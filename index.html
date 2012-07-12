@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Map application to display areas of Vulnerable Marine Ecosystems." />
+	<meta name="author-corporate" content="FAO of the UN" />
+	<meta name="copyright" content="http://www.fao.org/corp/copyright/en/" />
+	<meta name="keywords" content="RFB, Regional Fishery Body, Map, FAO" />
+	<title>Vulnerable Marine Ecosystems Map Viewer</title>
+
+	<link rel="stylesheet" href="theme/css/style.css" type="text/css" />
+	<link rel="stylesheet" href="theme/css/vme.css" type="text/css" />
+	
+      	<script type="text/javascript" src="lib/extjs/adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src="lib/extjs/ext-all.js"></script>
+        <link rel="stylesheet" type="text/css" href="lib/extjs/resources/css/ext-all.css" />
+        
+	<link rel="stylesheet" type="text/css" href="lib/jQueryUI/development-bundle/themes/start/jquery-ui-1.8.2.custom.css" />
+	<script type="text/javascript" src="lib/jQueryUI/js/jquery-1.4.2.min.js" ></script>
+	<script type="text/javascript" src="lib/jQueryUI/js/jquery-ui-1.8.2.custom.min.js"></script>
+	
+	<script type="text/javascript" src="lib/OpenLayers/OpenLayers.js"></script>
+	<script type="text/javascript" src="src/LoadingPanel.js"></script>
+	<script type="text/javascript" src="lib/GeoExt/script/GeoExt.js"></script>
+
+	<script type="text/javascript" src="src/figis-data.js"></script>
+	
+	<script type="text/javascript" src="src/FigisMap.js"></script>
+
+	<script type="text/javascript" src="src/rfb.js"></script>
+
+	<script type="text/javascript" src="src/Watermark.js" defer="defer"></script>
+	
+	<script type="text/javascript" src="src/vmeSlider.js" ></script>	
+
+</head>
+
+<body onload="setRFBPage('e-link','rfbs-link', 'rfbs-html')">
+
+	<div id="wrapper">
+		<div id="top">
+
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				<tr>
+					<td align="left">
+						<a href="http://www.fao.org" target="_blank"><img border=0 style="vertical-align: middle;" src="theme/img/FIGIS_banner-logo.gif" alt="FOOD AND AGRICULTURE ORGANIZATION OF THE UNITED NATIONS" title="Food and Agriculture Organization of the United Nations"/></a>
+					</td>
+					<td align="right">
+						<a href="http://www.fao.org/fishery" target="_blank"><img border=0 style="vertical-align: middle;" src="theme/img/FIGIS_banner-text.gif" alt="FAO Fisheries and Aquaculture Department" title="FAO Fisheries and Aquaculture Department"/></a>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<h1 id="title">Vulnerable Marine Ecosystems Map Viewer</h1>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<br />
+
+		<div id="topBar">
+			<label id="lblRFB">Select an area:</label>
+			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')">
+			</select>
+			  
+			<label id="lblSRS">Select a projection:</label>
+			<select id="SelectSRS" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')">
+				<option value='4326' default>WGS84 (4326)</option>
+
+				<option value='3349'>Mercator (3349)</option>
+				<option value='3031'>South Polar (3031)</option>
+			</select>
+
+			<!--a href="javascript:embedLink();" id="EmbedLink" title="Link or embed this RFB map"><span>Link</span></a-->
+			<input id="txtCql" type="hidden" />
+			<input id="command" type="hidden" />
+
+			<input id="opt" type="hidden" />
+			       	<!-- li>
+			       		<label id="lblCQL">Provide CQL Query</label>
+			       		<input id="txtCql" type="text" />
+			       		<input id="btnUpdate" type="button" value="UPDATE" onClick="addRFBCQL()"/>
+			       	</li>
+			       	<li>
+						<label id="lblCQL">Enter Command</label>
+			       		<input id="command" type="text" />
+			       		<input id="cmdbtn" type="button" value="UPDATE" onClick="Command()"/>
+			       	</li>
+					<li>
+						<label id="lblCQL">Optional Arguments</label>
+			       		<input id="opt" type="text" />
+			       	</li -->
+		</div>
+		<div id="main">
+			<div id="map" class="map"></div>
+			<table>
+				<tr>
+					<td>
+						<div id="first-year"></div>
+					</td>
+					<td>
+						<div id="year-min-largestep"></div>
+					</td>
+					<td>
+						<div id="year-min-littlestep"></div>
+					</td>
+					<td>
+						<div id="custom-slider"></div>
+					</td>
+					<td>
+						<div id="year-max-littlestep"></div>
+					</td>
+					<td>
+						<div id="year-max-largestep"></div>
+					</td>
+					<td>
+						<div id="last-year"></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div id="sidebar">
+			<!--div id="e-link">
+
+				<div>
+					<label for="rfbs-link">Paste the link in email or chat</label>
+					<input id="rfbs-link" type="text" readonly="readonly" value="" onclick="this.focus();this.select();"/>
+				</div>
+				<div>
+					<label for="rfbs-html">Paste the HTML in a web site</label>
+					<input id="rfbs-html" type="text" readonly="readonly" value="" onclick="this.focus();this.select();"/>
+				</div>
+
+			</div-->
+			<div class="legend legendTitle" id="legendLegendTitle">Legend</div>
+			<div id="legend" class="legend"></div>
+			<!--div class="legend legendTitle" id="legendMembersTitle">List of Members</div>
+			<div id="MemberCountries" class="legend"></div-->
+		</div>
+
+		
+
+		<div id ="disclaimer">
+			<p><strong>Disclaimer:</strong> The designations employed and the presentation of material in the map(s) are for illustration only and do not imply the expression of any opinion whatsoever on the part of FAO concerning the legal or constitutional status of any country, territory or sea area, or concerning the delimitation of frontiers or boundaries.</p>
+		</div>
+
+		<div id="bottomBar1">
+			powered by
+			<a alt="FIGIS web site" title="FIGIS web site" href="/fishery/figis/en">FIGIS</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+			<a alt="FAO (C)Copyright" title="FAO Copyright" target="_blank" href="http://www.fao.org/corp/copyright/en/">
+				&copy;&nbsp;FAO,
+				<span id="copyYear">2011</span>
+				&nbsp;
+			</a>
+		</div>
+		<div id="bottomBar2"></div>
+	</div>
+	<script type="text/javascript" language="javascript">
+	// <![CDATA[
+		function updateCopyYear() {
+			var uy = new Date();
+			uy = parseInt(uy.getFullYear() ? uy.getFullYear() : uy.getYear());
+			var py = parseInt( document.getElementById('copyYear').innerHTML );
+			if ( isNaN(uy) || isNaN(py) ) return void(0);
+			if ( uy > py ) document.getElementById('copyYear').innerHTML = String( uy );
+			return void(0);
+		}
+		updateCopyYear();
+	// ]]>
+	</script>
+
+	<!--<input type="button" id="addlayer" value="Show RFB" onclick="addLayer()"/>
+	<input type="button" id="addlayer" value="Show zoom" onclick="SLD()"/>-->
+	</body>
+</html>
+
