@@ -975,7 +975,6 @@ FigisMap.rfb.preparse = function( pars ) {
 		var baseTitle = FigisMap.label('Area of competence', pars );
 		var skipTitle = ( title == '' );
 		var ttitle = skipTitle ? baseTitle : title;
-		/*
 		if ( type.m ) {
 			var ttitle = skipTitle ? baseTitle : title;
 			if ( type.i ) ttitle += ' ' + FigisMap.label('(marine)', pars);
@@ -1020,7 +1019,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				title: ttitle,
 				skipLegend: true
 			} );
-		}*/
+		}
 		if ( pars.attribution == null ) pars.attribution = FigisMap.rfb.getDescriptor( pars.rfb, pars );
 		if ( ! pars.projection ) pars.projection =  sett.srs ? sett.srs : FigisMap.defaults.projection(pars);
 		if ( pars.global == null && sett.globalZoom != null ) pars.global = sett.globalZoom;
