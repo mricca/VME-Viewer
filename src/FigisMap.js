@@ -35,7 +35,8 @@ FigisMap.fifao = {
 	sdi : 'fifao:FAO_SUB_DIV',
 	spd : 'fifao:SPECIES_DIST',
 	sub : 'fifao:FAO_SUB_AREA',
-	vme : 'fifao:Vme'	
+	vme : 'fifao:Vme',
+	vme_fp : 'fifao:Footprints'	
 };
 
 FigisMap.defaults = {
@@ -67,6 +68,7 @@ FigisMap.rnd.vars = {
 	FAO_fishing_legendURL	: FigisMap.httpBaseRoot + "theme/img/FAO_fishing_legend.png",
 	EEZ_legendURL		: FigisMap.httpBaseRoot + "theme/img/EEZ_legend.png",
 	VME_legendURL		: FigisMap.httpBaseRoot + "theme/img/VME_legend.png",
+	VME_FP_legendURL	: FigisMap.httpBaseRoot + "theme/img/VME_FP_legend.png",
 	RFB_legendURL		: FigisMap.httpBaseRoot + "theme/img/RFB_legend.png",
 	wms			: FigisMap.geoServerBase + "/figis/geoserver" + "/wms",
 	gwc			: FigisMap.geoServerBase + "/figis/geoserver/gwc/service" + "/wms",
@@ -736,6 +738,19 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hideInSwitcher	: true
 			});
 		}
+		//WMS Footprints
+		if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
+			layers.unshift({
+				layer	: FigisMap.fifao.vme_fp,
+				label	: 'Footprints',
+				filter	:'*',
+				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+				opacity	: 1.0,
+				hidden	: pars.isFIGIS,
+				type	: 'auto',
+				hideInSwitcher	: false
+			});
+		}
 		//WMS Area of competence
 		if ( ! layerTypes[ FigisMap.fifao.rfb ] ) {
 			layers.unshift({
@@ -743,7 +758,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				label	: 'RFB regulatory area in high-seas',
 				filter	: "RFB = 'CCAMLR' OR RFB = 'NAFO' OR RFB = 'NEAFC'",
 				icon	: '<img src="' + FigisMap.rnd.vars.RFB_legendURL + '" width="30" height="20" />',
-				opacity	: 0.3,
+				opacity	: 0.8,
 				hidden	: false,
 				type	: 'auto'
 			});
