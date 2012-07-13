@@ -56,7 +56,7 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
     initComponent : function() {
     
 		var slider = this;
-		
+
         this.items = [
             {
                 height:40,

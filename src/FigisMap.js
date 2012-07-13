@@ -735,7 +735,8 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				opacity	: 1.0,
 				hidden	: pars.isFIGIS,
 				type	: 'auto',
-				hideInSwitcher	: true
+				hideInSwitcher	: true,
+				isMasked: true
 			});
 		}
 		//WMS Footprints
@@ -1213,11 +1214,11 @@ FigisMap.renderer = function(options) {
 		myMap.addControl( new OpenLayers.Control.LayerSwitcher() );
 		myMap.addControl( new OpenLayers.Control.LoadingPanel() );
 		myMap.addControl( new OpenLayers.Control.Navigation({ zoomWheelEnabled: true }) );
-		
+	
 		FigisMap.rnd.watermarkControl( myMap, p );
 		
 		FigisMap.rnd.mouseControl( myMap, p );
-		
+	
 		if ( p.attribution ) {
 			// myMap.addControl( new OpenLayers.Control.Attribution() ); // seems to be unnecessary
 			myMap.baseLayer.attribution = p.attribution;
@@ -1269,7 +1270,7 @@ FigisMap.renderer = function(options) {
 		}
 		
 		layers = FigisMap.rnd.sort4map( layers, p );
-		
+		var vme = new Array();
 		// FILLING THE MAP
 		for (var i = 0; i < layers.length; i++) {
 			var l = layers[i];
@@ -1282,8 +1283,44 @@ FigisMap.renderer = function(options) {
 			//myMap.addLayer( l.wms );
 			olLayers.push( l.wms );
 			
+			
+			
+			if (l.wms.name == 'Established VME areas' || l.wms.name == 'Footprints'){
+				vme.push(olLayers[i]);
+			}
+
 			l.inMap = true;
 		}
+		
+		//VMSGetFeatureInfo FOR FIGIS-VME PROJECT
+		myMap.addControl( new OpenLayers.Control.WMSGetFeatureInfo({
+				autoActivate: true,
+				layers: [vme[0],vme[1]],
+				queryVisible: true,
+				maxFeatures: 10,
+				eventListeners: {
+					getfeatureinfo: function(e) {
+		                new GeoExt.Popup({
+		                    title: vme.name,
+		                    width: 400,
+		                    height: 200,
+		                    layout: "accordion",
+		                    map: myMap,
+		                    location: e.xy,
+		                    items: [{   
+		                        title: e.fid,
+		                        layout: "fit",
+		                        bodyStyle: 'padding:10px;background-color:#F5F5DC',
+		                        html: e.text,
+		                        autoScroll: true,
+		                        autoWidth: true,
+		                        collapsible: false
+		                    }]
+		                }).show();
+					}
+				}
+			})
+		);
 		
 		FigisMap.debug( 'FigisMap.renderer layers array, after filling map:', layers );
 		
@@ -1313,6 +1350,7 @@ FigisMap.renderer = function(options) {
 		} else {
 			autoZoom( layers );
 		}
+	
 		FigisMap.debug('myMap:', myMap );
 		return myMap;
 		
