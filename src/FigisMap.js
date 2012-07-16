@@ -1285,6 +1285,7 @@ FigisMap.renderer = function(options) {
 			
 			
 			
+			//if (l.wms.name == 'Established VME areas' || l.wms.name == 'Footprints' || l.wms.name == 'RFB regulatory area in high-seas'){
 			if (l.wms.name == 'Established VME areas' || l.wms.name == 'Footprints'){
 				vme.push(olLayers[i]);
 			}
@@ -1292,6 +1293,11 @@ FigisMap.renderer = function(options) {
 			l.inMap = true;
 		}
 		
+		var doSwitch = function(btn) {
+		
+		    alert("asdf");
+		}
+				
 		//VMSGetFeatureInfo FOR FIGIS-VME PROJECT
 		myMap.addControl( new OpenLayers.Control.WMSGetFeatureInfo({
 				autoActivate: true,
@@ -1301,12 +1307,21 @@ FigisMap.renderer = function(options) {
 				eventListeners: {
 					getfeatureinfo: function(e) {
 		                new GeoExt.Popup({
-		                    title: vme.name,
+		                    title: 'Features Info',
 		                    width: 400,
 		                    height: 200,
 		                    layout: "accordion",
 		                    map: myMap,
 		                    location: e.xy,
+							buttons : [
+								{
+									text    : 'Encounters',
+									handler : doSwitch
+								},{
+									text    : 'Survey Data',
+									handler : doSwitch
+								}
+							],
 		                    items: [{   
 		                        title: e.fid,
 		                        layout: "fit",
