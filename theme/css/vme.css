@@ -282,8 +282,6 @@ h3 {
 	
 }
 
-
-
 .FeatureInfo ul{
 	padding-left: 10px;
 }
@@ -294,4 +292,19 @@ h3 {
 
 .FeatureInfo .links {
 	text-align:right;
+}
+
+/* button icons */
+.icon-login{
+	 background-image: url(../img/door_in.png) !important;
+}
+.icon-logout{
+	 background-image: url(../img/door_out.png) !important;
+}
+.icon-cancel{
+	 background-image: url(../img/cancel.png) !important;
+}
+#loginButton{
+	margin: 0px 0px 0px 10px;
+	float: right;
 }

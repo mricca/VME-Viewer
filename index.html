@@ -27,9 +27,9 @@
 	<script type="text/javascript" src="lib/GeoExt/script/GeoExt.js"></script>
 
 	<script type="text/javascript" src="src/figis-data.js"></script>
-	
+	<script type="text/javascript" src="src/login.js"></script>
 	<script type="text/javascript" src="src/FigisMap.js"></script>
-
+	
 	<script type="text/javascript" src="src/rfb.js"></script>
 
 	<script type="text/javascript" src="src/Watermark.js" defer="defer"></script>
@@ -104,6 +104,7 @@
 		<br />
 
 		<div id="topBar">
+			
 			<label id="lblRFB">Select an area:</label>
 			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')">
 			</select>
@@ -115,6 +116,7 @@
 				<option value='3349'>Mercator (3349)</option>
 				<option value='3031'>South Polar (3031)</option>
 			</select>
+			
 
 			<!--a href="javascript:embedLink();" id="EmbedLink" title="Link or embed this RFB map"><span>Link</span></a-->
 			<input id="txtCql" type="hidden" />
@@ -135,6 +137,7 @@
 						<label id="lblCQL">Optional Arguments</label>
 			       		<input id="opt" type="text" />
 			       	</li -->
+					<div id="loginButton"></div>
 		</div>
 		<div id="main">
 			<div id="map" class="map"></div>
