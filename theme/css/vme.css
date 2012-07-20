@@ -32,7 +32,9 @@ li {
                   height : 550px;
                    width : 810px;
 }
-
+#vme_slider{
+					margin-top: 10px;
+}
 /*
 #EmbedLink {
 	padding: 0;
