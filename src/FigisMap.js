@@ -1343,7 +1343,7 @@ FigisMap.renderer = function(options) {
 				                popup = new GeoExt.Popup({
 									title: 'Features Info',
 									width: 400,
-									height: 200,
+									height: 300,
 									layout: "accordion",
 									map: myMap,
 									location: e.xy,
