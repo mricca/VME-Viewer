@@ -36,7 +36,9 @@ FigisMap.fifao = {
 	spd : 'fifao:SPECIES_DIST',
 	sub : 'fifao:FAO_SUB_AREA',
 	vme : 'fifao:vme',
-	vme_fp : 'fifao:Footprints'	
+	vme_fp : 'fifao:Footprints',
+    vme_en : 'fifao:Encounters',
+    vme_sd : 'fifao:Surveydata'
 };
 
 FigisMap.defaults = {
@@ -75,10 +77,6 @@ FigisMap.rnd.vars = {
 	Legend_Base_Request	: FigisMap.geoServerBase + "/figis/geoserver" + "/wms" + "?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&WIDTH=30&HEIGHT=20",
 	wfs			: FigisMap.geoServerBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename=',
 	absWfs			: FigisMap.geoServerAbsBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename='
-};
-
-FigisMap.rnd.status = {
-    logged : false
 };
 
 if ( FigisMap.useProxy ) FigisMap.rnd.vars.wfs = FigisMap.currentSiteURI + '/figis/proxy/cgi-bin/proxy.cgi?url=' + escape( FigisMap.rnd.vars.absWfs );
@@ -729,6 +727,34 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 	var layerTypes = new Object();
 	for ( var i = 0; i < layers.length; i++ ) layerTypes[ layers[i].layer ] = true;
 	if ( pars.basicsLayers ) {
+		//WMS SurveyData
+		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
+			layers.unshift({
+				layer	: FigisMap.fifao.vme_sd,
+				label	: 'SurveyData',
+				filter	:'*',
+				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+                skipLegend	: true,
+				opacity	: 1.0,
+				hidden	: true,
+				type	: 'auto',
+				hideInSwitcher	: true
+			});
+		}
+		//WMS Encounters
+		if ( ! layerTypes[ FigisMap.fifao.vme_en ] ) {
+			layers.unshift({
+				layer	: FigisMap.fifao.vme_en,
+				label	: 'Encounters',
+				filter	:"*",
+				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+                skipLegend	: true,
+				opacity	: 1.0,
+				hidden	: true,
+				type	: 'auto',
+				hideInSwitcher	: true
+			});
+		}
 		//WMS Vme
 		if ( ! layerTypes[ FigisMap.fifao.vme ] ) {
 			layers.unshift({
@@ -740,7 +766,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hidden	: pars.isFIGIS,
 				type	: 'auto',
 				hideInSwitcher	: true,
-				isMasked: true
+				isMasked: false
 			});
 		}
 		//WMS Footprints
@@ -1002,6 +1028,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '1'",
 				dispOrder : 1,
 				style: sett.style,
+                hidden	: true,
 				hideInSwitcher: false,
 				title: ttitle,
 				skipTitle: skipTitle
@@ -1014,6 +1041,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '2'",
 				dispOrder : 2,
 				style: sett.style,
+                hidden	: true,
 				hideInSwitcher: false,
 				title: ttitle,
 				skipTitle: skipTitle
@@ -1025,6 +1053,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '2'",
 				dispOrder : 2,
 				style: sett.style,
+                hidden	: true,
 				hideInSwitcher: false,
 				title: ttitle,
 				skipLegend: true
@@ -1036,6 +1065,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "_DEP'",
 				style: '',
 				hideInSwitcher: false,
+                hidden	: true,
 				title: ttitle,
 				skipLegend: true
 			} );
@@ -1290,13 +1320,12 @@ FigisMap.renderer = function(options) {
 			
 			
 			//if (l.wms.name == 'Established VME areas' || l.wms.name == 'Footprints' || l.wms.name == 'RFB regulatory area in high-seas'){
-			if (l.wms.name == 'Established VME areas' || l.wms.name == 'Footprints'){
+			if (l.wms.name == 'Established VME areas' || l.wms.name == 'Footprints'  || l.wms.name == 'Encounters'  || l.wms.name == 'SurveyData'){
 				vme.push(olLayers[i]);
 			}
 
 			l.inMap = true;
 		}
-
 		var popupCache = {};
 		var vmeLyr;
 		for (vmeLyr=0;vmeLyr<vme.length ; vmeLyr++){
@@ -1331,19 +1360,27 @@ FigisMap.renderer = function(options) {
 		                    	popup = popupCache[popupKey];
 		                    }
 		                    
-		                    var doSwitch = function(btn) {  
-		                        alert("asdf");
+		                    var addEncounters = function(btn) {
+		                        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '2009'"});
+                                myMap.getLayersByName('Encounters')[0].visibility = true;
+                                myMap.getLayersByName('Encounters')[0].redraw(true);
+		                    }
+                            
+		                    var addServeyData = function(btn) {
+		                        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "Year = '2012'"});
+                                myMap.getLayersByName('SurveyData')[0].visibility = true;
+                                myMap.getLayersByName('SurveyData')[0].redraw(true);
 		                    }
 							var buttonsVme = [];
 							
-							if (e.object.layers[0].name == 'Established VME areas'){
+							if (e.object.layers[0].name == 'Established VME areas' && FigisMap.rnd.status.logged == true){
 								buttonsVme = [
 											{
 												text    : 'Encounters',
-												handler : doSwitch
+												handler : addEncounters
 											},{
 												text    : 'Survey Data',
-												handler : doSwitch
+												handler : addServeyData
 											}
 										]
 	
@@ -1404,6 +1441,21 @@ FigisMap.renderer = function(options) {
 		FigisMap.debug('Finalizing map:', myMap, 'olLayers:',olLayers);
 		myMap.updateSize();
 		myMap.addLayers( olLayers );
+        /*myMap.addLayer(new OpenLayers.Layer.WMS("Encounters",
+                FigisMap.rnd.vars.wms, 
+                {
+                    layers: FigisMap.fifao.vme_en,
+                    transparent: true,
+                    format: 'image/gif'
+                }, {
+                    isBaseLayer: false,
+                    singleTile: false,
+                    visibility: false,
+                    displayInLayerSwitcher: false,
+                    ratio: 1,
+                    buffer: 0
+                }
+            ))*/
 		if ( FigisMap.isDeveloper || FigisMap.isTesting ) {
 			myMap.events.register(
 				'moveend',
