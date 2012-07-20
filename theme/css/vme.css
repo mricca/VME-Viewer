@@ -275,3 +275,23 @@ h3 {
 .last-year{
     background-image: url(../img/last_year.png) !important;
 }
+/* FeatureInfo */
+.FeatureInfo{
+	text-align: left;
+	font: normal 14px tahoma,arial,helvetica,sans-serif;
+	
+}
+
+
+
+.FeatureInfo ul{
+	padding-left: 10px;
+}
+
+.FeatureInfo a{
+	text-align:right;
+}
+
+.FeatureInfo .links {
+	text-align:right;
+}
