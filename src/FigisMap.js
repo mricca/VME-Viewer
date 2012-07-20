@@ -35,7 +35,7 @@ FigisMap.fifao = {
 	sdi : 'fifao:FAO_SUB_DIV',
 	spd : 'fifao:SPECIES_DIST',
 	sub : 'fifao:FAO_SUB_AREA',
-	vme : 'fifao:Vme',
+	vme : 'fifao:vme',
 	vme_fp : 'fifao:Footprints'	
 };
 
@@ -747,7 +747,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				filter	:'*',
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
-				hidden	: pars.isFIGIS,
+				hidden	: true,
 				type	: 'auto',
 				hideInSwitcher	: false
 			});
@@ -1348,7 +1348,7 @@ FigisMap.renderer = function(options) {
 		OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
 		
 		// handlig the zoom/center/extent
-		if ( projection == 4326 ) myMap.addControl( new OpenLayers.Control.Graticule({ visible: true, layerName: FigisMap.label('Coordinates Grid', p) }) );
+		if ( projection == 4326 ) myMap.addControl( new OpenLayers.Control.Graticule({ visible: false, layerName: FigisMap.label('Coordinates Grid', p) }) );
 		
 		//myMap.zoomToExtent( myBounds, true );
 		if ( p.global ) {
