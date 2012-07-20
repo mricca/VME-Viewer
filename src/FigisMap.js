@@ -77,6 +77,10 @@ FigisMap.rnd.vars = {
 	absWfs			: FigisMap.geoServerAbsBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename='
 };
 
+FigisMap.rnd.status = {
+    logged : false
+};
+
 if ( FigisMap.useProxy ) FigisMap.rnd.vars.wfs = FigisMap.currentSiteURI + '/figis/proxy/cgi-bin/proxy.cgi?url=' + escape( FigisMap.rnd.vars.absWfs );
 
 /*document.write('<scr'+'ipt type="text/javascript" language="javascript" src="' + FigisMap.httpBaseRoot + 'proj4js/lib/proj4js-combined.js"></scr'+'ipt>');
@@ -1292,51 +1296,76 @@ FigisMap.renderer = function(options) {
 
 			l.inMap = true;
 		}
-		
-		var doSwitch = function(btn) {
-		
-		    alert("asdf");
-		}
-				
-		//VMSGetFeatureInfo FOR FIGIS-VME PROJECT
-		myMap.addControl( new OpenLayers.Control.WMSGetFeatureInfo({
-				autoActivate: true,
-				layers: [vme[0],vme[1]],
-				queryVisible: true,
-				maxFeatures: 10,
-				eventListeners: {
-					getfeatureinfo: function(e) {
-		                new GeoExt.Popup({
-		                    title: 'Features Info',
-		                    width: 400,
-		                    height: 200,
-		                    layout: "accordion",
-		                    map: myMap,
-		                    location: e.xy,
-							buttons : [
-								{
-									text    : 'Encounters',
-									handler : doSwitch
-								},{
-									text    : 'Survey Data',
-									handler : doSwitch
-								}
-							],
-		                    items: [{   
-		                        title: e.fid,
-		                        layout: "fit",
-		                        bodyStyle: 'padding:10px;background-color:#F5F5DC',
-		                        html: e.text,
-		                        autoScroll: true,
-		                        autoWidth: true,
-		                        collapsible: false
-		                    }]
-		                }).show();
+
+		var popupCache = {};
+		var vmeLyr;
+		for (vmeLyr=0;vmeLyr<vme.length ; vmeLyr++){
+			//VMSGetFeatureInfo FOR FIGIS-VME PROJECT
+			myMap.addControl(new OpenLayers.Control.WMSGetFeatureInfo({
+					autoActivate: true,
+					layers: [vme[vmeLyr]],
+					queryVisible: true,
+					maxFeatures: 10,
+					eventListeners: {
+						getfeatureinfo: function(e) {
+		                    var popupKey = e.xy.x + "." + e.xy.y;
+		                    var popup;
+		                    if (!(popupKey in popupCache)) {
+				                popup = new GeoExt.Popup({
+									title: 'Features Info',
+									width: 400,
+									height: 200,
+									layout: "accordion",
+									map: myMap,
+									location: e.xy,
+									listeners: {
+										close: function() {
+										        delete figisVmePopup;
+										        figisVmePopup = null;
+										},
+										scope: this
+									}
+								});
+								popupCache[popupKey] = popup;
+		                    } else{
+		                    	popup = popupCache[popupKey];
+		                    }
+		                    
+		                    var doSwitch = function(btn) {  
+		                        alert("asdf");
+		                    }
+							var buttonsVme = [];
+							
+							if (e.object.layers[0].name == 'Established VME areas'){
+								buttonsVme = [
+											{
+												text    : 'Encounters',
+												handler : doSwitch
+											},{
+												text    : 'Survey Data',
+												handler : doSwitch
+											}
+										]
+	
+							}
+							
+							popup.add({
+										title: e.object.layers[0].name,
+										layout: "fit",
+										bodyStyle: 'padding:10px;background-color:#F5F5DC',
+										html: e.text,
+										autoScroll: true,
+										autoWidth: true,
+										collapsible: false,
+										buttons : buttonsVme
+							});
+							popup.doLayout();
+							popup.show();
+						}
 					}
-				}
-			})
-		);
-		
+				})
+			);
+		};		                
 		FigisMap.debug( 'FigisMap.renderer layers array, after filling map:', layers );
 		
 		// BUILDING THE LEGEND
