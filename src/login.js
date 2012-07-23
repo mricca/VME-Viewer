@@ -46,7 +46,11 @@ Ext.onReady(function(){
             handler: function(){
             	FigisMap.submitLogin()
         	}
-        }]
+        }],
+		events:{
+			login:true,logout:true
+		
+		}
 	});
 	FigisMap.loginButton = new Ext.Button({
 			text: 'Login',
@@ -59,12 +63,13 @@ Ext.onReady(function(){
 					FigisMap.loginWin.userField.setValue("");
 					FigisMap.loginWin.passwordField.setValue("");
 					FigisMap.loginButton.setText("Login");
+					FigisMap.loginWin.fireEvent('logout');
 				}else{
 					FigisMap.loginWin.show();
 				}
 			}
 	});
-	
+	FigisMap.loginWin.addEvents(FigisMap.loginWin.events);
 	FigisMap.submitLogin = function () {
 			var w=FigisMap.loginWin;
 			//thats only an exemple
@@ -74,6 +79,7 @@ Ext.onReady(function(){
 				FigisMap.rnd.status.logged = true;
 				FigisMap.loginButton.setText("Logout");
 				FigisMap.loginButton.setIconClass("icon-logout");
+				w.fireEvent('login',user);
 				w.hide();
 			}else{
 				w.userField.markInvalid();
