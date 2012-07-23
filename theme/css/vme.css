@@ -308,7 +308,15 @@ margin-left:3px;
 float:left;
 
 }
+.encounters-icon{
+	background-image: url(../img/bullet_purple.png) !important;
 
+}
+
+.surveydata-icon{
+	background-image: url(../img/bullet_red.png) !important;
+
+}
 
 #user.user-login a{
 	padding-left:20px;
