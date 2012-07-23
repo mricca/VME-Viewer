@@ -782,6 +782,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
+                dispOrder: 4,
 				hideInSwitcher	: false
 			});
 		}
