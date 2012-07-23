@@ -35,7 +35,7 @@ FigisMap.fifao = {
 	sdi : 'fifao:FAO_SUB_DIV',
 	spd : 'fifao:SPECIES_DIST',
 	sub : 'fifao:FAO_SUB_AREA',
-	vme : 'fifao:vme',
+	vme : 'fifao:Vme',
 	vme_fp : 'fifao:Footprints',
     vme_en : 'fifao:Encounters',
     vme_sd : 'fifao:Surveydata'
@@ -1200,6 +1200,30 @@ FigisMap.renderer = function(options) {
 	OpenLayers.Util.onImageLoadErrorColor = 'transparent';
 
 	this.render = function( pars ) {
+	
+	OpenLayers.Util.onImageLoad = function(){
+		// //////////////////////
+		// OL code
+		// //////////////////////
+		if (!this.viewRequestID || (this.map && this.viewRequestID == this.map.viewRequestID)) { 
+			this.style.display = "";  
+		}
+
+		OpenLayers.Element.removeClass(this, "olImageLoadError");
+
+		// //////////////////////
+		// Tuna code
+		// ////////////////////// 
+		if(myMap.getLayersByName('Established VME areas')[0]){        
+			Ext.getCmp('years-slider').enable();
+			Ext.getCmp("year-min-largestep").enable(); 
+			Ext.getCmp("year-min-littlestep").enable(); 
+			Ext.getCmp("year-max-littlestep").enable(); 
+			Ext.getCmp("year-max-largestep").enable();
+			Ext.getCmp("last-year").enable(); 
+			Ext.getCmp("first-year").enable(); 
+		}
+	};
 		
 		FigisMap.debug( 'FigisMap.renderer render pars:', pars );
 		
@@ -1317,9 +1341,6 @@ FigisMap.renderer = function(options) {
 			//myMap.addLayer( l.wms );
 			olLayers.push( l.wms );
 			
-			
-			
-			//if (l.wms.name == 'Established VME areas' || l.wms.name == 'Footprints' || l.wms.name == 'RFB regulatory area in high-seas'){
 			if (l.wms.name == 'Established VME areas' || l.wms.name == 'Footprints'  || l.wms.name == 'Encounters'  || l.wms.name == 'SurveyData'){
 				vme.push(olLayers[i]);
 			}
@@ -1328,13 +1349,14 @@ FigisMap.renderer = function(options) {
 		}
 		var popupCache = {};
 		var vmeLyr;
-		for (vmeLyr=0;vmeLyr<vme.length ; vmeLyr++){
+		for (vmeLyr=0; vmeLyr<vme.length; vmeLyr++){
 			//VMSGetFeatureInfo FOR FIGIS-VME PROJECT
 			myMap.addControl(new OpenLayers.Control.WMSGetFeatureInfo({
 					autoActivate: true,
 					layers: [vme[vmeLyr]],
 					queryVisible: true,
 					maxFeatures: 10,
+					//vendorParams: {"CQL_FILTER": "year = '" + Ext.getCmp('years-slider').getValues()[0] + "'"},
 					eventListeners: {
 						getfeatureinfo: function(e) {
 		                    var popupKey = e.xy.x + "." + e.xy.y;
@@ -1348,26 +1370,26 @@ FigisMap.renderer = function(options) {
 									map: myMap,
 									location: e.xy,
 									listeners: {
-										close: function() {
-										        delete figisVmePopup;
-										        figisVmePopup = null;
-										},
-										scope: this
+										close: (function(key) {
+										    return function(panel){
+										        delete popupCache[key];
+										    };
+										})(popupKey)
 									}
 								});
 								popupCache[popupKey] = popup;
 		                    } else{
 		                    	popup = popupCache[popupKey];
 		                    }
-		                    
+
 		                    var addEncounters = function(btn) {
-		                        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '2009'"});
+		                        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
                                 myMap.getLayersByName('Encounters')[0].visibility = true;
                                 myMap.getLayersByName('Encounters')[0].redraw(true);
 		                    }
                             
 		                    var addServeyData = function(btn) {
-		                        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "Year = '2012'"});
+		                        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "Year = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
                                 myMap.getLayersByName('SurveyData')[0].visibility = true;
                                 myMap.getLayersByName('SurveyData')[0].redraw(true);
 		                    }
@@ -1441,21 +1463,6 @@ FigisMap.renderer = function(options) {
 		FigisMap.debug('Finalizing map:', myMap, 'olLayers:',olLayers);
 		myMap.updateSize();
 		myMap.addLayers( olLayers );
-        /*myMap.addLayer(new OpenLayers.Layer.WMS("Encounters",
-                FigisMap.rnd.vars.wms, 
-                {
-                    layers: FigisMap.fifao.vme_en,
-                    transparent: true,
-                    format: 'image/gif'
-                }, {
-                    isBaseLayer: false,
-                    singleTile: false,
-                    visibility: false,
-                    displayInLayerSwitcher: false,
-                    ratio: 1,
-                    buffer: 0
-                }
-            ))*/
 		if ( FigisMap.isDeveloper || FigisMap.isTesting ) {
 			myMap.events.register(
 				'moveend',

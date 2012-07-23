@@ -5,6 +5,8 @@ Ext.onReady(function(){
 	FigisMap.loginWin= new Ext.Window({
 		width: 250,
 		title: "Login",
+		closeAction: 'hide',
+		modal: true,
 		items:[{
 			xtype: 'form',
 			ref: 'form',
@@ -35,33 +37,16 @@ Ext.onReady(function(){
 			ref: '../loginButton',
 			iconCls: 'icon-login',
 			handler: function(){
-				var w=FigisMap.loginWin;
-				//thats only an exemple
-				var user = w.userField.getValue();
-				var password = w.passwordField.getValue();
-				if(user =="admin" && password =="admin"){
-					FigisMap.rnd.status.logged = true;
-					FigisMap.loginButton.setText("Logout");
-					FigisMap.loginButton.setIconClass("icon-logout");
-					w.hide();
-				}else{
-					w.userField.markInvalid();
-					w.passwordField.markInvalid();
-					
-				}
-				
+				FigisMap.submitLogin()
 			}
-		},{
-			text: 'Close',
-			ref: '../closeButton',
-			iconCls: 'icon-cancel',
-			handler: function(){
-				FigisMap.loginWin.hide();
-			}
-		}]
-
-			
-		
+		}],
+        keys: [{ 
+            key: [Ext.EventObject.ENTER],
+            scope: this,
+            handler: function(){
+            	FigisMap.submitLogin()
+        	}
+        }]
 	});
 	FigisMap.loginButton = new Ext.Button({
 			text: 'Login',
@@ -79,4 +64,20 @@ Ext.onReady(function(){
 				}
 			}
 	});
+	
+	FigisMap.submitLogin = function () {
+			var w=FigisMap.loginWin;
+			//thats only an exemple
+			var user = w.userField.getValue();
+			var password = w.passwordField.getValue();
+			if(user =="admin" && password =="admin"){
+				FigisMap.rnd.status.logged = true;
+				FigisMap.loginButton.setText("Logout");
+				FigisMap.loginButton.setIconClass("icon-logout");
+				w.hide();
+			}else{
+				w.userField.markInvalid();
+				w.passwordField.markInvalid();			
+			}
+	};
 });

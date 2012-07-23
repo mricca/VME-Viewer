@@ -220,6 +220,8 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
         var yr_start = years.getValues()[0];
 
         myMap.getLayersByName('Established VME areas')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
+        //myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
+        //myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
                 
     }
 });

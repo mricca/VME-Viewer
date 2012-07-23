@@ -59,28 +59,4 @@ Ext.onReady(function(){
         width : 815
     });
 
-	OpenLayers.Util.onImageLoad = function(){
-		// //////////////////////
-		// OL code
-		// //////////////////////
-		if (!this.viewRequestID || (this.map && this.viewRequestID == this.map.viewRequestID)) { 
-			this.style.display = "";  
-		}
-
-		OpenLayers.Element.removeClass(this, "olImageLoadError");
-
-		// //////////////////////
-		// Tuna code
-		// ////////////////////// 
-		if(myMap.getLayersByName('Established VME areas')[0]){        
-			Ext.getCmp('years-slider').enable();
-			Ext.getCmp("year-min-largestep").enable(); 
-			Ext.getCmp("year-min-littlestep").enable(); 
-			Ext.getCmp("year-max-littlestep").enable(); 
-			Ext.getCmp("year-max-largestep").enable();
-			Ext.getCmp("last-year").enable(); 
-			Ext.getCmp("first-year").enable(); 
-		}
-	};
-
 });
