@@ -33,11 +33,11 @@ FigisMap.fifao = {
 	RFB : 'fifao:RFB',
 	rfb : 'fifao:RFB_COMP',
 	sdi : 'fifao:FAO_SUB_DIV',
-	spd : 'fifao:SPECIES_DIST',
+	spd : 'fifao:SPECIES_DIST', 
 	sub : 'fifao:FAO_SUB_AREA',
 	vme : 'fifao:VME', 
 	vme_fp : 'fifao:FOOTPRINTS',
-    vme_en : 'fifao:ENCOUNTERS',
+    vme_en : 'fifao:Encounters',
     vme_sd : 'fifao:Surveydata'
 };
  
