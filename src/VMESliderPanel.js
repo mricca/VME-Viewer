@@ -124,7 +124,7 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
                         width   : 600,
                         minValue: 2007,
                         maxValue: new Date().getFullYear(),
-                        values  : ['2007'],
+                        values  : [new Date().getFullYear()],
                         plugins : new Ext.slider.Tip({
                             getText: function(thumb){
                                 return String.format('<b>{0}</b>', thumb.value);
@@ -220,8 +220,10 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
         var yr_start = years.getValues()[0];
 
         myMap.getLayersByName('Established VME areas')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
-        //myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
-        //myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
+        
+        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
+
+        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
                 
     }
 });
