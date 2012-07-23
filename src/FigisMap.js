@@ -1354,7 +1354,13 @@ FigisMap.renderer = function(options) {
                 popupCache[popupKey].close();
             }            
         });
-        
+
+        FigisMap.loginWin.on('logout',function(user){
+            for (var popupKey in popupCache){                
+                popupCache[popupKey].close();
+            }            
+        });
+
 		var vmeLyr;
 		for (vmeLyr=0; vmeLyr<vme.length; vmeLyr++){
 			//VMSGetFeatureInfo FOR FIGIS-VME PROJECT

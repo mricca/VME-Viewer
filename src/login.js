@@ -1,4 +1,12 @@
+/**
+ * Login Widget and button.
+ * Author: Lorenzo Natali (GeoSolutions S.A.S.)
+ * 
+ *
+ */
+
 Ext.onReady(function(){
+	//status variable,
 	FigisMap.rnd.status = {
 		logged : false
 	};
@@ -56,12 +64,15 @@ Ext.onReady(function(){
 			text: 'Login',
 			iconCls: 'icon-login',
 			renderTo: 'loginButton',
+			
 			handler:function(){
 				if(FigisMap.rnd.status.logged){
 					FigisMap.rnd.status.logged=false;
 					FigisMap.loginButton.setIconClass("icon-login");
+					//reset previous fields values
 					FigisMap.loginWin.userField.setValue("");
 					FigisMap.loginWin.passwordField.setValue("");
+					//change login button look
 					FigisMap.loginButton.setText("Login");
 					FigisMap.loginWin.fireEvent('logout');
 				}else{
@@ -72,7 +83,7 @@ Ext.onReady(function(){
 	FigisMap.loginWin.addEvents(FigisMap.loginWin.events);
 	FigisMap.submitLogin = function () {
 			var w=FigisMap.loginWin;
-			//thats only an exemple
+			//that's only an exemple
 			var user = w.userField.getValue();
 			var password = w.passwordField.getValue();
 			if(user =="admin" && password =="admin"){
@@ -87,3 +98,4 @@ Ext.onReady(function(){
 			}
 	};
 });
+ 
