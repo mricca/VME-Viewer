@@ -1399,7 +1399,7 @@ FigisMap.renderer = function(options) {
 		                    }
                             
 		                    var addServeyData = function(btn) {
-		                        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "Year = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
+		                        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
                                 myMap.getLayersByName('SurveyData')[0].visibility = true;
                                 myMap.getLayersByName('SurveyData')[0].redraw(true);
 		                    }
