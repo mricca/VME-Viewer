@@ -37,7 +37,7 @@ FigisMap.fifao = {
 	sub : 'fifao:FAO_SUB_AREA',
 	vme : 'fifao:VME', 
 	vme_fp : 'fifao:FOOTPRINTS',
-    vme_en : 'fifao:Encounters',
+    vme_en : 'fifao:ENCOUNTERS',
     vme_sd : 'fifao:Surveydata'
 };
  
@@ -827,6 +827,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			hideInSwitcher	: true
 		} );
 	}
+    
 	return layers;
 };
 
@@ -1193,6 +1194,7 @@ FigisMap.renderer = function(options) {
 	var target, projection, extent, center, zoom;
 	var olLayers = new Array();
 	var olImageFormat = OpenLayers.Util.alphaHack() ? "image/gif" : "image/png";
+    var info;
 	
 	// pink tile avoidance
 	OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
@@ -1210,7 +1212,7 @@ FigisMap.renderer = function(options) {
 		}
 
 		OpenLayers.Element.removeClass(this, "olImageLoadError");
-
+        info.deactivate();
 		// //////////////////////
 		// Tuna code
 		// ////////////////////// 
@@ -1353,14 +1355,18 @@ FigisMap.renderer = function(options) {
 
 		var vmeLyr;
 		for (vmeLyr=0; vmeLyr<vme.length; vmeLyr++){
-			//VMSGetFeatureInfo FOR FIGIS-VME PROJECT
-			myMap.addControl(new OpenLayers.Control.WMSGetFeatureInfo({
+            
+            //VMSGetFeatureInfo FOR FIGIS-VME PROJECT
+            info = new OpenLayers.Control.WMSGetFeatureInfo({
 					autoActivate: true,
 					layers: [vme[vmeLyr]],
 					queryVisible: true,
 					maxFeatures: 10,
 					//vendorParams: {"CQL_FILTER": "year = '" + Ext.getCmp('years-slider').getValues()[0] + "'"},
 					eventListeners: {
+                        beforegetfeatureinfo: function(e) { 
+                            this.vendorParams = {"CQL_FILTER": "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"};
+                        }, 
 						getfeatureinfo: function(e) {
 		                    var popupKey = e.xy.x + "." + e.xy.y;
 							//var id = e.text.getElementByClassName("VME_ID");
@@ -1387,7 +1393,7 @@ FigisMap.renderer = function(options) {
 		                    }
 
 		                    var addEncounters = function(btn) {
-		                        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
+		                        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
                                 myMap.getLayersByName('Encounters')[0].visibility = true;
                                 myMap.getLayersByName('Encounters')[0].redraw(true);
 		                    }
@@ -1428,7 +1434,8 @@ FigisMap.renderer = function(options) {
 						}
 					}
 				})
-			);
+			//);
+            myMap.addControl(info);
 		};		                
 		FigisMap.debug( 'FigisMap.renderer layers array, after filling map:', layers );
 		
