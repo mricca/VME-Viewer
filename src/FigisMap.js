@@ -1367,6 +1367,7 @@ FigisMap.renderer = function(options) {
 					eventListeners: {
 						getfeatureinfo: function(e) {
 		                    var popupKey = e.xy.x + "." + e.xy.y;
+							//var id = e.text.getElementByClassName("VME_ID");
 		                    var popup;
 		                    if (!(popupKey in popupCache)) {
 				                popup = new GeoExt.Popup({
