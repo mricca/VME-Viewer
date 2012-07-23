@@ -60,7 +60,7 @@ FigisMap.useProxy = FigisMap.isDeveloper ? false : ( FigisMap.isTesting ? FigisM
 FigisMap.geoServerAbsBase = FigisMap.isDeveloper ? 'http://192.168.1.122:8484' : ( FigisMap.isTesting ? 'http://193.43.36.238:8484' : 'http://www.fao.org' );
 FigisMap.geoServerBase = '';
 
-FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figis/figis-vme/' : '/figis/geoserver/figis-vme/' );
+FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figis/figis-vme/' : '/figis/figis-vme/' );
 
 FigisMap.rnd.vars = {
 	geoserverURL		: FigisMap.geoServerBase + "/figis/geoserver",
@@ -732,12 +732,13 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme_sd,
 				label	: 'SurveyData',
-				filter	:'*',
+				filter	:"YEAR = '1000'",
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
+                dispOrder: 4,
 				hideInSwitcher	: true
 			});
 		}
@@ -746,12 +747,13 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme_en,
 				label	: 'Encounters',
-				filter	:"*",
+				filter	:"YEAR = '1000'",
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
+                dispOrder: 4,
 				hideInSwitcher	: true
 			});
 		}
@@ -766,6 +768,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hidden	: pars.isFIGIS,
 				type	: 'auto',
 				hideInSwitcher	: true,
+                dispOrder: 4,
 				isMasked: false
 			});
 		}
@@ -1054,7 +1057,7 @@ FigisMap.rfb.preparse = function( pars ) {
 			var ttitle = FigisMap.label('Regulatory area', pars );;
 			pars.distribution.push( { rfb: pars.rfb, settings: sett, layer: FigisMap.fifao.RFB,
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '2'",
-				dispOrder : 2,
+				dispOrder : 1,
 				style: sett.style,
                 hidden	: false,
 				hideInSwitcher: false,
