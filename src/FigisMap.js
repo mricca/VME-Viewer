@@ -1212,7 +1212,7 @@ FigisMap.renderer = function(options) {
 		}
 
 		OpenLayers.Element.removeClass(this, "olImageLoadError");
-        info.deactivate();
+
 		// //////////////////////
 		// Tuna code
 		// ////////////////////// 
