@@ -295,19 +295,13 @@ h3 {
 }
 
 /* button icons */
-.icon-login{
-	 background-image: url(../img/door_in.png) !important;
-}
-.icon-logout{
-	 background-image: url(../img/door_out.png) !important;
-}
 .icon-cancel{
 	 background-image: url(../img/cancel.png) !important;
 }
-#loginButton{
-	margin: 0px 0px 0px 10px;
-	float: right;
+.icon-login{
+	 background-image: url(../img/door_in.png) !important;
 }
+
 #user{
 margin-top:2px;
 margin-left:3px;
@@ -316,7 +310,7 @@ float:left;
 }
 
 
-#user.loginuser-login a{
+#user.user-login a{
 	padding-left:20px;
 	background-image: url(../img/door_in.png) !important;
 	background-repeat:no-repeat;

@@ -85,7 +85,7 @@ Ext.onReady(function(){
 					Ext.DomHelper.overwrite(document.getElementById("user"),{
 						tag:'span',
 						id:'user',
-						class:'user-logout',
+						class:'user-login',
 						html:'<a onclick="FigisMap.logInOut()">Login</a>'
 				});
 				FigisMap.loginWin.fireEvent('logout');
@@ -139,7 +139,7 @@ Ext.onReady(function(){
 	Ext.DomHelper.overwrite(document.getElementById("user"),{
 				tag:'span',
 				id:'user',
-				class:'user-logout',
+				class:'user-login',
 				html:'<a onclick="FigisMap.logInOut()">Login</a>'
 			});
 });
