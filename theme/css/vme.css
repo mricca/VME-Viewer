@@ -309,10 +309,27 @@ h3 {
 	float: right;
 }
 #user{
-margin-top:3px;
+margin-top:2px;
 margin-left:3px;
-padding-left:20px;
-background-image: url(../img/door_out.png) !important;
-background-repeat:no-repeat;
+float:left;
+
 }
 
+
+#user.loginuser-login a{
+	padding-left:20px;
+	background-image: url(../img/door_in.png) !important;
+	background-repeat:no-repeat;
+
+}
+
+#user.user-logout a{
+	padding-left:20px;
+	background-image: url(../img/door_out.png) !important;
+	background-repeat:no-repeat;
+
+}
+
+#user.user-logout em{
+	font-weight:bold;
+}

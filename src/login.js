@@ -10,6 +10,10 @@ Ext.onReady(function(){
 	FigisMap.rnd.status = {
 		logged : false
 	};
+	
+	//
+	//Login window
+	//
 	FigisMap.loginWin= new Ext.Window({
 		width: 250,
 		title: "Login",
@@ -60,22 +64,35 @@ Ext.onReady(function(){
 		
 		}
 	});
+	
+	/**
+	 * logInOut toggles login/logout status
+	 */
 	FigisMap.logInOut = function(){
 		if(FigisMap.rnd.status.logged){
 			//logout
-			FigisMap.rnd.status.logged=false;
-			
-			//reset previous fields values
-			FigisMap.loginWin.userField.setValue("");
-			FigisMap.loginWin.passwordField.setValue("");
-			//change login link look
-			Ext.DomHelper.overWrite(document.getElementById("user"),{
-				tag:'span'
-				id:'user',
-				class:'user-login',
-				html:'<a onclick="FigisMap.logInOut()">Login</a>'
+			Ext.Msg.show({
+			   title:'Logout',
+			   msg: 'Are you sure that you want to logout?',
+			   buttons: Ext.Msg.YESNO,
+			   fn: function(btn ){
+					if(btn != 'yes') return;
+					FigisMap.rnd.status.logged=false;
+					//reset previous fields values
+					FigisMap.loginWin.userField.setValue("");
+					FigisMap.loginWin.passwordField.setValue("");
+					//change login link look
+					Ext.DomHelper.overwrite(document.getElementById("user"),{
+						tag:'span',
+						id:'user',
+						class:'user-logout',
+						html:'<a onclick="FigisMap.logInOut()">Login</a>'
+				});
+				FigisMap.loginWin.fireEvent('logout');
+				},
+			   animEl: 'elId',
+			   icon: Ext.MessageBox.QUESTION
 			});
-			FigisMap.loginWin.fireEvent('logout');
 			
 		}else{
 			//login prompt
@@ -83,31 +100,10 @@ Ext.onReady(function(){
 		}
 	};
 	
-	FigisMap.loginButton = new Ext.Button({
-			text: 'Login',
-			iconCls: 'icon-login',
-			renderTo: 'loginButton',
-			
-			handler:function(){
-				if(FigisMap.rnd.status.logged){
-					FigisMap.rnd.status.logged=false;
-					FigisMap.loginButton.setIconClass("icon-login");
-					//reset previous fields values
-					FigisMap.loginWin.userField.setValue("");
-					FigisMap.loginWin.passwordField.setValue("");
-					//change login button look
-					Ext.DomHelper.overWrite(document.getElementById("user"),{
-						tag:'span'
-						id:'user',
-						class:'user-logout',
-						html:'<a onclick="FigisMap.logInOut()">Logot</a>'
-					});
-				}else{
-					FigisMap.loginWin.show();
-				}
-			}
-	});
+	//add events login and logout
 	FigisMap.loginWin.addEvents(FigisMap.loginWin.events);
+	
+	// This function checks the user/password
 	FigisMap.submitLogin = function () {
 			var w=FigisMap.loginWin;
 			//that's only an exemple
@@ -115,17 +111,36 @@ Ext.onReady(function(){
 			var password = w.passwordField.getValue();
 			if(user =="admin" && password =="admin"){
 				FigisMap.rnd.status.logged = true;
-				FigisMap.loginButton.setText("Logout");
-				FigisMap.loginButton.setIconClass("icon-logout");
+				//change login link
+				Ext.DomHelper.overwrite(document.getElementById("user"),{
+					tag:'span',
+					id:'user',
+					class:'user-logout',
+					html:'You Are Logged as  <em>'+ user + ' </em> <a onclick="FigisMap.logInOut()">Logout</a>'
+				});
+				//fires event login
 				w.fireEvent('login',user);
+				//hide window
 				w.hide();
 			}else{
+				
+				Ext.Msg.show({
+				   title:'Login Error',
+				   msg: 'The username or password is not correct.',
+				   buttons: Ext.Msg.OK,
+				   icon: Ext.MessageBox.ERROR
+				});
 				w.userField.markInvalid();
 				w.passwordField.markInvalid();			
 			}
 	};
 	
-	
-	 
+	//setup login link
+	Ext.DomHelper.overwrite(document.getElementById("user"),{
+				tag:'span',
+				id:'user',
+				class:'user-logout',
+				html:'<a onclick="FigisMap.logInOut()">Login</a>'
+			});
 });
  

@@ -19,9 +19,9 @@
 	<link rel="stylesheet" type="text/css" href="lib/extjs/resources/css/xtheme-gray.css" />
 	<link rel="stylesheet" type="text/css" href="lib/GeoExt/resources/css/geoext-all.css" />
 
-	<link rel="stylesheet" type="text/css" href="lib/jQueryUI/development-bundle/themes/start/jquery-ui-1.8.2.custom.css" />
-	<!--  <script type="text/javascript" src="lib/jQueryUI/js/jquery-1.4.2.min.js" ></script> -->
-	<script type="text/javascript" src="lib/jQueryUI/js/jquery-ui-1.8.2.custom.min.js"></script>
+	<!--	<link rel="stylesheet" type="text/css" href="lib/jQueryUI/development-bundle/themes/start/jquery-ui-1.8.2.custom.css" />
+  <script type="text/javascript" src="lib/jQueryUI/js/jquery-1.4.2.min.js" ></script>
+	<script type="text/javascript" src="lib/jQueryUI/js/jquery-ui-1.8.2.custom.min.js"></script> -->
 	
 	<script type="text/javascript" src="lib/OpenLayers/OpenLayers.js"></script>
 	<script type="text/javascript" src="src/LoadingPanel.js"></script>
@@ -106,7 +106,7 @@
 		<br />
 
 		<div id="topBar">
-			<span id="user" style="float:left"> <a onclick="FigisMap.logInOut()">Login</a></span>
+			<span id="user" ></span>
 			<label id="lblRFB">Select an area:</label>
 			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')">
 			</select>
@@ -139,7 +139,7 @@
 						<label id="lblCQL">Optional Arguments</label>
 			       		<input id="opt" type="text" />
 			       	</li -->
-					<div id="loginButton"></div>
+					
 		</div>
 		<div id="main">
 			<div id="map" class="map"></div>
