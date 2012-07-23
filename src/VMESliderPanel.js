@@ -116,7 +116,7 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
                         xtype: 'textfield',
                         readOnly: true,
                         width: 40,
-                        value: '2007' //new Date().getFullYear() - 1
+                        value: '2012' //new Date().getFullYear() - 1
                     },
                     new Ext.slider.SingleSlider({
                         id : 'years-slider',
@@ -219,11 +219,15 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
         var years = Ext.getCmp('years-slider');	
         var yr_start = years.getValues()[0];
 
-        myMap.getLayersByName('Established VME areas')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
+        myMap.getLayersByName('Established VME areas')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + yr_start + "'"});
+        /*
+        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '" + yr_start + "'"});
+        myMap.getLayersByName('Encounters')[0].visibility = true;
+        myMap.getLayersByName('Encounters')[0].redraw(true);
         
-        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
-
-        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "year = '" + yr_start + "'"});
-                
+        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "Year = '" + yr_start + "'"});
+        myMap.getLayersByName('SurveyData')[0].visibility = true;
+        myMap.getLayersByName('SurveyData')[0].redraw(true);
+        */
     }
 });
