@@ -308,3 +308,11 @@ h3 {
 	margin: 0px 0px 0px 10px;
 	float: right;
 }
+#user{
+margin-top:3px;
+margin-left:3px;
+padding-left:20px;
+background-image: url(../img/door_out.png) !important;
+background-repeat:no-repeat;
+}
+

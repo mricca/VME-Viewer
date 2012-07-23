@@ -60,6 +60,29 @@ Ext.onReady(function(){
 		
 		}
 	});
+	FigisMap.logInOut = function(){
+		if(FigisMap.rnd.status.logged){
+			//logout
+			FigisMap.rnd.status.logged=false;
+			
+			//reset previous fields values
+			FigisMap.loginWin.userField.setValue("");
+			FigisMap.loginWin.passwordField.setValue("");
+			//change login link look
+			Ext.DomHelper.overWrite(document.getElementById("user"),{
+				tag:'span'
+				id:'user',
+				class:'user-login',
+				html:'<a onclick="FigisMap.logInOut()">Login</a>'
+			});
+			FigisMap.loginWin.fireEvent('logout');
+			
+		}else{
+			//login prompt
+			FigisMap.loginWin.show();
+		}
+	};
+	
 	FigisMap.loginButton = new Ext.Button({
 			text: 'Login',
 			iconCls: 'icon-login',
@@ -73,8 +96,12 @@ Ext.onReady(function(){
 					FigisMap.loginWin.userField.setValue("");
 					FigisMap.loginWin.passwordField.setValue("");
 					//change login button look
-					FigisMap.loginButton.setText("Login");
-					FigisMap.loginWin.fireEvent('logout');
+					Ext.DomHelper.overWrite(document.getElementById("user"),{
+						tag:'span'
+						id:'user',
+						class:'user-logout',
+						html:'<a onclick="FigisMap.logInOut()">Logot</a>'
+					});
 				}else{
 					FigisMap.loginWin.show();
 				}
@@ -97,5 +124,8 @@ Ext.onReady(function(){
 				w.passwordField.markInvalid();			
 			}
 	};
+	
+	
+	 
 });
  

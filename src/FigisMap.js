@@ -35,12 +35,12 @@ FigisMap.fifao = {
 	sdi : 'fifao:FAO_SUB_DIV',
 	spd : 'fifao:SPECIES_DIST',
 	sub : 'fifao:FAO_SUB_AREA',
-	vme : 'fifao:vme', 
-	vme_fp : 'fifao:Footprints',
+	vme : 'fifao:VME', 
+	vme_fp : 'fifao:FOOTPRINTS',
     vme_en : 'fifao:Encounters',
     vme_sd : 'fifao:Surveydata'
 };
-
+ 
 FigisMap.defaults = {
 	lang		: document.documentElement.getAttribute('lang') ? document.documentElement.getAttribute('lang').toLowerCase() : 'en',
 	baseLayer	: { layer: FigisMap.fifao.cnt, cached: true, label : "Continents" },//FigisMap.fifao.maj,
@@ -760,7 +760,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme,
 				label	: 'Established VME areas',
-				filter	:"year = '2012'",
+				filter	:"YEAR = '2012'",
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: pars.isFIGIS,
@@ -1347,19 +1347,9 @@ FigisMap.renderer = function(options) {
 
 			l.inMap = true;
 		}
-		var popupCache = {};
+		FigisMap.popupCache = {};
         
-        FigisMap.loginWin.on('login',function(user){
-            for (var popupKey in popupCache){                
-                popupCache[popupKey].close();
-            }            
-        });
-
-        FigisMap.loginWin.on('logout',function(user){
-            for (var popupKey in popupCache){                
-                popupCache[popupKey].close();
-            }            
-        });
+        
 
 		var vmeLyr;
 		for (vmeLyr=0; vmeLyr<vme.length; vmeLyr++){
@@ -1375,7 +1365,7 @@ FigisMap.renderer = function(options) {
 		                    var popupKey = e.xy.x + "." + e.xy.y;
 							//var id = e.text.getElementByClassName("VME_ID");
 		                    var popup;
-		                    if (!(popupKey in popupCache)) {
+		                    if (!(popupKey in FigisMap.popupCache)) {
 				                popup = new GeoExt.Popup({
 									title: 'Features Info',
 									width: 400,
@@ -1386,14 +1376,14 @@ FigisMap.renderer = function(options) {
 									listeners: {
 										close: (function(key) {
 										    return function(panel){
-										        delete popupCache[key];
+										        delete FigisMap.popupCache[key];
 										    };
 										})(popupKey)
 									}
 								});
-								popupCache[popupKey] = popup;
+								FigisMap.popupCache[popupKey] = popup;
 		                    } else{
-		                    	popup = popupCache[popupKey];
+		                    	popup = FigisMap.popupCache[popupKey];
 		                    }
 
 		                    var addEncounters = function(btn) {
@@ -1421,7 +1411,8 @@ FigisMap.renderer = function(options) {
 										]
 	
 							}
-
+							var pattAllWite=new RegExp("\s");
+							pattAllWite.test(e.text);
 							popup.add({
 										title: e.object.layers[0].name,
 										layout: "fit",
@@ -1618,3 +1609,17 @@ FigisMap.renderer = function(options) {
 	*/
 	
 } //FigisMap.renderer Class Ends
+Ext.onReady(function(){
+FigisMap.loginWin.on('login',function(user){
+            for (var popupKey in FigisMap.popupCache){                
+                FigisMap.popupCache[popupKey].close();
+            }            
+        });
+
+FigisMap.loginWin.on('logout',function(user){
+		for (var popupKey in FigisMap.popupCache){                
+                FigisMap.popupCache[popupKey].close();
+		}            
+});
+
+});
