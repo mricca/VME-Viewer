@@ -1408,9 +1408,11 @@ FigisMap.renderer = function(options) {
 							if (e.object.layers[0].name == 'Established VME areas' && FigisMap.rnd.status.logged == true){
 								buttonsVme = [
 											{
+												iconCls : 'encounters-icon',
 												text    : 'Encounters',
 												handler : addEncounters
 											},{
+												iconCls : 'surveydata-icon',
 												text    : 'Survey Data',
 												handler : addServeyData
 											}
