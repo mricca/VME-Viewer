@@ -782,6 +782,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hideInSwitcher	: false
 			});
 		}
+        /*
 		//WMS Area of competence
 		if ( ! layerTypes[ FigisMap.fifao.rfb ] ) {
 			layers.unshift({
@@ -794,6 +795,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				type	: 'auto'
 			});
 		}
+        */
 		//WMS 200 nautical miles arcs
 		if ( ! layerTypes[ FigisMap.fifao.nma ] ) {
 			layers.unshift({
@@ -1029,7 +1031,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '1'",
 				dispOrder : 1,
 				style: sett.style,
-                hidden	: true,
+                hidden	: false,
 				hideInSwitcher: false,
 				title: ttitle,
 				skipTitle: skipTitle
@@ -1042,7 +1044,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '2'",
 				dispOrder : 2,
 				style: sett.style,
-                hidden	: true,
+                hidden	: false,
 				hideInSwitcher: false,
 				title: ttitle,
 				skipTitle: skipTitle
@@ -1054,7 +1056,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '2'",
 				dispOrder : 2,
 				style: sett.style,
-                hidden	: true,
+                hidden	: false,
 				hideInSwitcher: false,
 				title: ttitle,
 				skipLegend: true
@@ -1066,7 +1068,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "_DEP'",
 				style: '',
 				hideInSwitcher: false,
-                hidden	: true,
+                hidden	: false,
 				title: ttitle,
 				skipLegend: true
 			} );
