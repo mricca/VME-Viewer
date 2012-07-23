@@ -35,7 +35,7 @@ FigisMap.fifao = {
 	sdi : 'fifao:FAO_SUB_DIV',
 	spd : 'fifao:SPECIES_DIST',
 	sub : 'fifao:FAO_SUB_AREA',
-	vme : 'fifao:Vme',
+	vme : 'fifao:vme', 
 	vme_fp : 'fifao:Footprints',
     vme_en : 'fifao:Encounters',
     vme_sd : 'fifao:Surveydata'
@@ -1348,6 +1348,13 @@ FigisMap.renderer = function(options) {
 			l.inMap = true;
 		}
 		var popupCache = {};
+        
+        FigisMap.loginWin.on('login',function(user){
+            for (var popupKey in popupCache){                
+                popupCache[popupKey].close();
+            }            
+        });
+        
 		var vmeLyr;
 		for (vmeLyr=0; vmeLyr<vme.length; vmeLyr++){
 			//VMSGetFeatureInfo FOR FIGIS-VME PROJECT
@@ -1407,7 +1414,7 @@ FigisMap.renderer = function(options) {
 										]
 	
 							}
-							
+
 							popup.add({
 										title: e.object.layers[0].name,
 										layout: "fit",
