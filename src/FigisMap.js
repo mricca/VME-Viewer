@@ -1626,6 +1626,13 @@ FigisMap.loginWin.on('login',function(user){
 FigisMap.loginWin.on('logout',function(user){
 		for (var popupKey in FigisMap.popupCache){                
                 FigisMap.popupCache[popupKey].close();
+                myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
+                myMap.getLayersByName('Encounters')[0].visibility = false;
+                myMap.getLayersByName('Encounters')[0].redraw(true);
+                
+                myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
+                myMap.getLayersByName('SurveyData')[0].visibility = false;
+                myMap.getLayersByName('SurveyData')[0].redraw(true);
 		}            
 });
 
