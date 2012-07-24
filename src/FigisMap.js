@@ -35,8 +35,8 @@ FigisMap.fifao = {
 	sdi : 'fifao:FAO_SUB_DIV',
 	spd : 'fifao:SPECIES_DIST', 
 	sub : 'fifao:FAO_SUB_AREA',
-	vme : 'fifao:VME', 
-	vme_fp : 'fifao:FOOTPRINTS',
+	vme : 'fifao:Vme', 
+	vme_fp : 'fifao:Footprints',
     vme_en : 'fifao:Encounters',
     vme_sd : 'fifao:Surveydata'
 };
@@ -1408,17 +1408,28 @@ FigisMap.renderer = function(options) {
 		                    	popup = FigisMap.popupCache[popupKey];
 		                    }
 
-		                    var addEncounters = function(btn) {
-		                        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
-                                myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
-                                myMap.getLayersByName('Encounters')[0].redraw(true);
-		                    }
-                            
+		                    var addEncounters = function(btn){
+		                    	if (btn.pressed == true){		                   
+				                    myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
+		                            myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
+		                            myMap.getLayersByName('Encounters')[0].redraw(true);
+		                    	}else{
+				                    myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
+		                            myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
+				                	myMap.getLayersByName('Encounters')[0].redraw(true);
+		                    	}
+                            }
 		                    var addServeyData = function(btn) {
-		                        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
-                                myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
-                                myMap.getLayersByName('SurveyData')[0].redraw(true);
-		                    }
+		                    	if (btn.pressed == true){			   
+				                    myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
+		                            myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
+		                            myMap.getLayersByName('SurveyData')[0].redraw(true);
+				                }else{
+				                    myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
+		                            myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
+		                            myMap.getLayersByName('SurveyData')[0].redraw(true);
+				                }
+				            }
 							var buttonsVme = [];
 							
 							if (e.object.layers[0].name == 'Established VME areas' && FigisMap.rnd.status.logged == true){
