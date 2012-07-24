@@ -303,9 +303,9 @@ h3 {
 }
 
 #user{
-margin: 1px 3px;
-float:left;
-
+	margin-top: 2px;
+	margin-left:3px;
+	float:left;
 }
 .encounters-icon{
 	background-image: url(../img/bullet_purple.png) !important;
@@ -317,14 +317,18 @@ float:left;
 
 }
 
-#user.user-login a{
+#login{
+	margin:0px 2px;
+
+}
+#login.user-login a{
 	padding-left:20px;
 	background-image: url(../img/door_in.png) !important;
 	background-repeat:no-repeat;
 
 }
 
-#user.user-logout a{
+#login.user-logout a{
 	padding-left:20px;
 	background-image: url(../img/door_out.png) !important;
 	background-repeat:no-repeat;

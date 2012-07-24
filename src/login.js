@@ -82,12 +82,18 @@ Ext.onReady(function(){
 					FigisMap.loginWin.userField.setValue("");
 					FigisMap.loginWin.passwordField.setValue("");
 					//change login link look
+					Ext.DomHelper.overwrite(document.getElementById("login"),{
+						tag:'span',
+						id:'login',
+						class:'user-login',
+						html:'<a onclick="FigisMap.logInOut()">Login</a>'
+					});
 					Ext.DomHelper.overwrite(document.getElementById("user"),{
 						tag:'span',
 						id:'user',
 						class:'user-login',
-						html:'<a onclick="FigisMap.logInOut()">Login</a>'
-				});
+						html:''
+					});
 				FigisMap.loginWin.fireEvent('logout');
 				},
 			   animEl: 'elId',
@@ -116,7 +122,13 @@ Ext.onReady(function(){
 					tag:'span',
 					id:'user',
 					class:'user-logout',
-					html:'You Are Logged as  <em>'+ user + ' </em> <a onclick="FigisMap.logInOut()">Logout</a>'
+					html:'You Are Logged as  <em>'+ user + ' </em>'
+				});
+				Ext.DomHelper.overwrite(document.getElementById("login"),{
+					tag:'span',
+					id:'login',
+					class:'user-logout',
+					html:'<a onclick="FigisMap.logInOut()">Logout</a>'
 				});
 				//fires event login
 				w.fireEvent('login',user);
@@ -136,9 +148,9 @@ Ext.onReady(function(){
 	};
 	
 	//setup login link
-	Ext.DomHelper.overwrite(document.getElementById("user"),{
+	Ext.DomHelper.overwrite(document.getElementById("login"),{
 				tag:'span',
-				id:'user',
+				id:'login',
 				class:'user-login',
 				html:'<a onclick="FigisMap.logInOut()">Login</a>'
 			});
