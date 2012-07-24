@@ -35,11 +35,11 @@ div.olLayerDiv {
     position: absolute;
     font-size: smaller;
 }
-.olControlScaleLine {
+div.olControlScaleLine {
    display: block;
    position: absolute;
-   left: 10px;
-   bottom: 15px;
+   left: 5px;
+   bottom: 35px;
    font-size: xx-small;
 }
 .olControlScaleLineBottom {
@@ -62,9 +62,9 @@ div.olLayerDiv {
     font-size: smaller;
 } 
 
-div.olControlMousePosition {
-    bottom: 0em;
-    right: 3px;
+div.olControlMousePosition.olControlNoSelect {
+    bottom: 15px;
+    left:5px;
     display: block;
     position: absolute;
     font-family: Arial;
