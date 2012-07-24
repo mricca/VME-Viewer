@@ -43,7 +43,7 @@ FigisMap.fifao = {
  
 FigisMap.defaults = {
 	lang		: document.documentElement.getAttribute('lang') ? document.documentElement.getAttribute('lang').toLowerCase() : 'en',
-	baseLayer	: { layer: FigisMap.fifao.cnt, cached: true, label : "Continents" },//FigisMap.fifao.maj,
+	baseLayer	: { layer: FigisMap.fifao.cnt, cached: true, remote:true, label : "Continents" },//FigisMap.fifao.maj,
 	basicsLayers	: true,
 	context		: 'default',
 	drawDataRect	: false,
@@ -74,6 +74,10 @@ FigisMap.rnd.vars = {
 	RFB_legendURL		: FigisMap.httpBaseRoot + "theme/img/RFB_legend.png",
 	wms			: FigisMap.geoServerBase + "/figis/geoserver" + "/wms",
 	gwc			: FigisMap.geoServerBase + "/figis/geoserver/gwc/service" + "/wms",
+	remote:{
+		wms: "http://figisapps.fao.org/figis/geoserver/wms",
+		gwc: "http://figisapps.fao.org/figis/geoserver/gwc/service/wms"
+	},
 	Legend_Base_Request	: FigisMap.geoServerBase + "/figis/geoserver" + "/wms" + "?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&WIDTH=30&HEIGHT=20",
 	wfs			: FigisMap.geoServerBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename=',
 	absWfs			: FigisMap.geoServerAbsBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename='
@@ -809,6 +813,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				icon	: '<img src="' + FigisMap.rnd.vars.EEZ_legendURL + '" width="30" height="20" />',
 				opacity	: 0.3,
 				hidden	: pars.isFIGIS,
+				remote  : true,
 				type	: 'auto'
 			});
 		}
@@ -818,6 +823,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				layer	: FigisMap.fifao.ma2,
 				label	: 'FAO fishing areas',
 				filter	:'*',
+				remote  : true, 
 				icon	:'<img src="'+FigisMap.rnd.vars.FAO_fishing_legendURL+'" width="30" height="20" />',
 				type	:'auto'
 			} );
@@ -829,6 +835,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			filter		: '*',
 			type		: 'auto',
 			style		: '*',
+			remote		: true,
 			skipLegend	: true,
 			hideInSwitcher	: true
 		} );
@@ -1270,7 +1277,7 @@ FigisMap.renderer = function(options) {
 		// myMap.baseLayer
 		myMap.addLayer( new OpenLayers.Layer.WMS(
 			p.base.title,
-			( p.base.cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms ),
+			(p.base.remote ? (p.base.cached ? FigisMap.rnd.vars.remote.gwc : FigisMap.rnd.vars.remote.wms) : ( p.base.cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms ) ),
 			{ layers: p.base.layer, format: olImageFormat, TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox },
 			{ wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false }
 		) );
@@ -1319,8 +1326,8 @@ FigisMap.renderer = function(options) {
 				var wp = new Object(); // OpenLayers.Layer.WMS constructor Paramters
 				
 				wp.name = l.lsTitle;
-				
-				wp.url = ( l.cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms );
+				wp.url =  l.remote==true ? (l.cached ? FigisMap.rnd.vars.remote.gwc : FigisMap.rnd.vars.remote.wms) : ( l.cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms );
+			
 				
 				wp.params = { format: olImageFormat, transparent: true, TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox };
 				wp.params.layers = l.layer;
@@ -1455,8 +1462,7 @@ FigisMap.renderer = function(options) {
 		OpenLayers.Feature.Vector.style['default']['fillOpacity'] = '0';
 		OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
 		
-		// handlig the zoom/center/extent
-		if ( projection == 4326 ) myMap.addControl( new OpenLayers.Control.Graticule({ visible: false, layerName: FigisMap.label('Coordinates Grid', p) }) );
+
 		
 		//myMap.zoomToExtent( myBounds, true );
 		if ( p.global ) {
@@ -1473,7 +1479,8 @@ FigisMap.renderer = function(options) {
 		} else {
 			autoZoom( layers );
 		}
-	
+			// handlig the zoom/center/extent
+		if ( projection == 4326 ) myMap.addControl( new OpenLayers.Control.Graticule({ visible: false, layerName: FigisMap.label('Coordinates Grid', p) }) );
 		FigisMap.debug('myMap:', myMap );
 		return myMap;
 		
