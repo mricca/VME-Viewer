@@ -1400,6 +1400,9 @@ FigisMap.renderer = function(options) {
 										})(popupKey)
 									}
 								});
+								for(var oldkey in FigisMap.popupCache){
+									FigisMap.popupCache[oldkey].close();
+								}
 								FigisMap.popupCache[popupKey] = popup;
 		                    } else{
 		                    	popup = FigisMap.popupCache[popupKey];
