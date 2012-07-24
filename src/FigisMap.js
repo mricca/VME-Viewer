@@ -1407,13 +1407,13 @@ FigisMap.renderer = function(options) {
 
 		                    var addEncounters = function(btn) {
 		                        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
-                                myMap.getLayersByName('Encounters')[0].visibility = true;
+                                myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
                                 myMap.getLayersByName('Encounters')[0].redraw(true);
 		                    }
                             
 		                    var addServeyData = function(btn) {
 		                        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
-                                myMap.getLayersByName('SurveyData')[0].visibility = true;
+                                myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
                                 myMap.getLayersByName('SurveyData')[0].redraw(true);
 		                    }
 							var buttonsVme = [];
@@ -1423,10 +1423,14 @@ FigisMap.renderer = function(options) {
 											{
 												iconCls : 'encounters-icon',
 												text    : 'Encounters',
+												enableToggle: true,
+												pressed : myMap.getLayersByName('Encounters')[0].visibility,
 												handler : addEncounters
 											},{
 												iconCls : 'surveydata-icon',
 												text    : 'Survey Data',
+												enableToggle: true,
+												pressed :myMap.getLayersByName('SurveyData')[0].visibility,
 												handler : addServeyData
 											}
 										]
