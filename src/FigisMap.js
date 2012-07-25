@@ -1207,7 +1207,7 @@ FigisMap.renderer = function(options) {
 	var target, projection, extent, center, zoom;
 	var olLayers = new Array();
 	var olImageFormat = OpenLayers.Util.alphaHack() ? "image/gif" : "image/png";
-    var info;
+    var info = {controls: []};
 	
 	// pink tile avoidance
 	OpenLayers.IMAGE_RELOAD_ATTEMPTS = 5;
@@ -1364,14 +1364,26 @@ FigisMap.renderer = function(options) {
 		}
 		FigisMap.popupCache = {};
         
-        
-
 		var vmeLyr;
+		
+        var control;
+        for (var i = 0, len = info.controls.length; i < len; i++){
+            control = info.controls[i];
+            control.deactivate();  // TODO: remove when http://trac.openlayers.org/ticket/2130 is closed
+            control.destroy();
+        }
+            
+		info.controls = [];
 		for (vmeLyr=0; vmeLyr<vme.length; vmeLyr++){
             
             //VMSGetFeatureInfo FOR FIGIS-VME PROJECT
-            info = new OpenLayers.Control.WMSGetFeatureInfo({
-					autoActivate: true,
+            control = new OpenLayers.Control.WMSGetFeatureInfo({
+					autoActivate: false,
+					displayClass: "olControlFeatureInfo",
+					title: "Query map features",
+					type: 2,
+					active: true,
+				    allowDepress: true,
 					layers: [vme[vmeLyr]],
 					queryVisible: true,
 					maxFeatures: 10,
@@ -1382,7 +1394,6 @@ FigisMap.renderer = function(options) {
                         }, 
 						getfeatureinfo: function(e) {
 		                    var popupKey = e.xy.x + "." + e.xy.y;
-							//var id = e.text.getElementByClassName("VME_ID");
 		                    var popup;
 		                    if (!(popupKey in FigisMap.popupCache)) {
 				                popup = new GeoExt.Popup({
@@ -1468,8 +1479,38 @@ FigisMap.renderer = function(options) {
 					}
 				})
 			//);
-            myMap.addControl(info);
-		};		                
+			
+            myMap.addControl(control); 
+            info.controls.push(control);         
+		    var panel = new OpenLayers.Control.Panel();
+		    
+            panel.addControls([control]); 
+             
+            // add the panel to the map
+            myMap.addControl(panel);
+        };		
+                        
+		function activateBtn(){
+	        for (var i = 0, len = info.controls.length; i < len; i++){
+	            control = info.controls[i];
+	            control.activate();
+	        }
+		}
+		
+		function deactivateBtn(){
+	        for (var i = 0, len = info.controls.length; i < len; i++){
+	            control = info.controls[i];
+	            control.deactivate();
+				for(var oldkey in FigisMap.popupCache){
+					FigisMap.popupCache[oldkey].close();
+				}
+	        }
+		}
+		
+        // register events to the featureInfo tool
+        control.events.register("activate", control, function() { activateBtn(); });                            
+        control.events.register("deactivate", control, function() { deactivateBtn(); }); 
+            
 		FigisMap.debug( 'FigisMap.renderer layers array, after filling map:', layers );
 		
 		// BUILDING THE LEGEND

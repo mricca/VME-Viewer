@@ -353,9 +353,9 @@ div.olControlSaveFeaturesItemInactive {
 /**
  * Layer switcher
  */
-.olControlLayerSwitcher {
+div.olControlLayerSwitcher {
     position: absolute;
-    top: 0px;
+    top: 35px;
     right: 0px;
     width: 24em;
     font-family: sans-serif;
@@ -368,7 +368,7 @@ div.olControlSaveFeaturesItemInactive {
     background-color: transparent;
 }
 
-.olControlLayerSwitcher .layersDiv {
+div.olControlLayerSwitcher .layersDiv {
 /*
     padding-top: 5px;
     padding-left: 5px;
@@ -382,26 +382,55 @@ div.olControlSaveFeaturesItemInactive {
     height: 100%;
 */
 }
-.olControlLayerSwitcher .layersDiv input {
+div.olControlLayerSwitcher .layersDiv input {
 	padding: 0;
 	margin: 0 4px 0 0;
 	border: 0;
 }
-.olControlLayerSwitcher .layersDiv .baseLbl,
-.olControlLayerSwitcher .layersDiv .dataLbl {
+div.olControlLayerSwitcher .layersDiv .baseLbl,
+div.olControlLayerSwitcher .layersDiv .dataLbl {
     margin-top: 3px;
     margin-left: 3px;
     margin-bottom: 3px;
 }
 
-.olControlLayerSwitcher .layersDiv .baseLayersDiv,
-.olControlLayerSwitcher .layersDiv .dataLayersDiv {
+div.olControlLayerSwitcher .layersDiv .baseLayersDiv,
+div.olControlLayerSwitcher .layersDiv .dataLayersDiv {
     padding-left: 5px;
 }
 
-.olControlLayerSwitcher .maximizeDiv,
-.olControlLayerSwitcher .minimizeDiv {
+div.olControlLayerSwitcher .maximizeDiv,
+div.olControlLayerSwitcher .minimizeDiv {
     top: 0px;
     right: 0px;
 }
-
+.olControlPanel 
+{
+	margin: 0px;
+	padding: 1px 0px 1px 0px;
+	background-color: #336699;
+    /*background-color: #fff;*/
+	margin-top: 4px;
+	margin-left: 770px;
+	border-right: solid 1px #999;
+	border-bottom: solid 1px #999;
+	border-left: solid 1px #999;
+	border-top: solid 1px #999;
+}
+.olControlPanel div 
+{ 
+	display:block;
+	width:  24px;
+	height: 24px;
+	float: left; /* remove this if you want a vertical toolbar  */
+	margin: 0px 1px 0px 1px
+}   
+.olControlPanel .olControlFeatureInfoItemActive
+{
+	background-image: url("../img/query_mode_on.png");
+}
+.olControlPanel .olControlFeatureInfoItemInactive 
+{
+	background-image: url("../img/query_mode_off.png");
+}    
+    
