@@ -1382,7 +1382,6 @@ FigisMap.renderer = function(options) {
 					displayClass: "olControlFeatureInfo",
 					title: "Query map features",
 					type: 2,
-					active: true,
 				    allowDepress: true,
 					layers: [vme[vmeLyr]],
 					queryVisible: true,
