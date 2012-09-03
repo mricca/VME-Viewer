@@ -22,6 +22,7 @@ var FigisMap = {
 	debugLevel	: 1 // 0|false|null: debug off, 1|true:console, 2: console + error alert
 };
 
+//layer names
 FigisMap.fifao = {
 	cbs : 'fifao:country_bounds',
 	cnt : 'fifao:UN_CONTINENT2',
@@ -84,14 +85,6 @@ FigisMap.rnd.vars = {
 };
 
 if ( FigisMap.useProxy ) FigisMap.rnd.vars.wfs = FigisMap.currentSiteURI + '/figis/proxy/cgi-bin/proxy.cgi?url=' + escape( FigisMap.rnd.vars.absWfs );
-
-/*document.write('<scr'+'ipt type="text/javascript" language="javascript" src="' + FigisMap.httpBaseRoot + 'proj4js/lib/proj4js-combined.js"></scr'+'ipt>');
-document.write('<scr'+'ipt type="text/javascript" language="javascript" src="' + FigisMap.httpBaseRoot + 'proj4js/lib/defs/EPSG4326.js"></scr'+'ipt>');
-document.write('<scr'+'ipt type="text/javascript" language="javascript" src="' + FigisMap.httpBaseRoot + 'proj4js/lib/defs/EPSG3031.js"></scr'+'ipt>');
-document.write('<scr'+'ipt type="text/javascript" language="javascript" src="' + FigisMap.httpBaseRoot + 'proj4js/lib/defs/EPSG900913.js"></scr'+'ipt>');
-
-document.write('<scr'+'ipt type="text/javascript" language="javascript" src="' + FigisMap.httpBaseRoot + 'src/OpenLayers.js"></scr'+'ipt>');
-document.write('<scr'+'ipt type="text/javascript" language="javascript" src="' + FigisMap.httpBaseRoot + 'js/figis-data.js" charset="UTF-8"></scr'+'ipt>');*/
 
 FigisMap.console = function( args, doAlert ) {
 	var e;
