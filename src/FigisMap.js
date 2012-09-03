@@ -1378,11 +1378,7 @@ FigisMap.renderer = function(options) {
             
             //VMSGetFeatureInfo FOR FIGIS-VME PROJECT
             control = new OpenLayers.Control.WMSGetFeatureInfo({
-					autoActivate: false,
-					displayClass: "olControlFeatureInfo",
-					title: "Query map features",
-					type: 2,
-				    allowDepress: true,
+					autoActivate: true,
 					layers: [vme[vmeLyr]],
 					queryVisible: true,
 					maxFeatures: 10,
@@ -1481,12 +1477,12 @@ FigisMap.renderer = function(options) {
 			
             myMap.addControl(control); 
             info.controls.push(control);         
-		    var panel = new OpenLayers.Control.Panel();
+		    //var panel = new OpenLayers.Control.Panel();
 		    
-            panel.addControls([control]); 
+            //panel.addControls([control]); 
              
             // add the panel to the map
-            myMap.addControl(panel);
+           // myMap.addControl(panel);
         };		
                         
 		function activateBtn(){
@@ -1507,8 +1503,8 @@ FigisMap.renderer = function(options) {
 		}
 		
         // register events to the featureInfo tool
-        control.events.register("activate", control, function() { activateBtn(); });                            
-        control.events.register("deactivate", control, function() { deactivateBtn(); }); 
+        //control.events.register("activate", control, function() { activateBtn(); });                            
+        //control.events.register("deactivate", control, function() { deactivateBtn(); }); 
             
 		FigisMap.debug( 'FigisMap.renderer layers array, after filling map:', layers );
 		
