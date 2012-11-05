@@ -64,7 +64,7 @@ FigisMap.geoServerBase = '';
 FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figis/figis-vme/' : '/figis/figis-vme/' );
 
 FigisMap.rnd.vars = {
-	geoserverURL		: FigisMap.geoServerBase + "/figis/geoserver",
+	geoserverURL		: FigisMap.geoServerBase + "/figis/geoserver",  //unused
 	geowebcacheURL		: FigisMap.geoServerBase + "/figis/geoserver/gwc/service",
 	logoURL			: FigisMap.httpBaseRoot + "theme/img/FAO_blue_20_transp.gif",
 	logoURLFirms		: FigisMap.httpBaseRoot + "theme/img/logoFirms60.gif",
