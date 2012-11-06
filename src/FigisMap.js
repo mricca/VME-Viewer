@@ -1449,20 +1449,33 @@ FigisMap.renderer = function(options) {
 										]
 	
 							}
-							var pattAllWite=new RegExp("\s");
-							pattAllWite.test(e.text);
-							popup.add({
-										title: e.object.layers[0].name,
-										layout: "fit",
-										bodyStyle: 'padding:10px;background-color:#F5F5DC',
-										html: e.text,
-										autoScroll: true,
-										autoWidth: true,
-										collapsible: false,
-										buttons : buttonsVme
-							});
-							popup.doLayout();
-							popup.show();
+							var res = e.text.match(/<body[^>]*>([\s]*)<\/body>/);
+							
+							e.object.layers[0].name
+							if(!res){
+								var oldItem;
+								if (popup.items){
+									oldItem =popup.items.get(e.object.layers[0].name);
+								}
+								if(oldItem){
+									oldItem.update(e.text);
+								}else{
+									popup.add({
+												itemId: e.object.layers[0].name,
+												title: e.object.layers[0].name,
+												layout: "fit",
+												bodyStyle: 'padding:10px;background-color:#F5F5DC',
+												html: e.text,
+												autoScroll: true,
+												autoWidth: true,
+												collapsible: false,
+												buttons : buttonsVme
+									});
+									
+									popup.doLayout();
+									popup.show();
+								}
+							}
 						}
 					}
 				})
