@@ -39,12 +39,15 @@ FigisMap.fifao = {
 	vme : 'fifao:Vme', 
 	vme_fp : 'fifao:Footprints',
     vme_en : 'fifao:Encounters',
-    vme_sd : 'fifao:Surveydata'
-};
+    vme_sd : 'fifao:Surveydata',
+	bathimetry: 'fifao:color_etopo1_ice_full' 
+}; 
  
 FigisMap.defaults = {
 	lang		: document.documentElement.getAttribute('lang') ? document.documentElement.getAttribute('lang').toLowerCase() : 'en',
-	baseLayer	: { layer: FigisMap.fifao.cnt, cached: true, remote:true, label : "Continents" },//FigisMap.fifao.maj,
+	defaultBaseLayer	: { layer: FigisMap.fifao.cnt, cached: true, remote:true, label : "Continents" },//FigisMap.fifao.maj,
+	baseLayers	: [{ layer: FigisMap.fifao.bathimetry, cached: true, remote:false, label : "Bathimetry",format: "image/jpeg" },//FigisMap.fifao.maj,
+				   { layer: FigisMap.fifao.cnt, cached: true, remote:true, label : "Continents" }],
 	basicsLayers	: true,
 	context		: 'default',
 	drawDataRect	: false,
@@ -476,11 +479,21 @@ FigisMap.parser.parse = function( p ) {
 		return p;
 	}
 	
-	if ( ! p.base ) if ( FigisMap.defaults.baseLayer ) p.base = FigisMap.defaults.baseLayer;
+	if ( ! p.base ) if ( FigisMap.defaults.baseLayers ) p.base = FigisMap.defaults.baseLayers;
+	p.defaultBase = FigisMap.defaults.defaultBaseLayer;
 	if ( p.base ) {
-		p.base = FigisMap.parser.layer( p.base, { 'type' : 'base'} );
-		if ( ! p.base.title ) p.base.title = FigisMap.label( p.base.label ? p.base.label : p.base.layer, p );
+		for(var i=0;i<p.base.length;i++){
+			p.base[i] = FigisMap.parser.layer( p.base[i], { 'type' : 'base'} );
+			if ( ! p.base[i].title ) p.base[i].title = FigisMap.label( p.base[i].label ? p.base[i].label : p.base[i].layer, p );
+		}
 	}
+	if ( p.defaultBase ) {
+		
+			p.defaultBase = FigisMap.parser.layer( p.defaultBase, { 'type' : 'base'} );
+			if ( ! p.defaultBase.title ) p.defaultBase.title = FigisMap.label( p.defaultBase.label ? p.defaultBase.label : p.defaultBase.layer, p );
+		
+	}
+
 	
 	p.distribution = FigisMap.parser.layers( p.distribution, { 'type' : 'distribution'} );
 	FigisMap.parser.checkLayerTitles( p.distribution, p );
@@ -1268,13 +1281,31 @@ FigisMap.renderer = function(options) {
 		);
 		
 		// myMap.baseLayer
-		myMap.addLayer( new OpenLayers.Layer.WMS(
-			p.base.title,
-			(p.base.remote ? (p.base.cached ? FigisMap.rnd.vars.remote.gwc : FigisMap.rnd.vars.remote.wms) : ( p.base.cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms ) ),
-			{ layers: p.base.layer, format: olImageFormat, TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox },
-			{ wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false }
-		) );
-		
+		if(projection== 3031){
+			//p.defaultBase
+			myMap.addLayer( new OpenLayers.Layer.WMS(
+					p.defaultBase.title,
+					(p.defaultBase.remote ? (p.defaultBase.cached ? FigisMap.rnd.vars.remote.gwc : FigisMap.rnd.vars.remote.wms) : ( p.defaultBase.cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms ) ),
+					{ layers: p.defaultBase.layer,  format: p.defaultBase.format ?p.defaultBase.format :olImageFormat, TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox },
+					{ wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false }
+				) );
+			
+		}else{
+			for( var i=0;i<p.base.length;i++){
+				myMap.addLayer( new OpenLayers.Layer.WMS(
+					p.base[i].title,
+					(p.base[i].remote ? (p.base[i].cached ? FigisMap.rnd.vars.remote.gwc : FigisMap.rnd.vars.remote.wms) : ( p.base[i].cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms ) ),
+					{ layers: p.base[i].layer, format: p.base[i].format ?p.base[i].format :olImageFormat, TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox },
+					{ wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false }
+				) );
+			}
+		}
+		// add GEBCO WMS
+		if(projection== 4326){
+			myMap.addLayer( new OpenLayers.Layer.WMS("GEBCO","http://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv",
+				{layers:"gebco_08_grid",format:"image/jpeg"}
+			));
+		}
 		// Managing OL controls
 		
 		myMap.addControl( new OpenLayers.Control.LayerSwitcher() );
