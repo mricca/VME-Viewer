@@ -24,6 +24,7 @@
 	<script type="text/javascript" src="lib/jQueryUI/js/jquery-ui-1.8.2.custom.min.js"></script> -->
 	
 	<script type="text/javascript" src="lib/OpenLayers/OpenLayers.js"></script>
+	<script type="text/javascript" src="lib/proj4js/lib/proj4js-compressed.js"></script>
 	<script type="text/javascript" src="src/LoadingPanel.js"></script>
 	<script type="text/javascript" src="lib/GeoExt/script/GeoExt.js"></script>
 
@@ -114,9 +115,11 @@
 			<label id="lblSRS">Select a projection:</label>
 			<select id="SelectSRS" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')">
 				<option value='4326' default>WGS84 (4326)</option>
-
 				<option value='3349'>Mercator (3349)</option>
 				<option value='3031'>South Polar (3031)</option>
+				<!-- missing proj4js eck4.js file -->
+				<!-- <option value='54012'>EckertIV (54012)</option> -->
+				<option value='54009'>Mollweide (54009)</option>
 			</select>
 			<span id="login" ></span>
 

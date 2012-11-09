@@ -30,6 +30,7 @@ FigisMap.fifao = {
 	eez : 'fifao:EEZ',
 	maj : 'fifao:FAO_MAJOR',
 	ma2 : 'fifao:FAO_MAJOR2',
+	mal : 'fifao:MarineAreas',
 	nma : 'fifao:eez2',
 	RFB : 'fifao:RFB',
 	rfb : 'fifao:RFB_COMP',
@@ -40,14 +41,16 @@ FigisMap.fifao = {
 	vme_fp : 'fifao:Footprints',
     vme_en : 'fifao:Encounters',
     vme_sd : 'fifao:Surveydata',
-	bathimetry: 'fifao:color_etopo1_ice_full' 
+	//bathimetry: 'fifao:color_etopo1_ice_full' //etopo
+	bathimetry: 'fifao:OB_LR'					//natural earth ocean bottom
+	
 }; 
  
 FigisMap.defaults = {
 	lang		: document.documentElement.getAttribute('lang') ? document.documentElement.getAttribute('lang').toLowerCase() : 'en',
-	defaultBaseLayer	: { layer: FigisMap.fifao.cnt, cached: true, remote:true, label : "Continents" },//FigisMap.fifao.maj,
+	defaultBaseLayer	: { layer: FigisMap.fifao.cnt, cached: true, remote:false, label : "Continents" },//FigisMap.fifao.maj,
 	baseLayers	: [{ layer: FigisMap.fifao.bathimetry, cached: true, remote:false, label : "Bathimetry",format: "image/jpeg" },//FigisMap.fifao.maj,
-				   { layer: FigisMap.fifao.cnt, cached: true, remote:true, label : "Continents" }],
+				   { layer: FigisMap.fifao.cnt, cached: true, remote:false, label : "Continents" }],
 	basicsLayers	: true,
 	context		: 'default',
 	drawDataRect	: false,
@@ -403,6 +406,8 @@ FigisMap.parser.projection = function( p ) {
 		case   3349	: break;
 		case 900913	: break;
 		case   3031	: break;
+		//case  54012 : break;
+		case  54009 : break;
 		default		: proj = 4326;
 	}
 	return proj;
@@ -656,7 +661,7 @@ FigisMap.rnd.maxResolution = function( proj, pars ) {
 			case 'M'	: return base / 2; break;
 			case 'L'	: return base / 4; break;
 		}
-	} else {
+	} else if(proj == 4326){
 // 		base = 0.703125;
 // 		offset = 0.1171875;
 // 		switch ( size ) {
@@ -670,6 +675,16 @@ FigisMap.rnd.maxResolution = function( proj, pars ) {
 			case 'S'	: return base /2; break;
 			case 'M'	: return base /4; break;
 			case 'L'	: return base /4; break;
+		}
+	} else if (proj == 54009){
+		//mollweide
+		
+		base = 281876.4952525812;
+		switch ( size ) {
+			case 'XS'	: return base; break;
+			case 'S'	: return base / 2; break;
+			case 'M'	: return base / 2; break;
+			case 'L'	: return base / 4; break;
 		}
 	}
 };
@@ -819,7 +834,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				icon	: '<img src="' + FigisMap.rnd.vars.EEZ_legendURL + '" width="30" height="20" />',
 				opacity	: 0.3,
 				hidden	: pars.isFIGIS,
-				remote  : true,
+				remote  : false,
 				type	: 'auto'
 			});
 		}
@@ -829,7 +844,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				layer	: FigisMap.fifao.ma2,
 				label	: 'FAO fishing areas',
 				filter	:'*',
-				remote  : true, 
+				remote  : false, 
 				icon	:'<img src="'+FigisMap.rnd.vars.FAO_fishing_legendURL+'" width="30" height="20" />',
 				type	:'auto'
 			} );
@@ -841,11 +856,22 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			filter		: '*',
 			type		: 'auto',
 			style		: '*',
-			remote		: true,
+			remote		: false,
 			skipLegend	: true,
 			hideInSwitcher	: true
 		} );
 	}
+	// marine areas
+	layers.push( {
+			layer		: FigisMap.fifao.mal,
+			cached		: true,
+			filter		: '*',
+			type		: 'auto',
+			style		: 'MarineAreasLabelled',
+			remote		: false,
+			skipLegend	: true,
+			hideInSwitcher	: true
+		} );
     
 	return layers;
 };
@@ -1258,6 +1284,8 @@ FigisMap.renderer = function(options) {
 		switch ( projection ) {
 			case   3031 : myBounds = new OpenLayers.Bounds(-25000000, -25000000, 25000000, 25000000); break;
 			case 900913 : myBounds = new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34); break;
+			//case 54012	: myBounds = new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34); break;
+			case 54009	: myBounds = new OpenLayers.Bounds(-18040095.6961652, -9020047.847897789, 18040095.6961652, 9020047.847897789); break;
 			default     : projection = 4326; myBounds = new OpenLayers.Bounds(-180, -90, 180, 90);
 		}
 		
@@ -1276,21 +1304,12 @@ FigisMap.renderer = function(options) {
 				restrictedExtent: ( projection == 3031 ? myBounds : null ),
 				maxResolution: mapMaxRes,
 				projection: new OpenLayers.Projection( 'EPSG:' + projection ),
-				units: ( projection == 4326 ? 'degrees' : 'm' )
+				units: ( projection == 4326  ? 'degrees' : 'm' )
 			}
 		);
 		
-		// myMap.baseLayer
-		if(projection== 3031){
-			//p.defaultBase
-			myMap.addLayer( new OpenLayers.Layer.WMS(
-					p.defaultBase.title,
-					(p.defaultBase.remote ? (p.defaultBase.cached ? FigisMap.rnd.vars.remote.gwc : FigisMap.rnd.vars.remote.wms) : ( p.defaultBase.cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms ) ),
-					{ layers: p.defaultBase.layer,  format: p.defaultBase.format ?p.defaultBase.format :olImageFormat, TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox },
-					{ wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false }
-				) );
-			
-		}else{
+		// myMap.baseLayer Backgrounds
+		if(projection == 4326 || projection == 900913 ){
 			for( var i=0;i<p.base.length;i++){
 				myMap.addLayer( new OpenLayers.Layer.WMS(
 					p.base[i].title,
@@ -1299,6 +1318,15 @@ FigisMap.renderer = function(options) {
 					{ wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false }
 				) );
 			}
+		}else{
+			//p.defaultBase
+			myMap.addLayer( new OpenLayers.Layer.WMS(
+					p.defaultBase.title,
+					(p.defaultBase.remote ? (p.defaultBase.cached ? FigisMap.rnd.vars.remote.gwc : FigisMap.rnd.vars.remote.wms) : ( p.defaultBase.cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms ) ),
+					{ layers: p.defaultBase.layer,  format: p.defaultBase.format ?p.defaultBase.format :olImageFormat, TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox },
+					{ wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false }
+				) );
+			
 		}
 		// add GEBCO WMS
 		if(projection== 4326){
@@ -1341,6 +1369,7 @@ FigisMap.renderer = function(options) {
 				case FigisMap.fifao.cnt : l.cached = true; break;
 				case FigisMap.fifao.ma2 : l.cached = true; break;
 				case FigisMap.fifao.nma : l.cached = true; break;
+				case FigisMap.fifao.mal : l.cached = true; break;
 				default : l.cached = false;
 			}
 			
