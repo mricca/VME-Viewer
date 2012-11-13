@@ -85,7 +85,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	itemSelector:'div.search-result',
 	itemCls: '.x-view-item',
 	overClass:'x-view-over',
-	selectedClass: 'x-view-selected'
+	selectedClass: 'x-view-selected',
 	emptyText: 'Nothing to display',
 	listeners: {
       click: function(view,index,node,event){
