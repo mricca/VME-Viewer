@@ -1336,8 +1336,9 @@ FigisMap.renderer = function(options) {
 			));
 		}
 		// Managing OL controls
-		
-		myMap.addControl( new OpenLayers.Control.LayerSwitcher({div:OpenLayers.Util.getElement('layerswitcher')}) );
+		var div = OpenLayers.Util.getElement('layerswitcher');
+		div.innerHTML="";
+		myMap.addControl( new OpenLayers.Control.LayerSwitcher({div:div}) );
 		myMap.addControl( new OpenLayers.Control.LoadingPanel() );
 		myMap.addControl( new OpenLayers.Control.Navigation({ zoomWheelEnabled: true }) );
 	
