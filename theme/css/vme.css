@@ -338,3 +338,22 @@ h3 {
 #user.user-logout em{
 	font-weight:bold;
 }
+
+.x-combo-list-item {
+	text-align:left;
+}
+
+#layerswitcher >div{
+	display:none;
+}
+#layerswitcher div.layersDiv{
+	margin:20px;
+	display:block;
+}
+
+#layerswitcher div.layersDiv .baseLbl, #layerswitcher div.layersDiv .dataLbl{
+	font-weight:bold;
+	margin: 4px auto;
+	
+}
+

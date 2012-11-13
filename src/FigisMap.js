@@ -921,6 +921,7 @@ FigisMap.rnd.sort4legend = function( layers, p ) {
 
 FigisMap.rnd.legend = function( layers, pars ) {
 	if ( pars.legend.div ) pars.legend.div.innerHTML = FigisMap.rnd.mainLegend( layers, pars );
+
 	if ( pars.countriesLegend.div ) pars.countriesLegend.div.innerHTML = FigisMap.rnd.countriesLegend( pars );
 };
 
@@ -1336,7 +1337,7 @@ FigisMap.renderer = function(options) {
 		}
 		// Managing OL controls
 		
-		myMap.addControl( new OpenLayers.Control.LayerSwitcher() );
+		myMap.addControl( new OpenLayers.Control.LayerSwitcher({div:OpenLayers.Util.getElement('layerswitcher')}) );
 		myMap.addControl( new OpenLayers.Control.LoadingPanel() );
 		myMap.addControl( new OpenLayers.Control.Navigation({ zoomWheelEnabled: true }) );
 	
@@ -1424,6 +1425,7 @@ FigisMap.renderer = function(options) {
             control = info.controls[i];
             control.deactivate();  // TODO: remove when http://trac.openlayers.org/ticket/2130 is closed
             control.destroy();
+			document.getElementById("layerswitcher").innerHTML="";
         }
             
 		info.controls = [];

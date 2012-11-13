@@ -32,7 +32,7 @@
 	<script type="text/javascript" src="src/login.js"></script>	
 	<script type="text/javascript" src="src/init.js" ></script>	
 	<script type="text/javascript" src="src/VMESliderPanel.js" ></script>
-	
+
 	<script type="text/javascript" src="src/FigisMap.js"></script>
 	
 	<script type="text/javascript" src="src/rfb.js"></script>
@@ -82,7 +82,7 @@
     </style>
 </head>
 
-<body onload="setRFBPage('e-link','rfbs-link', 'rfbs-html')">
+<body>
 
 	<div id="wrapper">
 		<div id="top">
@@ -161,8 +161,8 @@
 				</div>
 
 			</div-->
-			<div class="legend legendTitle" id="legendLegendTitle">Legend</div>
-			<div id="legend" class="legend"></div>
+			<!-- <div class="legend legendTitle" id="legendLegendTitle">Legend</div>
+			<div id="legend" class="legend"></div> -->
 			<!--div class="legend legendTitle" id="legendMembersTitle">List of Members</div>
 			<div id="MemberCountries" class="legend"></div-->
 		</div>
@@ -186,6 +186,11 @@
 	</div>
 	<script type="text/javascript" language="javascript">
 	// <![CDATA[
+		Ext.onReady(function(){
+			sidePanel.render(document.getElementById('sidebar'));
+
+			setRFBPage('e-link','rfbs-link', 'rfbs-html');
+		});
 		function updateCopyYear() {
 			var uy = new Date();
 			uy = parseInt(uy.getFullYear() ? uy.getFullYear() : uy.getYear());
