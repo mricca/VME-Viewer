@@ -357,3 +357,33 @@ h3 {
 	
 }
 
+/** Search Results **/
+.search-result{
+	margin:0;
+	padding:2px;
+}
+
+.x-view-item{border-bottom:thin solid black;}
+.x-view-over{background-color:#DBF1FF;cursor:pointer;}
+.x-view-selected{background-color:#A2CAE5}
+
+/** ICONS **/
+.legend-icon{
+	background-image: url(../img/icons/legend.png) !important;
+}
+.map-icon{
+	background-image: url(../img/icons/map.png) !important;
+}
+.layers-icon{
+	background-image: url(../img/icons/layers.png) !important;
+}
+.search-icon{
+	background-image: url(../img/icons/magnifier.png) !important;
+}
+.clear-icon{
+	background-image: url(../img/icons/delete.png) !important;
+}
+.back-search-icon{
+	background-image: url(../img/icons/application_form_magnify.png) !important;
+}
+

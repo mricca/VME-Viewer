@@ -4,7 +4,7 @@ Vme.data={
 	templates: {
 		searchResult: 
 				'<tpl for=".">'+
-					'<div class="search-result" style="border-bottom:thin solid black">' +
+					'<div class="search-result">' +
 						'<span class="ocean" >{ocean}</span> - '+'<span class="areatype" >{areatype}</span> - '+'<span class="area" >{area}</span> - '+'<span class="id" >{id}</span><br/>'+
 						'<span class="source" style="font-weight:bold">{source}</span>'+
 					'</div>'+
@@ -78,12 +78,23 @@ Vme.data.stores = {
 Vme.form.widgets.SearchResults = new Ext.DataView({
 	store: Vme.data.stores.SearchResultStore,
 	tpl: Vme.data.templates.searchResult,
+	singleSelect: true,
 	height:450,
 	autoScroll:true,
-	multiSelect: true,
+	//multiSelect: true,
+	itemSelector:'div.search-result',
+	itemCls: '.x-view-item',
 	overClass:'x-view-over',
-	itemSelector:'div.thumb-wrap',
+	selectedClass: 'x-view-selected'
 	emptyText: 'Nothing to display',
+	listeners: {
+      click: function(view,index,node,event){
+        if( window.console ) console.log('dataView.click(%o,%o,%o,%o)',view,index,node,event);
+      },
+      beforeclick: function(view,index,node,event){
+        if( window.console ) console.log('dataView.beforeclick(%o,%o,%o,%o)',view,index,node,event);
+      },
+    },
 	
 		
 		
@@ -94,9 +105,9 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 	labelWidth: 75, // label settings here cascade unless overridden
 	//url:'save-form.php',
 	bodyStyle:'padding:5px 5px 0',
-	width: 200,
+	
 	labelAlign :'top',
-	defaults: {width: 180},
+	defaults: {anchor:'100%' },
 	defaultType: 'combo',
 	items: [
 		{
@@ -105,7 +116,6 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			name : 'text',
 			ref:'../text',
 			emptyText:'Free Text...'
-
 		},{
 			fieldLabel: 'By RFMO and other institutions [<a href="#">?</a>]',
 			name: 'RFMO',
@@ -169,33 +179,41 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 		{
 			text: 'Search',
 			ref: '../Search',
+			iconCls: 'search-icon',
 			handler: function(){
 				Vme.data.stores.SearchResultStore.load();
 				Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-1');
 			}
 		},{
-			text: 'Clear'
+			text: 'Clear',
+			iconCls:'clear-icon'
+			
 		}
 	]
 });
 
 Vme.form.panels.SearchPanel = new Ext.Panel({
-	title:'Search',
+	
 	layout:'card',
 	activeItem: 0,
-	height:550,
+	
 	
 	defaults: {
-		// applied to each contained panel
 		border:false
 	},
 	items:[{
 			id: 'searchcard-0',
 			xtype:'panel',
+			defaults: {
+				border:false
+			},
 			items:[Vme.form.panels.SearchForm]
 		},{
 			id: 'searchcard-1',
 			xtype:'panel',
+			defaults: {
+				border:false
+			},
 			items:[
 				{
 					xtype:'panel',
@@ -209,9 +227,10 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 						})
 					]
 			}],
-			buttons:[{
-				xtype: 'tbbutton',
+			bbar:[{
+				xtype: 'button',
 				text: '&laquo; Back to the search form',
+				iconCls: 'back-search-icon',
 				handler: function(){Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-0')}
 			}],
 		}
@@ -228,18 +247,38 @@ var sidePanel = new Ext.TabPanel({
 	activeTab:0,
 	deferredRender:false,
 	border:false,
-	items:[{
-			id:'legendpanel',
-			title:'Legend',
-			html:'<div id="legend" class="legend"></div>',
+	defaults:{
+		border:false
+	},
+	items:[
+		{
+			layout:'accordion',
+			title:'Map',
+			activeItem: 'legendpanel',
+			iconCls:'map-icon',			
+			renderHidden:true,
+			defaults:{
+				border:false
+			},
+			items:[{	
+				id:'layerswitcherpanel',
+				title:'Layers',
+				iconCls: 'layers-icon',
+				html:'<div id="layerswitcher"></div>',
+			
+			},
+			{
+				id:'legendpanel',
+				title:'Legend',
+				iconCls: 'legend-icon',	
+				html:'<div id="legend" class="legend"></div>',
+			}]
 		},
-		
-		{	
-			id:'layerswitcherpanel',
-			title:'Layers',
-			html:'<div id="layerswitcher"></div>',
-		
-		},Vme.form.panels.SearchPanel
+		{
+			title:'Search',
+			iconCls: 'search-icon',
+			items:[Vme.form.panels.SearchPanel]
+		}
 		
 	]
 
