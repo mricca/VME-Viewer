@@ -186,7 +186,10 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			}
 		},{
 			text: 'Clear',
-			iconCls:'clear-icon'
+			iconCls:'clear-icon',
+			handler: function(){
+				Vme.form.panels.SearchForm.getForm().reset();
+			}
 			
 		}
 	]
