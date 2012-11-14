@@ -360,10 +360,11 @@ h3 {
 /** Search Results **/
 .search-result{
 	margin:0;
-	padding:2px;
+	padding: 6px 2px;
+	border-bottom:thin solid black;
 }
 
-.x-view-item{border-bottom:thin solid black;}
+
 .x-view-over{background-color:#DBF1FF;cursor:pointer;}
 .x-view-selected{background-color:#A2CAE5}
 
