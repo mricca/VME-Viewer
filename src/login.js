@@ -42,7 +42,7 @@ Ext.onReady(function(){
 			xtype: 'form',
 			ref: 'form',
 			bodyStyle:{
-				padding: "10px",
+				padding: "10px"
 				
 			},
 			items:[
@@ -104,13 +104,13 @@ Ext.onReady(function(){
 					Ext.DomHelper.overwrite(document.getElementById("login"),{
 						tag:'span',
 						id:'login',
-						class:'user-login',
+						'class':'user-login',
 						html:'<a onclick="FigisMap.logInOut()">Login</a>'
 					});
 					Ext.DomHelper.overwrite(document.getElementById("user"),{
 						tag:'span',
 						id:'user',
-						class:'user-login',
+						'class':'user-login',
 						html:''
 					});
 				FigisMap.loginWin.fireEvent('logout');
@@ -140,13 +140,13 @@ Ext.onReady(function(){
 				Ext.DomHelper.overwrite(document.getElementById("user"),{
 					tag:'span',
 					id:'user',
-					class:'user-logout',
+					'class':'user-logout',
 					html:'You Are Logged as  <em>'+ user + ' </em>'
 				});
 				Ext.DomHelper.overwrite(document.getElementById("login"),{
 					tag:'span',
 					id:'login',
-					class:'user-logout',
+					'class':'user-logout',
 					html:'<a onclick="FigisMap.logInOut()">Logout</a>'
 				});
 				//fires event login
@@ -170,7 +170,7 @@ Ext.onReady(function(){
 	Ext.DomHelper.overwrite(document.getElementById("login"),{
 				tag:'span',
 				id:'login',
-				class:'user-login',
+				'class':'user-login',
 				html:'<a onclick="FigisMap.logInOut()">Login</a>'
 			});
 });

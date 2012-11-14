@@ -48,20 +48,20 @@ Vme.data.stores = {
 	}),
 	areaTypeStore:  new Ext.data.ArrayStore({
         id: 0,
-		data: Vme.data.models.areaTypes,
         fields: [
             'id',
             'displayText'
         ],
+		data: Vme.data.models.areaTypes
         
     }),
 	VmeStatusStore: new Ext.data.ArrayStore({
         id: 0,
-		data: Vme.data.models.VmeStatuses,
         fields: [
             'id',
             'displayText'
         ],
+		data: Vme.data.models.VmeStatuses
 
     }),
 	yearStore:  new Ext.data.ArrayStore({id:0,data: Vme.data.models.years,fields:['year','yeartext']}),
@@ -79,11 +79,11 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	store: Vme.data.stores.SearchResultStore,
 	tpl: Vme.data.templates.searchResult,
 	singleSelect: true,
-	height:462,
+	height:470,
 	autoScroll:true,
 	//multiSelect: true,
 	itemSelector:'div.search-result',
-	itemCls: '.x-view-item',
+	itemCls: 'x-view-item',
 	overClass:'x-view-over',
 	selectedClass: 'x-view-selected',
 	emptyText: 'Nothing to display',
@@ -93,8 +93,8 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
       },
       beforeclick: function(view,index,node,event){
         if( window.console ) console.log('dataView.beforeclick(%o,%o,%o,%o)',view,index,node,event);
-      },
-    },
+      }
+    }
 	
 		
 		
@@ -171,7 +171,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			store:  Vme.data.stores.yearStore,
 			valueType : 'id',
 			displayField: 'year',
-            valueField: 'yearText',
+            valueField: 'yearText'
 		}
 	],
 
@@ -239,7 +239,7 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 				text: '&laquo; Back to the search form',
 				iconCls: 'back-search-icon',
 				handler: function(){Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-0')}
-			}],
+			}]
 		}
 	]
 		
@@ -271,14 +271,14 @@ var sidePanel = new Ext.TabPanel({
 				id:'layerswitcherpanel',
 				title:'Layers',
 				iconCls: 'layers-icon',
-				html:'<div id="layerswitcher"></div>',
+				html:'<div id="layerswitcher"></div>'
 			
 			},
 			{
 				id:'legendpanel',
 				title:'Legend',
 				iconCls: 'legend-icon',	
-				html:'<div id="legend" class="legend"></div>',
+				html:'<div id="legend" class="legend"></div>'
 			}]
 		},
 		{
