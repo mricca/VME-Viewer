@@ -79,7 +79,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	store: Vme.data.stores.SearchResultStore,
 	tpl: Vme.data.templates.searchResult,
 	singleSelect: true,
-	height:450,
+	height:462,
 	autoScroll:true,
 	//multiSelect: true,
 	itemSelector:'div.search-result',
@@ -221,14 +221,18 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 				{
 					xtype:'panel',
 					items:[Vme.form.widgets.SearchResults],
-					bbar :[ new Ext.PagingToolbar({
+					bbar : new Ext.PagingToolbar({
 							store: Vme.data.stores.SearchResultStore,
 							pageSize: 5,
 							displayInfo: true,
 							displayMsg: '',
-							emptyMsg: ""
+							emptyMsg: "",
+							listeners:{
+								beforerender: function(){this.refresh.setVisible(false);}
+								
+							}
 						})
-					]
+					
 			}],
 			bbar:[{
 				xtype: 'button',
