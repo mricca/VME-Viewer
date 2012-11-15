@@ -21,20 +21,27 @@ Vme.form={
 
 
 Vme.data.models = {
-	rfmos : [['WCPFC','WCPFC'],['IATTC','IATTC'],['ICCAT','ICCAT'],['CCSBT','CCSBT'],['IOTC','IOTC'],['WCPFC','WCPFC']],
-	areaTypes : [[0,'All'],[1,'VME'],[2,'Risk Area'], [3,'Benthic protext area'],[4, 'Closed area'],[5,'Other types of managed areas']],
+	rfmos : [['WCPFC','WCPFC'],['IATTC','IATTC'],['ICCAT','ICCAT'],['CCSBT','CCSBT'],['IOTC','IOTC']],
+	areaTypes : [
+		[0, FigisMap.label('VME_TYPE_ALL')],
+		[1, FigisMap.label('VME_TYPE_VME')],
+		[2, FigisMap.label('VME_TYPE_RISK')],
+		[3, FigisMap.label('VME_TYPE_BPA')],
+		[4, FigisMap.label('VME_TYPE_CLOSED')],
+		[5, FigisMap.label('VME_TYPE_OTHER')]
+	],
 	VmeStatuses:[ 
-		[0, 'All'],
-		[1, 'Established',],
-		[2, 'Under establishment'],
-		[3, 'Risk' ],
-		[4, 'Voluntary'],
-		[5,	'Exploratory'],
-		[6, 'Potential'],
-		[7, 'Temporary ']
+		[0, FigisMap.label("VME_STATUS_ALL")],
+		[1, FigisMap.label("VME_STATUS_ENS")],
+		[2, FigisMap.label("VME_STATUS_UNDEST")],
+		[3, FigisMap.label("VME_STATUS_RISK")],
+		[4, FigisMap.label("VME_STATUS_VOL")],
+		[5, FigisMap.label("VME_STATUS_EXP")],
+		[6, FigisMap.label("VME_STATUS_POT")],
+		[7, FigisMap.label("VME_STATUS_TEMP")]
 		
 	],
-	years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=1960;var ret=[];while(year<now+1){ret.push([year,''+year]);year++;}return ret;})()
+	years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})() 
 
 };
 Vme.data.stores = {
@@ -64,7 +71,7 @@ Vme.data.stores = {
 		data: Vme.data.models.VmeStatuses
 
     }),
-	yearStore:  new Ext.data.ArrayStore({id:0,data: Vme.data.models.years,fields:['year','yeartext']}),
+	yearStore:  new Ext.data.ArrayStore({id:0,data: Vme.data.models.years,fields:['year']}),
 	SearchResultStore : new Ext.data.JsonStore({
 		url: 'dummyData.js',
 		
@@ -86,7 +93,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	itemCls: 'x-view-item',
 	overClass:'x-view-over',
 	selectedClass: 'x-view-selected',
-	emptyText: 'Nothing to display',
+	emptyText: FigisMap.label('SEARCH_NO_RES'),
 	listeners: {
       click: function(view,index,node,event){
         if( window.console ) console.log('dataView.click(%o,%o,%o,%o)',view,index,node,event);
@@ -111,16 +118,16 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 	defaultType: 'combo',
 	items: [
 		{
-			fieldLabel:'Text',
+			fieldLabel: FigisMap.label("SEARCH_TEXT_LBL"),
 			xtype: 'textfield',
 			name : 'text',
 			ref:'../text',
-			emptyText:'Free Text...'
+			emptyText: FigisMap.label("SEARCH_TEXT_EMP")
 		},{
-			fieldLabel: 'By RFMO and other institutions [<a href="#">?</a>]',
+			fieldLabel: FigisMap.label('SEARCH_RFMO_LBL')+' [<a href="#">?</a>]',
 			name: 'RFMO',
 			ref:'../RFMO',
-			emptyText:'Select...',
+			emptyText:  FigisMap.label('SEARCH_RFMO_EMP'),
 			store: Vme.data.stores.rfmoStore,
 			allowBlank:true,
 			forceSelection:true,
@@ -128,10 +135,10 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			mode: 'local',
 			displayField: 'name'
 		},{
-			fieldLabel: 'By Area Type [<a href="#">?</a>]',
+			fieldLabel: FigisMap.label('SEARCH_TYPE_LBL')+' [<a href="#">?</a>]',
 			name: 'AreaType',
 			ref: '../AreaType',
-			emptyText:'Select...',
+			emptyText:  FigisMap.label('SEARCH_TYPE_EMP'),
 			allowBlank:true,
 			forceSelection:true,
 			triggerAction: 'all',
@@ -140,10 +147,10 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			valueType : 'id',
 			displayField: 'displayText'
 		},{
-			fieldLabel: 'By Status [<a href="#">?</a>]',
+			fieldLabel: FigisMap.label('SEARCH_STAT_LBL')+' [<a href="#">?</a>]',
 			name: 'status',
 			ref: '../status',
-			emptyText:'Select...',
+			emptyText:  FigisMap.label('SEARCH_STAT_EMP'),
 			allowBlank:true,
 			forceSelection:true,
 			typeAhead: true,
@@ -153,31 +160,31 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			valueType : 'id',
 			displayField: 'displayText'
 		},{
-			fieldLabel: 'By VME Criteria [<a href="#">?</a>]',
+			fieldLabel: FigisMap.label('SEARCH_CRIT_LBL')+' [<a href="#">?</a>]',
 			name: 'vmeCriteria',
 			ref: '../vmeCriteria',
-			emptyText:'Select...'
+			emptyText:  FigisMap.label('SEARCH_CRIT_EMP')
 		}, 
 		{
-			fieldLabel: 'By Year [<a href="#">?</a>]',
+			fieldLabel: FigisMap.label('SEARCH_YEAR_LBL') +'[<a href="#">?</a>]',
 			name: 'year',
 			ref:'../year',
-			emptyText:'Select Year',
+			emptyText:FigisMap.label('SEARCH_YEAR_EMP'),
 			allowBlank:true,
 			forceSelection:true,
 			typeAhead: true,
 			triggerAction: 'all',
 			mode: 'local',
 			store:  Vme.data.stores.yearStore,
-			valueType : 'id',
+			//valueType : 'id',
 			displayField: 'year',
-            valueField: 'yearText'
+            valueField: 'year'
 		}
 	],
 
 	buttons: [
 		{
-			text: 'Search',
+			text: FigisMap.label('SIDP_SEARCH'),
 			ref: '../Search',
 			iconCls: 'search-icon',
 			handler: function(){
@@ -185,7 +192,8 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 				Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-1');
 			}
 		},{
-			text: 'Clear',
+			text: FigisMap.label('SIDP_CLEAR'),
+			ref: '../Clear',
 			iconCls:'clear-icon',
 			handler: function(){
 				Vme.form.panels.SearchForm.getForm().reset();
@@ -236,7 +244,7 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 			}],
 			bbar:[{
 				xtype: 'button',
-				text: '&laquo; Back to the search form',
+				text: FigisMap.label('SEARCH_BACK_FORM'),
 				iconCls: 'back-search-icon',
 				handler: function(){Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-0')}
 			}]
@@ -260,7 +268,7 @@ var sidePanel = new Ext.TabPanel({
 	items:[
 		{
 			layout:'accordion',
-			title:'Map',
+			title:FigisMap.label('SIDP_MAP'),
 			activeItem: 'legendpanel',
 			iconCls:'map-icon',			
 			renderHidden:true,
@@ -269,20 +277,20 @@ var sidePanel = new Ext.TabPanel({
 			},
 			items:[{	
 				id:'layerswitcherpanel',
-				title:'Layers',
+				title:FigisMap.label('SIDP_LAYERS'),
 				iconCls: 'layers-icon',
 				html:'<div id="layerswitcher"></div>'
 			
 			},
 			{
 				id:'legendpanel',
-				title:'Legend',
+				title:FigisMap.label('SIDP_LEGEND'),
 				iconCls: 'legend-icon',	
 				html:'<div id="legend" class="legend"></div>'
 			}]
 		},
 		{
-			title:'Search',
+			title:FigisMap.label('SIDP_SEARCH'),
 			iconCls: 'search-icon',
 			items:[Vme.form.panels.SearchPanel]
 		}
