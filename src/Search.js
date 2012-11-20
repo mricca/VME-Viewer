@@ -3,12 +3,24 @@ var Vme={};
 Vme.data={
 	templates: {
 		searchResult: 
+				new Ext.XTemplate(
 				'<tpl for=".">'+
 					'<div class="search-result">' +
-						'<span class="ocean" >{ocean}</span> - '+'<span class="areatype" >{areatype}</span> - '+'<span class="area" >{area}</span> - '+'<span class="id" >{id}</span><br/>'+
-						'<span class="source" style="font-weight:bold">{source}</span>'+
+						'<span class="localname" >{[this.writeStatus(values.status)]}</span> {year} - '+'<span class="areatype" >{Terr_Name}</span> - '+'<span class="id" >{vme_id}</span><br/>'+
+						'<span class="source" style="font-weight:bold">Vulnerable Marine Ecosystem Database</span>'+
 					'</div>'+
-				'</tpl>'
+				'</tpl>',{
+				compiled:true,
+					writeStatus:function(status){
+						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
+						var text =statusRecord ? statusRecord.get('displayText'):status;
+						return text;
+					}
+
+				})
+	},
+	constants:{
+		pageSize:10
 	}
 	
 
@@ -72,12 +84,113 @@ Vme.data.stores = {
 
     }),
 	yearStore:  new Ext.data.ArrayStore({id:0,data: Vme.data.models.years,fields:['year']}),
-	SearchResultStore : new Ext.data.JsonStore({
+	/*SearchResultStore : new Ext.data.JsonStore({
 		url: 'dummyData.js',
 		
 		fields: [
 			'ocean', 'areatype', 'area', 'id', 'source'
 		]
+	})*/
+	SearchResultStore:new Ext.data.JsonStore({
+		//combo:this,
+		method:'GET',
+		
+		root:'features',
+		messageProperty: 'crs',
+		autoLoad: false,
+		fields: [
+			{name: 'id', mapping: 'fid'},
+			{name: 'geometry', mapping: 'geometry'},
+			{name: 'localname',  mapping: 'properties.Terr_Name'},
+			{name: 'bbox',		mapping: 'properties.bbox'},
+			{name: 'vme_id',     mapping: 'properties.VME_ID'},
+			{name: 'status', 	 mapping: 'properties.STATUS'},
+			{name: 'year', mapping: 'properties.YEAR'},
+			
+		],
+		url: 'http://office.geo-solutions.it/figis/geoserver/fifao/ows',
+		recordId: 'fid',
+		paramNames:{
+			start: "startindex",
+			limit: "maxfeatures",
+			sort: "sortBy"
+		},
+		baseParams:{
+			service:'WFS',
+			version:'1.0.0',
+			request:'GetFeature',
+			typeName: 'fifao:Vme',
+			outputFormat:'json',
+			sortBy: 'VME_ID',
+			srs:'EPSG:4326'
+			
+		
+		},
+		listeners:{
+			beforeload: function(store){
+			
+				//TODO get srs
+				//store.setBaseParam( 'srsName',app.mapPanel.map.getProjection() );
+			}
+		},
+		
+		loadRecords : function(o, options, success){
+			if (this.isDestroyed === true) {
+				return;
+			}
+			if(!o || success === false){
+				if(success !== false){
+					this.fireEvent('load', this, [], options);
+				}
+				if(options.callback){
+					options.callback.call(options.scope || this, [], options, false, o);
+				}
+				return;
+			}
+			this.crs = this.reader.jsonData.crs;
+			this.bbox =  this.reader.jsonData.bbox;
+			this.featurecollection = this.reader.jsonData;
+			//custom total workaround
+			var estimateTotal = function(o,options,store){
+				var current = o.totalRecords +  options.params[store.paramNames.start] ;
+				var currentCeiling = options.params[store.paramNames.start] + options.params[store.paramNames.limit];
+				if(current < currentCeiling){
+					return current;
+				}else{
+					return 100000000000000000; 
+				}
+
+			}
+			o.totalRecords = estimateTotal(o,options,this);
+			//end of custom total workaround
+			
+			var r = o.records, t = o.totalRecords || r.length;
+			if(!options || options.add !== true){
+				if(this.pruneModifiedRecords){
+					this.modified = [];
+				}
+				for(var i = 0, len = r.length; i < len; i++){
+					r[i].join(this);
+				}
+				if(this.snapshot){
+					this.data = this.snapshot;
+					delete this.snapshot;
+				}
+				this.clearData();
+				this.data.addAll(r);
+				this.totalLength = t;
+				this.applySort();
+				this.fireEvent('datachanged', this);
+			}else{
+				this.totalLength = Math.max(t, this.data.length+r.length);
+				this.add(r);
+			}
+			this.fireEvent('load', this, r, options);
+			if(options.callback){
+				options.callback.call(options.scope || this, r, options, true);
+			}
+		}
+		
 	})
 
 }
@@ -85,6 +198,7 @@ Vme.data.stores = {
 Vme.form.widgets.SearchResults = new Ext.DataView({
 	store: Vme.data.stores.SearchResultStore,
 	tpl: Vme.data.templates.searchResult,
+	pageSize:Vme.data.constants.pageSize,
 	singleSelect: true,
 	height:470,
 	autoScroll:true,
@@ -96,10 +210,53 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	emptyText: FigisMap.label('SEARCH_NO_RES'),
 	listeners: {
       click: function(view,index,node,event){
-        if( window.console ) console.log('dataView.click(%o,%o,%o,%o)',view,index,node,event);
+        //if( window.console ) console.log('dataView.click(%o,%o,%o,%o)',view,index,node,event);
+		var selectedRecord =this.store.getAt(index);
+		var layer = myMap.getLayersByName("hilights")[0];
+		//create layer
+		if(layer){
+			myMap.removeLayer(layer,false);
+		}	
+		var projcode = "EPSG:4326";
+		var GeoJsonFormat = new OpenLayers.Format.GeoJSON();
+		var geoJsonGeom= selectedRecord.get("geometry");
+		var geom = GeoJsonFormat.read(geoJsonGeom, "Geometry");
+		
+		var center = geom.getCentroid();
+				center = center.clone().transform(
+					new OpenLayers.Projection(projcode),
+					myMap.getProjectionObject()
+				);
+		center = new OpenLayers.LonLat(center.x, center.y);
+		var bounds = geom.getBounds().transform(
+						new OpenLayers.Projection(projcode),
+						myMap.getProjectionObject()
+		);
+		layer = new OpenLayers.Layer.Vector("hilights",{
+				displayInLayerSwitcher: false
+		});
+		layer.addFeatures(new OpenLayers.Feature.Vector(geom));
+		myMap.addLayer(layer);
+		myMap.zoomToExtent(bounds);
+		var year = selectedRecord.get("year");
+		var slider = Ext.getCmp('years-slider');
+		slider.setValue(year,true);
+		Ext.getCmp('years-min-field').setValue(year);
+		//TODO try use slider.updateVme();
+		 myMap.getLayersByName('Established VME areas')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + year + "'"});
+        
+        if (FigisMap.rnd.status.logged == true){
+            myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + year + "'"});
+            myMap.getLayersByName('Encounters')[0].redraw(true);
+            
+            myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + year + "'"});
+            myMap.getLayersByName('SurveyData')[0].redraw(true); 
+        }
+		
+		
       },
       beforeclick: function(view,index,node,event){
-        if( window.console ) console.log('dataView.beforeclick(%o,%o,%o,%o)',view,index,node,event);
+        //if( window.console ) console.log('dataView.beforeclick(%o,%o,%o,%o)',view,index,node,event);
       }
     }
 	
@@ -188,7 +345,14 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			ref: '../Search',
 			iconCls: 'search-icon',
 			handler: function(){
-				Vme.data.stores.SearchResultStore.load();
+				store: Vme.data.stores.SearchResultStore.load({
+					params: {
+						startindex: 0,          
+						maxfeatures: Vme.data.constants.pageSize,
+						// other params
+						//foo:   'bar'
+					}
+				});
 				Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-1');
 			}
 		},{
@@ -231,12 +395,14 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 					items:[Vme.form.widgets.SearchResults],
 					bbar : new Ext.PagingToolbar({
 							store: Vme.data.stores.SearchResultStore,
-							pageSize: 5,
+							pageSize: Vme.data.constants.pageSize,
 							displayInfo: true,
-							displayMsg: '',
+							displayMsg: "",
 							emptyMsg: "",
+							afterPageText:"",
+							beforePageText:"",
 							listeners:{
-								beforerender: function(){this.refresh.setVisible(false);}
+								beforerender: function(){this.refresh.setVisible(false);this.last.setVisible(false);}
 								
 							}
 						})
