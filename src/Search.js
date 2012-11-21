@@ -300,12 +300,12 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			triggerAction: 'all',
 			mode: 'local',
 			store:  Vme.data.stores.areaTypeStore,
-			valueType : 'id',
+			valueField : 'id',
 			displayField: 'displayText'
 		},{
 			fieldLabel: FigisMap.label('SEARCH_STAT_LBL')+' [<a href="#">?</a>]',
-			name: 'status',
-			ref: '../status',
+			name: 'STATUS',
+			ref: '../status', 
 			emptyText:  FigisMap.label('SEARCH_STAT_EMP'),
 			allowBlank:true,
 			forceSelection:true,
@@ -313,7 +313,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			triggerAction: 'all',
 			mode: 'local',
 			store:  Vme.data.stores.VmeStatusStore,
-			valueType : 'id',
+			valueField : 'id',
 			displayField: 'displayText'
 		},{
 			fieldLabel: FigisMap.label('SEARCH_CRIT_LBL')+' [<a href="#">?</a>]',
