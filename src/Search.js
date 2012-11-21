@@ -11,11 +11,11 @@ Vme.data={
 					'</div>'+
 				'</tpl>',{
 				compiled:true,
-					writeStatus:function(status){
-						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
-						var text =statusRecord ? statusRecord.get('displayText'):status;
-						return text;
-					}
+				writeStatus:function(status){
+					var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
+					var text =statusRecord ? statusRecord.get('displayText'):status;
+					return text;
+				}
 
 				})
 	},
@@ -33,7 +33,7 @@ Vme.form={
 
 
 Vme.data.models = {
-	rfmos : [['WCPFC','WCPFC'],['IATTC','IATTC'],['ICCAT','ICCAT'],['CCSBT','CCSBT'],['IOTC','IOTC']],
+	rfmos : [['NAFO','NAFO'],['NEAFC','NEAFC'],['CCAMLR','CCAMLR']],
 	areaTypes : [
 		[0, FigisMap.label('VME_TYPE_ALL')],
 		[1, FigisMap.label('VME_TYPE_VME')],
@@ -129,8 +129,7 @@ Vme.data.stores = {
 		listeners:{
 			beforeload: function(store){
 			
-				//TODO get srs
-				//store.setBaseParam( 'srsName',app.mapPanel.map.getProjection() );
+			
 			}
 		},
 		
@@ -282,7 +281,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			emptyText: FigisMap.label("SEARCH_TEXT_EMP")
 		},{
 			fieldLabel: FigisMap.label('SEARCH_RFMO_LBL')+' [<a href="#">?</a>]',
-			name: 'RFMO',
+			name: 'VME_ID',
 			ref:'../RFMO',
 			emptyText:  FigisMap.label('SEARCH_RFMO_EMP'),
 			store: Vme.data.stores.rfmoStore,
@@ -324,8 +323,8 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 		}, 
 		{
 			fieldLabel: FigisMap.label('SEARCH_YEAR_LBL') +'[<a href="#">?</a>]',
-			name: 'year',
-			ref:'../year',
+			name: 'YEAR',
+			ref:'../year', 
 			emptyText:FigisMap.label('SEARCH_YEAR_EMP'),
 			allowBlank:true,
 			forceSelection:true,
@@ -344,14 +343,38 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			text: FigisMap.label('SIDP_SEARCH'),
 			ref: '../Search',
 			iconCls: 'search-icon',
-			handler: function(){
-				store: Vme.data.stores.SearchResultStore.load({
-					params: {
-						startindex: 0,          
-						maxfeatures: Vme.data.constants.pageSize,
-						// other params
-						//foo:   'bar'
+			createFilter: function(values){
+				var query;
+				for (var key in values){
+					if(query){
+						query+= ' AND ';
+						query+= ' ( '+ this.generateFilterComponent(key,values[key]) +' ) ';
+					}else{
+						query= ' ( '+ this.generateFilterComponent(key,values[key]) +' ) ';;
 					}
+					
+				}
+				return query;
+			},
+			generateFilterComponent:function(key,value){
+				if (key == 'VME_ID') return key + ' LIKE \'%' + value +'%\'' ;
+				else return key + ' = ' + value ;
+
+			},
+			handler: function(){
+				Vme.data.stores.SearchResultStore.removeAll();
+				var query = this.createFilter(Vme.form.panels.SearchForm.getForm().getFieldValues(true));
+				var params = {
+					startindex: 0,          
+					maxfeatures: Vme.data.constants.pageSize,
+					srsName:	myMap.getProjection() || 'EPSG:4326',
+	
+				};
+				if(query){
+					params.cql_filter = query;
+				}
+				Vme.data.stores.SearchResultStore.load({
+					params: params
 				});
 				Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-1');
 			}
