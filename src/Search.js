@@ -1,7 +1,105 @@
+/*
+	Search module for VME using Extjs
+	Authors: Lorenzo Natali.
+	Status: Beta.	
+*/
+
+/**
+ * Ext.ux.LazyJSonStore: lazyStore to load without 
+ * knowing the total size of result list. Useful for
+ * paged queries when the total number of records is 
+ * not available/required
+ *
+ */
+Ext.ux.LazyJsonStore = Ext.extend(Ext.data.JsonStore,{
+  
+	loadRecords : function(o, options, success){
+		if (this.isDestroyed === true) {
+			return;
+		}
+		if(!o || success === false){
+			if(success !== false){
+				this.fireEvent('load', this, [], options);
+			}
+			if(options.callback){
+				options.callback.call(options.scope || this, [], options, false, o);
+			}
+			return;
+		}
+		this.crs = this.reader.jsonData.crs;
+		this.bbox =  this.reader.jsonData.bbox;
+		this.featurecollection = this.reader.jsonData;
+		//custom total workaround
+		var estimateTotal = function(o,options,store){
+			var current = o.totalRecords +  options.params[store.paramNames.start] ;
+			var currentCeiling = options.params[store.paramNames.start] + options.params[store.paramNames.limit];
+			if(current < currentCeiling){
+				return current;
+			}else{
+			  
+				return 100000000000000000; 
+			}
+
+		}
+		o.totalRecords = estimateTotal(o,options,this);
+		//end of custom total workaround
+		
+		var r = o.records, t = o.totalRecords || r.length;
+		if(!options || options.add !== true){
+			if(this.pruneModifiedRecords){
+				this.modified = [];
+			}
+			for(var i = 0, len = r.length; i < len; i++){
+				r[i].join(this);
+			}
+			if(this.snapshot){
+				this.data = this.snapshot;
+				delete this.snapshot;
+			}
+			this.clearData();
+			this.data.addAll(r);
+			this.totalLength = t;
+			this.applySort();
+			this.fireEvent('datachanged', this);
+		}else{
+			this.totalLength = Math.max(t, this.data.length+r.length);
+			this.add(r);
+		}
+		this.fireEvent('load', this, r, options);
+		if(options.callback){
+			options.callback.call(options.scope || this, r, options, true);
+		}
+	}
+	
+});
+	
+/**
+ * Ext.ux.LazyPagingToolbar
+ * Paging toolbar for lazy stores like Ext.ux.LazyJsonStore
+ */
+Ext.ux.LazyPagingToolbar = Ext.extend(Ext.PagingToolbar,{
+		
+		displayInfo: true,
+		displayMsg: "",
+		emptyMsg: "",
+		afterPageText:"",
+		beforePageText:"",
+		listeners:{
+			beforerender: function(){this.refresh.setVisible(false);this.last.setVisible(false);}
+			
+		}
+})
+
 var Vme={};
 
+/** 
+ * Vme.data contains templates and base Extjs Stores, models to load Vme data
+ */
 Vme.data={
 	templates: {
+	  /** Vme.data.templates.searchResult
+	   * displays search results with utiities to display human readable fields
+	   */
 		searchResult: 
 				new Ext.XTemplate(
 				'<tpl for=".">'+
@@ -25,13 +123,17 @@ Vme.data={
 	
 
 };
+
 Vme.form={
 	panels:{},
 	widgets:{}
 		
 };
 
-
+/**
+ * Models: base tipes for Vme for Extjs Stores 
+ *
+ */
 Vme.data.models = {
 	rfmos : [['NAFO','NAFO'],['NEAFC','NEAFC'],['CCAMLR','CCAMLR']],
 	areaTypes : [
@@ -56,6 +158,10 @@ Vme.data.models = {
 	years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})() 
 
 };
+
+/**
+ * Stores for data for Vme components
+ */
 Vme.data.stores = {
 	rfmoStore: new Ext.data.ArrayStore({
 		fields: [
@@ -84,14 +190,8 @@ Vme.data.stores = {
 
     }),
 	yearStore:  new Ext.data.ArrayStore({id:0,data: Vme.data.models.years,fields:['year']}),
-	/*SearchResultStore : new Ext.data.JsonStore({
-		url: 'dummyData.js',
-		
-		fields: [
-			'ocean', 'areatype', 'area', 'id', 'source'
-		]
-	})*/
-	SearchResultStore:new Ext.data.JsonStore({
+	
+	SearchResultStore:new Ext.ux.LazyJsonStore({
 		//combo:this,
 		method:'GET',
 		
@@ -131,69 +231,18 @@ Vme.data.stores = {
 			
 			
 			}
-		},
-		
-		loadRecords : function(o, options, success){
-			if (this.isDestroyed === true) {
-				return;
-			}
-			if(!o || success === false){
-				if(success !== false){
-					this.fireEvent('load', this, [], options);
-				}
-				if(options.callback){
-					options.callback.call(options.scope || this, [], options, false, o);
-				}
-				return;
-			}
-			this.crs = this.reader.jsonData.crs;
-			this.bbox =  this.reader.jsonData.bbox;
-			this.featurecollection = this.reader.jsonData;
-			//custom total workaround
-			var estimateTotal = function(o,options,store){
-				var current = o.totalRecords +  options.params[store.paramNames.start] ;
-				var currentCeiling = options.params[store.paramNames.start] + options.params[store.paramNames.limit];
-				if(current < currentCeiling){
-					return current;
-				}else{
-					return 100000000000000000; 
-				}
-
-			}
-			o.totalRecords = estimateTotal(o,options,this);
-			//end of custom total workaround
-			
-			var r = o.records, t = o.totalRecords || r.length;
-			if(!options || options.add !== true){
-				if(this.pruneModifiedRecords){
-					this.modified = [];
-				}
-				for(var i = 0, len = r.length; i < len; i++){
-					r[i].join(this);
-				}
-				if(this.snapshot){
-					this.data = this.snapshot;
-					delete this.snapshot;
-				}
-				this.clearData();
-				this.data.addAll(r);
-				this.totalLength = t;
-				this.applySort();
-				this.fireEvent('datachanged', this);
-			}else{
-				this.totalLength = Math.max(t, this.data.length+r.length);
-				this.add(r);
-			}
-			this.fireEvent('load', this, r, options);
-			if(options.callback){
-				options.callback.call(options.scope || this, r, options, true);
-			}
 		}
+		
+		
 		
 	})
 
 }
 
+/**
+ * Vme.form.widgets.SearchResults
+ * Data view for search results. uses SearchResultStore and searchResult template
+ */
 Vme.form.widgets.SearchResults = new Ext.DataView({
 	store: Vme.data.stores.SearchResultStore,
 	tpl: Vme.data.templates.searchResult,
@@ -263,10 +312,14 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 		
 });
 
-
+/**
+ * Vme.form.panels.SearchForm
+ * form to perform searches on Vme search services (now to WFS) 
+ * 
+ */
 Vme.form.panels.SearchForm = new Ext.FormPanel({
 	labelWidth: 75, // label settings here cascade unless overridden
-	//url:'save-form.php',
+
 	bodyStyle:'padding:5px 5px 0',
 	
 	labelAlign :'top',
@@ -390,6 +443,12 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 	]
 });
 
+/** 
+ * Vme.form.panels.SearchPanel
+ * panel containing search form and search results dataview using
+ * card layout. Wraps the previous components to complete search GUI
+ *
+ */
 Vme.form.panels.SearchPanel = new Ext.Panel({
 	
 	layout:'card',
@@ -416,18 +475,10 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 				{
 					xtype:'panel',
 					items:[Vme.form.widgets.SearchResults],
-					bbar : new Ext.PagingToolbar({
+					bbar : new Ext.ux.LazyPagingToolbar({
 							store: Vme.data.stores.SearchResultStore,
-							pageSize: Vme.data.constants.pageSize,
-							displayInfo: true,
-							displayMsg: "",
-							emptyMsg: "",
-							afterPageText:"",
-							beforePageText:"",
-							listeners:{
-								beforerender: function(){this.refresh.setVisible(false);this.last.setVisible(false);}
-								
-							}
+							pageSize: Vme.data.constants.pageSize
+							
 						})
 					
 			}],
@@ -487,4 +538,3 @@ var sidePanel = new Ext.TabPanel({
 	]
 
 });
-	
