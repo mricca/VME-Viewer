@@ -1197,10 +1197,10 @@ FigisMap.ol.createPopupControl = function(vme){
 			  layers: [vme[vmeLyr]],
 			  queryVisible: true,
 			  maxFeatures: 10,
-			  //vendorParams: {"CQL_FILTER": "year = '" + Ext.getCmp('years-slider').getValues()[0] + "'"},
+			  //vendorParams: {"CQL_FILTER": "year = '" + FigisMap.ol.getSelectedYear() + "'"},
 			  eventListeners: {
           beforegetfeatureinfo: function(e) { 
-            this.vendorParams = {"CQL_FILTER": "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"};
+            this.vendorParams = {"CQL_FILTER": "YEAR = '" + FigisMap.ol.getSelectedYear() + "'"};
           }, 
 				  getfeatureinfo: function(e) {
             var popupKey = e.xy.x + "." + e.xy.y;
@@ -1229,25 +1229,25 @@ FigisMap.ol.createPopupControl = function(vme){
 
             var addEncounters = function(btn){
             	if (btn.pressed == true){		                   
-                myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
+                myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + FigisMap.ol.getSelectedYear() + "'"});
                     myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
                     myMap.getLayersByName('Encounters')[0].redraw(true);
             	}else{
-                myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
-                    myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
+                //myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
+                myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
             	myMap.getLayersByName('Encounters')[0].redraw(true);
             	}
             }
             
             var addServeyData = function(btn) {
             	if (btn.pressed == true){			   
-                myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + Ext.getCmp('years-slider').getValues()[0] + "'"});
-                    myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
-                    myMap.getLayersByName('SurveyData')[0].redraw(true);
+                myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + FigisMap.ol.getSelectedYear() + "'"});
+				myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
+				myMap.getLayersByName('SurveyData')[0].redraw(true);
               }else{
-                  myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
-                      myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
-                      myMap.getLayersByName('SurveyData')[0].redraw(true);
+                  //myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
+				  myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
+				  myMap.getLayersByName('SurveyData')[0].redraw(true);
               }
             }
             
@@ -1306,7 +1306,10 @@ FigisMap.ol.createPopupControl = function(vme){
     return info.controls;
     
 }
-
+/**
+ * FigisMap.ol.getStyle
+ * returns style for the auth level
+ */
 FigisMap.ol.getStyle = function (type){
 	if(type=='encounters'){
 		return FigisMap.rnd.status.logged ? 'point': null;
@@ -1316,8 +1319,11 @@ FigisMap.ol.getStyle = function (type){
 	}
 
 }
+
 /**
- * Refresh styles for encounters and surveydata
+ * FigisMap.ol.refreshLayersStyle
+ * Refresh styles for encounters and surveydata for the proper auth level (logged in)
+ * 
  */
 FigisMap.ol.refreshLayersStyle = function(){
 		myMap.getLayersByName('Encounters')[0].mergeNewParams({'styles': FigisMap.ol.getStyle('encounters')});
@@ -1329,16 +1335,23 @@ FigisMap.ol.refreshLayersStyle = function(){
         myMap.getLayersByName('SurveyData')[0].redraw(true);
 
 }
+
+/**
+ * FigisMap.ol.getSelectedYear returns the selected year in the slider
+ */
+FigisMap.ol.getSelectedYear= function(){
+	return Ext.getCmp('years-slider').getValues()[0];
+
+}
 /** 
  * FigisMap.ol.refreshFilters 
  * refresh filters when year/filter are changes
  * 
  */
 FigisMap.ol.refreshFilters = function (year,owner){
-
-    //TODO implement this utility
+	var year = FigisMap.ol.getSelectedYear();
+    
 }
-
 /*
 	Drawing function: FigisMap.draw( pars );
 		pars --> map parameters, an object with properties:
