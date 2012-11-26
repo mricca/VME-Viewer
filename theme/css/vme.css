@@ -363,7 +363,9 @@ h3 {
 	padding: 6px 2px;
 	border-bottom:thin solid black;
 }
-
+.search-result em{
+	font-weight: bold;
+}
 
 .x-view-over{background-color:#DBF1FF;cursor:pointer;}
 .x-view-selected{background-color:#A2CAE5}
