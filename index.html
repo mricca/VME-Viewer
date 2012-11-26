@@ -109,9 +109,11 @@
 
 		<div id="topBar">
 			<span id="user" ></span>
+			<label id="lblFilRFB">Filter by area:</label>
+			<select id="FilterRFB" onchange="FilterRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>
 			<label id="lblRFB">Select an area:</label>
-			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')">
-			</select>
+			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>
+			
 			  
 			<label id="lblSRS">Select a projection:</label>
 			<select id="SelectSRS" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')">

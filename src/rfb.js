@@ -9,12 +9,12 @@ var myMap = false;
 *       urlLink -> The id of the url input field of the embed-link (optional if not using the embed link div).
 *       htmlLink -> The id of the html input field of the embed-link (optional if not using the embed link div).
 **/
-function setRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink) {
+function setRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink,filter) {
 	if ( ! mapProjection ) {
 		var settings = FigisMap.rfb.getSettings( document.getElementById("SelectRFB").value );
 		document.getElementById("SelectSRS").value = settings && settings.srs ? settings.srs : '4326';
 	}
-	addRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink );
+	addRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink,filter );
 }
 
 /**
@@ -25,7 +25,7 @@ function setRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink) {
 *       urlLink -> The id of the url input field of the embed-link (optional if not using the embed link div).
 *       htmlLink -> The id of the html input field of the embed-link (optional if not using the embed link div).
 **/
-function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink) {
+function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink,filter) {
 	
 	var pars = {
 		rfb		: document.getElementById("SelectRFB").value,
@@ -37,6 +37,7 @@ function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink) {
 	};
 	if ( zoom != null ) pars.zoom = zoom;
 	if ( extent != null ) pars.extent = extent;
+	pars.filter = filter;
 	
 	if ( document.getElementById(elinkDiv) ) document.getElementById(elinkDiv).style.display = "none";
 	
@@ -69,8 +70,8 @@ function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink) {
 	}
 }
 
-function populateRfbOptions() {
-	var tgt = document.getElementById('SelectRFB');
+function populateRfbOptions(id) {
+	var tgt = document.getElementById(id);
 	var opt, e, cv = '';
 	if ( tgt.options.length != 0 || tgt.value ) cv = tgt.value;
 	var opts = new Array();
@@ -104,8 +105,8 @@ function populateRfbOptions() {
 *       htmlLink -> The id of the html input field of the embed-link (optional if not using the embed link div).
 */
 function setRFBPage(elinkDiv, urlLink, htmlLink) {
-	populateRfbOptions();
-	
+	populateRfbOptions('SelectRFB');
+	populateRfbOptions('FilterRFB');
 	var layer, extent, zoom, prj;
 	
 	if ( location.search.indexOf("rfb=") != -1 ){
