@@ -759,7 +759,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				label	: 'SurveyData',
 				singleTile	:true,
 				style	: FigisMap.ol.getStyle('survey'),
-				//filter	:"YEAR = '1000'",
+				filter	:"Year = '"+ FigisMap.ol.getSelectedYear() + "'",
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				opacity	: 1.0,
@@ -776,7 +776,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				layer	: FigisMap.fifao.vme_en,
 				label	: 'Encounters',
 				style	: FigisMap.ol.getStyle('encounters'),
-				//filter	:"YEAR = '1000'",
+				filter	:"YEAR = '"+ FigisMap.ol.getSelectedYear() + "'",
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				singleTile	:true,
@@ -1197,10 +1197,11 @@ FigisMap.ol.createPopupControl = function(vme){
 			  layers: [vme[vmeLyr]],
 			  queryVisible: true,
 			  maxFeatures: 10,
+			  
 			  //vendorParams: {"CQL_FILTER": "year = '" + FigisMap.ol.getSelectedYear() + "'"},
 			  eventListeners: {
           beforegetfeatureinfo: function(e) { 
-            this.vendorParams = {"CQL_FILTER": "YEAR = '" + FigisMap.ol.getSelectedYear() + "'"};
+            this.vendorParams = {"CQL_FILTER": e.object.layers[0].params.CQL_FILTER};
           }, 
 				  getfeatureinfo: function(e) {
             var popupKey = e.xy.x + "." + e.xy.y;
@@ -1229,7 +1230,7 @@ FigisMap.ol.createPopupControl = function(vme){
 
             var addEncounters = function(btn){
             	if (btn.pressed == true){		                   
-                myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + FigisMap.ol.getSelectedYear() + "'"});
+                myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '" + FigisMap.ol.getSelectedYear() + "'"});
                     myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
                     myMap.getLayersByName('Encounters')[0].redraw(true);
             	}else{
@@ -1239,7 +1240,7 @@ FigisMap.ol.createPopupControl = function(vme){
             	}
             }
             
-            var addServeyData = function(btn) {
+            var addSurveyData = function(btn) {
             	if (btn.pressed == true){			   
                 myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + FigisMap.ol.getSelectedYear() + "'"});
 				myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
@@ -1251,7 +1252,7 @@ FigisMap.ol.createPopupControl = function(vme){
               }
             }
             
-					  var buttonsVme = [];
+			var buttonsVme = [];
 					
 					  if (e.object.layers[0].name == 'Established VME areas' && FigisMap.rnd.status.logged == true){
 						  buttonsVme = [
@@ -1266,7 +1267,7 @@ FigisMap.ol.createPopupControl = function(vme){
 								  text    : 'Survey Data',
 								  enableToggle: true,
 								  pressed :myMap.getLayersByName('SurveyData')[0].visibility,
-								  handler : addServeyData
+								  handler : addSurveyData
 							  }
 						  ]
 
@@ -1340,7 +1341,11 @@ FigisMap.ol.refreshLayersStyle = function(){
  * FigisMap.ol.getSelectedYear returns the selected year in the slider
  */
 FigisMap.ol.getSelectedYear= function(){
-	return Ext.getCmp('years-slider').getValues()[0];
+	var yr;
+	try{
+		yr = Ext.getCmp('years-slider').getValues()[0];
+	}catch (e){ yr = 2012};
+	return yr;
 
 }
 /** 
@@ -1348,8 +1353,12 @@ FigisMap.ol.getSelectedYear= function(){
  * refresh filters when year/filter are changes
  * 
  */
-FigisMap.ol.refreshFilters = function (year,owner){
-	var year = FigisMap.ol.getSelectedYear();
+FigisMap.ol.refreshFilters = function (){
+	var year = FigisMap.ol.getSelectedYear();  
+	myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '"+FigisMap.ol.getSelectedYear() +"'"});
+        myMap.getLayersByName('Encounters')[0].redraw(true);
+        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '"+FigisMap.ol.getSelectedYear() +"'"});
+        myMap.getLayersByName('SurveyData')[0].redraw(true);
     
 }
 /*
