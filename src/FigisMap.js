@@ -39,10 +39,10 @@ FigisMap.fifao = {
 	sub : 'fifao:FAO_SUB_AREA',
 	vme : 'fifao:Vme2', 
 	vme_fp : 'fifao:Footprints',
-    vme_en : 'fifao:Encounters',
+    vme_en : 'fifao:Encounters2',
     vme_sd : 'fifao:Surveydata',
 	//bathimetry: 'fifao:color_etopo1_ice_full' //etopo
-	bathimetry: 'fifao:OB_LR'					//natural earth ocean bottom
+	bathimetry: 'fifao:OB_LR'				//natural earth ocean bottom
 	
 }; 
  
@@ -757,29 +757,34 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme_sd,
 				label	: 'SurveyData',
-				filter	:"YEAR = '1000'",
+				singleTile	:true,
+				style	: FigisMap.ol.getStyle('survey'),
+				//filter	:"YEAR = '1000'",
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
                 dispOrder: 4,
-				hideInSwitcher	: true
+				hideInSwitcher	: false
 			});
 		}
 		//WMS Encounters
+		
 		if ( ! layerTypes[ FigisMap.fifao.vme_en ] ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme_en,
 				label	: 'Encounters',
-				filter	:"YEAR = '1000'",
+				style	: FigisMap.ol.getStyle('encounters'),
+				//filter	:"YEAR = '1000'",
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
+				singleTile	:true,
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
                 dispOrder: 4,
-				hideInSwitcher	: true
+				hideInSwitcher	: false
 			});
 		}
 		//WMS Vme
@@ -792,7 +797,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				opacity	: 1.0,
 				hidden	: pars.isFIGIS,
 				type	: 'auto',
-				hideInSwitcher	: true,
+				hideInSwitcher	: false,
                 dispOrder: 4,
 				isMasked: false
 			});
@@ -1302,6 +1307,38 @@ FigisMap.ol.createPopupControl = function(vme){
     
 }
 
+FigisMap.ol.getStyle = function (type){
+	if(type=='encounters'){
+		return FigisMap.rnd.status.logged ? 'point': null;
+	}
+	if(type=='survey'){
+		return FigisMap.rnd.status.logged ? 'SurveyData_point': null;
+	}
+
+}
+/**
+ * Refresh styles for encounters and surveydata
+ */
+FigisMap.ol.refreshLayersStyle = function(){
+		myMap.getLayersByName('Encounters')[0].mergeNewParams({'styles': FigisMap.ol.getStyle('encounters')});
+        //myMap.getLayersByName('Encounters')[0].visibility = false;
+        myMap.getLayersByName('Encounters')[0].redraw(true);
+        
+        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'styles': FigisMap.ol.getStyle('survey')});
+        //myMap.getLayersByName('SurveyData')[0].visibility = false;
+        myMap.getLayersByName('SurveyData')[0].redraw(true);
+
+}
+/** 
+ * FigisMap.ol.refreshFilters 
+ * refresh filters when year/filter are changes
+ * 
+ */
+FigisMap.ol.refreshFilters = function (year,owner){
+
+    //TODO implement this utility
+}
+
 /*
 	Drawing function: FigisMap.draw( pars );
 		pars --> map parameters, an object with properties:
@@ -1548,6 +1585,7 @@ FigisMap.renderer = function(options) {
 				if ( l.hideInSwitcher ) wp.options.displayInLayerSwitcher = false;
 				if ( l.opacity ) wp.options.opacity = l.opacity;
 				if ( l.hidden ) wp.options.visibility = false;
+				if ( l.singleTile ) wp.options.singleTile = true;
 				
 				l.wms = new OpenLayers.Layer.WMS( wp.name, wp.url, wp.params, wp.options );
 			}
@@ -1761,20 +1799,18 @@ FigisMap.renderer = function(options) {
 } //FigisMap.renderer Class Ends
 Ext.onReady(function(){
 FigisMap.loginWin.on('login',function(user){
-  FigisMap.ol.clearPopupCache();          
+		FigisMap.ol.refreshLayersStyle();
+
+
+		FigisMap.ol.clearPopupCache();          
 });
 
 FigisMap.loginWin.on('logout',function(user){
 		for (var popupKey in FigisMap.popupCache){                
                 FigisMap.popupCache[popupKey].close();
 		}
-        myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
-        myMap.getLayersByName('Encounters')[0].visibility = false;
-        myMap.getLayersByName('Encounters')[0].redraw(true);
-        
-        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
-        myMap.getLayersByName('SurveyData')[0].visibility = false;
-        myMap.getLayersByName('SurveyData')[0].redraw(true);
+		
+        FigisMap.ol.refreshLayersStyle();
 });
 
 });
