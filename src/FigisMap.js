@@ -37,7 +37,7 @@ FigisMap.fifao = {
 	sdi : 'fifao:FAO_SUB_DIV',
 	spd : 'fifao:SPECIES_DIST', 
 	sub : 'fifao:FAO_SUB_AREA',
-	vme : 'fifao:Vme', 
+	vme : 'fifao:Vme2', 
 	vme_fp : 'fifao:Footprints',
     vme_en : 'fifao:Encounters',
     vme_sd : 'fifao:Surveydata',

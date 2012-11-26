@@ -435,14 +435,14 @@ var staticLabels = {
 	SEARCH_NO_RES		: {en:'Nothing to display'},
 	SEARCH_BACK_FORM	: {en:'&laquo; Back to the search form'},
 	//VME AREA TYPES
-	VME_TYPE_ALL		: { en:"All"},
+	VME_TYPE_UNKNOWN	: { en:"Unknown"},
 	VME_TYPE_VME		: { en:"VME"},
 	VME_TYPE_RISK		: { en:"Risk Area"},
 	VME_TYPE_BPA		: { en:"Benthic protext area"},
 	VME_TYPE_CLOSED		: { en:"Closed area"},
 	VME_TYPE_OTHER		: { en:"Other types of managed areas"},
 	//VME STATUSES 
-	VME_STATUS_ALL		: { en:"All"},
+	VME_STATUS_UNKNOWN	: { en:"Unknown"},
 	VME_STATUS_ENS		: { en:"Established"},
 	VME_STATUS_UNDEST	: { en:"Under establishment"},
 	VME_STATUS_RISK		: { en:"Risk"},

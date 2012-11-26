@@ -104,7 +104,14 @@ Vme.data={
 				new Ext.XTemplate(
 				'<tpl for=".">'+
 					'<div class="search-result">' +
-						'<span class="localname" >{[this.writeStatus(values.status)]}</span> {year} - '+'<span class="areatype" >{Terr_Name}</span> - '+'<span class="id" >{vme_id}</span><br/>'+
+						'<em>Local Name:</em>{localname}<br/>'+
+						'<em>Status:</em><span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
+						'<em>Reporting Year:</em>{year} <br/> '+
+						'<em>Area Type:</em><span classhttp://www.google.it/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0CDMQFjAA&url=http%3A%2F%2Fwww.tizag.com%2FhtmlT%2Fhtmlbold.php&ei=3DCzUJXvHoSF4ASp2YDwCQ&usg=AFQjCNH4TiHKTWpib2DrnZ9auTwG4pMBGg&sig2=XVGFpxbI_IMqf6__y_5djQ="type" >{type}</span> <br/> '+
+						'<em>Geographic reference:</em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						
+						//'<span class="id" >{vme_id}</span><br/>'+
+						'<span class="own" >{owner}</span><br/>'+
 						'<span class="source" style="font-weight:bold">Vulnerable Marine Ecosystem Database</span>'+
 					'</div>'+
 				'</tpl>',{
@@ -118,7 +125,7 @@ Vme.data={
 				})
 	},
 	constants:{
-		pageSize:10
+		pageSize:5
 	}
 	
 
@@ -137,7 +144,7 @@ Vme.form={
 Vme.data.models = {
 	rfmos : [['NAFO','NAFO'],['NEAFC','NEAFC'],['CCAMLR','CCAMLR']],
 	areaTypes : [
-		[0, FigisMap.label('VME_TYPE_ALL')],
+		[0, FigisMap.label('VME_TYPE_UNKNOWN')],
 		[1, FigisMap.label('VME_TYPE_VME')],
 		[2, FigisMap.label('VME_TYPE_RISK')],
 		[3, FigisMap.label('VME_TYPE_BPA')],
@@ -145,7 +152,7 @@ Vme.data.models = {
 		[5, FigisMap.label('VME_TYPE_OTHER')]
 	],
 	VmeStatuses:[ 
-		[0, FigisMap.label("VME_STATUS_ALL")],
+		[0, FigisMap.label("VME_STATUS_UNKNOWN")],
 		[1, FigisMap.label("VME_STATUS_ENS")],
 		[2, FigisMap.label("VME_STATUS_UNDEST")],
 		[3, FigisMap.label("VME_STATUS_RISK")],
@@ -201,11 +208,15 @@ Vme.data.stores = {
 		fields: [
 			{name: 'id', mapping: 'fid'},
 			{name: 'geometry', mapping: 'geometry'},
-			{name: 'localname',  mapping: 'properties.Terr_Name'},
+			{name: 'localname',  mapping: 'properties.LOCAL_NAME'},
 			{name: 'bbox',		mapping: 'properties.bbox'},
 			{name: 'vme_id',     mapping: 'properties.VME_ID'},
 			{name: 'status', 	 mapping: 'properties.STATUS'},
 			{name: 'year', mapping: 'properties.YEAR'},
+			{name: 'type', mapping: 'properties.VME_TYPE'},
+			{name: 'owner', mapping: 'properties.OWNER'},
+			{name: 'geo_ref', mapping: 'properties.GEO_AREA'}
+			
 			
 		],
 		url: 'http://office.geo-solutions.it/figis/geoserver/fifao/ows',
@@ -219,7 +230,7 @@ Vme.data.stores = {
 			service:'WFS',
 			version:'1.0.0',
 			request:'GetFeature',
-			typeName: 'fifao:Vme',
+			typeName: 'fifao:Vme2',
 			outputFormat:'json',
 			sortBy: 'VME_ID',
 			srs:'EPSG:4326'
@@ -334,7 +345,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			emptyText: FigisMap.label("SEARCH_TEXT_EMP")
 		},{
 			fieldLabel: FigisMap.label('SEARCH_RFMO_LBL')+' [<a href="#">?</a>]',
-			name: 'VME_ID',
+			name: 'OWNER',
 			ref:'../RFMO',
 			emptyText:  FigisMap.label('SEARCH_RFMO_EMP'),
 			store: Vme.data.stores.rfmoStore,
@@ -345,7 +356,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			displayField: 'name'
 		},{
 			fieldLabel: FigisMap.label('SEARCH_TYPE_LBL')+' [<a href="#">?</a>]',
-			name: 'AreaType',
+			name: 'AREA_TYPE',
 			ref: '../AreaType',
 			emptyText:  FigisMap.label('SEARCH_TYPE_EMP'),
 			allowBlank:true,
@@ -410,8 +421,8 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 				return query;
 			},
 			generateFilterComponent:function(key,value){
-				if (key == 'VME_ID') return key + ' LIKE \'%' + value +'%\'' ;
-				else return key + ' = ' + value ;
+				//if (key == 'VME_ID') return key + ' LIKE \'%' + value +'%\'' ;
+				return key + ' = ' + value ;
 
 			},
 			handler: function(){
