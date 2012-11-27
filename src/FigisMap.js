@@ -1353,7 +1353,7 @@ FigisMap.ol.getSelectedYear= function(){
  * FigisMap.ol.getSelectedYear returns the selected year in the slider
  */
 FigisMap.ol.getSelectedOwner= function(){
-	return	document.getElementById("FilterRFB").value;
+	return	document.getElementById("SelectRFB").value;
 
 }
 /** 
