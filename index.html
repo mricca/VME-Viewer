@@ -110,7 +110,7 @@
 		<div id="topBar">
 			<span id="user" ></span>
 			<label id="lblFilRFB">Filter by area:</label>
-			<select id="FilterRFB" onchange="FilterRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>
+			<select id="FilterRFB" onchange="FigisMap.ol.refreshFilters()"></select>
 			<label id="lblRFB">Select an area:</label>
 			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>
 			

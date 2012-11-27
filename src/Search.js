@@ -302,15 +302,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 		slider.setValue(year,true);
 		Ext.getCmp('years-min-field').setValue(year);
 		//TODO try use slider.updateVme();
-		 myMap.getLayersByName('Established VME areas')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + year + "'"});
-        
-        if (FigisMap.rnd.status.logged == true){
-            myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + year + "'"});
-            myMap.getLayersByName('Encounters')[0].redraw(true);
-            
-            myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + year + "'"});
-            myMap.getLayersByName('SurveyData')[0].redraw(true); 
-        }
+		 FigisMap.ol.refreshFilters();
 		
 		
       },
@@ -422,7 +414,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			},
 			generateFilterComponent:function(key,value){
 				//if (key == 'VME_ID') return key + ' LIKE \'%' + value +'%\'' ;
-				return key + ' = ' + value ;
+				return key + ' = \'' + value +'\'' ;
 
 			},
 			handler: function(){

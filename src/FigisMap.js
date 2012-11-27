@@ -752,6 +752,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 	var layerTypes = new Object();
 	for ( var i = 0; i < layers.length; i++ ) layerTypes[ layers[i].layer ] = true;
 	if ( pars.basicsLayers ) {
+		var owner = FigisMap.ol.getSelectedOwner();
 		//WMS SurveyData
 		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
 			layers.unshift({
@@ -759,7 +760,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				label	: 'SurveyData',
 				singleTile	:true,
 				style	: FigisMap.ol.getStyle('survey'),
-				filter	:"Year = '"+ FigisMap.ol.getSelectedYear() + "'",
+				filter	:"Year = '"+ FigisMap.ol.getSelectedYear() + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				opacity	: 1.0,
@@ -776,7 +777,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				layer	: FigisMap.fifao.vme_en,
 				label	: 'Encounters',
 				style	: FigisMap.ol.getStyle('encounters'),
-				filter	:"YEAR = '"+ FigisMap.ol.getSelectedYear() + "'",
+				filter	:"YEAR = '"+ FigisMap.ol.getSelectedYear() + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				singleTile	:true,
@@ -1229,26 +1230,26 @@ FigisMap.ol.createPopupControl = function(vme){
             }
 
             var addEncounters = function(btn){
-            	if (btn.pressed == true){		                   
-                myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '" + FigisMap.ol.getSelectedYear() + "'"});
-                    myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
-                    myMap.getLayersByName('Encounters')[0].redraw(true);
-            	}else{
+				if (btn.pressed == true){		                   
+					//myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '" + FigisMap.ol.getSelectedYear() + "'"+(owner ? " AND OWNER ='" + owner +"'" :"")});
+                    //myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
+                    //myMap.getLayersByName('Encounters')[0].redraw(true);
+            	// }else{
                 //myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
-                myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
-            	myMap.getLayersByName('Encounters')[0].redraw(true);
+                //myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
+            	//myMap.getLayersByName('Encounters')[0].redraw(true);
             	}
             }
             
             var addSurveyData = function(btn) {
             	if (btn.pressed == true){			   
-                myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + FigisMap.ol.getSelectedYear() + "'"});
-				myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
-				myMap.getLayersByName('SurveyData')[0].redraw(true);
+                //myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + FigisMap.ol.getSelectedYear() + "'"+(owner ? " AND OWNER ='" + owner +"'" :"")});
+				//myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
+				//myMap.getLayersByName('SurveyData')[0].redraw(true);
               }else{
                   //myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '1000'"});
-				  myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
-				  myMap.getLayersByName('SurveyData')[0].redraw(true);
+				  //myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
+				  //myMap.getLayersByName('SurveyData')[0].redraw(true);
               }
             }
             
@@ -1348,6 +1349,13 @@ FigisMap.ol.getSelectedYear= function(){
 	return yr;
 
 }
+/**
+ * FigisMap.ol.getSelectedYear returns the selected year in the slider
+ */
+FigisMap.ol.getSelectedOwner= function(){
+	return	document.getElementById("FilterRFB").value;
+
+}
 /** 
  * FigisMap.ol.refreshFilters 
  * refresh filters when year/filter are changes
@@ -1355,10 +1363,29 @@ FigisMap.ol.getSelectedYear= function(){
  */
 FigisMap.ol.refreshFilters = function (){
 	var year = FigisMap.ol.getSelectedYear();  
-	myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '"+FigisMap.ol.getSelectedYear() +"'"});
-        myMap.getLayersByName('Encounters')[0].redraw(true);
-        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '"+FigisMap.ol.getSelectedYear() +"'"});
-        myMap.getLayersByName('SurveyData')[0].redraw(true);
+	var owner = FigisMap.ol.getSelectedOwner();
+	
+	myMap.getLayersByName('Established VME areas')[0].mergeNewParams(
+		{'CQL_FILTER': 
+			"YEAR = '" + year + "'"+
+			(owner ? " AND OWNER ='" + owner +"'" :"")
+		}
+	);
+	myMap.getLayersByName('Established VME areas')[0].redraw(true);
+	myMap.getLayersByName('Encounters')[0].mergeNewParams(
+		{'CQL_FILTER': 
+			"Year = '"+ year +"'" + 
+			(owner ? " AND Owner ='" + owner +"'" :"")
+		}
+	);
+	myMap.getLayersByName('Encounters')[0].redraw(true);
+	myMap.getLayersByName('SurveyData')[0].mergeNewParams(
+		{'CQL_FILTER':
+			"YEAR = '" + year +"'"+
+			(owner ? " AND OWNER ='" + owner +"'" :"")
+		}
+	);
+	myMap.getLayersByName('SurveyData')[0].redraw(true);
     
 }
 /*
@@ -1554,9 +1581,8 @@ FigisMap.renderer = function(options) {
 		var div = OpenLayers.Util.getElement('layerswitcher');
 		div.innerHTML="";
 		myMap.addControl( new OpenLayers.Control.LayerSwitcher({div:div}) );
-		myMap.addControl( new OpenLayers.Control.LoadingPanel() );
 		myMap.addControl( new OpenLayers.Control.Navigation({ zoomWheelEnabled: true }) );
-	
+		myMap.addControl( new OpenLayers.Control.LoadingPanel());
 		FigisMap.rnd.watermarkControl( myMap, p );
 		
 		FigisMap.rnd.mouseControl( myMap, p );
@@ -1608,7 +1634,7 @@ FigisMap.renderer = function(options) {
 				if ( l.opacity ) wp.options.opacity = l.opacity;
 				if ( l.hidden ) wp.options.visibility = false;
 				if ( l.singleTile ) wp.options.singleTile = true;
-				
+				else{l.tiled= true; l.tilesorigin= boundsOrigin;}
 				l.wms = new OpenLayers.Layer.WMS( wp.name, wp.url, wp.params, wp.options );
 			}
 		}

@@ -215,11 +215,8 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
         Ext.getCmp("year-max-largestep").disable();
         Ext.getCmp("last-year").disable(); 
         Ext.getCmp("first-year").disable(); 
-         
-        var years = Ext.getCmp('years-slider');	
-        var yr_start = years.getValues()[0];
 
-        myMap.getLayersByName('Established VME areas')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + yr_start + "'"});
+
         FigisMap.ol.refreshFilters();
        
        
