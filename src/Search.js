@@ -267,6 +267,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	overClass:'x-view-over',
 	selectedClass: 'x-view-selected',
 	emptyText: FigisMap.label('SEARCH_NO_RES'),
+	loadingText:FigisMap.label('SEARCH_LOADING'),
 	listeners: {
       click: function(view,index,node,event){
         //if( window.console ) console.log('dataView.click(%o,%o,%o,%o)',view,index,node,event);

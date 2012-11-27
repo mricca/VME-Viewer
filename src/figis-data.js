@@ -433,6 +433,7 @@ var staticLabels = {
 	SEARCH_YEAR_EMP		: {en:"Select..."},
 	// SEARCH NO RESULT LABEL
 	SEARCH_NO_RES		: {en:'Nothing to display'},
+	SEARCH_LOADING		: {en:'Loading'},
 	SEARCH_BACK_FORM	: {en:'&laquo; Back to the search form'},
 	//VME AREA TYPES
 	VME_TYPE_UNKNOWN	: { en:"Unknown"},
