@@ -12,7 +12,10 @@
  *
  */
 Ext.ux.LazyJsonStore = Ext.extend(Ext.data.JsonStore,{
-  
+	resetTotal:function (){
+		this.tot = null;
+	
+	},
 	loadRecords : function(o, options, success){
 		if (this.isDestroyed === true) {
 			return;
@@ -31,13 +34,14 @@ Ext.ux.LazyJsonStore = Ext.extend(Ext.data.JsonStore,{
 		this.featurecollection = this.reader.jsonData;
 		//custom total workaround
 		var estimateTotal = function(o,options,store){
-			var current = o.totalRecords +  options.params[store.paramNames.start] ;
+			var current = o.totalRecords + options.params[store.paramNames.start] ;
 			var currentCeiling = options.params[store.paramNames.start] + options.params[store.paramNames.limit];
 			if(current < currentCeiling){
+				this.tot = current;
 				return current;
 			}else{
 			  
-				return 100000000000000000; 
+				return this.tot || 100000000000000000; 
 			}
 
 		}
@@ -84,9 +88,20 @@ Ext.ux.LazyPagingToolbar = Ext.extend(Ext.PagingToolbar,{
 		emptyMsg: "",
 		afterPageText:"",
 		beforePageText:"",
+		
 		listeners:{
-			beforerender: function(){this.refresh.setVisible(false);this.last.setVisible(false);}
-			
+			beforerender: function(){
+				this.refresh.setVisible(false);
+				this.last.setVisible(false);
+			},
+			change: function (total,pageData){
+				if(pageData.activePage>pageData.pages){
+					this.movePrevious();
+				}
+				FigisMap.debug("active",pageData.activePage);
+				FigisMap.debug("total",pageData.total);
+				FigisMap.debug("pages",pageData.pages);
+			}
 		}
 })
 
@@ -239,7 +254,7 @@ Vme.data.stores = {
 		},
 		listeners:{
 			beforeload: function(store){
-			
+				
 			
 			}
 		}
@@ -419,18 +434,24 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 
 			},
 			handler: function(){
-				Vme.data.stores.SearchResultStore.removeAll();
+				var store = Vme.data.stores.SearchResultStore;
+				store.resetTotal();
+				store.removeAll();
 				var query = this.createFilter(Vme.form.panels.SearchForm.getForm().getFieldValues(true));
+				
 				var params = {
 					startindex: 0,          
 					maxfeatures: Vme.data.constants.pageSize,
-					srsName:	myMap.getProjection() || 'EPSG:4326',
+					
 	
 				};
+				
 				if(query){
-					params.cql_filter = query;
+					store.setBaseParam("cql_filter", query);
+					store.setBaseParam("srsName",'EPSG:4326');
 				}
-				Vme.data.stores.SearchResultStore.load({
+				
+				store.load({
 					params: params
 				});
 				Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-1');
