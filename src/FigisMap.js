@@ -1039,6 +1039,58 @@ FigisMap.rfb.getSettings = function( rfb, pars ) {
 	return v;
 };
 
+//returns list of zoom areas 
+FigisMap.ol.list = function(projd) {
+	if (projd != undefined) var newProj = projd;
+	var checked;
+	var bound;
+	var ans = new Array();
+	if ( georeferences_data ){
+		for ( var i in georeferences_data ){
+			if(newProj){
+				bound = georeferences_data[i];
+				checked = FigisMap.ol.checkValidBbox(newProj,bound);			
+			}
+			if (checked == undefined || checked == true){
+				if ( ! georeferences_data[i].skip ){
+					ans.push( i )
+				}
+			}
+		}
+	}
+	return ans;
+};
+
+//check if bbox of zoom area is in bbox of projection
+FigisMap.ol.checkValidBbox = function (projections,bboxs) {
+	if (projections == '3031'){
+		Proj4js.defs["EPSG:3031"] = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
+	    var bbox2 = OpenLayers.Bounds.fromString(bboxs.zoomExtent,false);
+	    
+		bbox2 = bbox2.transform(
+			new OpenLayers.Projection("EPSG:4326"),
+			new OpenLayers.Projection(myMap.getProjection())
+		);
+
+		if (!myMap.getExtent().containsBounds(bbox2)){
+			return false; 		
+		}else{
+			return true; 					
+		}		
+	}else{
+		return true; 		
+	}
+}
+
+//returns selected zoom area
+FigisMap.ol.getSettings = function( rfb, pars ) {
+	if ( pars && ! ( pars.isViewer || pars.rfb )  ) return null;
+	var v = georeferences_data[ rfb ];
+	if ( ! v ) return null;
+	v.name = rfb;
+	return v;
+};
+
 FigisMap.rfb.getDescriptor = function( layerName, pars ) {
 	if ( ! rfbLayerDescriptors ) return '';
 	var ldn = layerName.replace(/[' ]/g,'');

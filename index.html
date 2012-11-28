@@ -29,6 +29,7 @@
 	<script type="text/javascript" src="lib/GeoExt/script/GeoExt.js"></script>
 
 	<script type="text/javascript" src="src/figis-data.js"></script>
+	<script type="text/javascript" src="src/georeferences.js"></script>
 	<script type="text/javascript" src="src/login.js"></script>	
 	<script type="text/javascript" src="src/init.js" ></script>	
 	<script type="text/javascript" src="src/VMESliderPanel.js" ></script>
@@ -110,7 +111,7 @@
 		<div id="topBar">
 			<span id="user" ></span>
 			<label id="lblFilRFB">Filter by area:</label>
-			<select id="FilterRFB" onchange="FigisMap.ol.refreshFilters()"></select>
+			<select id="FilterRFB" onchange="setZoom()"></select>
 			<label id="lblRFB">Select an area:</label>
 			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>
 			

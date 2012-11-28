@@ -1,6 +1,33 @@
 var myMap = false;
 
 /**
+* function setZoom
+*
+**/
+function setZoom() {
+	var settings = FigisMap.ol.getSettings( document.getElementById("FilterRFB").value );
+	//Close popup when RFB change
+	FigisMap.ol.clearPopupCache();
+	zoomTo(settings);
+}
+
+/**
+* function zoomTo
+*
+**/
+function zoomTo(settings) {
+	if (settings != null){
+		var bbox = OpenLayers.Bounds.fromString(settings.zoomExtent,false);
+		bbox = bbox.transform(
+		    new OpenLayers.Projection("EPSG:4326"),
+		    new OpenLayers.Projection(myMap.getProjection()));
+		myMap.zoomToExtent(bbox);
+    }else{
+    	myMap.zoomToMaxExtent();
+    }
+}
+
+/**
 * function setRFB
 *       extent -> The extent to zoom after the layer is rendered (optional).
 *       zoom -> The zoom level of the map (optional).
@@ -14,6 +41,8 @@ function setRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink,filter
 		var settings = FigisMap.rfb.getSettings( document.getElementById("SelectRFB").value );
 		document.getElementById("SelectSRS").value = settings && settings.srs ? settings.srs : '4326';
 	}
+	//Close popup when RFB change
+	FigisMap.ol.clearPopupCache();
 	addRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink,filter );
 }
 
@@ -67,6 +96,9 @@ function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink,filter) {
 				l.style.display = '';
 			}
 		}
+		
+		//sets the zoom dropdown to default values ​​when the area selection and the selection of projection change
+		populateZoomAreaOptions('FilterRFB',pars.projection);
 	}
 }
 
@@ -98,6 +130,36 @@ function populateRfbOptions(id) {
 	tgt.value = cv;
 }
 
+function populateZoomAreaOptions(id,proj) {
+	var tgt = document.getElementById(id);
+	var opt, e, cv, bound = '';
+	//if ( tgt.options.length != 0 || tgt.value ) cv = tgt.value;
+	var opts = new Array();
+	var rfbs = FigisMap.ol.list(proj);
+	
+	for ( var i = 0; i < rfbs.length; i++ ) {
+		opt = document.createElement('OPTION');
+		opt.value = rfbs[i];
+		opt.text = FigisMap.label( opt.value );			
+		opts.push( opt );
+	}
+	
+	opt = document.createElement('OPTION');
+	opt.text = FigisMap.label('SELECT_AN_AREA');
+	opt.value = '';
+	opt = new Array( opt );
+	opts = opt.concat( opts.sort( function(a,b) { return a.text > b.text ? 1 : ( a.text < b.text ? -1 : 0 ); } ) );
+	while ( tgt.options.length > 0 ) tgt.remove( 0 );
+	for ( var i = 0; i < opts.length; i++ ) {	
+		try {
+			tgt.add( opts[i], null );
+		} catch(e) {
+			tgt.add( opts[i] );
+		}
+	}
+	tgt.value = cv;
+}
+
 /*
 * setRFBPage function. Load the base RFB Map applying the user request parameters, if any, to load the rfbs in to the map.  
 *       elinkDiv -> The embed-link id  (optional if not using the embed link div).
@@ -106,7 +168,6 @@ function populateRfbOptions(id) {
 */
 function setRFBPage(elinkDiv, urlLink, htmlLink) {
 	populateRfbOptions('SelectRFB');
-	populateRfbOptions('FilterRFB');
 	var layer, extent, zoom, prj;
 	
 	if ( location.search.indexOf("rfb=") != -1 ){
