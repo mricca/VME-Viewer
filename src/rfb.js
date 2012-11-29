@@ -18,8 +18,9 @@ function setZoom() {
 function zoomTo(settings) {
 	if (settings != null){
 		var bbox = OpenLayers.Bounds.fromString(settings.zoomExtent,false);
+		var bboxproj = settings.srs || "EPSG:4326";
 		bbox = bbox.transform(
-		    new OpenLayers.Projection("EPSG:4326"),
+		    new OpenLayers.Projection(bboxproj),
 		    new OpenLayers.Projection(myMap.getProjection()));
 		myMap.zoomToExtent(bbox);
     }else{

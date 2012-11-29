@@ -1063,20 +1063,18 @@ FigisMap.ol.list = function(projd) {
 
 //check if bbox of zoom area is in bbox of projection
 FigisMap.ol.checkValidBbox = function (projections,bboxs) {
-	if (projections == '3031'){
-		Proj4js.defs["EPSG:3031"] = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";
-	    var bbox2 = OpenLayers.Bounds.fromString(bboxs.zoomExtent,false);
-	    
-		bbox2 = bbox2.transform(
-			new OpenLayers.Projection("EPSG:4326"),
-			new OpenLayers.Projection(myMap.getProjection())
-		);
-
-		if (!myMap.getExtent().containsBounds(bbox2)){
-			return false; 		
+	if(bboxs.srs){
+		if (bboxs.srs!=myMap.getProjection()){
+			return false;
 		}else{
-			return true; 					
-		}		
+			return true;
+		}
+	}
+	if (projections == '3031'){
+	    var bbox2 = OpenLayers.Bounds.fromString(bboxs.zoomExtent,false);
+		var southpolarbbox = new OpenLayers.Bounds(-180,-90,180, 0);
+		return southpolarbbox.containsBounds(bbox2);
+			
 	}else{
 		return true; 		
 	}
@@ -1253,9 +1251,9 @@ FigisMap.ol.createPopupControl = function(vme){
 			  
 			  //vendorParams: {"CQL_FILTER": "year = '" + FigisMap.ol.getSelectedYear() + "'"},
 			  eventListeners: {
-          beforegetfeatureinfo: function(e) { 
-            this.vendorParams = {"CQL_FILTER": e.object.layers[0].params.CQL_FILTER};
-          }, 
+				  beforegetfeatureinfo: function(e) { 
+					this.vendorParams = {"CQL_FILTER": e.object.layers[0].params.CQL_FILTER};
+				  }, 
 				  getfeatureinfo: function(e) {
             var popupKey = e.xy.x + "." + e.xy.y;
             var popup;
