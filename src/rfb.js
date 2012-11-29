@@ -133,25 +133,23 @@ function populateRfbOptions(id) {
 
 function populateZoomAreaOptions(id,proj) {
 	var tgt = document.getElementById(id);
-	var opt, e, cv, bound = '';
+	var opt, e, cv = '';
 	//if ( tgt.options.length != 0 || tgt.value ) cv = tgt.value;
 	var opts = new Array();
 	var rfbs = FigisMap.ol.list(proj);
-	
 	for ( var i = 0; i < rfbs.length; i++ ) {
 		opt = document.createElement('OPTION');
 		opt.value = rfbs[i];
-		opt.text = FigisMap.label( opt.value );			
+		opt.text = FigisMap.label( opt.value );
 		opts.push( opt );
 	}
-	
 	opt = document.createElement('OPTION');
 	opt.text = FigisMap.label('SELECT_AN_AREA');
 	opt.value = '';
 	opt = new Array( opt );
 	opts = opt.concat( opts.sort( function(a,b) { return a.text > b.text ? 1 : ( a.text < b.text ? -1 : 0 ); } ) );
 	while ( tgt.options.length > 0 ) tgt.remove( 0 );
-	for ( var i = 0; i < opts.length; i++ ) {	
+	for ( var i = 0; i < opts.length; i++ ) {
 		try {
 			tgt.add( opts[i], null );
 		} catch(e) {

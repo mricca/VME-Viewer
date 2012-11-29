@@ -215,7 +215,8 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
         Ext.getCmp("year-max-largestep").disable();
         Ext.getCmp("last-year").disable(); 
         Ext.getCmp("first-year").disable(); 
-
+        
+        FigisMap.ol.clearPopupCache();
         FigisMap.ol.refreshFilters();
 		 //remove layer for hilighting
 		var hilayer = myMap.getLayersByName("highlight")[0];
