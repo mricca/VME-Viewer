@@ -34,7 +34,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
       click: function(view,index,node,event){
         //if( window.console ) console.log('dataView.click(%o,%o,%o,%o)',view,index,node,event);
 		var selectedRecord =this.store.getAt(index);
-		var layer = myMap.getLayersByName("hilights")[0];
+		var layer = myMap.getLayersByName("highlight")[0];
 		//create layer
 		if(layer){
 			myMap.removeLayer(layer,false);
@@ -54,10 +54,14 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 						new OpenLayers.Projection(projcode),
 						myMap.getProjectionObject()
 		);
-		layer = new OpenLayers.Layer.Vector("hilights",{
+		layer = new OpenLayers.Layer.Vector("highlight",{
 				displayInLayerSwitcher: false
 		});
-		layer.addFeatures(new OpenLayers.Feature.Vector(geom));
+		var  repro_geom= geom.transform(
+			new OpenLayers.Projection(projcode),
+			myMap.getProjectionObject()
+		);
+		layer.addFeatures(new OpenLayers.Feature.Vector(repro_geom));
 		myMap.addLayer(layer);
 		myMap.zoomToExtent(bounds);
 		var year = selectedRecord.get("year");
@@ -65,7 +69,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 		slider.setValue(year,true);
 		Ext.getCmp('years-min-field').setValue(year);
 		//TODO try use slider.updateVme();
-		 FigisMap.ol.refreshFilters();
+		FigisMap.ol.refreshFilters();
 		
 		
       },
