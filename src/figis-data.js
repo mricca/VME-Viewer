@@ -456,5 +456,6 @@ var staticLabels = {
 	LEGEND_NOTE_SPRFMO	: "The Convention is subject to ratification, acceptance or approval by the signatories<br />The signatories and the participants that have deposited their instruments can be found <a href=\"http://www.southpacificrfmo.org/status-of-the-convention\" target=\"_blank\">here</a>.",
 	LEGEND_NOTE_CACFAC	: "<br><i>In December 2009 the following countries were officially invited by the Director General to become member of the Commission: Armenia, Azerbaijan, People's Republic China, Georgia, Islamic Republic of Iran, Kazakhstan, Kyrgyzstan, Russian Federation, Tajikistan, Turkey, Turkmenistan, Uzbekistan, Afghanistan, Mongolia and Ukraine.</i>",
 	SELECT_AN_RFB		: '(Select an RFB...)',
+    SELECT_AN_AREA      : '(Select an area...)',
 	defined			: true
 };
