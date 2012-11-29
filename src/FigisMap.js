@@ -753,6 +753,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 	for ( var i = 0; i < layers.length; i++ ) layerTypes[ layers[i].layer ] = true;
 	if ( pars.basicsLayers ) {
 		var owner = FigisMap.ol.getSelectedOwner();
+		var year = FigisMap.ol.getSelectedYear();
 		//WMS SurveyData
 		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
 			layers.unshift({
@@ -760,7 +761,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				label	: 'SurveyData',
 				singleTile	:true,
 				style	: FigisMap.ol.getStyle('survey'),
-				filter	:"Year = '"+ FigisMap.ol.getSelectedYear() + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
+				filter	:"Year = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				opacity	: 1.0,
@@ -777,7 +778,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				layer	: FigisMap.fifao.vme_en,
 				label	: 'Encounters',
 				style	: FigisMap.ol.getStyle('encounters'),
-				filter	:"YEAR = '"+ FigisMap.ol.getSelectedYear() + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
+				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				singleTile	:true,
@@ -793,7 +794,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme,
 				label	: 'Established VME areas',
-				filter	:"YEAR = '2012'",
+				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + (owner ? " AND OWNER ='" + owner +"'" :"") ,
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: pars.isFIGIS,
@@ -1417,7 +1418,7 @@ FigisMap.ol.refreshFilters = function (){
 	
 	myMap.getLayersByName('Established VME areas')[0].mergeNewParams(
 		{'CQL_FILTER': 
-			"YEAR = '" + year + "'"+
+			"YEAR <= '" + year + "' AND END_YEAR >="+ year +
 			(owner ? " AND OWNER ='" + owner +"'" :"")
 		}
 	);
