@@ -192,9 +192,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 				
 				var params = {
 					startindex: 0,          
-					maxfeatures: Vme.data.constants.pageSize,
-					
-	
+					maxfeatures: Vme.data.constants.pageSize
 				};
 				
 				if(query){
