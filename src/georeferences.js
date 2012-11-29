@@ -35,7 +35,7 @@ var georeferences_data = {
     CHINA: { zoomExtent: "73.5403,16.0968,134.7658,53.608867"},
     COLOMBIA: { zoomExtent: "-81.8458,-4.0608,-66.8912,15.886067"},
     COMOROS: { zoomExtent: "43.121,-12.405267,44.527,-11.3164"},
-    "Democratic Republic of Congo": { zoomExtent: "11.0154,-4.999933,18.691,3.681333"},
+    
     CROATIA: { zoomExtent: "13.50481,42.4555,19.2728,46.583016"},
     CUBA: { zoomExtent: "-84.88225,19.796767,-74.10875,23.263867"},
     CYPRUS: { zoomExtent: "32.196,34.596467,34.5541,35.748533"},
