@@ -218,8 +218,10 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
 
         FigisMap.ol.refreshFilters();
 		 //remove layer for hilighting
-	var hilayer = myMap.getLayersByName("highlight")[0];
-	myMap.removeLayer(hilayer)
+		var hilayer = myMap.getLayersByName("highlight")[0];
+		if(hilayer ){
+			myMap.removeLayer(hilayer)
+		}
        
        
     }
