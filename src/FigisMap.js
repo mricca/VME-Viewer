@@ -1681,6 +1681,7 @@ FigisMap.renderer = function(options) {
 				if ( l.filter && l.filter != '*' ) wp.params.cql_filter = l.filter;
 				
 				wp.options = { wrapDateLine: true, ratio: 1, buffer: 0, singleTile: false, opacity: 1.0 };
+                wp.options.showLegendGraphic = true;
 				if ( l.hideInSwitcher ) wp.options.displayInLayerSwitcher = false;
 				if ( l.opacity ) wp.options.opacity = l.opacity;
 				if ( l.hidden ) wp.options.visibility = false;

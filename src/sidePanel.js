@@ -297,6 +297,7 @@ var sidePanel = new Ext.TabPanel({
 				id:'layerswitcherpanel',
 				title:FigisMap.label('SIDP_LAYERS'),
 				iconCls: 'layers-icon',
+				autoScroll: true,
 				html:'<div id="layerswitcher"></div>'
 			
 			},
