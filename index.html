@@ -109,14 +109,14 @@
 		<br />
 
 		<div id="topBar">
-			<span id="user" ></span>
-			<label id="lblFilRFB">Zoom To Area:</label>
+			<span id="user" ></span>|
+			<label id="lblFilRFB">Explore a Region:</label>
 			<select id="FilterRFB" onchange="setZoom()"></select>
-			<label id="lblRFB">Select an RFB:</label>
+			<label id="lblRFB">Select by Competent Authority:</label>
 			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>
 			
 			  
-			<label id="lblSRS">Select a projection:</label>
+			<label id="lblSRS">Change projection:</label>
 			<select id="SelectSRS" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')">
 				<option value='4326' default>WGS84 (4326)</option>
 				<option value='3349'>Mercator (3349)</option>
