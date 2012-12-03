@@ -1272,7 +1272,15 @@ FigisMap.ol.createPopupControl = function(vme){
             }
 
             var addEncounters = function(btn){
-				if (btn.pressed == true){		                   
+             Ext.MessageBox.show({
+                title: "Info",
+                msg: "Releated Encounters not implemented yet",
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO,
+                scope: this
+            });  
+				if (btn.pressed == true){	
+				                     
 					//myMap.getLayersByName('Encounters')[0].mergeNewParams({'CQL_FILTER': "Year = '" + FigisMap.ol.getSelectedYear() + "'"+(owner ? " AND OWNER ='" + owner +"'" :"")});
                     //myMap.getLayersByName('Encounters')[0].visibility = btn.pressed;
                     //myMap.getLayersByName('Encounters')[0].redraw(true);
@@ -1284,7 +1292,15 @@ FigisMap.ol.createPopupControl = function(vme){
             }
             
             var addSurveyData = function(btn) {
+              Ext.MessageBox.show({
+                title: "Info",
+                msg: "Releated Survey Data not implemented yet",
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO,
+                scope: this
+            }); 
             	if (btn.pressed == true){			   
+            	
                 //myMap.getLayersByName('SurveyData')[0].mergeNewParams({'CQL_FILTER': "YEAR = '" + FigisMap.ol.getSelectedYear() + "'"+(owner ? " AND OWNER ='" + owner +"'" :"")});
 				//myMap.getLayersByName('SurveyData')[0].visibility = btn.pressed;
 				//myMap.getLayersByName('SurveyData')[0].redraw(true);
@@ -1302,14 +1318,14 @@ FigisMap.ol.createPopupControl = function(vme){
 							  {
 								  iconCls : 'encounters-icon',
 								  text    : 'Encounters',
-								  enableToggle: true,
-								  pressed : myMap.getLayersByName('Encounters')[0].visibility,
+								  //enableToggle: true,
+								  //pressed : myMap.getLayersByName('Encounters')[0].visibility,
 								  handler : addEncounters
 							  },{
 								  iconCls : 'surveydata-icon',
 								  text    : 'Survey Data',
-								  enableToggle: true,
-								  pressed :myMap.getLayersByName('SurveyData')[0].visibility,
+								  //enableToggle: true,
+								  //pressed :myMap.getLayersByName('SurveyData')[0].visibility,
 								  handler : addSurveyData
 							  }
 						  ]
