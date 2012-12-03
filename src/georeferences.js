@@ -553,9 +553,7 @@ var georeferences_data =
    "Gulf of Alaska":{
       "zoomExtent":"-162.801719,51.758862,-130.460541,61.278046"
    },
-   "":{
-      "zoomExtent":"-114.724167,74.691925,-110.912781,75.466095"
-   },
+   
    "Prince of Wales Strait":{
       "zoomExtent":"-119.515557,71.730545,-114.70723,73.511658"
    },
