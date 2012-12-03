@@ -78,6 +78,85 @@ Ext.ux.LazyJsonStore = Ext.extend(Ext.data.JsonStore,{
 	}
 	
 });
+/**
+ * Ext.ux.WFSStore: WFS generic store 
+ * you can replace fields to get the needed properties
+ * (e.g. {name:'myprop',mapping: 'properties.myprop'
+ * properties:
+ * * typeName - the featureType  
+ *
+ */
+Ext.ux.WFSStore = Ext.extend(Ext.ux.LazyJsonStore,{
+	//combo:this,
+	
+	typeName: 'fifao:Vme2',
+	reader: new Ext.data.JsonReader({
+		root:'features',
+		idProperty:'id', 
+		fields: [
+			{name: 'id', mapping: 'id'},
+			{name: 'geometry', mapping: 'geometry'},
+			{name: 'properties',  mapping: 'properties'},
+			{name: 'type',		mapping: 'type'}
+		]
+	}),
+	messageProperty: 'crs',
+	autoLoad: true,
+	
+	
+	proxy : new Ext.data.HttpProxy({
+		method: 'GET',
+		url: 'http://office.geo-solutions.it/figis/geoserver/fifao/ows',
+
+	}),
+	
+	recordId: 'id',
+	paramNames:{
+		start: "startindex",
+		limit: "maxfeatures",
+		sort: "sortBy"
+	},
+	
+	baseParams:{
+		service:'WFS',
+		version:'1.0.0',
+		request:'GetFeature',
+		outputFormat:'json',
+		srs:'EPSG:4326'
+	},
+	listeners:{
+		beforeload: function(store,options){
+			//store.setBaseParam( 'srs',store.srsName );
+			if(!options.typeName){
+				store.setBaseParam( 'typeName',store.typeName);
+				
+			}
+		}
+	}
+});
+/*
+//get georeferences
+var MarineAreas = new Ext.ux.WFSStore({typeName:'fifao:MarineAreas'});
+MarineAreas.load({
+	callback:function(records,options,success){
+		var georeferences = {};
+		var GeoJsonFormat = new OpenLayers.Format.GeoJSON();
+		records= this.reader.jsonData.features;
+		for (var i=0; i<records.length; i++){
+			var selectedRecord = records[i]; 
+			var geoJsonGeom= selectedRecord["geometry"];
+			var geom = GeoJsonFormat.read(geoJsonGeom, "Geometry");
+			var name = selectedRecord["properties"].Name;
+			georeferences[name] = {
+				zoomExtent:geom.getBounds().toBBOX()
+			};
+			
+		}
+		console.log (JSON.stringify(georeferences));
+	}
+});
+*/
+	
 	
 /**
  * Ext.ux.LazyPagingToolbar
@@ -125,6 +204,8 @@ Ext.ux.LazyPagingToolbar = Ext.extend(Ext.PagingToolbar,{
 })
 
 var Vme={};
+
+
 
 /** 
  * Vme.data contains templates and base Extjs Stores, models to load Vme data
