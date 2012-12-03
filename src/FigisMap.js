@@ -41,6 +41,7 @@ FigisMap.fifao = {
 	vme_fp : 'fifao:Footprints',
     vme_en : 'fifao:Encounters2',
     vme_sd : 'fifao:SurveyData2',
+    vme_agg_sd : 'fifao:AggregatedData',    
 	//bathimetry: 'fifao:color_etopo1_ice_full' //etopo
 	bathimetry: 'fifao:OB_LR'				//natural earth ocean bottom
 	
@@ -755,9 +756,9 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 		var owner = FigisMap.ol.getSelectedOwner();
 		var year = FigisMap.ol.getSelectedYear();
 		//WMS SurveyData
-		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
+		if ( ! layerTypes[ FigisMap.fifao.vme_agg_sd ] ) {
 			layers.unshift({
-				layer	: FigisMap.fifao.vme_sd,
+				layer	: FigisMap.fifao.vme_agg_sd,
 				label	: 'SurveyData',
 				singleTile	:true,
 				style	: FigisMap.ol.getStyle('survey'),
