@@ -40,7 +40,7 @@ FigisMap.fifao = {
 	vme : 'fifao:Vme2', 
 	vme_fp : 'fifao:Footprints',
     vme_en : 'fifao:Encounters2',
-    vme_sd : 'fifao:Surveydata',
+    vme_sd : 'fifao:SurveyData2',
 	//bathimetry: 'fifao:color_etopo1_ice_full' //etopo
 	bathimetry: 'fifao:OB_LR'				//natural earth ocean bottom
 	
@@ -833,9 +833,9 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 		}
         */
 		//WMS 200 nautical miles arcs
-		if ( ! layerTypes[ FigisMap.fifao.nma ] ) {
+		if ( ! layerTypes[ FigisMap.fifao.eez ] ) {
 			layers.unshift({
-				layer	: FigisMap.fifao.nma,
+				layer	: FigisMap.fifao.eez,
 				label	: '200 nautical miles arcs',
 				filter	:'*',
 				icon	: '<img src="' + FigisMap.rnd.vars.EEZ_legendURL + '" width="30" height="20" />',
@@ -848,7 +848,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 		//WMS FAO Areas
 		if ( ! ( layerTypes[ FigisMap.fifao.ma2 ] || layerTypes[ FigisMap.fifao.maj ] ) ) {
 			layers.unshift( {
-				layer	: FigisMap.fifao.ma2,
+				layer	: FigisMap.fifao.maj,
 				label	: 'FAO fishing areas',
 				filter	:'*',
 				remote  : false, 
@@ -1379,11 +1379,11 @@ FigisMap.ol.getStyle = function (type){
  * 
  */
 FigisMap.ol.refreshLayersStyle = function(){
-		myMap.getLayersByName('Encounters')[0].mergeNewParams({'styles': FigisMap.ol.getStyle('encounters')});
+		myMap.getLayersByName('Encounters')[0].mergeNewParams({'style': FigisMap.ol.getStyle('encounters')});
         //myMap.getLayersByName('Encounters')[0].visibility = false;
         myMap.getLayersByName('Encounters')[0].redraw(true);
         
-        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'styles': FigisMap.ol.getStyle('survey')});
+        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'style': FigisMap.ol.getStyle('survey')});
         //myMap.getLayersByName('SurveyData')[0].visibility = false;
         myMap.getLayersByName('SurveyData')[0].redraw(true);
 
@@ -1700,7 +1700,7 @@ FigisMap.renderer = function(options) {
 			if ( l.inMap ) continue;
 			if ( ! l.wms ) continue;
 
-			if ( l.style && l.style != '*' && l.style != 'default' ) l.wms.mergeNewParams({ STYLES: l.style });
+			if ( l.style && l.style != '*' && l.style != 'default' ) l.wms.mergeNewParams({ STYLE: l.style });
 			
 			//myMap.addLayer( l.wms );
 			olLayers.push( l.wms );
