@@ -43,33 +43,43 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 		var GeoJsonFormat = new OpenLayers.Format.GeoJSON();
 		var geoJsonGeom= selectedRecord.get("geometry");
 		var geom = GeoJsonFormat.read(geoJsonGeom, "Geometry");
-		
-		var center = geom.getCentroid();
-				center = center.clone().transform(
-					new OpenLayers.Projection(projcode),
-					myMap.getProjectionObject()
-				);
-		center = new OpenLayers.LonLat(center.x, center.y);
-		var bounds = geom.getBounds().transform(
-						new OpenLayers.Projection(projcode),
-						myMap.getProjectionObject()
-		);
-		layer = new OpenLayers.Layer.Vector("highlight",{
-				displayInLayerSwitcher: false
-		});
-		var  repro_geom= geom.transform(
-			new OpenLayers.Projection(projcode),
-			myMap.getProjectionObject()
-		);
-		layer.addFeatures(new OpenLayers.Feature.Vector(repro_geom));
-		myMap.addLayer(layer);
-		myMap.zoomToExtent(bounds);
-		var year = selectedRecord.get("year");
-		var slider = Ext.getCmp('years-slider');
-		slider.setValue(year,true);
-		Ext.getCmp('years-min-field').setValue(year);
-		//TODO try use slider.updateVme();
-		FigisMap.ol.refreshFilters();
+
+		if (geom == null){
+            Ext.MessageBox.show({
+                title: "Info",
+                msg: FigisMap.label("SIDP_NOGEOMETRY"),
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO,
+                scope: this
+            });  
+		}else{		
+            var center = geom.getCentroid();
+                    center = center.clone().transform(
+                        new OpenLayers.Projection(projcode),
+                        myMap.getProjectionObject()
+                    );
+            center = new OpenLayers.LonLat(center.x, center.y);
+            var bounds = geom.getBounds().transform(
+                            new OpenLayers.Projection(projcode),
+                            myMap.getProjectionObject()
+            );
+            layer = new OpenLayers.Layer.Vector("highlight",{
+                    displayInLayerSwitcher: false
+            });
+            var  repro_geom= geom.transform(
+                new OpenLayers.Projection(projcode),
+                myMap.getProjectionObject()
+            );
+            layer.addFeatures(new OpenLayers.Feature.Vector(repro_geom));
+            myMap.addLayer(layer);
+            myMap.zoomToExtent(bounds);
+            var year = selectedRecord.get("year");
+            var slider = Ext.getCmp('years-slider');
+            slider.setValue(year,true);
+            Ext.getCmp('years-min-field').setValue(year);
+            //TODO try use slider.updateVme();
+            FigisMap.ol.refreshFilters();
+        }
 		
 		
       },

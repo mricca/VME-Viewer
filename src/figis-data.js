@@ -417,6 +417,7 @@ var staticLabels = {
 	SIDP_LEGEND			: {en:"Legend"},
 	SIDP_SEARCH			: {en:"Search"},
 	SIDP_CLEAR			: {en:"Clear"},
+	SIDP_NOGEOMETRY     : {en:"Label area isn't defined yet!"},    
 	//SEARCH FIELDS LABELS
 	SEARCH_TEXT_LBL		: {en:"text"},
 	SEARCH_RFMO_LBL		: {en:"By RFMO and other institutions"},

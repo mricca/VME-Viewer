@@ -761,7 +761,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				label	: 'SurveyData',
 				singleTile	:true,
 				style	: FigisMap.ol.getStyle('survey'),
-				filter	:"Year = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
+				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				opacity	: 1.0,
