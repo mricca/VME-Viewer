@@ -141,7 +141,7 @@ Ext.onReady(function(){
 					tag:'span',
 					id:'user',
 					'class':'user-logout',
-					html:'You Are Logged as  <em>'+ user + ' </em>'
+					html:'Logged as <em>'+ user + '</em>'
 				});
 				Ext.DomHelper.overwrite(document.getElementById("login"),{
 					tag:'span',
