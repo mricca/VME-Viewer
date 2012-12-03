@@ -285,9 +285,9 @@ var sidePanel = new Ext.TabPanel({
 	},
 	items:[
 		{
-			layout:'accordion',
+			layout:'fit',
 			title:FigisMap.label('SIDP_MAP'),
-			activeItem: 'legendpanel',
+			//activeItem: 'legendpanel',
 			iconCls:'map-icon',			
 			renderHidden:true,
 			defaults:{
@@ -300,13 +300,13 @@ var sidePanel = new Ext.TabPanel({
 				autoScroll: true,
 				html:'<div id="layerswitcher"></div>'
 			
-			},
+			}/*,
 			{
 				id:'legendpanel',
 				title:FigisMap.label('SIDP_LEGEND'),
 				iconCls: 'legend-icon',	
 				html:'<div id="legend" class="legend"></div>'
-			}]
+			}*/]
 		},
 		{
 			title:FigisMap.label('SIDP_SEARCH'),
