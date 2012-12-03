@@ -1700,7 +1700,7 @@ FigisMap.renderer = function(options) {
 			if ( l.inMap ) continue;
 			if ( ! l.wms ) continue;
 
-			if ( l.style && l.style != '*' && l.style != 'default' ) l.wms.mergeNewParams({ STYLE: l.style });
+			if ( l.style && l.style != '*' && l.style != 'default' ) l.wms.mergeNewParams({ STYLES: l.style, STYLE: l.style  });
 			
 			//myMap.addLayer( l.wms );
 			olLayers.push( l.wms );
