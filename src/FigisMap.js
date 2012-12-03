@@ -778,7 +778,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				layer	: FigisMap.fifao.vme_en,
 				label	: 'Encounters',
 				style	: FigisMap.ol.getStyle('encounters'),
-				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
+				filter	:"Year = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				singleTile	:true,
@@ -1379,11 +1379,11 @@ FigisMap.ol.getStyle = function (type){
  * 
  */
 FigisMap.ol.refreshLayersStyle = function(){
-		myMap.getLayersByName('Encounters')[0].mergeNewParams({'style': FigisMap.ol.getStyle('encounters')});
+		myMap.getLayersByName('Encounters')[0].mergeNewParams({'styles': FigisMap.ol.getStyle('encounters'),'style':FigisMap.ol.getStyle('encounters')});
         //myMap.getLayersByName('Encounters')[0].visibility = false;
         myMap.getLayersByName('Encounters')[0].redraw(true);
         
-        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'style': FigisMap.ol.getStyle('survey')});
+        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'styles': FigisMap.ol.getStyle('survey'),'style':FigisMap.ol.getStyle('survey')});
         //myMap.getLayersByName('SurveyData')[0].visibility = false;
         myMap.getLayersByName('SurveyData')[0].redraw(true);
 
