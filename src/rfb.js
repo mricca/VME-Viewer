@@ -18,11 +18,26 @@ function setZoom() {
 function zoomTo(settings) {
 	if (settings != null){
 		var bbox = OpenLayers.Bounds.fromString(settings.zoomExtent,false);
+		var curr_proj = myMap.getProjection();
 		var bboxproj = settings.srs || "EPSG:4326";
-		bbox = bbox.transform(
-		    new OpenLayers.Projection(bboxproj),
-		    new OpenLayers.Projection(myMap.getProjection()));
-		myMap.zoomToExtent(bbox);
+		
+		//check 
+		var projcode = curr_proj.split(":")[1];
+		var valid = FigisMap.ol.checkValidBbox(projcode,settings);
+		console.log(curr_proj);
+		if(valid){
+			bbox = bbox.transform(
+				new OpenLayers.Projection(bboxproj),
+				new OpenLayers.Projection(curr_proj)
+			);
+			myMap.zoomToExtent(bbox);
+		}else{
+			var newproj =bboxproj.split(":")[1];
+			setRFB(bbox, null, newproj, 'e-link','rfbs-link', 'rfbs-html');
+			myMap.zoomToExtent(bbox);
+			document.getElementById("SelectSRS").value = newproj;
+		
+		}
     }else{
     	myMap.zoomToMaxExtent();
     }
@@ -98,8 +113,7 @@ function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink,filter) {
 			}
 		}
 		
-		//sets the zoom dropdown to default values ​​when the area selection and the selection of projection change
-		populateZoomAreaOptions('FilterRFB',pars.projection);
+		
 	}
 }
 
@@ -131,15 +145,15 @@ function populateRfbOptions(id) {
 	tgt.value = cv;
 }
 
-function populateZoomAreaOptions(id,proj) {
+function populateZoomAreaOptions(id) {
 	var tgt = document.getElementById(id);
 	var opt, e, cv = '';
 	//if ( tgt.options.length != 0 || tgt.value ) cv = tgt.value;
-	var opts = new Array();
-	var rfbs = FigisMap.ol.list(proj);
-	for ( var i = 0; i < rfbs.length; i++ ) {
+	var opts = [];
+	
+	for ( var i in georeferences_data ) {
 		opt = document.createElement('OPTION');
-		opt.value = rfbs[i];
+		opt.value = i;
 		opt.text = FigisMap.label( opt.value );
 		opts.push( opt );
 	}
@@ -167,6 +181,8 @@ function populateZoomAreaOptions(id,proj) {
 */
 function setRFBPage(elinkDiv, urlLink, htmlLink) {
 	populateRfbOptions('SelectRFB');
+	//sets the zoom dropdown to default values ​​when the area selection and the selection of projection change
+		populateZoomAreaOptions('FilterRFB');
 	var layer, extent, zoom, prj;
 	
 	if ( location.search.indexOf("rfb=") != -1 ){
