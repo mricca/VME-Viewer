@@ -1,3 +1,11 @@
+/*
+	vme-data.js
+	data model and stores for VME using Extjs
+	Authors: Lorenzo Natali. Geo-Solutions
+	
+	Status: Beta.	
+*/
+
 /**
  * FigisMap.ol.clearPopupCache
  * closes all popups, if any
@@ -157,4 +165,16 @@ FigisMap.ol.createPopupControl = function(vme){
     };
     return info.controls;
     
+}
+/** 
+ * Emulate the popup control on a vertext of a geom
+ */
+FigisMap.ol.emulatePupupFromGeom = function(geom){
+	vert  = geom.getVertices()[0];
+	var evt  ={
+		xy: myMap.getPixelFromLonLat(new OpenLayers.LonLat(vert.x,vert.y)  )
+	}
+	var cc = myMap.getControlsByClass('OpenLayers.Control.WMSGetFeatureInfo');
+	for(var i = 0 ;i < cc.length ; i++) {cc[i].getInfoForClick(evt);}
+
 }
