@@ -37,11 +37,12 @@ FigisMap.fifao = {
 	sdi : 'fifao:FAO_SUB_DIV',
 	spd : 'fifao:SPECIES_DIST', 
 	sub : 'fifao:FAO_SUB_AREA',
-	vme : 'fifao:Vme2', 
+	vme : 'fifao:Vme3', 
 	vme_fp : 'fifao:Footprints',
     vme_en : 'fifao:Encounters2',
     vme_sd : 'fifao:SurveyData2',
-    vme_agg_en : 'fifao:AggregatedData',    
+    vme_agg_en : 'fifao:AggregatedEncounters',    
+	vme_agg_sd : 'fifao:AggregatedSurveyData',  
 	//bathimetry: 'fifao:color_etopo1_ice_full' //etopo
 	bathimetry: 'fifao:OB_LR'				//natural earth ocean bottom
 	
@@ -758,10 +759,9 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 		//WMS SurveyData
 		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
 			layers.unshift({
-				layer	: FigisMap.fifao.vme_sd,
+				layer	: FigisMap.ol.getAuthLayer('survey'),
 				label	: 'SurveyData',
-				singleTile	:true,
-				//style	: FigisMap.ol.getStyle('survey'),
+				singleTile	:false,
 				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
@@ -776,13 +776,12 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 		
 		if ( ! layerTypes[ FigisMap.fifao.vme_agg_en ] ) {
 			layers.unshift({
-				layer	: FigisMap.fifao.vme_agg_en,
+				layer	: FigisMap.ol.getAuthLayer('encounters'),
 				label	: 'Encounters',
-				//style	: FigisMap.ol.getStyle('encounters'),
-				filter	:"Year = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
+				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
-				singleTile	:true,
+				singleTile	:false,
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
@@ -1367,33 +1366,31 @@ FigisMap.ol.createPopupControl = function(vme){
     
 }
 /**
- * FigisMap.ol.getStyle
- * returns style for the auth level
+ * FigisMap.ol.getAuthLayer
+ * returns proper layer for the auth level
  */
-FigisMap.ol.getStyle = function (type){
+FigisMap.ol.getAuthLayer = function (type){
 	if(type=='encounters'){
-		return FigisMap.rnd.status.logged ? 'point': null;
+		return FigisMap.rnd.status.logged ? FigisMap.fifao.vme_en:FigisMap.fifao.vme_agg_en;
 	}
 	if(type=='survey'){
-		return FigisMap.rnd.status.logged ? 'SurveyData_point': null;
+		return FigisMap.rnd.status.logged ? FigisMap.fifao.vme_sd: FigisMap.fifao.vme_agg_sd;
 	}
-
 }
 
 /**
- * FigisMap.ol.refreshAthorized
+ * FigisMap.ol.refreshAuthorized
  * Refresh styles for encounters and surveydata for the proper auth level (logged in)
  * 
  */
-FigisMap.ol.refreshAthorized = function(){
+FigisMap.ol.refreshAuthorized = function(){
 		myMap.getLayersByName('Encounters')[0].mergeNewParams({
-			'styles': FigisMap.ol.getStyle('encounters'),
-			'style':FigisMap.ol.getStyle('encounters'),
-			'layers':FigisMap.fifao.vme_en});
+			
+			'layers':FigisMap.ol.getAuthLayer('encounters')});
         //myMap.getLayersByName('Encounters')[0].visibility = false;
         myMap.getLayersByName('Encounters')[0].redraw(true);
         
-        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'styles': FigisMap.ol.getStyle('survey'),'style':FigisMap.ol.getStyle('survey')});
+        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'layers': FigisMap.ol.getAuthLayer('survey')});
         //myMap.getLayersByName('SurveyData')[0].visibility = false;
         myMap.getLayersByName('SurveyData')[0].redraw(true);
 
@@ -1408,7 +1405,6 @@ FigisMap.ol.getSelectedYear= function(){
 		yr = Ext.getCmp('years-slider').getValues()[0];
 	}catch (e){ yr = 2012};
 	return yr;
-
 }
 /**
  * FigisMap.ol.getSelectedYear returns the selected year in the slider
@@ -1432,11 +1428,12 @@ FigisMap.ol.refreshFilters = function (){
 			(owner ? " AND OWNER ='" + owner +"'" :"")
 		}
 	);
+	
 	myMap.getLayersByName('Established VME areas')[0].redraw(true);
 	myMap.getLayersByName('Encounters')[0].mergeNewParams(
 		{'CQL_FILTER': 
 			"YEAR = '"+ year +"'" +  
-			(owner ? " AND Owner ='" + owner +"'" :"")
+			(owner ? " AND OWNER ='" + owner +"'" :"")
 		}
 	);
 	myMap.getLayersByName('Encounters')[0].redraw(true);
@@ -1909,7 +1906,7 @@ FigisMap.renderer = function(options) {
 } //FigisMap.renderer Class Ends
 Ext.onReady(function(){
 FigisMap.loginWin.on('login',function(user){
-		FigisMap.ol.refreshAthorized();
+		FigisMap.ol.refreshAuthorized();
 
 
 		FigisMap.ol.clearPopupCache();          
@@ -1920,7 +1917,7 @@ FigisMap.loginWin.on('logout',function(user){
                 FigisMap.popupCache[popupKey].close();
 		}
 		
-        FigisMap.ol.refreshAthorized();
+        FigisMap.ol.refreshAuthorized();
 });
 
 });
