@@ -59,10 +59,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
                         myMap.getProjectionObject()
                     );
             center = new OpenLayers.LonLat(center.x, center.y);
-            var bounds = geom.getBounds().transform(
-                            new OpenLayers.Projection(projcode),
-                            myMap.getProjectionObject()
-            );
+            var bounds = geom.getBounds();
             layer = new OpenLayers.Layer.Vector("highlight",{
                     displayInLayerSwitcher: false
             });
@@ -72,7 +69,11 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
             );
             layer.addFeatures(new OpenLayers.Feature.Vector(repro_geom));
             myMap.addLayer(layer);
-            myMap.zoomToExtent(bounds);
+            var settings ={
+              zoomExtent: bounds.toBBOX()
+            }
+            zoomTo(settings);
+            //myMap.zoomToExtent(bounds);
             var year = selectedRecord.get("year");
             var slider = Ext.getCmp('years-slider');
             slider.setValue(year,true);
@@ -307,7 +308,7 @@ var sidePanel = new Ext.TabPanel({
 			},
 			items:[{	
 				id:'layerswitcherpanel',
-				title:FigisMap.label('SIDP_LAYERS'),
+				//title:FigisMap.label('SIDP_LAYERS'),
 				iconCls: 'layers-icon',
 				autoScroll: true,
 				html:'<div id="layerswitcher"></div>'
