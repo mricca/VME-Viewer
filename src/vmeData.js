@@ -89,7 +89,7 @@ Ext.ux.LazyJsonStore = Ext.extend(Ext.data.JsonStore,{
 Ext.ux.WFSStore = Ext.extend(Ext.ux.LazyJsonStore,{
 	//combo:this,
 	
-	typeName: 'fifao:Vme2',
+	typeName: FigisMap.fifao.vme,
 	reader: new Ext.data.JsonReader({
 		root:'features',
 		idProperty:'id', 
@@ -106,7 +106,7 @@ Ext.ux.WFSStore = Ext.extend(Ext.ux.LazyJsonStore,{
 	
 	proxy : new Ext.data.HttpProxy({
 		method: 'GET',
-		url: 'http://office.geo-solutions.it/figis/geoserver/fifao/ows',
+		url: '/figis/geoserver/fifao/ows',
 
 	}),
 	
@@ -332,7 +332,7 @@ Vme.data.stores = {
 			
 			
 		],
-		url: 'http://office.geo-solutions.it/figis/geoserver/fifao/ows',
+		url: '/figis/geoserver/fifao/ows',
 		recordId: 'fid',
 		paramNames:{
 			start: "startindex",
