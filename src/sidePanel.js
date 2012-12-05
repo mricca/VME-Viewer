@@ -53,27 +53,33 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
                 scope: this
             });  
 		}else{		
-            var center = geom.getCentroid();
+            /*var center = geom.getCentroid();
                     center = center.clone().transform(
                         new OpenLayers.Projection(projcode),
                         myMap.getProjectionObject()
-                    );
-            center = new OpenLayers.LonLat(center.x, center.y);
-            var bounds = geom.getBounds();
+                    );*/
+            //center = new OpenLayers.LonLat(center.x, center.y);
+            //var bounds = geom.getBounds();
             layer = new OpenLayers.Layer.Vector("highlight",{
                     displayInLayerSwitcher: false
             });
-            var  repro_geom= geom.transform(
+            var repro_geom = geom.clone().transform(
                 new OpenLayers.Projection(projcode),
                 myMap.getProjectionObject()
             );
             layer.addFeatures(new OpenLayers.Feature.Vector(repro_geom));
             myMap.addLayer(layer);
+            var bounds = geom.clone().getBounds();
+            var repro_bbox = repro_geom.getBounds();
             var settings ={
-              zoomExtent: bounds.toBBOX()
+              zoomExtent: bounds.toBBOX(20)
             }
-            zoomTo(settings);
-            //myMap.zoomToExtent(bounds);
+            zoomTo(settings,repro_bbox);
+            if(document.getElementById("SelectSRS").value == "4326"){
+            	FigisMap.ol.emulatePupupFromGeom(geom);
+            }else{
+            	FigisMap.ol.emulatePupupFromGeom(repro_geom);
+            }
             var year = selectedRecord.get("year");
             var slider = Ext.getCmp('years-slider');
             slider.setValue(year,true);

@@ -15,9 +15,9 @@ function setZoom() {
 * function zoomTo
 *
 **/
-function zoomTo(settings) {
+function zoomTo(settings,geom) {
 	if (settings != null){
-		var bbox = OpenLayers.Bounds.fromString(settings.zoomExtent,false);
+		var bbox = geom ? geom : OpenLayers.Bounds.fromString(settings.zoomExtent,false);
 		var curr_proj = myMap.getProjection();
 		var bboxproj = settings.srs || "EPSG:4326";
 		
@@ -26,11 +26,15 @@ function zoomTo(settings) {
 		var valid = FigisMap.ol.checkValidBbox(projcode,settings);
 		console.log(curr_proj);
 		if(valid){
-			bbox = bbox.transform(
-				new OpenLayers.Projection(bboxproj),
-				new OpenLayers.Projection(curr_proj)
-			);
-			myMap.zoomToExtent(bbox);
+			if(geom){
+				myMap.zoomToExtent(bbox);
+			}else{
+				bbox = bbox.clone().transform(
+					new OpenLayers.Projection(bboxproj),
+					new OpenLayers.Projection(curr_proj)
+				);
+				myMap.zoomToExtent(bbox);			
+			}
 		}else{
 			var newproj =bboxproj.split(":")[1];
 			setRFB(bbox, null, newproj, 'e-link','rfbs-link', 'rfbs-html');
