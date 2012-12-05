@@ -198,6 +198,8 @@ Vme.data={
 						'<em>Competent Authority:</em><span class="own"> {owner}</span><br/>'+
 						'<br/>'+
 						'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+						'<a class="zipmlink" style="float:right" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
+						'{[this.addProtectedLinks(values)]}' +
 					'</div>'+
 				'</tpl>',
 				{
@@ -213,17 +215,30 @@ Vme.data={
 							bbox = values.bbox;
 							return bbox.toArray(); 
 						}else{
-								var geom = values.geometry;
-								var repro_geom = geom.clone().transform(
-								new OpenLayers.Projection(projcode),
-								myMap.getProjectionObject()
-							);
-							
-							
-							var repro_bbox = repro_geom.getBounds();
-							return repro_bbox.toArray();
+							var geom = values.geometry;
+							var repro_geom = geom.clone().transform(
+							new OpenLayers.Projection(projcode),
+							myMap.getProjectionObject()
+						);
+						
+						var repro_bbox = repro_geom.getBounds();
+						return repro_bbox.toArray();
 						
 						}
+					},
+					getDownloadLink: function(values){
+						return FigisMap.rnd.vars.ows+"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
+							"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+							
+					},
+					addProtectedLinks: function(values){
+						if(!FigisMap.rnd.status.logged){
+							return "";
+						}
+						return  '<a class="zoomlink" onClick="myMap.relatedFeatures( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">Releated</a>'
+						
+						
+						
 					}
 				}
 			),

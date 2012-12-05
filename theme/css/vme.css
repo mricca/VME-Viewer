@@ -397,3 +397,10 @@ h3 {
 	background-image: url(../img/icons/magnifier.png) !important;
 	background-repeat: no-repeat;
 }
+
+.zipmlink{ 
+	padding-left: 15px;
+	background-size:13px;
+	background-image: url(../img/icons/compress.png) !important;
+	background-repeat: no-repeat;
+}
