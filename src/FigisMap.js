@@ -83,6 +83,7 @@ FigisMap.rnd.vars = {
 	RFB_legendURL		: FigisMap.httpBaseRoot + "theme/img/RFB_legend.png",
 	wms			: FigisMap.geoServerBase + "/figis/geoserver" + "/wms",
 	gwc			: FigisMap.geoServerBase + "/figis/geoserver/gwc/service" + "/wms",
+	ows			: FigisMap.geoServerBase + "/figis/geoserver/ows",
 	remote:{
 		wms: "http://figisapps.fao.org/figis/geoserver/wms",
 		gwc: "http://figisapps.fao.org/figis/geoserver/gwc/service/wms"

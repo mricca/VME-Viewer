@@ -5,6 +5,16 @@
 	
 	Status: Beta.	
 */
+function getQSParam(ParamName) {
+  QS=window.location.toString(); 
+  var indSta=QS.indexOf(ParamName); 
+  if (indSta==-1 || ParamName=="") return null; 
+  var indEnd=QS.indexOf('&amp;',indSta); 
+  if (indEnd==-1) indEnd=QS.length; 
+  var valore = unescape(QS.substring(indSta+ParamName.length+1,indEnd)); 
+  return valore; 
+}
+
 
 /**
  * FigisMap.ol.clearPopupCache
@@ -124,6 +134,122 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 	  }
 	}
 }
+/**
+ *  FigisMap.ol.getFeatureInfoHandlerGML
+ *  handler to parse GML response
+ */
+FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
+	var popupKey = e.xy.x + "." + e.xy.y;
+	var reader = new OpenLayers.Format.WMSGetFeatureInfo();
+	var response = reader.read(e.text);
+	var store = new Vme.data.extensions.FeatureInfo.VmeStore();
+	store.loadData(response);
+	var dv = new Ext.DataView({
+		itemId: e.object.layers[0].name,
+		title: e.object.layers[0].name,
+		layout: "fit",
+		itemSelector: 'span.x-editable',
+		autoScroll:true,
+		border:false,
+		store: store,
+		tpl: Vme.data.templates.vme,
+		singleSelect: true
+	});
+	var popup;
+	if (!(popupKey in FigisMap.popupCache)){
+	  popup = new GeoExt.Popup({
+					title: 'Features Info',
+					width: 400,
+					height: 300,
+					layout: "accordion",
+					map: myMap,
+					location: e.xy,
+					listeners: {
+						close: (function(key) {
+							return function(panel){
+								delete FigisMap.popupCache[key];
+							};
+						})(popupKey)
+					}
+			  });
+				FigisMap.ol.clearPopupCache();
+				FigisMap.popupCache[popupKey] = popup;
+	}else{
+		popup = FigisMap.popupCache[popupKey];
+	}
+
+	var addEncounters = function(btn){
+		Ext.MessageBox.show({
+			title: "Info",
+			msg: "Releated Encounters not implemented yet",
+			buttons: Ext.Msg.OK,
+			icon: Ext.MessageBox.INFO,
+			scope: this
+		});  
+	}
+	
+	var addSurveyData = function(btn) {
+		Ext.MessageBox.show({
+			title: "Info",
+			msg: "Releated Survey Data not implemented yet",
+			buttons: Ext.Msg.OK,
+			icon: Ext.MessageBox.INFO,
+			scope: this
+		}); 
+		
+	}
+	
+	var buttonsVme = [];
+			
+	if (e.object.layers[0].name == 'Established VME areas' && FigisMap.rnd.status.logged == true){
+		buttonsVme = [
+		  {
+			  iconCls : 'encounters-icon',
+			  text    : 'Encounters',
+			  //enableToggle: true,
+			  //pressed : myMap.getLayersByName('Encounters')[0].visibility,
+			  handler : addEncounters
+		  },{
+			  iconCls : 'surveydata-icon',
+			  text    : 'Survey Data',
+			  //enableToggle: true,
+			  //pressed :myMap.getLayersByName('SurveyData')[0].visibility,
+			  handler : addSurveyData
+		  }
+		]
+
+	}
+	var count =store.getCount();
+
+	e.object.layers[0].name
+	if(count> 0){
+	  var oldItem;
+	  if (popup.items){
+		  oldItem =popup.items.get(e.object.layers[0].name);
+	  }
+	  if(oldItem){
+		  oldItem.update(e.text);
+	  }else{
+		  popup.add({
+			  itemId: e.object.layers[0].name,
+			  title: e.object.layers[0].name,
+			  layout: "fit",
+			  border:false,
+			  bodyStyle: 'padding:0px;background-color:#F5F5DC',
+			  items:[dv],
+			  //autoScroll: true,
+			  autoWidth: true,
+			  collapsible: false,
+			  buttons : buttonsVme
+		  });
+		  
+		 
+		  popup.opened =true;
+		  popup.doLayout();
+		  popup.show();
+	  }
+	}
+}
 
 /** 
  * FigisMap.ol.createPopupControl(layers)
@@ -132,7 +258,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
  */
 FigisMap.ol.createPopupControl = function(vme){
     FigisMap.ol.clearPopupCache();
-   
+    var gml = getQSParam('gml');
 		var info={controls : []};
 		var vmeLyr;
 		
@@ -152,13 +278,13 @@ FigisMap.ol.createPopupControl = function(vme){
 			  layers: [vme[vmeLyr]],
 			  queryVisible: true,
 			  maxFeatures: 10,
-			  
+			  infoFormat:  gml? "application/vnd.ogc.gml" :"text/html",
 			  //vendorParams: {"CQL_FILTER": "year = '" + FigisMap.ol.getSelectedYear() + "'"},
 			  eventListeners: {
 				  beforegetfeatureinfo: function(e) { 
 					this.vendorParams = {"CQL_FILTER": e.object.layers[0].params.CQL_FILTER};
 				  }, 
-				  getfeatureinfo: FigisMap.ol.getFeatureInfoHandler
+				  getfeatureinfo: gml ? FigisMap.ol.getFeatureInfoHandlerGML : FigisMap.ol.getFeatureInfoHandler
 			  }
 	    })  
       info.controls.push(control);  
@@ -170,6 +296,7 @@ FigisMap.ol.createPopupControl = function(vme){
  * Emulate the popup control on a vertext of a geom
  */
 FigisMap.ol.emulatePupupFromGeom = function(geom){
+	FigisMap.ol.clearPopupCache();
 	vert  = geom.getVertices()[0];
 	var evt  ={
 		xy: myMap.getPixelFromLonLat(new OpenLayers.LonLat(vert.x,vert.y)  )

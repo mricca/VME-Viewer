@@ -78,62 +78,8 @@ Ext.ux.LazyJsonStore = Ext.extend(Ext.data.JsonStore,{
 	}
 	
 });
-/**
- * Ext.ux.WFSStore: WFS generic store 
- * you can replace fields to get the needed properties
- * (e.g. {name:'myprop',mapping: 'properties.myprop'
- * properties:
- * * typeName - the featureType  
- *
- */
-Ext.ux.WFSStore = Ext.extend(Ext.ux.LazyJsonStore,{
-	//combo:this,
-	
-	typeName: FigisMap.fifao.vme,
-	reader: new Ext.data.JsonReader({
-		root:'features',
-		idProperty:'id', 
-		fields: [
-			{name: 'id', mapping: 'id'},
-			{name: 'geometry', mapping: 'geometry'},
-			{name: 'properties',  mapping: 'properties'},
-			{name: 'type',		mapping: 'type'}
-		]
-	}),
-	messageProperty: 'crs',
-	autoLoad: true,
-	
-	
-	proxy : new Ext.data.HttpProxy({
-		method: 'GET',
-		url: '/figis/geoserver/fifao/ows',
 
-	}),
-	
-	recordId: 'id',
-	paramNames:{
-		start: "startindex",
-		limit: "maxfeatures",
-		sort: "sortBy"
-	},
-	
-	baseParams:{
-		service:'WFS',
-		version:'1.0.0',
-		request:'GetFeature',
-		outputFormat:'json',
-		srs:'EPSG:4326'
-	},
-	listeners:{
-		beforeload: function(store,options){
-			//store.setBaseParam( 'srs',store.srsName );
-			if(!options.typeName){
-				store.setBaseParam( 'typeName',store.typeName);
-				
-			}
-		}
-	}
-});
+
 /*
 //get georeferences
 var MarineAreas = new Ext.ux.WFSStore({typeName:'fifao:MarineAreas'});
@@ -212,37 +158,121 @@ var Vme={};
  */
 Vme.data={
 	templates: {
-	  /** Vme.data.templates.searchResult
-	   * displays search results with utiities to display human readable fields
-	   */
+		/** Vme.data.templates.searchResult
+		 * displays search results with utiities to display human readable fields
+	     */
 		searchResult: 
-				new Ext.XTemplate(
+			new Ext.XTemplate(
 				'<tpl for=".">'+
 					'<div class="search-result">' +
 						'<em>Local Name:</em>{localname}<br/>'+
 						'<em>Status:</em><span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
 						'<em>Reporting Year:</em>{year} <br/> '+
-						'<em>Area Type:</em><span classhttp://www.google.it/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0CDMQFjAA&url=http%3A%2F%2Fwww.tizag.com%2FhtmlT%2Fhtmlbold.php&ei=3DCzUJXvHoSF4ASp2YDwCQ&usg=AFQjCNH4TiHKTWpib2DrnZ9auTwG4pMBGg&sig2=XVGFpxbI_IMqf6__y_5djQ="type" >{type}</span> <br/> '+
+						'<em>Area Type:</em><span>{type}</span> <br/> '+
 						'<em>Geographic reference:</em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						
 						//'<span class="id" >{vme_id}</span><br/>'+
 						'<span class="own" >{owner}</span><br/>'+
 						'<span class="source" style="font-weight:bold">Vulnerable Marine Ecosystem Database</span>'+
 					'</div>'+
-				'</tpl>',{
-				compiled:true,
-				writeStatus:function(status){
-					var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
-					var text =statusRecord ? statusRecord.get('displayText'):status;
-					return text;
+				'</tpl>',
+				{
+					compiled:true,
+					writeStatus:function(status){
+						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
+						var text =statusRecord ? statusRecord.get('displayText'):status;
+						return text;
+					}
 				}
-
-				})
+			),
+				
+		vme: 
+			new Ext.XTemplate(
+				'<tpl for=".">'+
+					'<div class="search-result" style="text-align:left">' +
+						'<em>Local Name: </em>{localname}<br/>'+
+						'<em>Status: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
+						'<em>Reporting Year: </em>{year}<br/> '+
+						'<em>Area Type: </em><span>{type}</span> <br/> '+
+						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						'<em>Competent Authority:</em><span class="own"> {owner}</span><br/>'+
+						'<br/>'+
+						'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+					'</div>'+
+				'</tpl>',
+				{
+					compiled:true,
+					writeStatus:function(status){
+						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
+						var text =statusRecord ? statusRecord.get('displayText'):status;
+						return text;
+					},
+					getBBOX:function(values){
+						var projcode = "EPSG:4326";
+						if(myMap.getProjection() == projcode ){
+							bbox = values.bbox;
+							return bbox.toArray(); 
+						}else{
+								var geom = values.geometry;
+								var repro_geom = geom.clone().transform(
+								new OpenLayers.Projection(projcode),
+								myMap.getProjectionObject()
+							);
+							
+							
+							var repro_bbox = repro_geom.getBounds();
+							return repro_bbox.toArray();
+						
+						}
+					}
+				}
+			),
+		encounters :
+			new Ext.XTemplate(
+				'<tpl for=".">'+
+					'<div class="search-result">' +
+						'<em>Local Name: </em>{localname}<br/>'+
+						'<em>Status: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
+						'<em>Reporting Year: </em>{year}<br/> '+
+						'<em>Area Type: </em><span>{type}</span> <br/> '+
+						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						'<span class="own"> {owner}</span><br/>'+
+					'</div>'+
+				'</tpl>',
+				{
+					compiled:true,
+					writeStatus:function(status){
+						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
+						var text =statusRecord ? statusRecord.get('displayText'):status;
+						return text;
+					}
+				}
+			),
+		surveydata :
+			new Ext.XTemplate(
+				'<tpl for=".">'+
+					'<div class="search-result">' +
+						'<em>Local Name: </em>{localname}<br/>'+
+						'<em>Status: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
+						'<em>Reporting Year: </em>{year}<br/> '+
+						'<em>Area Type: </em><span>{type}</span> <br/> '+
+						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						'<span class="own"> {owner}</span><br/>'+
+					'</div>'+
+				'</tpl>',
+				{
+					compiled:true,
+					writeStatus:function(status){
+						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
+						var text =statusRecord ? statusRecord.get('displayText'):status;
+						return text;
+					}
+				}
+			)
 	},
 	constants:{
 		pageSize:5
 	}
-	
 
 };
 
@@ -273,10 +303,138 @@ Vme.data.models = {
 		[7, FigisMap.label("VME_STATUS_TEMP")]
 		
 	],
-	years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})() 
+	years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})()
 
 };
 
+Vme.data.extensions ={
+	FeatureInfo:{
+		VmeStore : Ext.extend(Ext.data.JsonStore,{
+			reader : new Ext.data.JsonReader({
+				root:'',
+				fields: [
+					{name: 'id', mapping: 'fid'},
+					{name: 'geometry', mapping: 'geometry'},
+					{name: 'localname',  mapping: 'attributes.LOCAL_NAME'},
+					{name: 'bbox',		mapping: 'bounds'},
+					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
+					{name: 'status', 	 mapping: 'attributes.STATUS'},
+					{name: 'year', mapping: 'attributes.YEAR'},
+					{name: 'type', mapping: 'attributes.VME_TYPE'},
+					{name: 'owner', mapping: 'attributes.OWNER'},
+					{name: 'geo_ref', mapping: 'attributes.GEO_AREA'}
+					
+					
+				],
+				idProperty: 'fid'
+			
+			})
+		}),
+		EncountersStore : Ext.extend(Ext.data.JsonStore,{
+			reader : new Ext.data.JsonReader({
+				root:'',
+				fields: [
+					{name: 'id', mapping: 'fid'},
+					{name: 'geometry', mapping: 'geometry'},
+					{name: 'localname',  mapping: 'attributes.LOCAL_NAME'},
+					{name: 'bbox',		mapping: 'attributes.bbox'},
+					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
+					{name: 'status', 	 mapping: 'attributes.STATUS'},
+					{name: 'year', mapping: 'attributes.YEAR'},
+					{name: 'type', mapping: 'attributes.VME_TYPE'},
+					{name: 'owner', mapping: 'attributes.OWNER'},
+					{name: 'geo_ref', mapping: 'attributes.GEO_AREA'}
+					
+					
+				],
+				idProperty: 'fid'
+			
+			})
+		}),
+		SurveyDataStore : Ext.extend(Ext.data.JsonStore,{
+			reader : new Ext.data.JsonReader({
+				root:'',
+				fields: [
+					{name: 'id', mapping: 'fid'},
+					{name: 'geometry', mapping: 'geometry'},
+					{name: 'localname',  mapping: 'attributes.LOCAL_NAME'},
+					{name: 'bbox',		mapping: 'attributes.bbox'},
+					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
+					{name: 'status', 	 mapping: 'attributes.STATUS'},
+					{name: 'year', mapping: 'attributes.YEAR'},
+					{name: 'type', mapping: 'attributes.VME_TYPE'},
+					{name: 'owner', mapping: 'attributes.OWNER'},
+					{name: 'geo_ref', mapping: 'attributes.GEO_AREA'}
+					
+					
+				],
+				idProperty: 'fid'
+			
+			})
+		})
+		
+	
+	},
+	WFS:{
+		/**
+		 * Vme.data.extensions.WFS.WFSStore: WFS generic store 
+		 * you can replace fields to get the needed properties
+		 * (e.g. {name:'myprop',mapping: 'properties.myprop'
+		 * properties:
+		 * * typeName - the featureType  
+		 *
+		 */
+		WFSStore : Ext.extend(Ext.ux.LazyJsonStore,{
+			//combo:this,
+			
+			typeName: FigisMap.fifao.vme,
+			reader: new Ext.data.JsonReader({
+				root:'features',
+				idProperty:'id', 
+				fields: [
+					{name: 'id', mapping: 'id'},
+					{name: 'geometry', mapping: 'geometry'},
+					{name: 'properties',  mapping: 'properties'},
+					{name: 'type',		mapping: 'type'}
+				]
+			}),
+			messageProperty: 'crs',
+			autoLoad: true,
+			
+			
+			proxy : new Ext.data.HttpProxy({
+				method: 'GET',
+				url: FigisMap.rnd.vars.ows
+
+			}),
+			
+			recordId: 'id',
+			paramNames:{
+				start: "startindex",
+				limit: "maxfeatures",
+				sort: "sortBy"
+			},
+			
+			baseParams:{
+				service:'WFS',
+				version:'1.0.0',
+				request:'GetFeature',
+				outputFormat:'json',
+				srs:'EPSG:4326'
+			},
+			listeners:{
+				beforeload: function(store,options){
+					//store.setBaseParam( 'srs',store.srsName );
+					if(!options.typeName){
+						store.setBaseParam( 'typeName',store.typeName);
+						
+					}
+				}
+			}
+		})
+	
+	}
+}
 
 
 /**
@@ -332,7 +490,7 @@ Vme.data.stores = {
 			
 			
 		],
-		url: '/figis/geoserver/fifao/ows',
+		url: FigisMap.rnd.vars.ows,
 		recordId: 'fid',
 		paramNames:{
 			start: "startindex",
@@ -377,7 +535,7 @@ Vme.data.stores = {
 			{name: 'unit', mapping: 'properties.UNIT'}
 
 		],
-		url: 'http://office.geo-solutions.it/figis/geoserver/fifao/ows',
+		url: FigisMap.rnd.vars.ows,
 		recordId: 'fid',
 		paramNames:{
 			start: "startindex",
@@ -419,7 +577,7 @@ Vme.data.stores = {
 			{name: 'unit', mapping: 'properties.UNIT'}
 
 		],
-		url: 'http://office.geo-solutions.it/figis/geoserver/fifao/ows',
+		url: FigisMap.rnd.vars.ows,
 		recordId: 'fid',
 		paramNames:{
 			start: "startindex",

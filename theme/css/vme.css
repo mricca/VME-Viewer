@@ -391,3 +391,9 @@ h3 {
 	background-image: url(../img/icons/application_form_magnify.png) !important;
 }
 
+.zoomlink{ 
+	padding-left: 15px;
+	background-size:13px;
+	background-image: url(../img/icons/magnifier.png) !important;
+	background-repeat: no-repeat;
+}
