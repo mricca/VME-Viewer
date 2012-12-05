@@ -501,7 +501,7 @@ Vme.data.stores = {
 			service:'WFS',
 			version:'1.0.0',
 			request:'GetFeature',
-			typeName: 'fifao:Vme2',
+			typeName: FigisMap.fifao.vme,
 			outputFormat:'json',
 			sortBy: 'VME_ID',
 			srs:'EPSG:4326'
