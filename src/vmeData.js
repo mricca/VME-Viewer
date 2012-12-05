@@ -185,17 +185,19 @@ Vme.data={
 					}
 				}
 			),
-				
+			
 		vme: 
 			new Ext.XTemplate(
 				'<tpl for=".">'+
 					'<div class="search-result" style="text-align:left">' +
+					  '<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Local Name: </em>{localname}<br/>'+
-						'<em>Status: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
-						'<em>Reporting Year: </em>{year}<br/> '+
 						'<em>Area Type: </em><span>{type}</span> <br/> '+
-						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						'<em>Status: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
+						'<em>Validity Period: </em><span>from 2007 up to 2014</span> <br/> '+
+						'<em>Reporting Year: </em>{year}<br/> '+
 						'<em>Competent Authority:</em><span class="own"> {owner}</span><br/>'+
+						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						'<br/>'+
 						'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
 						'<a class="zipmlink" style="float:right" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
@@ -245,12 +247,115 @@ Vme.data={
 		encounters :
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="search-result">' +
-						'<em>Local Name: </em>{localname}<br/>'+
-						'<em>Status: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
+					'<div class="search-result" style="text-align:left">' +						
+						'<em>Taxa: </em><span>{taxa}</span> <br/> '+
 						'<em>Reporting Year: </em>{year}<br/> '+
-						'<em>Area Type: </em><span>{type}</span> <br/> '+
-						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						'<em>Quantity: </em><span>{quantity} {unit}</span> <br/> '+
+						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
+						'<br/>'+
+						'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+						'<a class="zipmlink" style="float:right" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
+						'{[this.addProtectedLinks(values)]}' +
+					'</div>'+
+				'</tpl>',
+				{
+					compiled:true,
+					writeStatus:function(status){
+						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
+						var text =statusRecord ? statusRecord.get('displayText'):status;
+						return text;
+					},
+					getBBOX:function(values){
+						var projcode = "EPSG:4326";
+						if(myMap.getProjection() == projcode ){
+							bbox = values.bbox;
+							return bbox.toArray(); 
+						}else{
+							var geom = values.geometry;
+							var repro_geom = geom.clone().transform(
+							new OpenLayers.Projection(projcode),
+							myMap.getProjectionObject()
+						);
+						
+						var repro_bbox = repro_geom.getBounds();
+						return repro_bbox.toArray();
+						
+						}
+					},
+					getDownloadLink: function(values){
+						return FigisMap.rnd.vars.ows+"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme_en+ "&outputFormat=shape-zip" +
+							"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+							
+					},
+					addProtectedLinks: function(values){
+						if(!FigisMap.rnd.status.logged){
+							return "";
+						}
+						return  '<a class="zoomlink" onClick="myMap.relatedFeatures( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">Releated</a>'
+						
+						
+						
+					}
+				}
+			),
+		surveydata :
+			new Ext.XTemplate(
+				'<tpl for=".">'+
+					'<div class="search-result" style="text-align:left">' +						
+						'<em>Taxa: </em><span>{taxa}</span> <br/> '+
+						'<em>Reporting Year: </em>{year}<br/> '+
+						'<em>Quantity: </em><span>{quantity} {unit}</span> <br/> '+
+						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
+						'<br/>'+
+						'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+						'<a class="zipmlink" style="float:right" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
+						'{[this.addProtectedLinks(values)]}' +
+					'</div>'+
+				'</tpl>',
+				{
+					compiled:true,
+					writeStatus:function(status){
+						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
+						var text =statusRecord ? statusRecord.get('displayText'):status;
+						return text;
+					},
+					getBBOX:function(values){
+						var projcode = "EPSG:4326";
+						if(myMap.getProjection() == projcode ){
+							bbox = values.bbox;
+							return bbox.toArray(); 
+						}else{
+							var geom = values.geometry;
+							var repro_geom = geom.clone().transform(
+							new OpenLayers.Projection(projcode),
+							myMap.getProjectionObject()
+						);
+						
+						var repro_bbox = repro_geom.getBounds();
+						return repro_bbox.toArray();
+						
+						}
+					},
+					getDownloadLink: function(values){
+						return FigisMap.rnd.vars.ows+"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme_sd+ "&outputFormat=shape-zip" +
+							"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+							
+					},
+					addProtectedLinks: function(values){
+						if(!FigisMap.rnd.status.logged){
+							return "";
+						}
+						return  '<a class="zoomlink" onClick="myMap.relatedFeatures( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">Releated</a>'
+					}
+				}
+			),
+		aggregate :
+			new Ext.XTemplate(
+				'<tpl for=".">'+
+					'<div class="search-result" style="text-align:left">' +
+						'<em>Count: </em>{count}<br/>'+
+						'<em>Year: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
+						
 						'<span class="own"> {owner}</span><br/>'+
 					'</div>'+
 				'</tpl>',
@@ -263,16 +368,14 @@ Vme.data={
 					}
 				}
 			),
-		surveydata :
+		footprints :
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="search-result">' +
-						'<em>Local Name: </em>{localname}<br/>'+
-						'<em>Status: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
-						'<em>Reporting Year: </em>{year}<br/> '+
-						'<em>Area Type: </em><span>{type}</span> <br/> '+
-						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
-						'<span class="own"> {owner}</span><br/>'+
+					'<div class="search-result" style="text-align:left">' +
+						'<em>VME_NAFO bottom fishing areas ("footprint") </em>{localname}<br/>'+
+						'<em>Last referene Year: </em>{year}<br/> '+
+						'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+						'<a class="zipmlink" style="float:right" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
 					'</div>'+
 				'</tpl>',
 				{
@@ -281,7 +384,29 @@ Vme.data={
 						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
 						var text =statusRecord ? statusRecord.get('displayText'):status;
 						return text;
-					}
+					},
+					getBBOX:function(values){
+						var projcode = "EPSG:4326";
+						if(myMap.getProjection() == projcode ){
+							bbox = values.bbox;
+							return bbox.toArray(); 
+						}else{
+							var geom = values.geometry;
+							var repro_geom = geom.clone().transform(
+							new OpenLayers.Projection(projcode),
+							myMap.getProjectionObject()
+						);
+						
+						var repro_bbox = repro_geom.getBounds();
+						return repro_bbox.toArray();
+						
+						}
+					},
+					getDownloadLink: function(values){
+						return FigisMap.rnd.vars.ows+"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme_fp+ "&outputFormat=shape-zip" +
+							"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+							
+					},
 				}
 			)
 	},
@@ -345,22 +470,24 @@ Vme.data.extensions ={
 			
 			})
 		}),
+		
 		EncountersStore : Ext.extend(Ext.data.JsonStore,{
 			reader : new Ext.data.JsonReader({
-				root:'',
+				root:'',		
 				fields: [
 					{name: 'id', mapping: 'fid'},
 					{name: 'geometry', mapping: 'geometry'},
-					{name: 'localname',  mapping: 'attributes.LOCAL_NAME'},
-					{name: 'bbox',		mapping: 'attributes.bbox'},
+					{name: 'object_id',  mapping: 'attributes.OBJECTID'},
+					{name: 'bbox',		mapping: 'bounds'},
 					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
-					{name: 'status', 	 mapping: 'attributes.STATUS'},
+					{name: 'aggregation', 	 mapping: 'attributes.AGREGATION'},
 					{name: 'year', mapping: 'attributes.YEAR'},
-					{name: 'type', mapping: 'attributes.VME_TYPE'},
-					{name: 'owner', mapping: 'attributes.OWNER'},
-					{name: 'geo_ref', mapping: 'attributes.GEO_AREA'}
-					
-					
+					{name: 'taxa', mapping: 'attributes.TAXA'},
+					{name: 'quantity', mapping: 'attributes.QUANTITY'},
+					{name: 'unit', mapping: 'attributes.UNIT'},
+					{name: 'owner', mapping: 'attributes.OWNER'}
+
+
 				],
 				idProperty: 'fid'
 			
@@ -370,10 +497,51 @@ Vme.data.extensions ={
 			reader : new Ext.data.JsonReader({
 				root:'',
 				fields: [
+		    	{name: 'id', mapping: 'fid'},
+					{name: 'geometry', mapping: 'geometry'},
+					{name: 'object_id',  mapping: 'attributes.OBJECTID'},
+					{name: 'bbox',		mapping: 'bounds'},
+					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
+					{name: 'aggregation', 	 mapping: 'attributes.AGREGATION'},
+					{name: 'year', mapping: 'attributes.YEAR'},
+					{name: 'taxa', mapping: 'attributes.TAXA'},
+					{name: 'quantity', mapping: 'attributes.QUANTITY'},
+					{name: 'unit', mapping: 'attributes.UNIT'},
+					{name: 'owner', mapping: 'attributes.OWNER'}
+					
+					
+				],
+				idProperty: 'fid'
+			
+			})
+		}),
+		AggregateDataStore : Ext.extend(Ext.data.JsonStore,{
+			reader : new Ext.data.JsonReader({
+				root:'',
+				fields: [
+						{name: 'id', mapping: 'fid'},
+					{name: 'geometry', mapping: 'geometry'},
+					{name: 'resolution',  mapping: 'attributes.RESOLUTION'},
+					{name: 'bbox',		mapping: 'bounds'},
+					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
+					{name: 'count', 	 mapping: 'attributes.COUNT'},
+					{name: 'year', mapping: 'attributes.YEAR'},
+					{name: 'owner', mapping: 'attributes.OWNER'}
+					
+					
+				],
+				idProperty: 'fid'
+			
+			})
+		}),
+		FootprintStore : Ext.extend(Ext.data.JsonStore,{
+			reader : new Ext.data.JsonReader({
+				root:'',
+				fields: [
 					{name: 'id', mapping: 'fid'},
 					{name: 'geometry', mapping: 'geometry'},
 					{name: 'localname',  mapping: 'attributes.LOCAL_NAME'},
-					{name: 'bbox',		mapping: 'attributes.bbox'},
+					{name: 'bbox',		mapping: 'bounds'},
 					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
 					{name: 'status', 	 mapping: 'attributes.STATUS'},
 					{name: 'year', mapping: 'attributes.YEAR'},

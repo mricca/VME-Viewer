@@ -134,25 +134,66 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 	  }
 	}
 }
+
+FigisMap.ol.getStore = function(layer){
+  var name = layer.params.LAYERS;
+  var layernames = FigisMap.fifao;
+  var featureInfoStores =Vme.data.extensions.FeatureInfo;
+  switch(name){
+    case layernames.vme :
+      return new featureInfoStores.VmeStore();
+    case layernames.vme_fp : 
+      return new featureInfoStores.FootprintStore();
+    case layernames.vme_en : 
+      return new featureInfoStores.EncountersStore();
+    case layernames.vme_sd :   
+      return new featureInfoStores.SurveyDataStore();
+    case  layernames.vme_agg_en :  
+	  case  layernames.vme_agg_sd : 
+	     return new featureInfoStores.AggregateDataStore();
+  }
+  //return new Vme.data.extensions.FeatureInfo.VmeStore();
+}
+
+FigisMap.ol.getTemplate = function(layer){
+  var name = layer.params.LAYERS;
+  var layernames = FigisMap.fifao;
+  var templates =Vme.data.templates;
+  switch(name){
+    case layernames.vme :
+      return templates.vme;
+    case layernames.vme_fp : 
+      return templates.footprints;
+    case layernames.vme_en : 
+      return templates.encounters;
+    case layernames.vme_sd :   
+      return templates.surveydata;
+    case  layernames.vme_agg_en :  
+	  case  layernames.vme_agg_sd : 
+	     return  templates.aggregate;
+  }
+}
 /**
  *  FigisMap.ol.getFeatureInfoHandlerGML
  *  handler to parse GML response
  */
 FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 	var popupKey = e.xy.x + "." + e.xy.y;
+	var layer = e.object.layers[0];
 	var reader = new OpenLayers.Format.WMSGetFeatureInfo();
 	var response = reader.read(e.text);
-	var store = new Vme.data.extensions.FeatureInfo.VmeStore();
+	var store = FigisMap.ol.getStore(layer);
+	var template = FigisMap.ol.getTemplate
 	store.loadData(response);
 	var dv = new Ext.DataView({
-		itemId: e.object.layers[0].name,
-		title: e.object.layers[0].name,
+		itemId: layer.name,
+		title: layer.name,
 		layout: "fit",
 		itemSelector: 'span.x-editable',
 		autoScroll:true,
 		border:false,
 		store: store,
-		tpl: Vme.data.templates.vme,
+		tpl: FigisMap.ol.getTemplate(layer),
 		singleSelect: true
 	});
 	var popup;
@@ -221,18 +262,18 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 	}
 	var count =store.getCount();
 
-	e.object.layers[0].name
+	
 	if(count> 0){
 	  var oldItem;
 	  if (popup.items){
-		  oldItem =popup.items.get(e.object.layers[0].name);
+		  oldItem =popup.items.get(layer.name);
 	  }
 	  if(oldItem){
 		  oldItem.update(e.text);
 	  }else{
 		  popup.add({
-			  itemId: e.object.layers[0].name,
-			  title: e.object.layers[0].name,
+			  itemId: layer.name,
+			  title: layer.name,
 			  layout: "fit",
 			  border:false,
 			  bodyStyle: 'padding:0px;background-color:#F5F5DC',
