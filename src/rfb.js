@@ -24,7 +24,7 @@ function zoomTo(settings,geom) {
 		//check 
 		var projcode = curr_proj.split(":")[1];
 		var valid = FigisMap.ol.checkValidBbox(projcode,settings);
-		console.log(curr_proj);
+		
 		if(valid){
 			if(geom){
 				myMap.zoomToExtent(bbox);
