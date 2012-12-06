@@ -404,3 +404,18 @@ h3 {
 	background-image: url(../img/icons/compress.png) !important;
 	background-repeat: no-repeat;
 }
+
+.factlink{ 
+	padding-left: 15px;
+	background-size:13px;
+	background-image: url(../img/icons/page_white_go.png) !important;
+	background-repeat: no-repeat;
+}
+.rellink{ 
+	padding-left: 15px;
+	background-size:13px;
+	background-image: url(../img/icons/attach.png) !important;
+	background-repeat: no-repeat;
+}
+
+
