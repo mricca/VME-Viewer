@@ -227,8 +227,8 @@ Vme.data={
 			new Ext.XTemplate(
 				'<tpl for=".">'+
 					'<div class="search-result" style="text-align:left;position:relative">' +
-					  '<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Local Name: </em>{localname}<br/>'+
+						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{type}</span> <br/> '+
 						'<em>Status: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
 						'<em>Validity Period: </em><span>from 2007 up to 2014</span> <br/> '+
