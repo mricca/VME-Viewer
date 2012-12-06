@@ -269,7 +269,12 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 		  oldItem =popup.items.get(layer.name);
 	  }
 	  if(oldItem){
-		  oldItem.update(e.text);
+		  oldItem.removeAll();
+		  oldItem.add(dv);
+		  oldItem.doLayout();
+		  
+		  
+		  
 	  }else{
 		  popup.add({
 			  itemId: layer.name,
