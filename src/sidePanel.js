@@ -132,7 +132,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			displayField: 'name'
 		},{
 			fieldLabel: FigisMap.label('SEARCH_TYPE_LBL')+' [<a href="#">?</a>]',
-			name: 'AREA_TYPE',
+			name: 'VME_TYPE',
 			ref: '../AreaType',
 			emptyText:  FigisMap.label('SEARCH_TYPE_EMP'),
             value:   FigisMap.label('SEARCH_TYPE_EMP'),            
@@ -141,7 +141,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			triggerAction: 'all',
 			mode: 'local',
 			store:  Vme.data.stores.areaTypeStore,
-			valueField : 'id',
+			valueField : 'displayText',
 			displayField: 'displayText'
 		},{
 			fieldLabel: FigisMap.label('SEARCH_STAT_LBL')+' [<a href="#">?</a>]',
@@ -185,22 +185,32 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			text: FigisMap.label('SIDP_SEARCH'),
 			ref: '../Search',
 			iconCls: 'search-icon',
+			
 			createFilter: function(values){
 				var query;
+				
 				for (var key in values){
-					if(query){
-						query+= ' AND ';
-						query+= ' ( '+ this.generateFilterComponent(key,values[key]) +' ) ';
-					}else{
-						query= ' ( '+ this.generateFilterComponent(key,values[key]) +' ) ';;
+					if (key != 'vmeCriteria') { //TODO
+						if(query){
+							query+= ' AND ';
+							query+= ' ( '+ this.generateFilterComponent(key,values[key]) +' ) ';
+						}else{
+							query= ' ( '+ this.generateFilterComponent(key,values[key]) +' ) ';
+						}
 					}
-					
 				}
 				return query;
 			},
 			generateFilterComponent:function(key,value){
-				//if (key == 'VME_ID') return key + ' LIKE \'%' + value +'%\'' ;
-				return key + ' = \'' + value +'\'' ;
+				switch(key){
+					case 'text':
+						return 'LOCAL_NAME ILIKE \'%' + value + '%\''; 
+					case 'VME_TYPE':
+						return  'VME_TYPE ILIKE \'%' + value + '%\''; 
+					
+					default:
+						return key + ' = \'' + value +'\'' ;
+				}
 
 			},
 			handler: function(){
