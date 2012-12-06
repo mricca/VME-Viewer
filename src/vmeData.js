@@ -117,7 +117,7 @@ Ext.ux.LazyPagingToolbar = Ext.extend(Ext.PagingToolbar,{
 		beforePageText:"",
 		onLoad : function(store, r, o){
 			if(!this.rendered){
-				this.dsLoaded = [store, r, o];
+				this.dsLoaded = [store, r, o]; 
 				return;
 			}
 			var p = this.getParams();
@@ -149,7 +149,44 @@ Ext.ux.LazyPagingToolbar = Ext.extend(Ext.PagingToolbar,{
 		}
 })
 
-var Vme={};
+var Vme={
+	utils: {
+		generateDownloadLink :function(ows,types,filters,format){
+			try{
+				var cql_filter = filters.join(";");
+			}catch(e){
+				cql_filter =filters;
+			}
+			try{
+				var typeName = types.join(",");
+			}catch(e){
+				typeName = types;
+			}
+			return ows+"?service=WFS&version=1.0.0&request=GetFeature" 
+				+"&typeName="+ encodeURIComponent(typeName)
+				+ "&outputFormat=" + encodeURIComponent( format )
+				+ (cql_filter ? "&cql_filter=" + encodeURIComponent( cql_filter ):"");
+									
+		
+		},
+		generateFidFilter:function(fids){
+			if(fids ==undefined) return ;
+			var len = fids.length;
+			if(!len) return ;
+			
+			var filter = "IN ('" +fids[0]+"'";
+			for (var i=1; i<len ;i++){
+				filter += ",'" +fids[i]+ "'";
+			} 
+			filter += ")"
+			return filter;
+		
+		}
+		
+	}
+
+
+};
 
 
 
@@ -189,7 +226,7 @@ Vme.data={
 		vme: 
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="search-result" style="text-align:left">' +
+					'<div class="search-result" style="text-align:left;position:relative">' +
 					  '<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Local Name: </em>{localname}<br/>'+
 						'<em>Area Type: </em><span>{type}</span> <br/> '+
@@ -198,10 +235,17 @@ Vme.data={
 						'<em>Reporting Year: </em>{year}<br/> '+
 						'<em>Competent Authority:</em><span class="own"> {owner}</span><br/>'+
 						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
-						'<br/>'+
-						'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
-						'<a class="zipmlink" style="float:right" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
-						'{[this.addProtectedLinks(values)]}' +
+						'<br/><br/>'+
+						'<div>'+
+						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
+							'<a class="factlink" target="_blank" href="http://www.fao.org/fishery/species/2525/en">link to factsheet </a><br/>' +
+							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
+						'</div>' +
+						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
+							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+							'<br/>{[this.addProtectedLinks(values)]}' +
+						'</div>'+
+						'</div>'+
 					'</div>'+
 				'</tpl>',
 				{
@@ -229,15 +273,21 @@ Vme.data={
 						}
 					},
 					getDownloadLink: function(values){
-						return FigisMap.rnd.vars.ows+"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
-							"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+						return Vme.utils.generateDownloadLink(
+							FigisMap.rnd.vars.ows,
+							FigisMap.fifao.vme,
+							Vme.utils.generateFidFilter([values.id]),
+							"shape-zip"
+						)
+						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
+						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
 							
 					},
 					addProtectedLinks: function(values){
 						if(!FigisMap.rnd.status.logged){
 							return "";
 						}
-						return  '<a class="zoomlink" onClick="myMap.relatedFeatures( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">Releated</a>'
+						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Releated Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Releated</a>'
 						
 						
 						
@@ -247,15 +297,22 @@ Vme.data={
 		encounters :
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="search-result" style="text-align:left">' +						
+					'<div class="search-result" style="text-align:left;position:relative">' +						
 						'<em>Taxa: </em><span>{taxa}</span> <br/> '+
 						'<em>Reporting Year: </em>{year}<br/> '+
 						'<em>Quantity: </em><span>{quantity} {unit}</span> <br/> '+
 						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
-						'<br/>'+
-						'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
-						'<a class="zipmlink" style="float:right" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
-						'{[this.addProtectedLinks(values)]}' +
+						'<br/><br/>'+
+						'<div>'+
+						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
+							'<a class="factlink" target="_blank" href="http://www.fao.org/fishery/species/2525/en">link to factsheet </a><br/>' +
+							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download Encounters coordinates </a>' +
+						'</div>' +
+						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
+							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+							'<br/>{[this.addProtectedLinks(values)]}' +
+						'</div>'+
+						'</div>'+
 					'</div>'+
 				'</tpl>',
 				{
@@ -283,15 +340,21 @@ Vme.data={
 						}
 					},
 					getDownloadLink: function(values){
-						return FigisMap.rnd.vars.ows+"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme_en+ "&outputFormat=shape-zip" +
-							"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+						return Vme.utils.generateDownloadLink(
+							FigisMap.rnd.vars.ows,
+							FigisMap.fifao.vme_en,
+							Vme.utils.generateFidFilter([values.id]),
+							"shape-zip"
+						)
+						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
+						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
 							
 					},
 					addProtectedLinks: function(values){
 						if(!FigisMap.rnd.status.logged){
 							return "";
 						}
-						return  '<a class="zoomlink" onClick="myMap.relatedFeatures( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">Releated</a>'
+						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Releated Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Releated</a>'
 						
 						
 						
@@ -301,15 +364,22 @@ Vme.data={
 		surveydata :
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="search-result" style="text-align:left">' +						
+					'<div class="search-result"  style="text-align:left;position:relative">' +						
 						'<em>Taxa: </em><span>{taxa}</span> <br/> '+
 						'<em>Reporting Year: </em>{year}<br/> '+
 						'<em>Quantity: </em><span>{quantity} {unit}</span> <br/> '+
 						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
-						'<br/>'+
-						'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
-						'<a class="zipmlink" style="float:right" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
-						'{[this.addProtectedLinks(values)]}' +
+						'<br/><br/>'+
+						'<div>'+
+						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
+							'<a class="factlink" target="_blank" href="http://www.fao.org/fishery/species/2525/en">link to factsheet </a><br/>' +
+							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download Survey Data coordinates </a>' +
+						'</div>' +
+						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
+							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+							'<br/>{[this.addProtectedLinks(values)]}' +
+						'</div>'+
+						'</div>'+
 					'</div>'+
 				'</tpl>',
 				{
@@ -337,15 +407,24 @@ Vme.data={
 						}
 					},
 					getDownloadLink: function(values){
-						return FigisMap.rnd.vars.ows+"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme_sd+ "&outputFormat=shape-zip" +
-							"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+						return Vme.utils.generateDownloadLink(
+							FigisMap.rnd.vars.ows,
+							FigisMap.fifao.vme_sd,
+							Vme.utils.generateFidFilter([values.id]),
+							"shape-zip"
+						)
+						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
+						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
 							
 					},
 					addProtectedLinks: function(values){
 						if(!FigisMap.rnd.status.logged){
 							return "";
 						}
-						return  '<a class="zoomlink" onClick="myMap.relatedFeatures( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">Releated</a>'
+						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Releated Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Releated</a>'
+						
+						
+						
 					}
 				}
 			),
@@ -354,28 +433,31 @@ Vme.data={
 				'<tpl for=".">'+
 					'<div class="search-result" style="text-align:left">' +
 						'<em>Count: </em>{count}<br/>'+
-						'<em>Year: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
-						
-						'<span class="own"> {owner}</span><br/>'+
+						'<em>Year: </em> <span class="status" >{year}</span><br/>' +
+						'<em>Competent Authority: </em> <span class="status" >{owner}</span><br/>' +
 					'</div>'+
 				'</tpl>',
 				{
-					compiled:true,
-					writeStatus:function(status){
-						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
-						var text =statusRecord ? statusRecord.get('displayText'):status;
-						return text;
-					}
+					compiled:true
+					
 				}
 			),
 		footprints :
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="search-result" style="text-align:left">' +
+					'<div class="search-result" style="text-align:left;position:relative;">' +
 						'<em>VME_NAFO bottom fishing areas ("footprint") </em>{localname}<br/>'+
 						'<em>Last referene Year: </em>{year}<br/> '+
-						'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
-						'<a class="zipmlink" style="float:right" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
+						'<br/><br/>'+
+						'<div>'+
+						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
+							'<a class="factlink" target="_blank" href="http://www.fao.org/fishery/species/2525/en">link to factsheet </a><br/>' +
+							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download Footprint coordinates </a>' +
+						'</div>' +
+						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
+							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+						'</div>'+
+						'</div>'+
 					'</div>'+
 				'</tpl>',
 				{
@@ -403,10 +485,17 @@ Vme.data={
 						}
 					},
 					getDownloadLink: function(values){
-						return FigisMap.rnd.vars.ows+"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme_fp+ "&outputFormat=shape-zip" +
-							"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+						return Vme.utils.generateDownloadLink(
+							FigisMap.rnd.vars.ows,
+							FigisMap.fifao.vme_fp,
+							Vme.utils.generateFidFilter([values.id]),
+							"shape-zip"
+						)
+						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
+						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
 							
-					},
+					}
+					
 				}
 			)
 	},

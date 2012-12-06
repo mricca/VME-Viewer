@@ -241,7 +241,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 	}
 	
 	var buttonsVme = [];
-			
+	/*		
 	if (e.object.layers[0].name == 'Established VME areas' && FigisMap.rnd.status.logged == true){
 		buttonsVme = [
 		  {
@@ -260,6 +260,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 		]
 
 	}
+	*/
 	var count =store.getCount();
 
 	

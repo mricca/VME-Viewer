@@ -368,6 +368,14 @@ h3 {
 	font-weight: bold;
 }
 
+.popup-result{
+	margin:0;
+	padding: 6px 2px;
+}
+.popup-result em{
+	font-weight: bold;
+}
+
 .x-view-over{background-color:#DBF1FF;cursor:pointer;}
 .x-view-selected{background-color:#A2CAE5}
 
