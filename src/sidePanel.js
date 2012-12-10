@@ -217,7 +217,8 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 						return 'LOCAL_NAME ILIKE \'%' + value + '%\''; 
 					case 'VME_TYPE':
 						return  'VME_TYPE ILIKE \'%' + value + '%\''; 
-					
+					case 'YEAR':
+						return  'YEAR >= \''  + value + '\' AND YEAR < \'2014\''; 	
 					default:
 						return key + ' = \'' + value +'\'' ;
 				}
