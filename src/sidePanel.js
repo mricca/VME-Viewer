@@ -161,7 +161,16 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			fieldLabel: FigisMap.label('SEARCH_CRIT_LBL')+' [<a href="#">?</a>]',
 			name: 'vmeCriteria',
 			ref: '../vmeCriteria',
-			emptyText:  FigisMap.label('SEARCH_CRIT_EMP')
+			emptyText:  FigisMap.label('SEARCH_CRIT_EMP'),
+			value:   FigisMap.label('SEARCH_CRIT_EMP'),   
+			allowBlank:true,
+			forceSelection:true,
+			typeAhead: true,
+			triggerAction: 'all',
+			mode: 'local',
+			store:  Vme.data.stores.VmeCriteriaStore,
+			valueField : 'id',
+			displayField: 'displayText'			
 		}, 
 		{
 			fieldLabel: FigisMap.label('SEARCH_YEAR_LBL') +'[<a href="#">?</a>]',
@@ -197,6 +206,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 						}else{
 							query= ' ( '+ this.generateFilterComponent(key,values[key]) +' ) ';
 						}
+
 					}
 				}
 				return query;

@@ -417,7 +417,7 @@ var staticLabels = {
 	SIDP_LEGEND			: {en:"Legend"},
 	SIDP_SEARCH			: {en:"Search"},
 	SIDP_CLEAR			: {en:"Clear"},
-	SIDP_NOGEOMETRY     : {en:"Label area isn't defined yet!"},    
+	SIDP_NOGEOMETRY     : {en:"Area isn't defined yet!"},    
 	//SEARCH FIELDS LABELS
 	SEARCH_TEXT_LBL		: {en:"text"},
 	SEARCH_RFMO_LBL		: {en:"By RFMO and other institutions"},
@@ -437,14 +437,12 @@ var staticLabels = {
 	SEARCH_LOADING		: {en:'Loading'},
 	SEARCH_BACK_FORM	: {en:'&laquo; Back to the search form'},
 	//VME AREA TYPES
-	VME_TYPE_UNKNOWN	: { en:"Unknown"},
 	VME_TYPE_VME		: { en:"VME"},
 	VME_TYPE_RISK		: { en:"Risk Area"},
-	VME_TYPE_BPA		: { en:"Benthic protext area"},
+	VME_TYPE_BPA		: { en:"Benthic protected area"},
 	VME_TYPE_CLOSED		: { en:"Closed area"},
 	VME_TYPE_OTHER		: { en:"Other types of managed areas"},
 	//VME STATUSES 
-	VME_STATUS_UNKNOWN	: { en:"Unknown"},
 	VME_STATUS_ENS		: { en:"Established"},
 	VME_STATUS_UNDEST	: { en:"Under establishment"},
 	VME_STATUS_RISK		: { en:"Risk"},
@@ -452,6 +450,13 @@ var staticLabels = {
 	VME_STATUS_EXP		: { en:"Exploratory"},
 	VME_STATUS_POT		: { en:"Potential"},
 	VME_STATUS_TEMP		: { en:"Temporary"},
+	//VME CRITERIA 
+	VME_CRITERIA_UNIQUE	: { en:"Uniqueness or rarity"},
+	VME_CRITERIA_FUNCT	: { en:"Functional significance of the habitat"},
+	VME_CRITERIA_FRAG	: { en:"Fragility"},
+	VME_CRITERIA_LIFE	: { en:"Life-history traits"},
+	VME_CRITERIA_STRUCT	: { en:"Structural complexity"},
+	VME_CRITERIA_NOTS	: { en:"Not specified"},
 	
 	LEGEND_NOTE_SIOFA	: "The Agreement is subject to ratification, acceptance or approval by the signatories.<br />The signatories and the participants that have deposited their instruments can be found <a href=\"http://www.fao.org/Legal/treaties/035s-e.htm\" target=\"_blank\">here</a>.",
 	LEGEND_NOTE_SPRFMO	: "The Convention is subject to ratification, acceptance or approval by the signatories<br />The signatories and the participants that have deposited their instruments can be found <a href=\"http://www.southpacificrfmo.org/status-of-the-convention\" target=\"_blank\">here</a>.",

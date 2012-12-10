@@ -305,12 +305,10 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="factlink" target="_blank" href="http://www.fao.org/fishery/species/2525/en">link to factsheet </a><br/>' +
 							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download Encounters coordinates </a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
 							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
-							'<br/>{[this.addProtectedLinks(values)]}' +
 						'</div>'+
 						'</div>'+
 					'</div>'+
@@ -338,26 +336,6 @@ Vme.data={
 						return repro_bbox.toArray();
 						
 						}
-					},
-					getDownloadLink: function(values){
-						return Vme.utils.generateDownloadLink(
-							FigisMap.rnd.vars.ows,
-							FigisMap.fifao.vme_en,
-							Vme.utils.generateFidFilter([values.id]),
-							"shape-zip"
-						)
-						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
-						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
-							
-					},
-					addProtectedLinks: function(values){
-						if(!FigisMap.rnd.status.logged){
-							return "";
-						}
-						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Releated Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Releated</a>'
-						
-						
-						
 					}
 				}
 			),
@@ -372,12 +350,10 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="factlink" target="_blank" href="http://www.fao.org/fishery/species/2525/en">link to factsheet </a><br/>' +
 							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download Survey Data coordinates </a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
 							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
-							'<br/>{[this.addProtectedLinks(values)]}' +
 						'</div>'+
 						'</div>'+
 					'</div>'+
@@ -405,26 +381,6 @@ Vme.data={
 						return repro_bbox.toArray();
 						
 						}
-					},
-					getDownloadLink: function(values){
-						return Vme.utils.generateDownloadLink(
-							FigisMap.rnd.vars.ows,
-							FigisMap.fifao.vme_sd,
-							Vme.utils.generateFidFilter([values.id]),
-							"shape-zip"
-						)
-						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
-						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
-							
-					},
-					addProtectedLinks: function(values){
-						if(!FigisMap.rnd.status.logged){
-							return "";
-						}
-						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Releated Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Releated</a>'
-						
-						
-						
 					}
 				}
 			),
@@ -451,7 +407,6 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="factlink" target="_blank" href="http://www.fao.org/fishery/species/2525/en">link to factsheet </a><br/>' +
 							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download Footprint coordinates </a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
@@ -514,24 +469,30 @@ Vme.data={
 Vme.data.models = {
 	rfmos : [['NAFO','NAFO'],['NEAFC','NEAFC'],['CCAMLR','CCAMLR']],
 	areaTypes : [
-		[0, FigisMap.label('VME_TYPE_UNKNOWN')],
-		[1, FigisMap.label('VME_TYPE_VME')],
-		[2, FigisMap.label('VME_TYPE_RISK')],
-		[3, FigisMap.label('VME_TYPE_BPA')],
-		[4, FigisMap.label('VME_TYPE_CLOSED')],
-		[5, FigisMap.label('VME_TYPE_OTHER')]
+		[0, FigisMap.label('VME_TYPE_VME')],
+		[1, FigisMap.label('VME_TYPE_RISK')],
+		[2, FigisMap.label('VME_TYPE_BPA')],
+		[3, FigisMap.label('VME_TYPE_CLOSED')],
+		[4, FigisMap.label('VME_TYPE_OTHER')]
 	],
 	VmeStatuses:[ 
-		[0, FigisMap.label("VME_STATUS_UNKNOWN")],
-		[1, FigisMap.label("VME_STATUS_ENS")],
-		[2, FigisMap.label("VME_STATUS_UNDEST")],
-		[3, FigisMap.label("VME_STATUS_RISK")],
-		[4, FigisMap.label("VME_STATUS_VOL")],
-		[5, FigisMap.label("VME_STATUS_EXP")],
-		[6, FigisMap.label("VME_STATUS_POT")],
-		[7, FigisMap.label("VME_STATUS_TEMP")]
+		[0, FigisMap.label("VME_STATUS_ENS")],
+		[1, FigisMap.label("VME_STATUS_UNDEST")],
+		[2, FigisMap.label("VME_STATUS_RISK")],
+		[3, FigisMap.label("VME_STATUS_VOL")],
+		[4, FigisMap.label("VME_STATUS_EXP")],
+		[5, FigisMap.label("VME_STATUS_POT")],
+		[6, FigisMap.label("VME_STATUS_TEMP")]
 		
 	],
+	VmeCriteria:[ 
+		[0, FigisMap.label("VME_CRITERIA_UNIQUE")],
+		[1, FigisMap.label("VME_CRITERIA_FUNCT")],
+		[2, FigisMap.label("VME_CRITERIA_FRAG")],
+		[3, FigisMap.label("VME_CRITERIA_LIFE")],
+		[4, FigisMap.label("VME_CRITERIA_STRUCT")],
+		[5, FigisMap.label("VME_CRITERIA_NOTS")]
+	],	
 	years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})()
 
 };
@@ -739,6 +700,15 @@ Vme.data.stores = {
 		data: Vme.data.models.VmeStatuses
 
     }),
+	VmeCriteriaStore: new Ext.data.ArrayStore({
+        id: 0,
+        fields: [
+            'id',
+            'displayText'
+        ],
+		data: Vme.data.models.VmeCriteria
+
+    }),    
 	yearStore:  new Ext.data.ArrayStore({id:0,data: Vme.data.models.years,fields:['year']}),
 	
 	SearchResultStore:new Ext.ux.LazyJsonStore({

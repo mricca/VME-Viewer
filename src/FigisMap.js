@@ -1123,6 +1123,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '1'",
 				dispOrder : 1,
 				style: sett.style,
+				rule: "Area of competence (marine waters)",
                 hidden	: false,
 				hideInSwitcher: false,
 				title: ttitle,
@@ -1136,6 +1137,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '2'",
 				dispOrder : 2,
 				style: sett.style,
+				rule: 'Established limits of the area of competence',
                 hidden	: false,
 				hideInSwitcher: false,
 				title: ttitle,
@@ -1148,6 +1150,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '2'",
 				dispOrder : 1,
 				style: sett.style,
+				rule: 'Regulatory area',
                 hidden	: false,
 				hideInSwitcher: false,
 				title: ttitle,
@@ -1160,6 +1163,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "_DEP'",
 				style: '',
 				hideInSwitcher: false,
+				rule: 'Established limits of the area of competence',
                 hidden	: false,
 				title: ttitle,
 				skipLegend: true
@@ -1456,7 +1460,7 @@ FigisMap.renderer = function(options) {
 					p.defaultBase.title,
 					(p.defaultBase.remote ? (p.defaultBase.cached ? FigisMap.rnd.vars.remote.gwc : FigisMap.rnd.vars.remote.wms) : ( p.defaultBase.cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms ) ),
 					{ layers: p.defaultBase.layer,  format: p.defaultBase.format ?p.defaultBase.format :olImageFormat, TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox },
-					{ wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false }
+					{ wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false}
 				) );
 			
 		}
@@ -1514,11 +1518,13 @@ FigisMap.renderer = function(options) {
 				wp.url =  l.remote==true ? (l.cached ? FigisMap.rnd.vars.remote.gwc : FigisMap.rnd.vars.remote.wms) : ( l.cached ? FigisMap.rnd.vars.gwc : FigisMap.rnd.vars.wms );
 			
 				
-				wp.params = { format: olImageFormat, transparent: true, TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox };
+				wp.params = { format: olImageFormat, transparent: true, TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox};
 				wp.params.layers = l.layer;
 				if ( l.filter && l.filter != '*' ) wp.params.cql_filter = l.filter;
+				if ( l.rule && l.rule != '*' ) wp.params.rule = l.rule;
 				
-				wp.options = { wrapDateLine: true, ratio: 1, buffer: 0, singleTile: false, opacity: 1.0 };
+				
+				wp.options = { wrapDateLine: true, ratio: 1, buffer: 0, singleTile: false, opacity: 1.0};
                 wp.options.showLegendGraphic = true;
 				if ( l.hideInSwitcher ) wp.options.displayInLayerSwitcher = false;
 				if ( l.opacity ) wp.options.opacity = l.opacity;
