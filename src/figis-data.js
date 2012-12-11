@@ -419,14 +419,14 @@ var staticLabels = {
 	SIDP_CLEAR			: {en:"Clear"},
 	SIDP_NOGEOMETRY     : {en:"Area isn't defined yet!"},    
 	//SEARCH FIELDS LABELS
-	SEARCH_TEXT_LBL		: {en:"text"},
-	SEARCH_RFMO_LBL		: {en:"By RFMO and other institutions"},
+	SEARCH_TEXT_LBL		: {en:"Free text search"},
+	SEARCH_RFMO_LBL		: {en:"By competent authority"},
 	SEARCH_TYPE_LBL		: {en:"By Area Type"},
 	SEARCH_STAT_LBL		: {en:"By Status"},
 	SEARCH_CRIT_LBL		: {en:"By VME Criteria"},
 	SEARCH_YEAR_LBL		: {en:"By Year"},
 	//SEARCH EMPTY TEXT
-	SEARCH_TEXT_EMP		: {en:"text"},
+	SEARCH_TEXT_EMP		: {en:"Free text"},
 	SEARCH_RFMO_EMP		: {en:"Select..."},
 	SEARCH_TYPE_EMP		: {en:"Select..."},
 	SEARCH_STAT_EMP		: {en:"Select..."},
@@ -435,7 +435,7 @@ var staticLabels = {
 	// SEARCH NO RESULT LABEL
 	SEARCH_NO_RES		: {en:'Nothing to display'},
 	SEARCH_LOADING		: {en:'Loading'},
-	SEARCH_BACK_FORM	: {en:'&laquo; Back to the search form'},
+	SEARCH_BACK_FORM	: {en:'&laquo; Back to search'},
 	//VME AREA TYPES
 	VME_TYPE_VME		: { en:"VME"},
 	VME_TYPE_RISK		: { en:"Risk Area"},
@@ -445,7 +445,6 @@ var staticLabels = {
 	//VME STATUSES 
 	VME_STATUS_ENS		: { en:"Established"},
 	VME_STATUS_UNDEST	: { en:"Under establishment"},
-	VME_STATUS_RISK		: { en:"Risk"},
 	VME_STATUS_VOL		: { en:"Voluntary"},
 	VME_STATUS_EXP		: { en:"Exploratory"},
 	VME_STATUS_POT		: { en:"Potential"},
@@ -461,7 +460,7 @@ var staticLabels = {
 	LEGEND_NOTE_SIOFA	: "The Agreement is subject to ratification, acceptance or approval by the signatories.<br />The signatories and the participants that have deposited their instruments can be found <a href=\"http://www.fao.org/Legal/treaties/035s-e.htm\" target=\"_blank\">here</a>.",
 	LEGEND_NOTE_SPRFMO	: "The Convention is subject to ratification, acceptance or approval by the signatories<br />The signatories and the participants that have deposited their instruments can be found <a href=\"http://www.southpacificrfmo.org/status-of-the-convention\" target=\"_blank\">here</a>.",
 	LEGEND_NOTE_CACFAC	: "<br><i>In December 2009 the following countries were officially invited by the Director General to become member of the Commission: Armenia, Azerbaijan, People's Republic China, Georgia, Islamic Republic of Iran, Kazakhstan, Kyrgyzstan, Russian Federation, Tajikistan, Turkey, Turkmenistan, Uzbekistan, Afghanistan, Mongolia and Ukraine.</i>",
-	SELECT_AN_RFB		: '(Select an RFB...)',
-    SELECT_AN_AREA      : '(Select an area...)',
+	SELECT_AN_RFB		: '(Select a competent authority)',
+    SELECT_AN_AREA      : '(Select an area)',
 	defined			: true
 };

@@ -189,8 +189,15 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 		}
 	],
 
-	buttons: [
-		{
+	buttons: [{
+			text: FigisMap.label('SIDP_CLEAR'),
+			ref: '../Clear',
+			iconCls:'clear-icon',
+			handler: function(){
+				Vme.form.panels.SearchForm.getForm().reset();
+			}
+			
+		},{
 			text: FigisMap.label('SIDP_SEARCH'),
 			ref: '../Search',
 			iconCls: 'search-icon',
@@ -249,14 +256,6 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 				});
 				Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-1');
 			}
-		},{
-			text: FigisMap.label('SIDP_CLEAR'),
-			ref: '../Clear',
-			iconCls:'clear-icon',
-			handler: function(){
-				Vme.form.panels.SearchForm.getForm().reset();
-			}
-			
 		}
 	]
 });

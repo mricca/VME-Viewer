@@ -467,7 +467,7 @@ Vme.data={
  *
  */
 Vme.data.models = {
-	rfmos : [['NAFO','NAFO'],['NEAFC','NEAFC'],['CCAMLR','CCAMLR']],
+	rfmos : [['CCAMLR','CCAMLR'],['NAFO','NAFO'],['NEAFC','NEAFC']],
 	areaTypes : [
 		[0, FigisMap.label('VME_TYPE_VME')],
 		[1, FigisMap.label('VME_TYPE_RISK')],
@@ -478,11 +478,10 @@ Vme.data.models = {
 	VmeStatuses:[ 
 		[0, FigisMap.label("VME_STATUS_ENS")],
 		[1, FigisMap.label("VME_STATUS_UNDEST")],
-		[2, FigisMap.label("VME_STATUS_RISK")],
-		[3, FigisMap.label("VME_STATUS_VOL")],
-		[4, FigisMap.label("VME_STATUS_EXP")],
-		[5, FigisMap.label("VME_STATUS_POT")],
-		[6, FigisMap.label("VME_STATUS_TEMP")]
+		[2, FigisMap.label("VME_STATUS_VOL")],
+		[3, FigisMap.label("VME_STATUS_EXP")],
+		[4, FigisMap.label("VME_STATUS_POT")],
+		[5, FigisMap.label("VME_STATUS_TEMP")]
 		
 	],
 	VmeCriteria:[ 
