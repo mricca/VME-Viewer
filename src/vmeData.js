@@ -320,7 +320,7 @@ Vme.data={
 						if(!FigisMap.rnd.status.logged){
 							return "";
 						}
-						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Releated Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Releated</a>'
+						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Releted Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Related</a>'
 						
 						
 						
@@ -402,7 +402,7 @@ Vme.data={
 								{format_options:"filename:VME-DB_ENC_"+values.vme_id+".zip"}
 							)
 							+'">Download full Data Set</a>' ;
-					},
+					}
 				}
 			),
 		surveydata :
@@ -480,7 +480,7 @@ Vme.data={
 								{format_options:"filename:VME-DB_SD_"+values.vme_id+".zip"}
 							)
 							+'">Download full Data Set</a>' ;
-					},
+					}
 				}
 			),
 		aggregate :
@@ -506,7 +506,7 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a>' +
+							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile </a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
 							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
