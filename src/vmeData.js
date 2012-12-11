@@ -506,7 +506,7 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download Footprint coordinates </a>' +
+							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
 							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
