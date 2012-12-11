@@ -305,7 +305,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
  */
 FigisMap.ol.createPopupControl = function(vme){
     FigisMap.ol.clearPopupCache();
-    var gml = getQSParam('gml');
+    var gml = true //getQSParam('gml');
 		var info={controls : []};
 		var vmeLyr;
 		
