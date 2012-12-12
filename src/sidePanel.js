@@ -225,7 +225,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 					case 'VME_TYPE':
 						return  'VME_TYPE ILIKE \'%' + value + '%\''; 
 					case 'YEAR':
-						return  'YEAR >= \''  + value + '\' AND YEAR < \'2014\''; 	
+						return  'YEAR <= \''  + value + '\' AND END_YEAR > \''  + value + ' \''; 	
 					default:
 						return key + ' = \'' + value +'\'' ;
 				}

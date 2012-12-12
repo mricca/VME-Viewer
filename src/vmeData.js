@@ -151,7 +151,7 @@ Ext.ux.LazyPagingToolbar = Ext.extend(Ext.PagingToolbar,{
 
 var Vme={
 	utils: {
-		generateDownloadLink :function(ows,types,filters,format){
+		generateDownloadLink :function(ows,types,filters,format,otherparams){
 			try{
 				var cql_filter = filters.join(";");
 			}catch(e){
@@ -162,10 +162,15 @@ var Vme={
 			}catch(e){
 				typeName = types;
 			}
+			var addParams = "";
+			for (var name in otherparams){
+				addParams += "&" + name + "=" + encodeURIComponent( otherparams[name] );
+			}
 			return ows+"?service=WFS&version=1.0.0&request=GetFeature" 
 				+"&typeName="+ encodeURIComponent(typeName)
 				+ "&outputFormat=" + encodeURIComponent( format )
-				+ (cql_filter ? "&cql_filter=" + encodeURIComponent( cql_filter ):"");
+				+ (cql_filter ? "&cql_filter=" + encodeURIComponent( cql_filter ):"")
+				+ addParams;
 									
 		
 		},
@@ -181,6 +186,10 @@ var Vme={
 			filter += ")"
 			return filter;
 		
+		},
+		generateVMEFilter:function(vme_id){
+			if (vme_id ==undefined) return ;
+			return "VME_ID = '" +vme_id +"'"
 		}
 		
 	}
@@ -239,7 +248,8 @@ Vme.data={
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
 							'<a class="factlink" target="_blank" href="http://www.fao.org/fishery/species/2525/en">link to factsheet </a><br/>' +
-							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download VME Area coordinates </a>' +
+							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a><br/>' +
+							'{[this.getDownloadFDS(values)]}' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
 							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
@@ -272,22 +282,45 @@ Vme.data={
 						
 						}
 					},
+					/**
+					 * Download all vme areas
+					 */
 					getDownloadLink: function(values){
 						return Vme.utils.generateDownloadLink(
 							FigisMap.rnd.vars.ows,
 							FigisMap.fifao.vme,
-							Vme.utils.generateFidFilter([values.id]),
-							"shape-zip"
+							Vme.utils.generateVMEFilter(values.vme_id),
+							"shape-zip",
+							{format_options:"filename:VME-DB_"+values.vme_id+".zip"}
 						)
 						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
 						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
 							
 					},
+					/**
+					 * Download all vme areas + encoutners & sd for this vme
+					 */
+					getDownloadFDS:function(values){
+						if(!FigisMap.rnd.status.logged){
+							return "";
+						}
+						var filter = Vme.utils.generateVMEFilter(values.vme_id);
+						filter =filter +";"+ filter + ";" + filter;
+						return '<a class="zipmlink" target="_blank" href="'+
+							Vme.utils.generateDownloadLink(
+								FigisMap.rnd.vars.ows,
+								[FigisMap.fifao.vme,FigisMap.fifao.vme_en,FigisMap.fifao.vme_sd],
+								filter,
+								"shape-zip",
+								{format_options:"filename:VME-DB_"+values.vme_id+"_DS.zip"}
+							)
+							+'">Download full Data Set</a>' ;
+					},
 					addProtectedLinks: function(values){
 						if(!FigisMap.rnd.status.logged){
 							return "";
 						}
-						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Releated Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Releated</a>'
+						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Releted Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Related</a>'
 						
 						
 						
@@ -305,7 +338,7 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download Encounters coordinates </a>' +
+							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
 							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
@@ -336,6 +369,39 @@ Vme.data={
 						return repro_bbox.toArray();
 						
 						}
+					},
+					/**
+					 * Downloads the single point
+					 */
+					getDownloadLink: function(values){
+						return Vme.utils.generateDownloadLink(
+							FigisMap.rnd.vars.ows,
+							FigisMap.fifao.vme_en,
+							Vme.utils.generateFidFilter(values.id),
+							"shape-zip",
+							{format_options:"filename:VME-DB_ENC_"+values.vme_id+"_SP.zip"}
+						)
+						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
+						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+							
+					},
+					/**
+					 * Download all points for this vme
+					 */
+					getDownloadFDS:function(values){
+						if(!FigisMap.rnd.status.logged){
+							return "";
+						}
+						
+						return '<a class="zipmlink" target="_blank" href="'+
+							Vme.utils.generateDownloadLink(
+								FigisMap.rnd.vars.ows,
+								FigisMap.fifao.vme_en,
+								Vme.utils.generateVMEFilter(values.vme_id),
+								"shape-zip",
+								{format_options:"filename:VME-DB_ENC_"+values.vme_id+".zip"}
+							)
+							+'">Download full Data Set</a>' ;
 					}
 				}
 			),
@@ -350,7 +416,7 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download Survey Data coordinates </a>' +
+							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
 							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
@@ -381,6 +447,39 @@ Vme.data={
 						return repro_bbox.toArray();
 						
 						}
+					},
+					/**
+					 * Downloads the single point
+					 */
+					getDownloadLink: function(values){
+						return Vme.utils.generateDownloadLink(
+							FigisMap.rnd.vars.ows,
+							FigisMap.fifao.vme_sd,
+							Vme.utils.generateFidFilter(values.id),
+							"shape-zip",
+							{format_options:"filename:VME-DB_SD_"+values.vme_id+"_SP.zip"}
+						)
+						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
+						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+							
+					},
+					/**
+					 * Download all points for this vme
+					 */
+					getDownloadFDS:function(values){
+						if(!FigisMap.rnd.status.logged){
+							return "";
+						}
+						
+						return '<a class="zipmlink" target="_blank" href="'+
+							Vme.utils.generateDownloadLink(
+								FigisMap.rnd.vars.ows,
+								FigisMap.fifao.vme_sd,
+								Vme.utils.generateVMEFilter(values.vme_id),
+								"shape-zip",
+								{format_options:"filename:VME-DB_SD_"+values.vme_id+".zip"}
+							)
+							+'">Download full Data Set</a>' ;
 					}
 				}
 			),
@@ -407,7 +506,7 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download Footprint coordinates </a>' +
+							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile </a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
 							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
@@ -718,7 +817,7 @@ Vme.data.stores = {
 		messageProperty: 'crs',
 		autoLoad: false,
 		fields: [
-			{name: 'id', mapping: 'fid'},
+			{name: 'id', mapping: 'id'},
 			{name: 'geometry', mapping: 'geometry'},
 			{name: 'localname',  mapping: 'properties.LOCAL_NAME'},
 			{name: 'bbox',		mapping: 'properties.bbox'},

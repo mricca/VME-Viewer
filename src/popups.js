@@ -68,7 +68,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 	var addEncounters = function(btn){
 		Ext.MessageBox.show({
 			title: "Info",
-			msg: "Releated Encounters not implemented yet",
+			msg: "Related Encounters not implemented yet",
 			buttons: Ext.Msg.OK,
 			icon: Ext.MessageBox.INFO,
 			scope: this
@@ -78,7 +78,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 	var addSurveyData = function(btn) {
 		Ext.MessageBox.show({
 			title: "Info",
-			msg: "Releated Survey Data not implemented yet",
+			msg: "Related Survey Data not implemented yet",
 			buttons: Ext.Msg.OK,
 			icon: Ext.MessageBox.INFO,
 			scope: this
@@ -154,7 +154,25 @@ FigisMap.ol.getStore = function(layer){
   }
   //return new Vme.data.extensions.FeatureInfo.VmeStore();
 }
-
+FigisMap.ol.getTabTitle=function(layer){
+  var name = layer.params.LAYERS;
+  var layernames = FigisMap.fifao;
+  var templates =Vme.data.templates;
+  switch(name){
+    case layernames.vme :
+      return "VME Area";
+    case layernames.vme_fp : 
+      return "Footprints";
+    case layernames.vme_en : 
+      return "Encounter data";
+    case layernames.vme_sd :   
+      return "Survey data";
+    case  layernames.vme_agg_en : 
+	   return "Encounter data";	  
+	case  layernames.vme_agg_sd : 
+	   return "Survey data";
+  }
+}
 FigisMap.ol.getTemplate = function(layer){
   var name = layer.params.LAYERS;
   var layernames = FigisMap.fifao;
@@ -185,10 +203,11 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 	var store = FigisMap.ol.getStore(layer);
 	var template = FigisMap.ol.getTemplate
 	store.loadData(response);
+	var name = FigisMap.ol.getTabTitle(layer);
 	var dv = new Ext.DataView({
-		itemId: layer.name,
-		title: layer.name,
-		layout: "fit",
+		itemId: name,
+		title: name,
+		
 		itemSelector: 'span.x-editable',
 		autoScroll:true,
 		border:false,
@@ -199,75 +218,42 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 	var popup;
 	if (!(popupKey in FigisMap.popupCache)){
 	  popup = new GeoExt.Popup({
-					title: 'Features Info',
-					width: 400,
-					height: 300,
-					layout: "accordion",
-					map: myMap,
-					location: e.xy,
-					listeners: {
-						close: (function(key) {
-							return function(panel){
-								delete FigisMap.popupCache[key];
-							};
-						})(popupKey)
-					}
-			  });
+		//title: 'Features Info',
+		width: 400,
+		height: 300,
+		layout: "fit",
+		map: myMap,
+		items:[new Ext.TabPanel(
+			{
+				itemId:'tabPanel',
+				//deferredRender:false,
+				activeTab: 0,
+				border:false,
+				layoutOnTabChange:true
+				
+			}
+		)],
+		location: e.xy,
+		listeners: {
+			close: (function(key) {
+				return function(panel){
+					delete FigisMap.popupCache[key];
+				};
+			})(popupKey)
+		}
+	  });
 				FigisMap.ol.clearPopupCache();
 				FigisMap.popupCache[popupKey] = popup;
 	}else{
 		popup = FigisMap.popupCache[popupKey];
 	}
-
-	var addEncounters = function(btn){
-		Ext.MessageBox.show({
-			title: "Info",
-			msg: "Releated Encounters not implemented yet",
-			buttons: Ext.Msg.OK,
-			icon: Ext.MessageBox.INFO,
-			scope: this
-		});  
-	}
-	
-	var addSurveyData = function(btn) {
-		Ext.MessageBox.show({
-			title: "Info",
-			msg: "Releated Survey Data not implemented yet",
-			buttons: Ext.Msg.OK,
-			icon: Ext.MessageBox.INFO,
-			scope: this
-		}); 
-		
-	}
-	
-	var buttonsVme = [];
-	/*		
-	if (e.object.layers[0].name == 'Established VME areas' && FigisMap.rnd.status.logged == true){
-		buttonsVme = [
-		  {
-			  iconCls : 'encounters-icon',
-			  text    : 'Encounters',
-			  //enableToggle: true,
-			  //pressed : myMap.getLayersByName('Encounters')[0].visibility,
-			  handler : addEncounters
-		  },{
-			  iconCls : 'surveydata-icon',
-			  text    : 'Survey Data',
-			  //enableToggle: true,
-			  //pressed :myMap.getLayersByName('SurveyData')[0].visibility,
-			  handler : addSurveyData
-		  }
-		]
-
-	}
-	*/
 	var count =store.getCount();
-
-	
 	if(count> 0){
-	  var oldItem;
+	  var oldItem,tp;
 	  if (popup.items){
-		  oldItem =popup.items.get(layer.name);
+
+		  tp=popup.items.get('tabPanel');
+		  oldItem =tp.items.get(name);
 	  }
 	  if(oldItem){
 		  oldItem.removeAll();
@@ -277,22 +263,21 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 		  
 		  
 	  }else{
-		  popup.add({
-			  itemId: layer.name,
-			  title: layer.name,
+		  tp.add({
+			  itemId: name,
+			  title: name,
 			  layout: "fit",
 			  border:false,
 			  bodyStyle: 'padding:0px;background-color:#F5F5DC',
 			  items:[dv],
-			  //autoScroll: true,
 			  autoWidth: true,
-			  collapsible: false,
-			  buttons : buttonsVme
+			  collapsible: false
 		  });
 		  
 		 
 		  popup.opened =true;
 		  popup.doLayout();
+		  tp.doLayout();
 		  popup.show();
 	  }
 	}
@@ -305,7 +290,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
  */
 FigisMap.ol.createPopupControl = function(vme){
     FigisMap.ol.clearPopupCache();
-    var gml = getQSParam('gml');
+    var gml = true //getQSParam('gml');
 		var info={controls : []};
 		var vmeLyr;
 		
