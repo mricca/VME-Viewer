@@ -83,9 +83,9 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
             //TODO try use slider.updateVme();
             FigisMap.ol.refreshFilters();
 			if(document.getElementById("SelectSRS").value == "4326"){
-            	FigisMap.ol.emulatePupupFromGeom(geom);
+            	FigisMap.ol.emulatePopupFromGeom(geom);
             }else{
-            	FigisMap.ol.emulatePupupFromGeom(repro_geom);
+            	FigisMap.ol.emulatePopupFromGeom(repro_geom);
             }
         }
 		
