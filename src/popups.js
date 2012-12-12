@@ -327,13 +327,26 @@ FigisMap.ol.createPopupControl = function(vme){
 /** 
  * Emulate the popup control on a vertext of a geom
  */
-FigisMap.ol.emulatePupupFromGeom = function(geom){
-	FigisMap.ol.clearPopupCache();
-	vert  = geom.getVertices()[0];
+FigisMap.ol.emulatePopupFromGeom = function(geom){
+	var vert = FigisMap.ol.getVertFromGeom(geom);
+	FigisMap.ol.emulatePopupFromVert(vert);
+}
+/**
+ * Get a evt with xy element from geometry to perform get feature info
+ */
+FigisMap.ol.getVertFromGeom = function(geom){
+	return geom.getVertices()[0];
+	
+}
+/**
+ * emulate click on GetFeatureInfo control
+ */
+FigisMap.ol.emulatePopupFromVert=function(vert){
 	var evt  ={
 		xy: myMap.getPixelFromLonLat(new OpenLayers.LonLat(vert.x,vert.y)  )
-	}
+	};
+	
+	FigisMap.ol.clearPopupCache();
 	var cc = myMap.getControlsByClass('OpenLayers.Control.WMSGetFeatureInfo');
 	for(var i = 0 ;i < cc.length ; i++) {cc[i].getInfoForClick(evt);}
-
-}
+};

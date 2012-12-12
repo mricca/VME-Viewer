@@ -252,7 +252,10 @@ Vme.data={
 							'{[this.getDownloadFDS(values)]}' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
-							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+							'<a class="zoomlink" onClick="'+
+								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
+							'">zoom</a>' +
 							'<br/>{[this.addProtectedLinks(values)]}' +
 						'</div>'+
 						'</div>'+
@@ -281,6 +284,12 @@ Vme.data={
 						return repro_bbox.toArray();
 						
 						}
+					},
+					getVert: function(geom){
+						vert  = geom.getVertices()[0];
+						
+						return "{x:"+vert.x+",y:"+vert.y+"}";
+						//return evt;
 					},
 					/**
 					 * Download all vme areas
@@ -341,7 +350,10 @@ Vme.data={
 							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
-							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+							'<a class="zoomlink" onClick="'+
+								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
+							'">zoom</a>' +
 						'</div>'+
 						'</div>'+
 					'</div>'+
@@ -369,6 +381,12 @@ Vme.data={
 						return repro_bbox.toArray();
 						
 						}
+					},
+					getVert: function(geom){
+						vert  = geom.getVertices()[0];
+						
+						return "{x:"+vert.x+",y:"+vert.y+"}";
+						//return evt;
 					},
 					/**
 					 * Downloads the single point
@@ -419,7 +437,10 @@ Vme.data={
 							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
-							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+							'<a class="zoomlink" onClick="'+
+								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
+							'">zoom</a>' +
 						'</div>'+
 						'</div>'+
 					'</div>'+
@@ -447,6 +468,12 @@ Vme.data={
 						return repro_bbox.toArray();
 						
 						}
+					},
+					getVert: function(geom){
+						vert  = geom.getVertices()[0];
+						
+						return "{x:"+vert.x+",y:"+vert.y+"}";
+						//return evt;
 					},
 					/**
 					 * Downloads the single point
@@ -509,7 +536,10 @@ Vme.data={
 							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile </a>' +
 						'</div>' +
 						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
-							'<a class="zoomlink" onClick="myMap.zoomToExtent( OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\' ) )">zoom</a>' +
+							'<a class="zoomlink" onClick="'+
+								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
+							'">zoom</a>' +
 						'</div>'+
 						'</div>'+
 					'</div>'+
@@ -537,6 +567,12 @@ Vme.data={
 						return repro_bbox.toArray();
 						
 						}
+					},
+					getVert: function(geom){
+						vert  = geom.getVertices()[0];
+						
+						return "{x:"+vert.x+",y:"+vert.y+"}";
+						//return evt;
 					},
 					getDownloadLink: function(values){
 						return Vme.utils.generateDownloadLink(
