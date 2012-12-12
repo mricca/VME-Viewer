@@ -75,17 +75,18 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
               zoomExtent: bounds.toBBOX(20)
             }
             zoomTo(settings,repro_bbox);
-            if(document.getElementById("SelectSRS").value == "4326"){
-            	FigisMap.ol.emulatePupupFromGeom(geom);
-            }else{
-            	FigisMap.ol.emulatePupupFromGeom(repro_geom);
-            }
+            
             var year = selectedRecord.get("year");
             var slider = Ext.getCmp('years-slider');
             slider.setValue(year,true);
             Ext.getCmp('years-min-field').setValue(year);
             //TODO try use slider.updateVme();
             FigisMap.ol.refreshFilters();
+			if(document.getElementById("SelectSRS").value == "4326"){
+            	FigisMap.ol.emulatePupupFromGeom(geom);
+            }else{
+            	FigisMap.ol.emulatePupupFromGeom(repro_geom);
+            }
         }
 		
 		
