@@ -19,7 +19,7 @@ var FigisMap = {
 	renderedMaps	: new Object(),
 	isTesting	: ( (document.domain.indexOf('figis02')==0 ||document.domain.indexOf('193.43.36.238')==0||document.domain.indexOf('www-data.fao.org')==0) ),
 	currentSiteURI	: location.href.replace(/^([^:]+:\/\/[^\/]+).*$/,"$1"),
-	debugLevel	: 1 // 0|false|null: debug off, 1|true:console, 2: console + error alert
+	debugLevel	: 0 // 0|false|null: debug off, 1|true:console, 2: console + error alert
 };
 
 //layer names
@@ -757,6 +757,39 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 	if ( pars.basicsLayers ) {
 		var owner = FigisMap.ol.getSelectedOwner();
 		var year = FigisMap.ol.getSelectedYear();
+		//WMS Vme
+		if ( ! layerTypes[ FigisMap.fifao.vme ] ) {
+			layers.push({
+				layer	: FigisMap.fifao.vme,
+				label	: 'Established VME areas',
+				group: "VME-DB layers",
+                showLegendGraphic: true,					
+				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + (owner ? " AND OWNER ='" + owner +"'" :"") ,
+				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
+				opacity	: 1.0,
+				hidden	: pars.isFIGIS,
+				type	: 'auto',
+				hideInSwitcher	: false,
+                dispOrder: 4,
+				isMasked: false
+			});
+		}	        
+		//WMS Footprints
+		if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
+			layers.unshift({
+				layer	: FigisMap.fifao.vme_fp,
+				label	: 'Footprints',
+				group: "VME-DB layers",
+                showLegendGraphic: true,					
+				filter	:'*',
+				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+				opacity	: 1.0,
+				hidden	: true,
+				type	: 'auto',
+                dispOrder: 4,
+				hideInSwitcher	: false
+			});
+		}        
 			//WMS SurveyData
 		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
 			layers.push({
@@ -764,6 +797,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				label	: 'SurveyData',
 				singleTile	:false,
 				group: "VME-DB layers",
+                showLegendGraphic: true,
 				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
@@ -780,7 +814,8 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			layers.push({
 				layer	: FigisMap.ol.getAuthLayer('encounters'),
 				label	: 'Encounters',
-				group: "VME-DB layers",				
+				group: "VME-DB layers",
+                showLegendGraphic: true,				
 				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
@@ -791,38 +826,8 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
                 dispOrder: 4,
 				hideInSwitcher	: false
 			});
-		}				
-		//WMS Footprints
-		if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
-			layers.push({
-				layer	: FigisMap.fifao.vme_fp,
-				label	: 'Footprints',
-				group: "VME-DB layers",				
-				filter	:'*',
-				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
-				opacity	: 1.0,
-				hidden	: true,
-				type	: 'auto',
-                dispOrder: 4,
-				hideInSwitcher	: false
-			});
-		}			
-		//WMS Vme
-		if ( ! layerTypes[ FigisMap.fifao.vme ] ) {
-			layers.push({
-				layer	: FigisMap.fifao.vme,
-				label	: 'Established VME areas',
-				group: "VME-DB layers",				
-				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + (owner ? " AND OWNER ='" + owner +"'" :"") ,
-				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
-				opacity	: 1.0,
-				hidden	: pars.isFIGIS,
-				type	: 'auto',
-				hideInSwitcher	: false,
-                dispOrder: 4,
-				isMasked: false
-			});
-		}	
+		}							
+
         /*
 		//WMS Area of competence
 		if ( ! layerTypes[ FigisMap.fifao.rfb ] ) {
@@ -837,13 +842,25 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			});
 		}
         */
+		//WMS FAO Areas
+		if ( ! ( layerTypes[ FigisMap.fifao.ma2 ] || layerTypes[ FigisMap.fifao.maj ] ) ) {
+			layers.push( {
+				layer	: FigisMap.fifao.maj,
+				label	: 'FAO fishing areas',
+                showLegendGraphic: true,	                
+				filter	:'*',
+				remote  : false, 
+				icon	:'<img src="'+FigisMap.rnd.vars.FAO_fishing_legendURL+'" width="30" height="20" />',
+				type	:'auto'
+			} );
+		}       
 		//WMS 200 nautical miles arcs
 		if ( ! layerTypes[ FigisMap.fifao.eez ] ) {
-			layers.unshift({
+			layers.push({
 				layer	: FigisMap.fifao.eez,
 				label	: '200 nautical miles arcs',
+                showLegendGraphic: true,	                
 				filter	:'*',
-				group   : 'Labels', 
 				icon	: '<img src="' + FigisMap.rnd.vars.EEZ_legendURL + '" width="30" height="20" />',
 				opacity	: 0.3,
 				hidden	: pars.isFIGIS,
@@ -851,19 +868,6 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				type	: 'auto'
 			});
 		}        
-		//WMS FAO Areas
-		if ( ! ( layerTypes[ FigisMap.fifao.ma2 ] || layerTypes[ FigisMap.fifao.maj ] ) ) {
-			layers.unshift( {
-				layer	: FigisMap.fifao.maj,
-				label	: 'FAO fishing areas',
-				group   : 'Labels', 
-				filter	:'*',
-				remote  : false, 
-				icon	:'<img src="'+FigisMap.rnd.vars.FAO_fishing_legendURL+'" width="30" height="20" />',
-				type	:'auto'
-			} );
-		}        
-
 	}
 	if ( pars.landMask && ! layerTypes[ FigisMap.fifao.cnt ] ) {
 		layers.push( {
@@ -883,9 +887,11 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			filter		: '*',
 			type		: 'auto',
 			style		: 'MarineAreasLabelled',
+            label	: 'Labels',
 			remote		: false,
+            showLegendGraphic: false,	            
 			skipLegend	: true,
-			hideInSwitcher	: true
+			hideInSwitcher	: false
 		} );
     
 	return layers;
@@ -1130,7 +1136,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '1'",
 				dispOrder : 1,
 				style: sett.style,
-				group: "VME-DB layers",
+                showLegendGraphic: true,	                
 				rule: "Area of competence (marine waters)",
                 hidden	: false,
 				hideInSwitcher: false,
@@ -1145,7 +1151,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '2'",
 				dispOrder : 2,
 				style: sett.style,
-				group: "VME-DB layers",				
+                showLegendGraphic: true,	                
 				rule: 'Established limits of the area of competence',
                 hidden	: false,
 				hideInSwitcher: false,
@@ -1158,8 +1164,8 @@ FigisMap.rfb.preparse = function( pars ) {
 			pars.distribution.push( { rfb: pars.rfb, settings: sett, layer: FigisMap.fifao.RFB,
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '2'",
 				dispOrder : 1,
-				style: sett.style,
-				group: "VME-DB layers",				
+				style: sett.style,		
+                showLegendGraphic: true,	
 				rule: 'Regulatory area',
                 hidden	: false,
 				hideInSwitcher: false,
@@ -1171,9 +1177,9 @@ FigisMap.rfb.preparse = function( pars ) {
 			var ttitle = FigisMap.label('Established limits of the area of competence', pars );;
 			pars.distribution.push( { rfb: pars.rfb, settings: sett, layer: FigisMap.fifao.RFB,
 				filter: "RFB = '" + pars.rfb + "_DEP'",
-				style: '',
-				group: "VME-DB layers",				
+				style: '',			
 				hideInSwitcher: false,
+                showLegendGraphic: true,	                
 				rule: 'Established limits of the area of competence',
                 hidden	: false,
 				title: ttitle,
@@ -1230,9 +1236,7 @@ FigisMap.ol.getAuthLayer = function (type){
  * 
  */
 FigisMap.ol.refreshAuthorized = function(){
-		myMap.getLayersByName('Encounters')[0].mergeNewParams({
-			
-			'layers':FigisMap.ol.getAuthLayer('encounters')});
+		myMap.getLayersByName('Encounters')[0].mergeNewParams({'layers':FigisMap.ol.getAuthLayer('encounters')});
         //myMap.getLayersByName('Encounters')[0].visibility = false;
         myMap.getLayersByName('Encounters')[0].redraw(true);
         
@@ -1542,7 +1546,7 @@ FigisMap.renderer = function(options) {
 				
 				
 				wp.options = { wrapDateLine: true, ratio: 1, buffer: 0, singleTile: false, opacity: 1.0};
-                wp.options.showLegendGraphic = true;
+                if ( l.showLegendGraphic ) wp.options.showLegendGraphic = true;
                 if ( l.group ) wp.options.group = l.group;
 				if ( l.hideInSwitcher ) wp.options.displayInLayerSwitcher = false;
 				if ( l.opacity ) wp.options.opacity = l.opacity;
