@@ -462,5 +462,6 @@ var staticLabels = {
 	LEGEND_NOTE_CACFAC	: "<br><i>In December 2009 the following countries were officially invited by the Director General to become member of the Commission: Armenia, Azerbaijan, People's Republic China, Georgia, Islamic Republic of Iran, Kazakhstan, Kyrgyzstan, Russian Federation, Tajikistan, Turkey, Turkmenistan, Uzbekistan, Afghanistan, Mongolia and Ukraine.</i>",
 	SELECT_AN_RFB		: '(Select a competent authority)',
     SELECT_AN_AREA      : '(Select an area)',
+	DISCLAIMER			: "<strong>Disclaimer:</strong> The designations employed and the presentation of material in the map(s) are for illustration only and do not imply the expression of any opinion whatsoever on the part of FAO concerning the legal or constitutional status of any country, territory or sea area, or concerning the delimitation of frontiers or boundaries.",
 	defined			: true
 };
