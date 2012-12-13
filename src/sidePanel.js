@@ -71,6 +71,9 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
             myMap.addLayer(layer);
             var bounds = geom.clone().getBounds();
             var repro_bbox = repro_geom.getBounds();
+			if(Ext.isIE){
+			  myMap.zoomOut(); 
+			}
             var settings ={
               zoomExtent: bounds.toBBOX(20)
             }
@@ -87,8 +90,6 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
             }else{
             	FigisMap.ol.emulatePopupFromGeom(repro_geom);
             }
-			//Workaround to force tile disposition in IE 
-			myMap.setBaseLayer(myMap.baseLayer);
         }
 		
 		
