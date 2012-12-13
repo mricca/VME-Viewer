@@ -1,5 +1,13 @@
 var myMap = false;
 
+function reset(){
+	document.getElementById("FilterRFB").text = FigisMap.label('SELECT_AN_AREA');
+	document.getElementById("FilterRFB").value = "";
+	document.getElementById("SelectRFB").value = "";
+	FigisMap.ol.clearPopupCache();
+	setRFBPage('e-link','rfbs-link', 'rfbs-html');
+	myMap.zoomToMaxExtent();
+}
 /**
 * function setZoom
 *
@@ -75,6 +83,8 @@ function setRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink,filter
 *       htmlLink -> The id of the html input field of the embed-link (optional if not using the embed link div).
 **/
 function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink,filter) {
+	//sets the zoom dropdown to default values ​​when the area selection and the selection of projection change
+		populateZoomAreaOptions('FilterRFB');
 	
 	var pars = {
 		rfb		: document.getElementById("SelectRFB").value,
@@ -186,7 +196,7 @@ function populateZoomAreaOptions(id) {
 function setRFBPage(elinkDiv, urlLink, htmlLink) {
 	populateRfbOptions('SelectRFB');
 	//sets the zoom dropdown to default values ​​when the area selection and the selection of projection change
-		populateZoomAreaOptions('FilterRFB');
+	//populateZoomAreaOptions('FilterRFB');
 	var layer, extent, zoom, prj;
 	
 	if ( location.search.indexOf("rfb=") != -1 ){

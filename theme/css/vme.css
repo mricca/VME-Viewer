@@ -7,13 +7,11 @@ body {
               text-align : center;
                    width : 100%;
 }
-a,
-a:visited {
+a, a:visited {
                    color : #2d8b8c;
          text-decoration : none;
 }
-a:hover,
-a:active {
+a:hover, a:active {
                    color : #f90;
                   cursor : pointer;
 }
@@ -34,6 +32,18 @@ li {
 }
 #vme_slider{
 					margin-top: 10px;
+}
+a.lblReset {
+    background-image: url(../img/arrow_out.png);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 3px 0px; /* equivalent to 'top left' */
+    border: none;           /* assuming we don't want any borders */
+    cursor: pointer;        /* make the cursor like hovering over an <a> element */
+    height: 16px;
+    padding-left: 20px;     /* make text start to the right of the image */
+    vertical-align: baseline; /* align the text vertically centered */
+    /*display:inline-block;*/
 }
 /*
 #EmbedLink {
@@ -258,7 +268,7 @@ h3 {
 }
 
 .year-min-littlestep{
-    background-image: url(../img/control_play_blue_retation.png) !important;
+    background-image: url(../img/resultset_previous.png) !important;
 }
 
 .year-min-largestep{
@@ -266,15 +276,15 @@ h3 {
 }
 
 .year-max-littlestep{
-    background-image: url(../img/control_play_blue.png) !important;
+    background-image: url(../img/resultset_next.png) !important;
 }
 
 .first-year{
-    background-image: url(../img/first_year.png) !important;
+    background-image: url(../img/resultset_first.png) !important;
 }
 
 .last-year{
-    background-image: url(../img/last_year.png) !important;
+    background-image: url(../img/resultset_last.png) !important;
 }
 /* FeatureInfo */
 .FeatureInfo{
