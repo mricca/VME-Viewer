@@ -7,13 +7,11 @@ body {
               text-align : center;
                    width : 100%;
 }
-a,
-a:visited {
+a, a:visited {
                    color : #2d8b8c;
          text-decoration : none;
 }
-a:hover,
-a:active {
+a:hover, a:active {
                    color : #f90;
                   cursor : pointer;
 }
@@ -32,7 +30,22 @@ li {
                   height : 550px;
                    width : 810px;
 }
-
+#vme_slider{
+					margin-top: 10px;
+}
+a.lblReset {
+    background-image: url(../img/house.png);
+    background-color: transparent;
+    background-repeat: no-repeat;
+	margin: 0px 12px 0px 12px;
+    background-position: 3px 0px; /* equivalent to 'top left' */
+    border: none;           /* assuming we don't want any borders */
+    cursor: pointer;        /* make the cursor like hovering over an <a> element */
+    height: 16px;
+    padding-left: 0px;     /* make text start to the right of the image */
+    vertical-align: baseline; /* align the text vertically centered */
+    /*display:inline-block;*/
+}
 /*
 #EmbedLink {
 	padding: 0;
@@ -144,7 +157,7 @@ li {
 #disclaimer {
                    clear : both;
                font-size :  12px;
-             padding-top :  40px;
+             padding-top :  55px;
                    width : 100%;
 }
 #disclaimer p {
@@ -165,7 +178,8 @@ li {
         background-image : url(../img/loading.gif);
      background-position : center;
        background-repeat : no-repeat;
-                 display : none;
+                 width   : 100%;
+                 height  : 100%;
 }
 .olControlMousePosition {
                   bottom :   0px;
@@ -255,7 +269,7 @@ h3 {
 }
 
 .year-min-littlestep{
-    background-image: url(../img/control_play_blue_retation.png) !important;
+    background-image: url(../img/resultset_previous.png) !important;
 }
 
 .year-min-largestep{
@@ -263,13 +277,164 @@ h3 {
 }
 
 .year-max-littlestep{
-    background-image: url(../img/control_play_blue.png) !important;
+    background-image: url(../img/resultset_next.png) !important;
 }
 
 .first-year{
-    background-image: url(../img/first_year.png) !important;
+    background-image: url(../img/resultset_first.png) !important;
 }
 
 .last-year{
-    background-image: url(../img/last_year.png) !important;
+    background-image: url(../img/resultset_last.png) !important;
 }
+/* FeatureInfo */
+.FeatureInfo{
+	text-align: left;
+	font: normal 14px tahoma,arial,helvetica,sans-serif;
+	
+}
+
+.FeatureInfo ul{
+	padding-left: 10px;
+}
+
+.FeatureInfo a{
+	text-align:right;
+}
+
+.FeatureInfo .links {
+	text-align:right;
+}
+
+/* button icons */
+.icon-cancel{
+	 background-image: url(../img/cancel.png) !important;
+}
+.icon-login{
+	 background-image: url(../img/door_in.png) !important;
+}
+
+#user{
+	margin-top: 2px;
+	margin-left:3px;
+	float:left;
+}
+.encounters-icon{
+	background-image: url(../img/bullet_purple.png) !important;
+
+}
+
+.surveydata-icon{
+	background-image: url(../img/bullet_red.png) !important;
+
+}
+
+#login{
+	margin:0px 2px;
+
+}
+#login.user-login a{
+	padding-left:20px;
+	background-image: url(../img/door_in.png) !important;
+	background-repeat:no-repeat;
+
+}
+
+#login.user-logout a{
+	padding-left:20px;
+	background-image: url(../img/door_out.png) !important;
+	background-repeat:no-repeat;
+
+}
+
+#user.user-logout em{
+	font-weight:bold;
+}
+
+.x-combo-list-item {
+	text-align:left;
+}
+
+#layerswitcher >div{
+	display:none;
+}
+#layerswitcher div.layersDiv{
+	margin:20px;
+	display:block;
+}
+
+#layerswitcher div.layersDiv .baseLbl, #layerswitcher div.layersDiv .dataLbl{
+	font-weight:bold;
+	margin: 4px auto;
+	
+}
+
+/** Search Results **/
+.search-result{
+	margin:0;
+	padding: 6px 2px;
+	border-bottom:thin solid black;
+}
+.search-result em{
+	font-weight: bold;
+}
+
+.popup-result{
+	margin:0;
+	padding: 6px 2px;
+}
+.popup-result em{
+	font-weight: bold;
+}
+
+.x-view-over{background-color:#DBF1FF;cursor:pointer;}
+.x-view-selected{background-color:#A2CAE5}
+
+/** ICONS **/
+.legend-icon{
+	background-image: url(../img/icons/legend.png) !important;
+}
+.map-icon{
+	background-image: url(../img/icons/map.png) !important;
+}
+.layers-icon{
+	background-image: url(../img/icons/layers.png) !important;
+}
+.search-icon{
+	background-image: url(../img/icons/magnifier.png) !important;
+}
+.clear-icon{
+	background-image: url(../img/icons/delete.png) !important;
+}
+.back-search-icon{
+	background-image: url(../img/icons/application_form_magnify.png) !important;
+}
+
+.zoomlink{ 
+	padding-left: 15px;
+	background-size:13px;
+	background-image: url(../img/icons/magnifier.png) !important;
+	background-repeat: no-repeat;
+}
+
+.zipmlink{ 
+	padding-left: 15px;
+	background-size:13px;
+	background-image: url(../img/icons/compress.png) !important;
+	background-repeat: no-repeat;
+}
+
+.factlink{ 
+	padding-left: 15px;
+	background-size:13px;
+	background-image: url(../img/icons/page_white_go.png) !important;
+	background-repeat: no-repeat;
+}
+.rellink{ 
+	padding-left: 15px;
+	background-size:13px;
+	background-image: url(../img/icons/attach.png) !important;
+	background-repeat: no-repeat;
+}
+
+
