@@ -87,6 +87,8 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
             }else{
             	FigisMap.ol.emulatePopupFromGeom(repro_geom);
             }
+			//Workaround to force tile disposition in IE 
+			myMap.setBaseLayer(myMap.baseLayer);
         }
 		
 		
