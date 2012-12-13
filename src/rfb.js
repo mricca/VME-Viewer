@@ -4,6 +4,7 @@ function reset(){
 	document.getElementById("FilterRFB").text = FigisMap.label('SELECT_AN_AREA');
 	document.getElementById("FilterRFB").value = "";
 	document.getElementById("SelectRFB").value = "";
+	document.getElementById("SelectSRS").value = '4326';
 	FigisMap.ol.clearPopupCache();
 	setRFBPage('e-link','rfbs-link', 'rfbs-html');
 	myMap.zoomToMaxExtent();
