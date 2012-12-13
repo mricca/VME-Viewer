@@ -764,6 +764,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				label	: 'Established VME areas',
 				group: "VME-DB layers",
                 showLegendGraphic: true,					
+                singleTile: true,
 				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + (owner ? " AND OWNER ='" + owner +"'" :"") ,
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
