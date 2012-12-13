@@ -34,9 +34,10 @@ li {
 					margin-top: 10px;
 }
 a.lblReset {
-    background-image: url(../img/arrow_out.png);
+    background-image: url(../img/house.png);
     background-color: transparent;
     background-repeat: no-repeat;
+	margin: 0px 12px 0px 12px;
     background-position: 3px 0px; /* equivalent to 'top left' */
     border: none;           /* assuming we don't want any borders */
     cursor: pointer;        /* make the cursor like hovering over an <a> element */
