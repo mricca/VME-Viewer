@@ -100,19 +100,20 @@ Ext.onReady(function(){
 					//reset previous fields values
 					FigisMap.loginWin.userField.setValue("");
 					FigisMap.loginWin.passwordField.setValue("");
-					//change login link look
-					Ext.DomHelper.overwrite(document.getElementById("login"),{
-						tag:'span',
-						id:'login',
-						'class':'user-login',
-						html:'<a onclick="FigisMap.logInOut()">Login</a>'
+					//Remove User button and add login button
+					Ext.DomHelper.overwrite(document.getElementById("loginContainer"),{});
+					new Ext.Button({
+						renderTo : 'loginContainer',
+						handler : FigisMap.logInOut,
+						text : 'Login',
+						iconCls: 'icon-login'
 					});
-					Ext.DomHelper.overwrite(document.getElementById("user"),{
-						tag:'span',
-						id:'user',
-						'class':'user-login',
-						html:''
-					});
+					//Ext.DomHelper.overwrite(document.getElementById("user"),{
+					//	tag:'span',
+					//	id:'user',
+					//	'class':'user-login',
+					//	html:''
+					//});
 				FigisMap.loginWin.fireEvent('logout');
 				},
 			   animEl: 'elId',
@@ -137,18 +138,34 @@ Ext.onReady(function(){
 			if(user =="admin" && password =="admin"){
 				FigisMap.rnd.status.logged = true;
 				//change login link
-				Ext.DomHelper.overwrite(document.getElementById("user"),{
-					tag:'span',
-					id:'user',
-					'class':'user-logout',
-					html:'Logged as <em>'+ user + '</em>'
-				});
-				Ext.DomHelper.overwrite(document.getElementById("login"),{
+				//Ext.DomHelper.overwrite(document.getElementById("user"),{
+				//	tag:'span',
+				//	id:'user',
+				//	'class':'user-logout',
+				//	html:'Logged as <em>'+ user + '</em>'
+				//});
+				Ext.DomHelper.overwrite(document.getElementById("loginContainer"),{
 					tag:'span',
 					id:'login',
-					'class':'user-logout',
-					html:'<a onclick="FigisMap.logInOut()">Logout</a>'
+					//'class':'user-logout',
+					html:'<span id="usermenu"></span>'
 				});
+				var sp =  new Ext.Toolbar.SplitButton({
+						text: user,
+						//handler: onButtonClick,
+						renderTo :'usermenu',
+						tooltip: {text:'', title:'User settings'},
+						iconCls: 'icon-user',
+						// Menus can be built/referenced by using nested menu config objects
+						menu : {
+							items: [{
+								iconCls: 'icon-logout',
+								text:'Logout',
+								handler: FigisMap.logInOut
+							}]
+						}
+					});
+
 				//fires event login
 				w.fireEvent('login',user);
 				//hide window
@@ -166,12 +183,13 @@ Ext.onReady(function(){
 			}
 	};
 	
-	//setup login link
-	Ext.DomHelper.overwrite(document.getElementById("login"),{
-				tag:'span',
-				id:'login',
-				'class':'user-login',
-				html:'<a onclick="FigisMap.logInOut()">Login</a>'
-			});
+	//Setup login button at startup
+	new Ext.Button({
+		renderTo : 'loginContainer',
+		handler : FigisMap.logInOut,
+		text : 'Login',
+		iconCls: 'icon-login'
+	});
+	
 });
  
