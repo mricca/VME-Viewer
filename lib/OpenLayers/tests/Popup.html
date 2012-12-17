@@ -1,6 +1,6 @@
 <html>
 <head>
-  <script src="../lib/OpenLayers.js"></script>
+  <script src="OLLoader.js"></script>
   <script type="text/javascript">
 
     var popup;
@@ -29,7 +29,7 @@
     }
     
     function test_Popup_constructor (t) {
-        t.plan( 8 );
+        t.plan(9);
 
         var id = "chicken";
         var w = 500;
@@ -63,11 +63,17 @@
         for (var i = 0; i < OpenLayers.Event.observers[cacheID].length; i++) {
             var observer = OpenLayers.Event.observers[cacheID][i];
             if (observer.element == closeImgDiv) {
-                t.ok(true, "An event was registered for the close box element");
-                t.eq(observer.name, "click", "A click event was registered for the close box element");
-                //call the registered observer to make sure it's the right one
-                observer.observer();
-                break;
+                if (observer.name == "click") {
+                    t.ok(true, "A click event was registered for the close box element");
+                    //call the registered observer to make sure it's the right one
+                    observer.observer();
+                } else if (observer.name == "touchend") {
+                    t.ok(true, "A touchend event was registered for the close box element");
+                    //call the registered observer to make sure it's the right one
+                    observer.observer();
+                } else {
+                    t.fail("A " + observer.name + " event was registered for the close box element");
+                }
             }
         }
     }
@@ -88,8 +94,8 @@
     }
     function test_Popup_keepInMap(t) {
         
-        var gb = OpenLayers.Util.getBrowserName;
-        OpenLayers.Util.getBrowserName = function() { return "mock"; }
+        var bn = OpenLayers.BROWSER_NAME;
+        OpenLayers.BROWSER_NAME = "mock";
         t.plan(3);
         var map = new OpenLayers.Map("map");
         map.addLayer(new OpenLayers.Layer("", {isBaseLayer: true}));
@@ -120,7 +126,7 @@
         t.ok(safeSizePan.equals(safeSizePanKeep), "Panning means that all sizes are equal");
         t.ok(safeSize.w < safeSizePan.w, "Width of non-panning is less");    
         t.ok(safeSize.h < safeSizePan.h, "Height of non-panning is less");    
-        OpenLayers.Util.getBrowserName = gb; 
+        OpenLayers.BROWSER_NAME = bn;
     }    
     function test_Popup_draw(t) {
         t.plan( 15 );
@@ -155,7 +161,7 @@
         t.eq(contentDiv.id, "chicken_contentDiv", "correct content div id");
         t.eq(contentDiv.style.position, "relative", "correct content div position");
         //Safari 3 separates style overflow into overflow-x and overflow-y
-        var prop = (OpenLayers.Util.getBrowserName() == 'safari') ? 'overflowX' : 'overflow';
+        var prop = (OpenLayers.BROWSER_NAME == 'safari') ? 'overflowX' : 'overflow';
         t.eq(contentDiv.style[prop], "", "correct content div overflow");
         t.eq(contentDiv.innerHTML, content, "correct content div content");
 
@@ -169,7 +175,7 @@
             t.eq(popup.div.style.filter, "alpha(opacity=" + opacity*100 + ")", "good default popup.opacity");
         }
         //Safari 3 separates the border style into separate entities when reading it
-        if (OpenLayers.Util.getBrowserName() == 'safari') {
+        if (OpenLayers.BROWSER_NAME == 'safari') {
           var s = border.split(' ');
           t.ok(popup.div.style.borderTopWidth == s[0] && popup.div.style.borderTopStyle == s[1], "good default popup.border")
         } else {

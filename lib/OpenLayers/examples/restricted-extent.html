@@ -1,13 +1,17 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>OpenLayers Restricted Extent Example</title>
-    <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
     <script src="../lib/Firebug/firebug.js"></script>
     <script src="../lib/OpenLayers.js"></script>
     <script type="text/javascript">
         var map = null;
-        var extent = new OpenLayers.Bounds(-180, -90, 180, 90);
+        var extent = new OpenLayers.Bounds(8, 44.5, 19, 50);
 
         function init() {
             var options = {
@@ -22,7 +26,7 @@
             ); 
 
             map.addLayers([wms]);
-            map.setCenter(extent, 1);
+            map.zoomToExtent(extent);
             document.getElementById("toggle").checked = true;
         }
         
@@ -37,6 +41,9 @@
   </head>
   <body onload="init()">
     <h1 id="title">OpenLayers Restricted Extent Example</h1>
+    <div id="tags">
+        map, restrict, restrictedextent, extent
+    </div>    
     <p id="shortdesc">
       Don't let users drag outside the map extent: instead, limit dragging such
       that the extent of the layer is the maximum viewable area.
@@ -63,7 +70,7 @@
         <input type="checkbox" id="toggle" checked="checked"
                onclick="toggleRestrictedExtent();" />
         <label for="toggle">
-            Toggle restricted extent (to [-180, -90, 180, 90]).
+            Toggle restricted extent (to [8, 44.5, 19, 50]).
         </label>
     
   </body>

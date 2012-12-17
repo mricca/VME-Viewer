@@ -1,8 +1,12 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>OpenLayers: Point Track Markers</title>
-    <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
     <script src="../lib/OpenLayers.js"></script>
     <script type="text/javascript">
         var map, layer, rss, lineFeatures, popup;
@@ -53,7 +57,11 @@
   </head>
   <body onload="init()">
     <h1 id="title">GeoRSS PointTrack in OpenLayers</h1>
-    <p style="font-size:.9em;">This demo uses OpenLayers.Layer.GeoRSS and OpenLayers.Layer.PointTrack. The track is created by connecting the points of the GeoRSS feed.</a></p>
+    <div id="tags">
+        GeoRSS, PointTrack
+    </div>
+    <p id="shortdesc">This demo uses OpenLayers.Layer.GeoRSS and OpenLayers.Layer.PointTrack.</p>
+    <p style="font-size:.9em;">The track is created by connecting the points of the GeoRSS feed.</a></p>
     <form onsubmit="return false;">
    GeoRSS URL: <input type="text" id="url" size="50" /><input type="submit" onclick="addUrl(); return false;" value="Load Feed" onsubmit="addUrl(); return false;" />
     </form>  

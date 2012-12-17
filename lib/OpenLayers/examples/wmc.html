@@ -1,7 +1,11 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
-    <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
     <style type="text/css">
         #wmc {
             width: 90%;
@@ -24,21 +28,12 @@
         var doc, context, map;
         
         function init() {
-            var options = {
-                maxExtent: new OpenLayers.Bounds(-130, 14, -60, 55)
-            };
-            map = new OpenLayers.Map("map", options);
+            map = new OpenLayers.Map("map");
 
-            var jpl = new OpenLayers.Layer.WMS(
-                "NASA Global Mosaic",
-                "http://t1.hypercube.telascience.org/cgi-bin/landsat7", 
-                {layers: "landsat7"},
-                {
-                    maxExtent: new OpenLayers.Bounds(-130, 14, -60, 55),
-                    maxResolution: 0.1,
-                    numZoomLevels: 4,
-                    minResolution: 0.02
-                }
+            var gwc = new OpenLayers.Layer.WMS(
+                "Global Imagery",
+                "http://maps.opengeo.org/geowebcache/service/wms",
+                {layers: "bluemarble"}
             );
 
             var vmap = new OpenLayers.Layer.WMS(
@@ -88,9 +83,9 @@
                 }
             );
 
-            map.addLayers([jpl, vmap, roads, nexrad]);
+            map.addLayers([gwc, vmap, roads, nexrad]);
             map.addControl(new OpenLayers.Control.LayerSwitcher());
-            map.setCenter(new OpenLayers.LonLat(-95, 34.5), 1);
+            map.setCenter(new OpenLayers.LonLat(-95, 34.5), 4);
         };
         
         function readWMC(merge) {
@@ -130,21 +125,22 @@
     <h1 id="title">WMC Example</h1>
 
     <div id="tags">
+        wmc, parser, advanced, cleanup
     </div>
     <p id="shortdesc">
            Shows parsing of Web Map Context documents.
     </p>
     <div id="map" class="smallmap"></div>
-        <button onclick="writeWMC();">write</button><br />
-        <button onclick="readWMC();">read as new map</button> with the following extra map options : <input type="text" id="mapOptions" value='{"div": "map", "allOverlays": true}'/><br />
-        <button onclick="readWMC(true);">read and merge</button><br />
-        <button onclick="pasteWMC();">try with another WMC document</button><br />
+        <button onclick="writeWMC();">write</button><br>
+        <button onclick="readWMC();">read as new map</button> with the following extra map options : <input type="text" id="mapOptions" value='{"div": "map", "allOverlays": true}'/><br>
+        <button onclick="readWMC(true);">read and merge</button><br>
+        <button onclick="pasteWMC();">try with another WMC document</button><br>
         <textarea id="wmc">paste WMC doc here</textarea>
     <div id="docs">
-        This is an example of parsing WMC documents. <br />
+        <p>This is an example of parsing WMC documents. <br>
         The format class has a layerOptions property, which can be used
         to control the default options of the layer when it is created
-        by the parser.
+        by the parser.</p>
     </div>
   </body>
 </html>

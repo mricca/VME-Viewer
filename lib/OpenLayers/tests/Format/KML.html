@@ -1,6 +1,6 @@
 <html> 
 <head> 
-    <script src="../../lib/OpenLayers.js"></script> 
+    <script src="../OLLoader.js"></script> 
     <script type="text/javascript">
 
     var test_content = '<kml xmlns="http://earth.google.com/kml/2.0"><Folder><name>OpenLayers export</name><description>Vector geometries from OpenLayers</description><Placemark id="KML.Polygon"><name>OpenLayers.Feature.Vector_344</name><description>A KLM Polygon</description><Polygon><outerBoundaryIs><LinearRing><coordinates>5.001370157823406,49.26855713824488 8.214706453896161,49.630662409673505 8.397385910100951,48.45172350357396 5.001370157823406,49.26855713824488</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark><Placemark id="KML.LineString"><name>OpenLayers.Feature.Vector_402</name><description>A KML LineString</description><LineString><coordinates>5.838523393080493,49.74814616928052 5.787079558782349,48.410795432216574 8.91427702008381,49.28932499608202</coordinates></LineString></Placemark><Placemark id="KML.Point"><name>OpenLayers.Feature.Vector_451</name><description>A KML Point</description><Point><coordinates>6.985073041685488,49.8682250149058</coordinates></Point></Placemark><Placemark id="KML.MultiGeometry"><name>SF Marina Harbor Master</name><description>KML MultiGeometry</description><MultiGeometry><LineString><coordinates>-122.4425587930444,37.80666418607323 -122.4428379594768,37.80663578323093</coordinates></LineString><LineString><coordinates>-122.4425509770566,37.80662588061205 -122.4428340530617,37.8065999493009</coordinates></LineString></MultiGeometry></Placemark></Folder></kml>';
@@ -9,7 +9,6 @@
     var test_style_outline = '<kml xmlns="http://earth.google.com/kml/2.0"> <Placemark>    <Style> <PolyStyle> <outline>0</outline> <color>870000ff</color> <width>10</width> </PolyStyle> </Style>  <LineString> <coordinates> -112,36 -113,37 </coordinates> </LineString> </Placemark></kml>';
     var test_style_font = '<kml xmlns="http://earth.google.com/kml/2.0"> <Placemark><Style><LabelStyle><color>870000ff</color><scale>1.5</scale></LabelStyle></Style><LineString><coordinates> -112,36 -113,37 </coordinates></LineString></Placemark></kml>';
     var test_nl = '<kml xmlns="http://earth.google.com/kml/2.2"> <Document> <NetworkLink> <Link> <href>http://maker.geocommons.com/maps/1717/overlays/0</href> </Link> </NetworkLink> </Document></kml>';
-
     function test_Format_KML_constructor(t) { 
         t.plan(5); 
          
@@ -23,7 +22,20 @@
         t.eq(format.externalProjection.getCode(), "EPSG:4326", 
              "default external projection is EPSG:4326"); 
     }
-
+    function test_Format_KML_multipoint(t) {
+        t.plan(1);
+        var f = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPoint([
+            new OpenLayers.Geometry.Point(15555162, 4247484)]));
+        var format = new OpenLayers.Format.KML({
+            extractStyles:      true, 
+            extractAttributes:  true,
+            internalProjection: new OpenLayers.Projection("EPSG:900913"),
+            externalProjection: new OpenLayers.Projection("EPSG:4326")
+        });
+        var data = format.write(f);
+        var found = (data.search('139.734') != -1);
+        t.ok(found, "Found 139.734 (correct reprojection) in data output.");
+    }        
     function test_Format_KML_read(t) {
         t.plan(5);
         var features = (new OpenLayers.Format.KML()).read(this.test_content);
@@ -35,6 +47,7 @@
              "read geometry collection");
     }
 
+    
     function test_Format_KML_readCdataAttributes_20(t) {
         t.plan(2);
         var cdata = '<kml xmlns="http://earth.google.com/kml/2.0"><Document><Placemark><name><![CDATA[Pezinok]]> </name><description><![CDATA[Full of text.]]></description><styleUrl>#rel1.0</styleUrl><Point> <coordinates>17.266666, 48.283333</coordinates></Point></Placemark></Document></kml>';
@@ -217,6 +230,18 @@
         };
         t.eq(f.read(f.write(feature))[0].attributes.name, feature.style.label, "placemark name from style.label");
     }
+    function test_Format_KML_linestring_projected(t) {
+        t.plan(1);
+        var f = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
+            new OpenLayers.Geometry.Point(15555162, 4247484), new OpenLayers.Geometry.Point(15555163, 4247485)]));
+        var format = new OpenLayers.Format.KML({
+            internalProjection: new OpenLayers.Projection("EPSG:900913"),
+            externalProjection: new OpenLayers.Projection("EPSG:4326")
+        });
+        var data = format.write(f);
+        var found = (data.search('139.734') != -1);
+        t.ok(found, "Found 139.734 (correct reprojection) in data output.");
+    }        
     
     function test_extractTracks(t) {
         

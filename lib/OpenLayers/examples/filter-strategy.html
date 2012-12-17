@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
         <title>OpenLayers Filter Strategy Example</title>
         <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
         <link rel="stylesheet" href="../theme/default/google.css" type="text/css">
         <link rel="stylesheet" href="style.css" type="text/css">
         <script src="../lib/OpenLayers.js"></script>
         <script>OpenLayers.ImgPath = "../img/";</script>
-        <script src="filter-strategy.js"></script>
         <style>
             .olControlAttribution {
                 font-size: 9px;
@@ -15,8 +17,11 @@
             }
         </style>
     </head>
-    <body onload="init()">
+    <body>
         <h1 id="title">Filter Strategy</h1>
+        <div id="tags">
+            filter, strategy, strategies, kml, advanced
+        </div>
         <p id="shortdesc">
             Demonstrates the filter strategy for limiting features passed to the layer.
         </p>
@@ -44,5 +49,6 @@
                 source to see how this is done
             </p>
         </div>
+        <script src="filter-strategy.js"></script>
     </body>
 </html>

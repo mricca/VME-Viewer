@@ -1,8 +1,12 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>MultiMap</title>
-    <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
     <style type="text/css">
         #map {
             width: 100%;
@@ -12,7 +16,8 @@
     </style>
 
 
-    <script type="text/javascript" src="http://clients.multimap.com/API/maps/1.1/metacarta_04"></script>
+    <!-- multimap api key for http://(www.)openlayers.org -->
+    <script type="text/javascript" src="http://developer.multimap.com/API/maps/1.2/OA10072915821139765"></script>
 
 
     <script src="../lib/OpenLayers.js"></script>
@@ -50,6 +55,9 @@
   </head>
   <body onload="init()">
     <h1 id="title">MultiMap Example</h1>
+    <div id="tags">
+        MultiMap, basic, cleanup
+    </div>
     <p id="shortdesc">
       An example of using the Layer.MultiMap class.
     </p>  

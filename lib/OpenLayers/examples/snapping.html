@@ -1,14 +1,21 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Snapping</title>
-    <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+    <!--[if lte IE 6]>
+        <link rel="stylesheet" href="../theme/default/ie6-style.css" type="text/css" />
+    <![endif]-->
+    <link rel="stylesheet" href="style.css" type="text/css">
     <style type="text/css">
         .olControlEditingToolbar .olControlModifyFeatureItemInactive { 
-            background-position: -1px 0px ;                                                                   
+            background-position: -1px -1px;
         }
         .olControlEditingToolbar .olControlModifyFeatureItemActive { 
-            background-position: -1px -23px ;                                                                   
+            background-position: -1px -24px;
         }
         table {
             padding: 1em 0 1em;
@@ -164,7 +171,7 @@
             });
             draw = new OpenLayers.Control.DrawFeature(
                 poly, OpenLayers.Handler.Polygon,
-                {displayClass: "olControlDrawFeaturePoint", title: "Draw Features"}
+                {displayClass: "olControlDrawFeaturePoint", title: "Draw Features", handlerOptions: {holeModifier: "altKey"}}
             );
             modify = new OpenLayers.Control.ModifyFeature(
                 poly, {displayClass: "olControlModifyFeature", title: "Modify Features"}
@@ -272,9 +279,12 @@
   </head>
   <body onload="init()">
     <h1 id="title">Snapping Example</h1>
+    <div id="tags">
+        vector, feature, snapping, stylemap, advanced
+    </div>      
     <div id="shortdesc">A demonstration snapping while editing vector features.</div>
     <div id="map" class="smallmap"></div>
-    <br/>
+    <br>
     <label for="editable">Editable Layer:</label>
     <select id="editable" name="editable">
         <option value="poly">polygons</option>

@@ -1,6 +1,6 @@
 <html>
 <head>
-  <script src="../../lib/OpenLayers.js"></script>
+  <script src="../OLLoader.js"></script>
   <script type="text/javascript">
     var isMozilla = (navigator.userAgent.indexOf("compatible") == -1);
     var layer; 
@@ -27,7 +27,7 @@
                        
         layer = new OpenLayers.Layer.Grid(name, url, params, null);
         t.ok( layer instanceof OpenLayers.Layer.Grid, "returns OpenLayers.Layer.Grid object" );
-        t.eq( layer.buffer, 2, "buffer default is 2");
+        t.eq( layer.buffer, 0, "buffer default is 0");
         t.eq( layer.ratio, 1.5, "ratio default is 1.5");
         t.eq( layer.numLoadingTiles, 0, "numLoadingTiles starts at 0");
         t.ok( layer.events.listeners["tileloaded"] != null, "'tileloaded' event added to layer's event types");
@@ -47,7 +47,7 @@
     function test_Layer_Grid_inittiles (t) {
         t.plan( 2 );
         var map = new OpenLayers.Map('map');
-        layer = new OpenLayers.Layer.WMS(name, url, params);
+        layer = new OpenLayers.Layer.WMS(name, url, params, {buffer:2});
         map.addLayer(layer);
         map.setCenter(new OpenLayers.LonLat(0,0),5);
         t.eq( layer.grid.length, 7, "Grid rows is correct." );
@@ -169,7 +169,7 @@
     
     function test_Layer_Grid_moveTo(t) {
 
-    t.plan(13);
+    t.plan(14);
 
         var map = new OpenLayers.Map('map');
         layer = new OpenLayers.Layer.WMS(name, url, params);
@@ -193,9 +193,9 @@
             g_WhichFunc = "InitGridded";
             g_Bounds = bounds;
         };
-        layer.moveGriddedTiles = function(bounds) {
+        layer._moveGriddedTiles = function() {
             g_WhichFunc = "MoveGridded";
-            g_Bounds = bounds;
+            g_Bounds = layer.map.getExtent();
         };
         var clearTestBounds = function() {
             g_WhichFunc = null;
@@ -243,13 +243,7 @@
         clearTestBounds();
         layer.singleTile = true;
         layer.moveTo(null, zoomChanged);
-        t.ok(g_Bounds.equals(b), "if layer has grid but zoomChanged is called, initSingleTile called");
-
-
-        layer.getTilesBounds = function() {
-            return tilesBounds;
-        }
-        
+        t.ok(g_Bounds.equals(b), "if layer has grid but zoomChanged is called, initSingleTile called");        
         
 
 //NO FORCE
@@ -305,9 +299,13 @@
         //regular move 
         clearTestBounds();
         tilesBounds = new OpenLayers.Bounds(10,10,120,120);
+        g_WhichFunc = null;
         layer.moveTo(null, zoomChanged);
-        t.ok(g_WhichFunc == "MoveGridded", "if tiles not drastically out of bounds, we call moveGriddedTile()");
-        t.ok(g_Bounds.equals(b), "if tiles not drastically out of bounds, we call moveGriddedTile() with correct bounds");
+        t.eq(g_WhichFunc, null, "moveGriddedTiles is delayed - not called yet");
+        t.delay_call(0.2, function() {
+            t.ok(g_WhichFunc == "MoveGridded", "if tiles not drastically out of bounds, we call moveGriddedTile()");
+            t.ok(g_Bounds.equals(b), "if tiles not drastically out of bounds, we call moveGriddedTile() with correct bounds");
+        });
     }
 
     /** THIS WOULD BE WHERE THE TESTS WOULD GO FOR 
@@ -595,7 +593,7 @@
 
     function test_Layer_Grid_destroy (t) {
 
-        t.plan( 7 );
+        t.plan( 8 );
 
         var map = new OpenLayers.Map('map');
         layer = new OpenLayers.Layer.Grid(name, url, params);
@@ -610,6 +608,7 @@
         map.addLayer(layer);
 
         map.setCenter(new OpenLayers.LonLat(0,0), 10);
+        map.setCenter(new OpenLayers.LonLat(1,1));
 
          
         //grab a reference to one of the tiles
@@ -618,6 +617,7 @@
 
         layer.destroy();
         t.eq( tile.imgDiv, null, "Tile destroyed" ); 
+        t.eq( layer.timerId, null, "Tile loading timeout cleared");
         
         t.ok( layer.grid == null, "tiles appropriately destroyed")
 

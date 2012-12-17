@@ -1,6 +1,6 @@
 <html>
 <head>
-    <script src="../../../lib/OpenLayers.js"></script>
+    <script src="../../OLLoader.js"></script>
     <script type="text/javascript">
     var isMozilla = (navigator.userAgent.indexOf("compatible") == -1);
     var isOpera   = (navigator.userAgent.indexOf("Opera") != -1);
@@ -16,19 +16,20 @@
         t.plan( 2 );
 
         var url = "http://octo.metacarta.com/cgi-bin/mapserv";
-        layer = new OpenLayers.Layer.WMS.Post(name, url, params);
+        var options = {unsupportedBrowsers: []};
+        layer = new OpenLayers.Layer.WMS.Post(name, url, params, options);
 
-        t.ok(
-            layer.tileClass == OpenLayers.Tile.Image.IFrame,
-            "instantiate OpenLayers.Tile.Image.IFrame tiles.");
+        t.eq(
+            layer.usePost, true,
+            "Supported browsers use IFrame tiles.");
 
         layer.destroy();
 
-        var options = { unsupportedBrowsers: [OpenLayers.Util.getBrowserName()]};
+        var options = { unsupportedBrowsers: [OpenLayers.BROWSER_NAME]};
         layer = new OpenLayers.Layer.WMS.Post(name, url, params, options);
-        t.ok(
-            layer.tileClass == OpenLayers.Tile.Image,
-            "unsupported browser instantiate Image tiles.");
+        t.eq(
+            layer.usePost, false,
+            "unsupported browsers use Image tiles.");
         layer.destroy();
     }
 
@@ -49,16 +50,15 @@
         }
         else {
             t.ok(
-                tile instanceof OpenLayers.Tile.Image.IFrame,
-                "tile is an instance of OpenLayers.Tile.Image.IFrame");
+                tile.useIFrame !== undefined,
+                "tile is created with the OpenLayers.Tile.Image.IFrame mixin");
         }
         map.destroy();
 
-        var browserName = OpenLayers.Util.getBrowserName();
-        var options = { unsupportedBrowsers: [browserName]};
-
         // test the unsupported browser
-        layer = new OpenLayers.Layer.WMS.Post(name, url, params, options);
+        layer = new OpenLayers.Layer.WMS.Post(name, url, params, {
+            unsupportedBrowsers: [OpenLayers.BROWSER_NAME]
+        });
         map   = new OpenLayers.Map('map');
         map.addLayer(layer);
         tile  = layer.addTile(bounds, pixel);
@@ -68,13 +68,14 @@
         layer.destroy();
 
         // test a supported browser
-        OpenLayers.Util.getBrowserName = function () { return 'not_' + browserName };
-        layer = new OpenLayers.Layer.WMS.Post(name, url, params, options);
+        layer = new OpenLayers.Layer.WMS.Post(name, url, params, {
+            unsupportedBrowsers: []
+        });
         map.addLayer(layer);
         var tile2 = layer.addTile(bounds, pixel);
         t.ok(
-            tile2 instanceof OpenLayers.Tile.Image.IFrame,
-            "supported browser: tile is an instance of Tile.Image.IFrame");
+            tile2.createIFrame,
+            "supported browser: tile is created with the Tile.Image.IFrame mixin");
         map.destroy();
     }
 

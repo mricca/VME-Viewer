@@ -1,8 +1,12 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
     <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
         <title>OpenLayers Cluster Strategy Example</title>
-        <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-        <link rel="stylesheet" href="style.css" type="text/css" />
+        <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+        <link rel="stylesheet" href="style.css" type="text/css">
         <style type="text/css">
             #photos {
                 height: 100px;
@@ -66,7 +70,6 @@
         <script src="animator.js"></script>
         <script type="text/javascript">
             var map, template;
-            var Jugl = window["http://jugl.tschaub.net/trunk/lib/Jugl.js"];
             OpenLayers.ProxyHost = (window.location.host == "localhost") ?
                 "/cgi-bin/proxy.cgi?url=" : "proxy.cgi?url=";
 
@@ -135,7 +138,7 @@
                 map.setCenter(new OpenLayers.LonLat(0, 0), 1);
                 
                 // template setup
-                template = new Jugl.Template("template");
+                template = new jugl.Template("template");
 
             }
             
@@ -168,6 +171,9 @@
     </head>
     <body onload="init()">
         <h1 id="title">Cluster Strategy Example</h1>
+        <div id="tags">
+            vector, feature, stylemap, wfs, cluster, strategy, cleanup
+        </div>         
         <p id="shortdesc">
             Uses a cluster strategy to render points representing clusters of features.
         </p>

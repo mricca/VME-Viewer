@@ -1,9 +1,13 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
         <title>OpenLayers Map Controls Example</title>
 
-        <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-        <link rel="stylesheet" href="style.css" type="text/css" />
+        <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+        <link rel="stylesheet" href="style.css" type="text/css">
         <script src="../lib/OpenLayers.js"></script>
         <script type="text/javascript">
             var map;
@@ -23,25 +27,33 @@
                     numZoomLevels: 6
                     
                 });
-    
 
-                var ol_wms = new OpenLayers.Layer.WMS( "OpenLayers WMS",
+                var ol_wms = new OpenLayers.Layer.WMS(
+                    "OpenLayers WMS",
                     "http://vmap0.tiles.osgeo.org/wms/vmap0",
-                    {layers: 'basic'} );
-                var jpl_wms = new OpenLayers.Layer.WMS( "NASA Global Mosaic",
-                    "http://t1.hypercube.telascience.org/cgi-bin/landsat7", 
-                    {layers: "landsat7"});
-                var dm_wms = new OpenLayers.Layer.WMS( "DM Solutions Demo",
+                    {layers: 'basic'} 
+                );
+
+                var gwc = new OpenLayers.Layer.WMS(
+                    "Global Imagery",
+                    "http://maps.opengeo.org/geowebcache/service/wms",
+                    {layers: "bluemarble"},
+                    {tileOrigin: new OpenLayers.LonLat(-180, -90)}
+                );
+                var dm_wms = new OpenLayers.Layer.WMS(
+                    "DM Solutions Demo",
                     "http://www2.dmsolutions.ca/cgi-bin/mswms_gmap",
                     {layers: "bathymetry,land_fn,park,drain_fn,drainage," +
                              "prov_bound,fedlimit,rail,road,popplace",
-                     transparent: "true", format: "image/png" });
+                     transparent: "true", format: "image/png"},
+                    {visibility: false}
+                );
 
-                jpl_wms.setVisibility(false);
-                dm_wms.setVisibility(false);
+                map.addLayers([ol_wms, gwc, dm_wms]);
 
-                map.addLayers([ol_wms, jpl_wms, dm_wms]);
-                if (!map.getCenter()) map.zoomToMaxExtent();
+                if (!map.getCenter()) {
+                    map.zoomToMaxExtent();
+                }
             }
         </script>
     </head>
@@ -49,14 +61,15 @@
         <h1 id="title">Map Controls Example</h1>
 
         <div id="tags">
+            control, basic
         </div>
 
         <p id="shortdesc">
             Attach zooming, panning, layer switcher, overview map, and permalink map controls to an OpenLayers window.
         </p>
 
-        <a style="float:right" href="" id="permalink">Permalink</a>
         <div id="map" class="smallmap"></div>
+        <a href="#" id="permalink">Permalink</a>
 
         <div id="docs"></div>
     </body>

@@ -1,6 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
         <!-- This is the example list source: if you are trying to look at the 
         source of an example, YOU ARE IN THE WRONG PLACE. If you want to view
         the source of just one example, you can typically choose 
@@ -9,17 +12,27 @@
         click on the link), and view source from there. -->  
         <title>OpenLayers Examples</title>
         <link rel="alternate" href="example-list.xml" type="application/atom+xml" />
-        <link rel="stylesheet" href="style.css" type="text/css" />
+        <link rel="stylesheet" href="style.css" type="text/css">
         <style type="text/css">
             html, body {
-                height: 100%;
-                overflow: hidden;
                 margin: 0;
                 padding: 0;
                 line-height: 1.25em;
             }
+            #logo {
+                text-shadow: 2px 2px 3px gray;
+                color: white;
+                vertical-align: middle;
+                position: absolute;
+                top: 5px;
+                left: 5px;
+                font-size: 34px;
+                font-family: "Trebuchet MS",Helvetica,Arial,sans-serif;
+            }
+            #logo img {
+                vertical-align: middle;
+            }
             .ex_container{
-                border-bottom: 1px solid #cccccc;
             }
             .ex_container a {
                 text-decoration: none;
@@ -32,6 +45,12 @@
             .ex_title{
                 display: inline;
                 font-weight: bold;
+                color: #333;
+            }
+            .ex_tags{
+                display: inline;
+                font-size: smaller;
+                font-style: italic;
                 color: #333;
             }
             .ex_filename {
@@ -49,20 +68,18 @@
                 display: none;
             }
             #toc {
-                width: 30%;
+                width: 100%;
                 height: 100%;
             }
             #filter {
+                position: fixed;
+                text-align: center;
                 top: 0px;
-                height: 50px;
-                padding: 10px 1em 10px 1em;
+                background: #9D9FA1;
+                width: 100%;
+                padding: 1.3em 0;
             }
             #examples {
-                border-top: 1px solid #cccccc;
-                position: absolute;
-                width: 30%;
-                top: 70px;
-                bottom: 0px;
                 overflow: auto;
                 list-style: none;
                 margin: 0;
@@ -72,11 +89,20 @@
                 list-style: none;
                 margin: 0;
                 padding: 0;
+                margin-top: 4em;
             }
             #examples ul li {
-                display: block;
-                margin: 0;
+                display: inline;
+                float: left;
+                width: 350px;
+                margin: 10px 0 0 10px;
                 padding: 0;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+            }
+            #examples .mainlink {
+                height: 8em;
+                overflow: auto;
             }
             #exwin {
                 position: absolute;
@@ -88,12 +114,30 @@
                 border-left: 1px solid #cccccc;
                 margin: 0;
             }
+            @media only screen and (max-width: 600px) {
+                #examples ul {
+                    margin-top: 100px;
+                }
+                #filter {
+                    padding-top: 50px;
+                }
+                #examples ul li {
+                    margin-left: 0;
+                    border-radius: 0;
+                    border-width: 1px 0;
+                    width: 100%;
+                }
+                #examples .mainlink {
+                    height: auto;
+                }
+                #examples .ex_tags, #examples .ex_filename {
+                    display: none;
+                }
+            }
         </style>
         <script type="text/javascript" src="Jugl.js"></script>
         <script type="text/javascript" src="example-list.js"></script>
         <script type="text/javascript">
-            // import
-            var Jugl = window["http://jugl.tschaub.net/trunk/lib/Jugl.js"];
             var template, target;
 
             function listExamples(examples) {
@@ -127,7 +171,7 @@
                     for(var i=0; i<words.length; ++i) {
                         var word = words[i].toLowerCase()
                         var dict = info.index[word];
-                        if(dict) {
+                        var updateScores = function() {
                             for(exIndex in dict) {
                                 var count = dict[exIndex];
                                 if(scores[exIndex]) {
@@ -140,6 +184,18 @@
                                     scores[exIndex] = {};
                                     scores[exIndex][word] = count;
                                 }
+                            }
+                        }
+                        if(dict) {
+                            updateScores();
+                        } else {
+                            var r;
+                            for (idx in info.index) {
+                               r = new RegExp(word);
+                               if (r.test(idx)) {
+                                    dict = info.index[idx];
+                                    updateScores();
+                               }
                             }
                         }
                     }
@@ -195,10 +251,10 @@
                 }
             }
             window.onload = function() {
-                template = new Jugl.Template("template");
+                //document.getElementById('keywords').focus();
+                template = new jugl.Template("template");
                 target = document.getElementById("examples");
                 listExamples(info.examples);
-                document.getElementById("exwin").src = "../examples/example.html";
                 document.getElementById("keywords").onkeyup = inputChange
                 parseQuery();
             };
@@ -207,22 +263,26 @@
     <body>
         <div id="toc">
             <div id="filter">
+                <div id="logo">
+                <img src="http://www.openlayers.org/images/OpenLayers.trac.png"
+                 />
+                 OpenLayers
+             </div>
                 <p>
-                    <label for="keywords">Filter by keywords</label><br />
-                    <input type="text" id="keywords" />
-                    <span id="count"></span><br />
+                    <input autofocus placeholder="filter by keywords..." type="text" id="keywords" />
+                    <span id="count"></span>
                     <a href="javascript:void showAll();">show all</a>
                 </p>
             </div>
             <div id="examples"></div>
         </div>
-        <iframe id="exwin" name="exwin" frameborder="0"></iframe>        
         <div style="display: none;">
             <ul id="template">
                 <li class="ex_container" jugl:repeat="example examples">
-                    <a jugl:attributes="href example.link" target="exwin">
+                <a jugl:attributes="href example.link" class="mainlink"
+                    target="_blank">
                         <h5 class="ex_title">
-                            <span jugl:replace="example.title">title</span><br />
+                            <span jugl:replace="example.title">title</span><br>
                             <span class="ex_filename" jugl:content="'(' + example.example + ')'">filename</span>
                         </h5>
                         <div class="ex_description" jugl:content="example.shortdesc">
@@ -231,6 +291,9 @@
                         <p class="ex_classes" jugl:content="example.classes">
                             Related Classes go here
                         </p>
+                        <div class="ex_tags" jugl:content="'...tagged with ' + example.tags">
+                            
+                        </div>
                     </a>
                 </li>
             </ul>

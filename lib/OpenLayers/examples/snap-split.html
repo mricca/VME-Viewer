@@ -1,19 +1,26 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
-    <title>Snapping & Splitting</title>
-    <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Snapping &amp; Splitting</title>
+    <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+    <!--[if lte IE 6]>
+        <link rel="stylesheet" href="../theme/default/ie6-style.css" type="text/css" />
+    <![endif]-->
+    <link rel="stylesheet" href="style.css" type="text/css">
     <style type="text/css">
         .olControlEditingToolbar .olControlModifyFeatureItemInactive { 
-            background-position: -1px 0px ;                                                                   
+            background-position: -1px -1px;
         }
         .olControlEditingToolbar .olControlModifyFeatureItemActive { 
-            background-position: -1px -23px ;                                                                   
+            background-position: -1px -24px;
         }
         label.head {
             font-weight: bold;
             padding: 1em 0 0.1em 0;
-            border-bottom: 1px solid grey;
+            border-bottom: 1px solid gray;
         }
         td {
             padding: 0.25em 1em;
@@ -90,6 +97,10 @@
                 })
             });
 
+            // allow testing of specific renderers via "?renderer=Canvas", etc
+            var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
+            renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+
             // create three vector layers
             vectors = new OpenLayers.Layer.Vector("Lines", {
                 isBaseLayer: true,
@@ -101,7 +112,8 @@
                 styleMap: styles,
                 maxExtent: new OpenLayers.Bounds(
                     1549471.9221, 6403610.94, 1550001.32545, 6404015.8
-                )
+                ),
+                renderers: renderer
             });
             map.addLayer(vectors);
             
@@ -232,9 +244,12 @@
   </head>
   <body onload="init()">
     <h1 id="title">Snapping & Splitting Example</h1>
+    <div id="tags">
+        vector, feature, splitting, snapping, stylemap, advanced
+    </div>    
     <div id="shortdesc">A demonstration snapping and splitting while editing vector features.</div>
     <div id="map" class="smallmap"></div>
-    <br/>
+    <br>
     <input type="checkbox" id="snap_toggle" />
     <label for="snap_toggle" class="head">Enable Snapping</label>
     <table id="snap_options">
@@ -250,7 +265,7 @@
             </tr>
         </tbody>
     </table>
-    <br />
+    <br>
     <input type="checkbox" id="split_toggle" />
     <label for="split_toggle" class="head">Enable Splitting</label>
     <table id="split_options">
@@ -261,7 +276,7 @@
             </tr>
         </tbody>
     </table>
-    <br />
+    <br>
     <button id="clear">clear</button> Clear all features.
   </body>
 </html>

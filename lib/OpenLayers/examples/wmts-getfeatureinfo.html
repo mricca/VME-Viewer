@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
         <title>OpenLayers WMTS GetFeatureInfo Example</title>
         <link rel="stylesheet" href="../theme/default/style.css" type="text/css"/>
-        <link rel="stylesheet" href="style.css" type="text/css" />
+        <link rel="stylesheet" href="style.css" type="text/css">
         <script src="../lib/Firebug/firebug.js"></script>
         <script src="../lib/OpenLayers.js"></script>
         <script src="wmts-getfeatureinfo.js"></script>
@@ -43,7 +46,9 @@
     </head>
     <body onload="init();">
         <h1 id="title">WMTS GetFeatureInfo Control</h1>
-        
+        <div id="tags">
+            wmts, tile, cache, getfeatureinfo
+        </div>        
         <p id="shortdesc">
             The WMTSGetFeatureInfo control allows retrieval of information about
             features displayed in a WMTS layer.

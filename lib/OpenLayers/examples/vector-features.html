@@ -1,8 +1,12 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>OpenLayers: Vector Features</title>
-    <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
     <script src="../lib/OpenLayers.js" type="text/javascript"></script>
     <script type="text/javascript">
         var map;
@@ -12,6 +16,10 @@
             var layer = new OpenLayers.Layer.WMS( "OpenLayers WMS",
                     "http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'} );
             map.addLayer(layer);
+
+            // allow testing of specific renderers via "?renderer=Canvas", etc
+            var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
+            renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
 
             /*
              * Layer style
@@ -63,9 +71,12 @@
             style_mark.graphicYOffset = -style_mark.graphicHeight;
             style_mark.externalGraphic = "../img/marker.png";
             // graphicTitle only works in Firefox and Internet Explorer
-			style_mark.graphicTitle = "this is a test tooltip";
+            style_mark.graphicTitle = "this is a test tooltip";
 
-            var vectorLayer = new OpenLayers.Layer.Vector("Simple Geometry", {style: layer_style});
+            var vectorLayer = new OpenLayers.Layer.Vector("Simple Geometry", {
+                style: layer_style,
+                renderers: renderer
+            });
 
             // create a point feature
             var point = new OpenLayers.Geometry.Point(-111.04, 45.68);
@@ -112,6 +123,7 @@
 <h1 id="title">Drawing Simple Vector Features Example</h1>
 
 <div id="tags">
+    vector, feature
 </div>
 <p id="shortdesc">
     Shows the use of the shows drawing simple vector features, in different styles.

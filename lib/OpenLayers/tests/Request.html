@@ -1,6 +1,6 @@
 <html>
 <head>
-    <script src="../lib/OpenLayers.js"></script>
+    <script src="OLLoader.js"></script>
     <script type="text/javascript">
     function setup() {
         window._xhr = OpenLayers.Request.XMLHttpRequest;
@@ -20,7 +20,7 @@
     function test_issue(t) {
         setup();
 
-        t.plan(21);
+        t.plan(22);
         var request, config;
         var proto = OpenLayers.Request.XMLHttpRequest.prototype;
         var issue = OpenLayers.Function.bind(OpenLayers.Request.issue,
@@ -81,7 +81,18 @@
             t.eq(url, config.url + "&foo=bar", "existing query string gets extended with &");
         }
         request = issue(config);
-
+        
+        // test that query string doesn't get ? followed by &
+        config = {
+            method: "GET",
+            url: "http://example.com/service?",
+            params: {"foo": "bar"}
+        };
+        proto.open = function(method, url, async, user, password) {
+            t.eq(url, config.url + "foo=bar", "existing query string ending with ? gets extended without &");
+        }
+        request = issue(config);
+        
         // reset open method
         proto.open = _open;
         
@@ -319,7 +330,7 @@
     }
 
     function test_ProxyHost(t) {
-        t.plan(4);
+        t.plan(5);
 
         /*
          * Setup
@@ -334,6 +345,7 @@
         var proto = OpenLayers.Request.XMLHttpRequest.prototype;
         var _open = proto.open;
         var log = [];
+        var port;
         proto.open = function(method, url, async, user, password) {
             log.push(url);
         };
@@ -349,9 +361,17 @@
         OpenLayers.Request.GET({url: "http://bar?k1=v1&k2=v2"});
         t.eq(log.length, 1, "[1] XHR.open called once");
         t.eq(log[0], expectedURL, "[1] the URL used for XHR is correct (" + log[0] + ")");
-
+        
+        // 1 test
+        log = [];
+        OpenLayers.ProxyHost = "http://fooproxy/?url=";
+        port = window.location.port ? ':'+window.location.port : '';
+        expectedURL = window.location.protocol+"//"+window.location.hostname+port+"/service";
+        OpenLayers.Request.GET({url: expectedURL});
+        t.eq(log[0], expectedURL, "[2] proxy is not used when requesting the same server");
+        
         // 2 tests
-        log = []
+        log = [];
         OpenLayers.ProxyHost = function(url) {
             var p = OpenLayers.Util.getParameters(url);
             var p = OpenLayers.Util.getParameterString(p);
@@ -359,8 +379,8 @@
         };
         expectedURL = "http://barproxy/?k1=v1&k2=v2";
         OpenLayers.Request.GET({url: "http://bar?k1=v1&k2=v2"});
-        t.eq(log.length, 1, "[2] XHR.open called once");
-        t.eq(log[0], expectedURL, "[2] the URL used for XHR is correct (" + log[0] + ")");
+        t.eq(log.length, 1, "[3] XHR.open called once");
+        t.eq(log[0], expectedURL, "[3] the URL used for XHR is correct (" + log[0] + ")");
 
         /*
          * Teardown
@@ -372,6 +392,44 @@
     }
 
     function test_abort(t) {
+
+        t.plan(0);
+
+        var sendCalled;
+
+        // set up
+
+        var _open = OpenLayers.Request.XMLHttpRequest.prototype.open;
+        OpenLayers.Request.XMLHttpRequest.prototype.open = function() {
+            this.readyState = OpenLayers.Request.XMLHttpRequest.OPENED;
+        };
+
+        var _setRequestHeader = OpenLayers.Request.XMLHttpRequest.prototype.setRequestHeader;
+        OpenLayers.Request.XMLHttpRequest.prototype.setRequestHeader = function() {};
+
+        var _send = OpenLayers.Request.XMLHttpRequest.prototype.send;
+        OpenLayers.Request.XMLHttpRequest.prototype.send = function() {
+            sendCalled = true;
+        };
+
+        // test
+
+        sendCalled = false;
+        OpenLayers.Request.issue().abort();
+
+        t.delay_call(0.5, function() {
+            if (sendCalled) {
+                t.fail("Send should not be called because request is aborted");
+            }
+
+            // tear down
+            OpenLayers.Request.XMLHttpRequest.prototype.open = _open;
+            OpenLayers.Request.XMLHttpRequest.prototype.setRequestHeader = _setRequestHeader;
+            OpenLayers.Request.XMLHttpRequest.prototype.send = _send;
+        });
+    }
+
+    function test_abort2(t) {
         t.plan(0);
         var fail = false;
         OpenLayers.Request.XMLHttpRequest.onsend = function(args) {
@@ -383,10 +441,9 @@
             }
             OpenLayers.Request.XMLHttpRequest.onsend = null;
         });
-        var protocol = new OpenLayers.Protocol.HTTP();
-        protocol.abort(protocol.read());
+        var req = OpenLayers.Request.GET();
+        req.abort();
     }
-
     </script>
 </head>
 <body>

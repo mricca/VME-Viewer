@@ -1,7 +1,11 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
-    <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
     <style type="text/css">
         #controlToggle li {
             list-style: none;
@@ -132,10 +136,20 @@
                 control.geodesic = element.checked;
             }
         }
+        
+        function toggleImmediate(element) {
+            for(key in measureControls) {
+                var control = measureControls[key];
+                control.setImmediate(element.checked);
+            }
+        }
     </script>
   </head>
   <body onload="init()">
     <h1 id="title">OpenLayers Measure Example</h1>
+    <div id="tags">
+        measuring, geodesic, area, length, distance
+    </div>
     <p id="shortdesc">
         Demonstrates the measure control to measure distances and areas.
     </p>
@@ -161,13 +175,19 @@
                 <input type="checkbox" name="geodesic" id="geodesicToggle" onclick="toggleGeodesic(this);" />
                 <label for="geodesicToggle">use geodesic measures</label>
             </li>
+            <li>
+                <input type="checkbox" name="immediate" id="immediateToggle" onclick="toggleImmediate(this);" />
+                <label for="immediateToggle">use immediate measures</label>
+            </li>
         </ul>
         <p>Note that the geometries drawn are planar geometries and the
         metrics returned by the measure control are planar measures by
         default.  If your map is in a geographic projection or you have the
         appropriate projection definitions to transform your geometries into
         geographic coordinates, you can set the "geodesic" property of the control
-        to true to calculate geodesic measures instead of planar measures.</p>
+        to true to calculate geodesic measures instead of planar measures.
+        Also you have the possibility to set the "immediate" property to true
+        to get a new calculated value once the mouse has been mooved.</p>
     </div>
   </body>
 </html>

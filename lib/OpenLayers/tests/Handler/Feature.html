@@ -1,6 +1,6 @@
 <html>
 <head>
-  <script src="../../lib/OpenLayers.js"></script>
+  <script src="../OLLoader.js"></script>
   <script type="text/javascript">
     function test_initialize(t) {
         t.plan(4);
@@ -53,7 +53,7 @@
         
     }
     function test_events(t) {
-        t.plan(25);
+        t.plan(35);
         
         var map = new OpenLayers.Map('map');
         var control = new OpenLayers.Control();
@@ -64,8 +64,8 @@
  
         // list below events that should be handled (events) and those
         // that should not be handled (nonevents) by the handler
-        var events = ["mousedown", "mouseup", "mousemove", "click", "dblclick"];
-        var nonevents = ["mouseout", "resize", "focus", "blur"];
+        var events = ["mousedown", "mouseup", "mousemove", "click", "dblclick", "touchstart", "touchmove"];
+        var nonevents = ["mouseout", "resize", "focus", "blur", "touchend"];
         map.events.registerPriority = function(type, obj, func) {
             var output = func();
             // Don't listen for setEvent handlers (#902)
@@ -123,7 +123,7 @@
     }
 
     function test_callbacks(t) {
-        t.plan(9);
+        t.plan(14);
         
         var map = new OpenLayers.Map('map', {controls: []});
         var control = new OpenLayers.Control();
@@ -223,6 +223,118 @@
         callbacks['dblclick'] = getCallback('dblclick', newFeature);
         evtPx.type = "dblclick";
         map.events.triggerEvent('dblclick', evtPx);
+
+        // test touchstart on a feature
+        // 'click' callback should be called
+        handler.feature = null;
+        lastFeature = null;
+        newFeature = new OpenLayers.Feature.Vector();
+        newFeature.layer = layer;
+        callbacks['click'] = getCallback('click (touch)', newFeature);
+        callbacks['clickout'] = getCallback('clickout (touch)', lastFeature);
+        evtPx.type = "touchstart";
+        map.events.triggerEvent('touchstart', evtPx);
+
+        // test touchstart on the same feature
+        // 'click' callback should be called
+        callbacks['click'] = getCallback('click (touch)', newFeature);
+        evtPx.type = "touchstart";
+        map.events.triggerEvent('touchstart', evtPx);
+
+        // test touchstart in new feature and out of last feature
+        // both 'click' and 'clickout' callbacks should be called
+        lastFeature = newFeature;
+        newFeature = new OpenLayers.Feature.Vector();
+        newFeature.layer = layer;
+        callbacks['click'] = getCallback('click (touch)', newFeature);
+        callbacks['clickout'] = getCallback('clickout (touch)', lastFeature);
+        evtPx.type = "touchstart";
+        map.events.triggerEvent('touchstart', evtPx);
+
+        // test touchstart out of last feature
+        // only 'clickout' callback should be called
+        lastFeature = newFeature;
+        newFeature = null;
+        callbacks['click'] = getCallback('click (touch)', newFeature);
+        callbacks['clickout'] = getCallback('clickout (touch)', lastFeature);
+        evtPx.type = "touchstart";
+        map.events.triggerEvent('touchstart', evtPx);
+    }
+
+    function test_touchstart(t) {
+        // a test to verify that the touchstart function does
+        // unregister the mouse listeners when it's called the
+        // first time
+
+        t.plan(4);
+
+        // set up
+
+        var map = new OpenLayers.Map('map', {controls: []});
+        var control = new OpenLayers.Control();
+        map.addControl(control);
+        var layer = new OpenLayers.Layer();
+        map.addLayer(layer);
+
+        var handler = new OpenLayers.Handler.Feature(control, layer, {});
+        handler.mousedown = function() {}; // mock mousedown
+        handler.activate();
+
+        function allRegistered() {
+            var eventTypes = ['mousedown', 'mouseup', 'mousemove', 'click', 'dblclick'],
+                eventType,
+                listeners,
+                listener,
+                flag;
+            for(var i=0, ilen=eventTypes.length; i<ilen; i++) {
+                flag =  false;
+                eventType = eventTypes[i];
+                listeners = map.events.listeners[eventType];
+                for(var j=0, jlen=listeners.length; j<jlen; j++) {
+                    listener = listeners[j];
+                    if(listener.func === handler[eventType] && listener.obj === handler) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if(!flag) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function noneRegistered() {
+            var eventTypes = ['mousedown', 'mouseup', 'mousemove', 'click', 'dblclick'],
+                eventType,
+                listeners,
+                listener;
+            for(var i=0, ilen=eventTypes.length; i<ilen; i++) {
+                eventType = eventTypes[i];
+                listeners = map.events.listeners[eventType];
+                for(var j=0, jlen=listeners.length; j<jlen; j++) {
+                    listener = listeners[j];
+                    if(listener.func === handler[eventType] && listener.obj === handler) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        // test
+
+        t.ok(allRegistered(), 'mouse listeners are registered');
+        handler.touchstart({xy: new OpenLayers.Pixel(0, 0)});
+        t.ok(noneRegistered(), 'mouse listeners are unregistered');
+        t.ok(handler.touch, 'handler.touch is set');
+
+        handler.deactivate();
+        t.ok(!handler.touch, 'handler.touch is not set');
+
+        // tear down
+
+        map.destroy();
     }
 
     function test_deactivate(t) {
@@ -474,6 +586,78 @@
         clicks = 0;
         map.events.triggerEvent("click", evtPx);
         t.eq(clicks, 0, "click callback does not trigger when tolerance is reached");
+    }
+
+    function test_multitouch_canvas(t) {
+        var supported = OpenLayers.Renderer.Canvas.prototype.supported();
+        if (!supported) { t.plan(0); return; }
+
+        t.plan(1);
+
+        // set up
+
+        var log;
+
+        var map = new OpenLayers.Map('map');
+        var layer = new OpenLayers.Layer.Vector('vectors', {
+            renderers: ['Canvas'],
+            isBaseLayer: true
+        });
+        map.addLayer(layer);
+
+        var control = new OpenLayers.Control();
+        var handler = new OpenLayers.Handler.Feature(control, layer,
+                {click: function() { log++; }});
+        control.handler = handler;
+        map.addControl(control);
+        control.activate();
+
+        var feature = new OpenLayers.Feature.Vector(
+            new OpenLayers.Geometry.Point(0, 0));
+        layer.addFeatures(feature);
+
+        map.zoomToMaxExtent();
+
+        // test
+
+        // mock getMousePosition on the events object to make
+        // sure scrolls, offsets and leftop do not interfere
+        map.events.getMousePosition = function(evt) {
+            return new OpenLayers.Pixel(evt.clientX,
+                                        evt.clientY);
+        };
+
+        log = 0;
+        var evt = {
+            type: 'touchstart',
+            touches: [{
+                clientX: 100,
+                clientY: 75
+            }, {
+                clientX: 200,
+                clientY: 75
+            }]
+        };
+        map.events.handleBrowserEvent(evt);
+        t.eq(log, 0, "no feature selection when multi-touching");
+
+        // tear down
+
+        map.destroy();
+    }
+    
+    function test_layerorder(t) {
+        t.plan(2);
+        var map = new OpenLayers.Map("map");
+        var base = new OpenLayers.Layer(null, {isBaseLayer: true});
+        var vector = new OpenLayers.Layer.Vector();
+        map.addLayers([base, vector]);
+        map.addControl(new OpenLayers.Control.SelectFeature(vector, {autoActivate: true}));
+        map.zoomToMaxExtent();
+        t.eq(parseInt(vector.getZIndex(), 10), 725, "vector layer's zIndex correct");
+        map.events.triggerEvent("changelayer");
+        t.eq(parseInt(vector.getZIndex(), 10), 725, "vector layer's zIndex still correct after changelayer event");
+        
     }
 
   </script>

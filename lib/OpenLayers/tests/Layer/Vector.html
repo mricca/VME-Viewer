@@ -1,6 +1,6 @@
 <html>
 <head>
-<script src="../../lib/OpenLayers.js"></script>
+<script src="../OLLoader.js"></script>
   <script type="text/javascript">
 
     var name = "Vector Layer";
@@ -194,6 +194,83 @@
         t.ok(layer.getFeatureBy('fid', 'some_fid_that_does_not_exist') == null,
              "OpenLayers.Layer.Vector.getFeatureBy('fid', ...) works like getFeatureByFid on non-existing feature fid");
     }
+    
+    function test_Layer_Vector_getFeaturesByAttribute(t) {
+        t.plan( 9 );
+        // setup layer
+        var layer = new OpenLayers.Layer.Vector(name);
+        
+        // feature_1
+        var geometry_1 = new OpenLayers.Geometry.Point(-28.63, 153.64);
+        var attributes_1 = {
+            humpty: 'dumpty',
+            clazz: 1
+        };
+        var feature_1 = new OpenLayers.Feature.Vector(geometry_1, attributes_1);
+        feature_1.fid = 'f_01'; // to identify later
+        
+        // feature_2
+        var geometry_2 = new OpenLayers.Geometry.Point(-27.48, 153.05);
+        var attributes_2 = {
+            // this feature has attribute humpty === undefined
+            clazz: '1'
+        };
+        var feature_2 = new OpenLayers.Feature.Vector(geometry_2, attributes_2);
+        feature_2.fid = 'f_02'; // to identify later
+        
+        // feature_3
+        var geometry_3 = new OpenLayers.Geometry.Point(-33.74, 150.3);
+        var attributes_3 = {
+            humpty: 'foobar',
+            clazz: 1
+        };
+        var feature_3 = new OpenLayers.Feature.Vector(geometry_3, attributes_3);
+        feature_3.fid = 'f_03'; // to identify later
+        
+        // Tests
+        
+        // don't find anything... no features added
+        // 1 test
+        t.ok(layer.getFeaturesByAttribute('humpty', 'dumpty').length === 0,
+             "OpenLayers.Layer.Vector.getFeaturesByAttribute returns an empty array while the layer is empty");
+        
+        layer.addFeatures([feature_1, feature_2, feature_3]);
+        
+        // simple use case: find 1 feature with an attribute and matching value
+        // 2 tests
+        var dumptyResults = layer.getFeaturesByAttribute('humpty', 'dumpty');
+        t.ok(dumptyResults.length === 1,
+             "OpenLayers.Layer.Vector.getFeaturesByAttribute returns an array with one feature for attribute 'humpty' with value 'dumpty'");
+        t.ok(dumptyResults[0].fid === 'f_01',
+             "OpenLayers.Layer.Vector.getFeaturesByAttribute returns the correct feature with attribute 'humpty' set to 'dumpty'");
+        
+        // simple use case: find 1 feature with an attribute and matching value
+        //                  and respect data types
+        // 2 tests
+        var strOneResults = layer.getFeaturesByAttribute('clazz', '1');
+        t.ok(strOneResults.length === 1,
+             "OpenLayers.Layer.Vector.getFeaturesByAttribute returns an array with one feature for attribute 'clazz' with value '1' (a string)");
+        t.ok(strOneResults[0].fid === 'f_02',
+             "OpenLayers.Layer.Vector.getFeaturesByAttribute returns the correct feature with attribute 'clazz' set to the string '1'");
+        
+        // simple use case: find 2 features with an attribute and matching value
+        //                  and respect data types
+        // 2 tests    
+        var numOneResults = layer.getFeaturesByAttribute('clazz', 1);
+        t.ok(numOneResults.length === 2,
+             "OpenLayers.Layer.Vector.getFeaturesByAttribute returns an array with two features for attribute 'clazz' with value 1 (a number)");
+        var bothFound = !!((numOneResults[0].fid === 'f_01' && numOneResults[1].fid === 'f_03') || (numOneResults[0].fid === 'f_03' && numOneResults[1].fid === 'f_01')); 
+        t.ok(bothFound,
+             "OpenLayers.Layer.Vector.getFeaturesByAttribute returns the correct features with attribute 'clazz' set to the number 1");
+        
+        // advanced use case: find the 1 feature, that has an attribute not set
+        var undefined;
+        var humptyNotSet = layer.getFeaturesByAttribute('humpty', undefined);
+        t.ok(humptyNotSet.length === 1,
+             "OpenLayers.Layer.Vector.getFeaturesByAttribute can be used to find features that have certain attributes not set");
+        t.ok(humptyNotSet[0].fid === 'f_02',
+             "OpenLayers.Layer.Vector.getFeaturesByAttribute found the correct featuren that has a certain attribute not set");
+    }
 
     function test_Layer_Vector_getDataExtent(t) {
         t.plan(1);
@@ -207,6 +284,14 @@
         layer.addFeatures([pointFeature]);
         var extent = layer.getDataExtent();
         t.ok(extent.toBBOX() != layer.features[0].geometry.getBounds().toBBOX(), "extent from getDataExtent doesn't clobber first feature");
+    }
+
+    function test_Layer_Vector_getDataExtentEmpty(t) {
+        t.plan(1);
+        var layer = new OpenLayers.Layer.Vector(name);
+        layer.addFeatures([new OpenLayers.Feature.Vector(null), new OpenLayers.Feature.Vector(null)]);
+        var extent = layer.getDataExtent();
+        t.eq(extent, null, "We expect null to be returned if there are no features with a geometry");
     }
 
     function test_Layer_Vector_removeFeatures(t) {
@@ -381,9 +466,7 @@
         t.plan(9);
         
         var map = new OpenLayers.Map("map");
-        var layer = new OpenLayers.Layer.Vector(null, {
-            drawn: true
-        });
+        var layer = new OpenLayers.Layer.Vector();
         map.addLayer(layer);
         var feature = new OpenLayers.Feature.Vector(
             new OpenLayers.Geometry.Point(10, 10)
@@ -400,6 +483,7 @@
         };
         
         // draw feature with no state
+        layer.drawn = true;
         layer.drawFeature(feature);
         t.ok(log.feature === feature, "[no state] drawFeature called with correct feature");
         t.ok(log.style.display !== "none", "[no state] drawFeature called with style display not none");
@@ -609,9 +693,12 @@
                              "given graphicHeight and graphicWidth, both are set: width");
                 feature.style = customStyle5;
                 layer.drawFeature(feature);
-                t.eq(root.firstChild.getAttributeNS(null, 'style'),
-                             'opacity: '+customStyle5.graphicOpacity.toString()+((OpenLayers.Util.getBrowserName() == "opera" || OpenLayers.Util.getBrowserName() == "safari") ? "" : ';'),
-                             "graphicOpacity correctly set");
+                // we use startsWith here as some browsers (at least Safari 3 and FireFox 4)
+                // do not append a semi-colon to the opacity string
+                t.ok(OpenLayers.String.startsWith(
+                            root.firstChild.getAttributeNS(null, 'style'),
+                            "opacity: " + customStyle5.graphicOpacity.toString()),
+                     "graphicOpacity correctly set");
                 feature.style = customStyle6;
                 layer.drawFeature(feature);
                 var x = geometryX / renderer.getResolution() + renderer.left;
@@ -628,6 +715,54 @@
                         "graphicXOffset correctly set");
                 t.eq(root.firstChild.getAttributeNS(null, 'y'),
                         (-y + customStyle6.graphicYOffset).toFixed().toString(),
+                        "graphicYOffset correctly set");
+        }
+        if (layer.renderer.CLASS_NAME == 'OpenLayers.Renderer.SVG2') {
+                feature.style = customStyle1;
+                layer.drawFeature(feature);
+                var resolution = map.getResolution();
+                t.eq(root.firstChild.getAttributeNS(null, 'width'),
+                             (2*customStyle1.pointRadius*resolution).toString(),
+                             "given a pointRadius, width equals 2*pointRadius");
+                t.eq(root.firstChild.getAttributeNS(null, 'height'),
+                             (2*customStyle1.pointRadius*resolution).toString(),
+                             "given a pointRadius, height equals 2*pointRadius");
+                feature.style = customStyle2;
+                layer.drawFeature(feature);
+                t.eq(root.firstChild.getAttributeNS(null, 'width'),
+                             root.firstChild.getAttributeNS(null, 'height'),
+                             "given a graphicWidth, width equals height");
+                t.eq(root.firstChild.getAttributeNS(null, 'width'),
+                             (customStyle2.graphicWidth*resolution).toString(),
+                             "width is set correctly");
+                feature.style = customStyle3;
+                layer.drawFeature(feature);
+                t.eq(root.firstChild.getAttributeNS(null, 'height'),
+                             root.firstChild.getAttributeNS(null, 'width'),
+                             "given a graphicHeight, height equals width");
+                t.eq(root.firstChild.getAttributeNS(null, 'height'),
+                             (customStyle3.graphicHeight*resolution).toString(),
+                             "height is set correctly");
+                feature.style = customStyle4;
+                layer.drawFeature(feature);
+                t.eq(root.firstChild.getAttributeNS(null, 'height'),
+                             (customStyle4.graphicHeight*resolution).toString(),
+                             "given graphicHeight and graphicWidth, both are set: height");
+                t.eq(root.firstChild.getAttributeNS(null, 'width'),
+                             (customStyle4.graphicWidth*resolution).toString(),
+                             "given graphicHeight and graphicWidth, both are set: width");
+                feature.style = customStyle5;
+                layer.drawFeature(feature);
+                t.eq(root.firstChild.getAttributeNS(null, 'style'),
+                             'opacity: '+customStyle5.graphicOpacity.toString()+((OpenLayers.Util.getBrowserName() == "opera" || OpenLayers.Util.getBrowserName() == "safari") ? "" : ';'),
+                             "graphicOpacity correctly set");
+                feature.style = customStyle6;
+                layer.drawFeature(feature);
+                t.eq(root.firstChild.getAttributeNS(null, 'x'),
+                        (geometryX + customStyle6.graphicXOffset*resolution).toString(),
+                        "graphicXOffset correctly set");
+                t.eq(root.firstChild.getAttributeNS(null, 'y'),
+                        (-geometryY + customStyle6.graphicYOffset*resolution).toString(),
                         "graphicYOffset correctly set");
         }
         if (layer.renderer.CLASS_NAME == 'OpenLayers.Renderer.VML') {

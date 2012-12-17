@@ -1,8 +1,12 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>OpenLayers: Wrap Date Line</title>
-    <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
     <script src="../lib/OpenLayers.js"></script>
     <script type="text/javascript">
         var map;
@@ -23,7 +27,7 @@
                 {layers: "bathymetry,land_fn,park,drain_fn,drainage," +
                          "prov_bound,fedlimit,rail,road,popplace",
                  transparent: "true", format: "image/png"},
-                {wrapDateLine: true, reproject: false});
+                {wrapDateLine: true});
 
             /* WW doesn't quite work yet */
             ww = new OpenLayers.Layer.WorldWind( "LANDSAT",
@@ -43,10 +47,9 @@
   <body onload="init()">
     <h1 id="title">Wrapping the Date Line</h1>
     <div id="tags">
-      Related to:
-        <a href="http://dev.openlayers.org/docs/OpenLayers/Layer/WMS.html">Layer.WMS</a>,
-        <a href="http://dev.openlayers.org/docs2/OpenLayers/Layer/MapServer.html">Layer.MapServer</a>,
-        <a href="http://dev.openlayers.org/docs2/OpenLayers/Layer.html#wrapDateLine">wrapDateLine</a>
+        WMS,
+        MapServer,
+        wrapDateLine
     </div>
 
     <p id="shortdesc">Shows how to work around dateline issues, by wrapping the dateline on a number of layer types.</p>

@@ -1,8 +1,12 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>OpenLayers: Vector Graphics with Shadows</title>
-    <link rel="stylesheet" href="../theme/default/style.css" type="text/css" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/default/style.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
     <style type="text/css">
         .smallmap {
             width: 300px;
@@ -31,13 +35,17 @@
         function init() {
             map = new OpenLayers.Map("map");
             
+            // allow testing of specific renderers via "?renderer=Canvas", etc
+            var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
+            renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+
             layer = new OpenLayers.Layer.Vector(
                 "Marker Drop Shadows",
                 {
                     styleMap: new OpenLayers.StyleMap({
                         // Set the external graphic and background graphic images.
                         externalGraphic: "../img/marker-gold.png",
-                        backgroundGraphic: "./marker_shadow.png",
+                        backgroundGraphic: "./img/marker_shadow.png",
                         
                         // Makes sure the background graphic is placed correctly relative
                         // to the external graphic.
@@ -53,7 +61,8 @@
                         pointRadius: 10
                     }),
                     isBaseLayer: true,
-                    rendererOptions: {yOrdering: true}
+                    rendererOptions: {yOrdering: true},
+                    renderers: renderer
                 }
             );
             
@@ -107,6 +116,7 @@
         <h1 id="title">Marker Shadows using Background Graphics/Z-Indexes</h1>
 
         <div id="tags">
+            markers, shadow, style
         </div>
 
         <p id="shortdesc">

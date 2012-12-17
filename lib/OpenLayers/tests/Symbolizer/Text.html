@@ -1,6 +1,6 @@
 <html> 
 <head> 
-    <script src="../../lib/OpenLayers.js"></script> 
+    <script src="../OLLoader.js"></script> 
     <script type="text/javascript">
 
     function test_constructor(t) { 
@@ -23,6 +23,16 @@
         t.ok(clone instanceof OpenLayers.Symbolizer.Text, "correct type");
         t.eq(clone.foo, "bar", "clone copies properties");
         
+    }
+
+    function test_defaults(t) {
+        t.plan(5);
+        var symbolizer = new OpenLayers.Symbolizer.Point();
+        t.ok(symbolizer.label === undefined, "no default label");
+        t.ok(symbolizer.fontFamily === undefined, "no default fontFamily");
+        t.ok(symbolizer.fontSize === undefined, "no default fontSize");
+        t.ok(symbolizer.fontWeight === undefined, "no default fontWeight");
+        t.ok(symbolizer.fontStyle === undefined, "no default fontStyle");
     }
 
 

@@ -1,6 +1,6 @@
 <html>
 <head>
-    <script src="../../lib/OpenLayers.js"></script>
+    <script src="../OLLoader.js"></script>
     <script type="text/javascript">
 
     function test_initialize(t) {
@@ -113,6 +113,61 @@
 
         control.getInfoForClick({xy: {x: 50, y: 50}});
         control.getInfoForHover({xy: {x: 50, y: 50}});
+    }
+
+    function test_getfeatureinfo_event(t) {
+
+        t.plan(5);
+
+        var text =
+            '<?xml version="1.0" encoding="UTF-8" ?>' +
+            '<FeatureInfoResponse>' +
+            '  <FIELDS OBJECTID="1188" HECTARES="1819.734" ZONENR="5854" NULZONES=" " AREA="18197340.1426" PERIMETER="19177.4073627" SHAPE="NULL" SE_ANNO_CAD_DATA="NULL" SHAPE.AREA="0" SHAPE.LEN="0"/>' +
+            '</FeatureInfoResponse>';
+
+        var map = new OpenLayers.Map('map');
+
+        var xy;
+        var url = "http://foo";
+
+        // mock up a control with output "object" and drillDown true
+        var control = new OpenLayers.Control.WMSGetFeatureInfo({
+            output: "object",
+            drillDown: true,
+            request: function(position) {},
+            eventListeners: {
+                getfeatureinfo: function(evt) {
+                    t.ok(evt.features[0].url === url, "features is an object with a property url when output is object");
+                    var features = evt.features[0].features;
+                    t.ok(features.length === 1, "features properties has a length of 1");
+                    t.ok(features[0] instanceof OpenLayers.Feature.Vector, "Feature array contains 1 feature");
+                }
+            }
+        });
+
+        // mock up a control with output "features" and drillDown true
+        var control2 = new OpenLayers.Control.WMSGetFeatureInfo({
+            autoActivate: true,
+            drillDown: true,
+            request: function(position) {},
+            eventListeners: {
+                getfeatureinfo: function(evt) {
+                    var features = evt.features;
+                    t.ok(features.length === 1, "features properties has a length of 1");
+                    t.ok(features[0] instanceof OpenLayers.Feature.Vector, "Feature array contains 1 feature");
+                }
+            }
+        });
+
+        map.addControls([control, control2]);
+        control.activate();
+
+        xy = {x: 50, y: 50};
+        control._requestCount = control2._requestCount = 0;
+        control._numRequests = control2._numRequests = 1;
+        control.handleResponse({xy: xy}, {responseText: text}, url);
+        control2.handleResponse({xy: xy}, {responseText: text}, url);
+        map.destroy();
     }
 
     function test_beforegetfeatureinfo_event(t) {
@@ -233,7 +288,7 @@
     // Verify that things work all right when we combine different types for the STYLES and LAYERS
     // params in the WMS Layers involved
     function test_mixedParams(t) {
-        t.plan(3);
+        t.plan(5);
         var map = new OpenLayers.Map("map", {
             getExtent: function() {return(new OpenLayers.Bounds(-180,-90,180,90));}
             }
@@ -271,8 +326,20 @@
             log.options = options;
         };
         click.activate();
-        click.getInfoForClick({xy: {x: 50, y: 50}});
+        click.getInfoForClick({xy: {x: 50.2, y: 50.1}});
         OpenLayers.Request.GET = _request;
+
+        t.eq(
+            log.options && log.options.params.X,
+            50,
+            "X should be an integer"
+        );
+
+        t.eq(
+            log.options && log.options.params.Y,
+            50,
+            "Y should be an integer" 
+        );
 
         t.eq(
             log.options && log.options.url,
@@ -408,7 +475,7 @@
     }
 
     function test_drillDown(t) {
-        t.plan(4);
+        t.plan(6);
         var map = new OpenLayers.Map("map", {
             getExtent: function() {return(new OpenLayers.Bounds(-180,-90,180,90));}
             }
@@ -422,14 +489,17 @@
             layers: "c"
         });
 
+        // this service does not support application/vnd.ogc.gml for GetFeatureInfo, only text/xml
         var c = new OpenLayers.Layer.WMS("dummy","http://myhost/wms", {
-            layers: "x"
+            layers: "x",
+            info_format: "text/xml"
         });
 
         map.addLayers([a, b, c]);
 
         var click = new OpenLayers.Control.WMSGetFeatureInfo({
-            drillDown: true
+            drillDown: true,
+            infoFormat: "application/vnd.ogc.gml"
         });
 
         map.addControl(click);
@@ -439,9 +509,11 @@
         OpenLayers.Request.GET = function(options) {
             count++;
             if (count == 1) {
+                t.eq(options.params["INFO_FORMAT"], "application/vnd.ogc.gml", "Default info format of the control is used");
                 t.eq(options.params["QUERY_LAYERS"].join(","), "a,c", "Layers should be grouped by service url");
                 t.eq(options.url, "http://localhost/wms", "Correct url used for first request");
             } else if (count == 2) {
+                t.eq(options.params["INFO_FORMAT"], "text/xml", "Overridden info format is used instead of the control's infoFormat");
                 t.eq(options.url, "http://myhost/wms", "Correct url used for second request");
             }
         };
@@ -450,6 +522,37 @@
         OpenLayers.Request.GET = _request;
         t.eq(count, 2, "We expect 2 requests to go off");
         map.destroy();
+    }
+    
+    function test_GetFeatureInfo_buildWMSOptions(t) {
+        t.plan(3);
+        
+        var map = new OpenLayers.Map("map", {
+            getExtent: function() {return(new OpenLayers.Bounds(-180,-90,180,90));},
+            projection: "EPSG:900913"
+        });
+        var a = new OpenLayers.Layer.WMS("dummy", "http://localhost/wms", {
+            layers: "a"
+        }, {projection: "EPSG:3857"});
+        var b = new OpenLayers.Layer.WMS("dummy", "http://localhost/wms", {
+            layers: "b"
+        });
+        var c = new OpenLayers.Layer.WMS("dummy", "http://localhost/wms", {
+            layers: "c"
+        }, {projection: "EPSG:4326"});
+        map.addLayers([a, b, c]);
+        var gfi = new OpenLayers.Control.WMSGetFeatureInfo();
+        map.addControl(gfi);
+        gfi.activate();
+
+        var options = gfi.buildWMSOptions("http://localhost/wms", [a], {xy: {x: 50, y: 50}}, "text/html");
+        t.eq(options.params.SRS, "EPSG:3857", "layer projection used if provided and equal map projection");
+
+        options = gfi.buildWMSOptions("http://localhost/wms", [b], {xy: {x: 50, y: 50}}, "text/html");
+        t.eq(options.params.SRS, "EPSG:900913", "map projection used if layer has no projection configured");
+
+        options = gfi.buildWMSOptions("http://localhost/wms", [b], {xy: {x: 50, y: 50}}, "text/html");
+        t.eq(options.params.SRS, "EPSG:900913", "map projection used if layer configured with an incompatible projection");
     }
 
     function test_GetFeatureInfo_WMS13(t) {
@@ -475,7 +578,7 @@
             log.options = options;
         };
         click.activate();
-        click.getInfoForClick({xy: {x: 50, y: 60}});
+        click.getInfoForClick({xy: {x: 50.1, y: 60.2}});
         OpenLayers.Request.GET = _request;
         t.eq(
             log.options && log.options.params.CRS,

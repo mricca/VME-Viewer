@@ -1,6 +1,6 @@
 <html> 
 <head> 
-    <script src="../../lib/OpenLayers.js"></script> 
+    <script src="../OLLoader.js"></script> 
     <script type="text/javascript">
 
     function test_constructor(t) { 
@@ -23,6 +23,18 @@
         t.ok(clone instanceof OpenLayers.Symbolizer.Polygon, "correct type");
         t.eq(clone.foo, "bar", "clone copies properties");
         
+    }
+
+    function test_defaults(t) {
+        t.plan(7);
+        var symbolizer = new OpenLayers.Symbolizer.Polygon();
+        t.ok(symbolizer.strokeColor === undefined, "no default strokeColor");
+        t.ok(symbolizer.strokeOpacity === undefined, "no default strokeOpacity");
+        t.ok(symbolizer.strokeWidth === undefined, "no default strokeWidth");
+        t.ok(symbolizer.strokeLinecap === undefined, "no default strokeLinecap");
+        t.ok(symbolizer.strokeDashstyle === undefined, "no default strokeDashstyle");
+        t.ok(symbolizer.fillColor === undefined, "no default fillColor");
+        t.ok(symbolizer.fillOpacity === undefined, "no default fillOpacity");
     }
 
 

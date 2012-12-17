@@ -1,6 +1,6 @@
 <html>
 <head>
-  <script src="../../lib/OpenLayers.js"></script>
+  <script src="../OLLoader.js"></script>
   <script type="text/javascript">
     var isMozilla = (navigator.userAgent.indexOf("compatible") == -1);
     var isOpera = (navigator.userAgent.indexOf("Opera") != -1);
@@ -57,12 +57,12 @@
 // MOUSEMOVE test does not seem to work... 
 //         t.plan( 2 );    
 
-        if (OpenLayers.Util.getBrowserName() != "firefox" && OpenLayers.Util.getBrowserName() != "mozilla") {
-          t.plan(4);
+        if (OpenLayers.BROWSER_NAME != "firefox" && OpenLayers.BROWSER_NAME != "mozilla") {
+            t.plan(4);
         } else {
-          t.plan(0);
-          t.debug_print("Firefox gives different results for different browsers on setMap on EventPane, so just don't run it for now.") 
-          return;
+            t.plan(0);
+            t.debug_print("Firefox gives different results for different browsers on setMap on EventPane, so just don't run it for now.") 
+            return;
         }
         var map = new OpenLayers.Map('map');
         
@@ -84,19 +84,23 @@
         layer2.getWarningHTML = function() { this.warning = true; return ""; }
 
         map.addLayer(layer2);
-        t.ok( !layer2.warning, "warning not registered on mapObject load" );
+        t.ok(!layer2.warning, "warning not registered on mapObject load");
 
-        map.events.register("mousemove", map, function () {
-            t.ok(true, "got mouse move");
+        var log = [];
+        map.events.register("mousemove", map, function(event) {
+            log.push(event);
         });
         
-        if( document.createEvent ) { // Mozilla
-          var evObj = document.createEvent('MouseEvents');
-          evObj.initEvent( 'mousemove', true, false );
-          layer.pane.dispatchEvent(evObj);
-        } else if( document.createEventObject ) { // IE
-          layer.pane.fireEvent('onmousemove');
+        if (document.createEvent) { // Mozilla
+            var evObj = document.createEvent('MouseEvents');
+            evObj.initEvent('mousemove', true, false);
+            map.eventsDiv.dispatchEvent(evObj);
+        } else if(document.createEventObject) { // IE
+            map.eventsDiv.fireEvent('onmousemove');
         }
+        
+        t.eq(log.length, 1, "got one event");
+        
     }
 
     function test_Layer_EventPane_setVisibility (t) {

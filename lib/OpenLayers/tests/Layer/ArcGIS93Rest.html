@@ -2,7 +2,7 @@
 <head>
     <script type="text/javascript">var oldAlert = window.alert, gMess; window.alert = function(message) {gMess = message; return true;};</script>
     <script type="text/javascript">window.alert = oldAlert;</script>
-<script src="../../lib/OpenLayers.js"></script>
+<script src="../OLLoader.js"></script>
   <script type="text/javascript">
     var isMozilla = (navigator.userAgent.indexOf("compatible") == -1);
     var layer; 
@@ -94,7 +94,7 @@
         var params = {layers: "show:0,2"};
         t.plan( 2 );
         var map = new OpenLayers.Map('map');
-        layer = new OpenLayers.Layer.ArcGIS93Rest(name, url, params);
+        layer = new OpenLayers.Layer.ArcGIS93Rest(name, url, params, {buffer: 2});
         map.addLayer(layer);
         map.setCenter(new OpenLayers.LonLat(0,0),5);
         t.eq( layer.grid.length, 7, "Grid rows is correct." );
