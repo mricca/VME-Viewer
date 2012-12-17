@@ -329,7 +329,7 @@ Vme.data={
 						if(!FigisMap.rnd.status.logged){
 							return "";
 						}
-						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Releted Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Related</a>'
+						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Related Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Related</a>'
 						
 						
 						

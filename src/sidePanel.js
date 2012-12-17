@@ -71,6 +71,9 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
             myMap.addLayer(layer);
             var bounds = geom.clone().getBounds();
             var repro_bbox = repro_geom.getBounds();
+            
+            myMap.getLayersByName("Established VME areas")[0].setVisibility(false);
+            
 			if(Ext.isIE){
 			  myMap.zoomOut(); 
 			}
@@ -85,11 +88,15 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
             Ext.getCmp('years-min-field').setValue(year);
             //TODO try use slider.updateVme();
             FigisMap.ol.refreshFilters();
+            
+            myMap.getLayersByName("Established VME areas")[0].setVisibility(true);
+                        
 			if(document.getElementById("SelectSRS").value == "4326"){
             	FigisMap.ol.emulatePopupFromGeom(geom);
             }else{
             	FigisMap.ol.emulatePopupFromGeom(repro_geom);
             }
+         
         }
 		
 		

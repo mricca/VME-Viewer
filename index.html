@@ -9,7 +9,8 @@
 	<meta name="copyright" content="http://www.fao.org/corp/copyright/en/" />
 	<meta name="keywords" content="RFB, Regional Fishery Body, Map, FAO" />
 	<title>Vulnerable Marine Ecosystems Map Viewer</title>
-
+	
+	<link rel="stylesheet" type="text/css" href="lib/OpenLayers/theme/default/style.css">
 	<link rel="stylesheet" href="theme/css/style.css" type="text/css" />
 	<link rel="stylesheet" href="theme/css/vme.css" type="text/css" />
 	
@@ -109,8 +110,9 @@ document.namespaces;
 					<td>
 						<h1 id="title">Vulnerable Marine Ecosystems Map Viewer</h1>
 					</td>
-				</tr>
+				</tr>			
 			</table>
+			<span id="subTitle"></span>
 		</div>
 		<br />
 
@@ -209,6 +211,7 @@ document.namespaces;
 		}
 		updateCopyYear();
 		document.getElementById('disclaimer').innerHTML = FigisMap.label('DISCLAIMER', '<p></p>');
+		document.getElementById('subTitle').innerHTML = FigisMap.label('SUB_TITLE');
 	// ]]>
 	</script>
 
