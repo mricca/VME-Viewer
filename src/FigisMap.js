@@ -757,45 +757,28 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 	if ( pars.basicsLayers ) {
 		var owner = FigisMap.ol.getSelectedOwner();
 		var year = FigisMap.ol.getSelectedYear();
-		//WMS Vme
-		if ( ! layerTypes[ FigisMap.fifao.vme ] ) {
-			layers.unshift({
-				layer	: FigisMap.fifao.vme,
-				label	: 'VME areas',
+	   
+       
+       
+		//WMS Footprints
+		if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
+			layers.push({
+				layer	: FigisMap.fifao.vme_fp,
+				label	: 'Footprints',
 				group: "VME-DB layers",
                 showLegendGraphic: true,					
-                singleTile: true,
-				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + (owner ? " AND OWNER ='" + owner +"'" :"") ,
-				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
-				opacity	: 1.0,
-				hidden	: pars.isFIGIS,
-				type	: 'auto',
-				hideInSwitcher	: false,
-                dispOrder: 2,
-				isMasked: false
-			});
-		}	   
-		//WMS Encounters		
-		if ( ! layerTypes[ FigisMap.fifao.vme_agg_en ] ) {
-			layers.unshift({
-				layer	: FigisMap.ol.getAuthLayer('encounters'),
-				label	: 'Encounters',
-				group: "VME-DB layers",
-                showLegendGraphic: true,				
-				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
-				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
-                skipLegend	: true,
-				singleTile	:false,
+				filter	:'*',
+				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
-                dispOrder: 2,
+                dispOrder: 1,
 				hideInSwitcher	: false
 			});
 		}        
 			//WMS SurveyData
 		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
-			layers.unshift({
+			layers.push({
 				layer	: FigisMap.ol.getAuthLayer('survey'),
 				label	: 'Survey Data',
 				singleTile	:false,
@@ -807,26 +790,47 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
-                dispOrder: 2,
+                dispOrder: 1,
 				hideInSwitcher	: false
 			});
-		}        
-		//WMS Footprints
-		if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
-			layers.unshift({
-				layer	: FigisMap.fifao.vme_fp,
-				label	: 'Footprints',
+		} 		
+		//WMS Encounters		
+		if ( ! layerTypes[ FigisMap.fifao.vme_agg_en ] ) {
+			layers.push({
+				layer	: FigisMap.ol.getAuthLayer('encounters'),
+				label	: 'Encounters',
 				group: "VME-DB layers",
-                showLegendGraphic: true,					
-				filter	:'*',
-				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+                showLegendGraphic: true,				
+				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
+				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+                skipLegend	: true,
+				singleTile	:false,
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
-                dispOrder: 2,
+                dispOrder: 1,
 				hideInSwitcher	: false
 			});
-		}        
+		} 			
+		//WMS Vme
+		if ( ! layerTypes[ FigisMap.fifao.vme ] ) {
+			layers.push({
+				layer	: FigisMap.fifao.vme,
+				label	: 'VME areas',
+				group: "VME-DB layers",
+                showLegendGraphic: true,					
+                singleTile: true,
+				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + (owner ? " AND OWNER ='" + owner +"'" :"") ,
+				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
+				opacity	: 1.0,
+				hidden	: pars.isFIGIS,
+				type	: 'auto',
+				hideInSwitcher	: false,
+                dispOrder: 1,
+				isMasked: false
+			});
+		}		
+	
         /*
 		//WMS Area of competence
 		if ( ! layerTypes[ FigisMap.fifao.rfb ] ) {
