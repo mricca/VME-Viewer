@@ -121,9 +121,7 @@ document.namespaces;
 			<label id="lblFilRFB">Zoom to:</label>
 			<select id="FilterRFB" onchange="setZoom()"></select>
 			<label id="lblRFB">Filter by:</label>
-			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>
-			<a id="lblReset" class="lblReset" onclick="reset()">Reset</a>
-			  
+			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>  
 			<label id="lblSRS">Change projection:</label>
 			<select id="SelectSRS" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')">
 				<option value='4326' default>WGS84 (4326)</option>
@@ -133,6 +131,7 @@ document.namespaces;
 				<!-- <option value='54012'>EckertIV (54012)</option> -->
 				<option value='54009'>Mollweide (54009)</option>
 			</select>
+            <a id="lblReset" class="lblReset" onclick="reset()">Reset</a>            
 
 			<!--a href="javascript:embedLink();" id="EmbedLink" title="Link or embed this RFB map"><span>Link</span></a-->
 			<input id="txtCql" type="hidden" />
