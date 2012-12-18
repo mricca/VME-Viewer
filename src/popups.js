@@ -88,7 +88,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 	
 	var buttonsVme = [];
 			
-	if (e.object.layers[0].name == 'Established VME areas' && FigisMap.rnd.status.logged == true){
+	if (e.object.layers[0].name == 'VME areas' && FigisMap.rnd.status.logged == true){
 		buttonsVme = [
 		  {
 			  iconCls : 'encounters-icon',

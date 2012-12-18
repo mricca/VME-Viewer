@@ -759,9 +759,9 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 		var year = FigisMap.ol.getSelectedYear();
 		//WMS Vme
 		if ( ! layerTypes[ FigisMap.fifao.vme ] ) {
-			layers.push({
+			layers.unshift({
 				layer	: FigisMap.fifao.vme,
-				label	: 'Established VME areas',
+				label	: 'VME areas',
 				group: "VME-DB layers",
                 showLegendGraphic: true,					
                 singleTile: true,
@@ -771,10 +771,46 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hidden	: pars.isFIGIS,
 				type	: 'auto',
 				hideInSwitcher	: false,
-                dispOrder: 4,
+                dispOrder: 1,
 				isMasked: false
 			});
-		}	        
+		}	   
+		//WMS Encounters		
+		if ( ! layerTypes[ FigisMap.fifao.vme_agg_en ] ) {
+			layers.unshift({
+				layer	: FigisMap.ol.getAuthLayer('encounters'),
+				label	: 'Encounters',
+				group: "VME-DB layers",
+                showLegendGraphic: true,				
+				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
+				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+                skipLegend	: true,
+				singleTile	:false,
+				opacity	: 1.0,
+				hidden	: true,
+				type	: 'auto',
+                dispOrder: 1,
+				hideInSwitcher	: false
+			});
+		}        
+			//WMS SurveyData
+		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
+			layers.unshift({
+				layer	: FigisMap.ol.getAuthLayer('survey'),
+				label	: 'Survey Data',
+				singleTile	:false,
+				group: "VME-DB layers",
+                showLegendGraphic: true,
+				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
+				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+                skipLegend	: true,
+				opacity	: 1.0,
+				hidden	: true,
+				type	: 'auto',
+                dispOrder: 1,
+				hideInSwitcher	: false
+			});
+		}        
 		//WMS Footprints
 		if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
 			layers.unshift({
@@ -787,48 +823,10 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
-                dispOrder: 4,
+                dispOrder: 1,
 				hideInSwitcher	: false
 			});
 		}        
-			//WMS SurveyData
-		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
-			layers.push({
-				layer	: FigisMap.ol.getAuthLayer('survey'),
-				label	: 'SurveyData',
-				singleTile	:false,
-				group: "VME-DB layers",
-                showLegendGraphic: true,
-				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
-				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
-                skipLegend	: true,
-				opacity	: 1.0,
-				hidden	: true,
-				type	: 'auto',
-                dispOrder: 4,
-				hideInSwitcher	: false
-			});
-		}	
-	
-		//WMS Encounters		
-		if ( ! layerTypes[ FigisMap.fifao.vme_agg_en ] ) {
-			layers.push({
-				layer	: FigisMap.ol.getAuthLayer('encounters'),
-				label	: 'Encounters',
-				group: "VME-DB layers",
-                showLegendGraphic: true,				
-				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
-				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
-                skipLegend	: true,
-				singleTile	:false,
-				opacity	: 1.0,
-				hidden	: true,
-				type	: 'auto',
-                dispOrder: 4,
-				hideInSwitcher	: false
-			});
-		}							
-
         /*
 		//WMS Area of competence
 		if ( ! layerTypes[ FigisMap.fifao.rfb ] ) {
@@ -848,7 +846,8 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			layers.push( {
 				layer	: FigisMap.fifao.maj,
 				label	: 'FAO fishing areas',
-                showLegendGraphic: true,	                
+                showLegendGraphic: true,	  
+                group: "Overlays",
 				filter	:'*',
 				remote  : false, 
 				icon	:'<img src="'+FigisMap.rnd.vars.FAO_fishing_legendURL+'" width="30" height="20" />',
@@ -860,7 +859,8 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			layers.push({
 				layer	: FigisMap.fifao.eez,
 				label	: '200 nautical miles arcs',
-                showLegendGraphic: true,	                
+                showLegendGraphic: true,
+                group: "Overlays",
 				filter	:'*',
 				icon	: '<img src="' + FigisMap.rnd.vars.EEZ_legendURL + '" width="30" height="20" />',
 				opacity	: 0.3,
@@ -888,6 +888,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			filter		: '*',
 			type		: 'auto',
 			style		: 'MarineAreasLabelled',
+            group: "Overlays",
             label	: 'Labels',
 			remote		: false,
             showLegendGraphic: false,	            
@@ -1137,7 +1138,8 @@ FigisMap.rfb.preparse = function( pars ) {
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '1'",
 				dispOrder : 1,
 				style: sett.style,
-                showLegendGraphic: true,	                
+                showLegendGraphic: true,
+                group: "Overlays",
 				rule: "Area of competence (marine waters)",
                 hidden	: false,
 				hideInSwitcher: false,
@@ -1153,6 +1155,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				dispOrder : 2,
 				style: sett.style,
                 showLegendGraphic: true,	                
+                group: "Overlays",
 				rule: 'Established limits of the area of competence',
                 hidden	: false,
 				hideInSwitcher: false,
@@ -1167,6 +1170,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				dispOrder : 1,
 				style: sett.style,		
                 showLegendGraphic: true,	
+                group: "Overlays",                
 				rule: 'Regulatory area',
                 hidden	: false,
 				hideInSwitcher: false,
@@ -1181,6 +1185,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				style: '',			
 				hideInSwitcher: false,
                 showLegendGraphic: true,	                
+                group: "Overlays",
 				rule: 'Established limits of the area of competence',
                 hidden	: false,
 				title: ttitle,
@@ -1233,7 +1238,7 @@ FigisMap.ol.getAuthLayer = function (type){
 
 /**
  * FigisMap.ol.refreshAuthorized
- * Refresh styles for encounters and surveydata for the proper auth level (logged in)
+ * Refresh styles for encounters and Survey Data for the proper auth level (logged in)
  * 
  */
 FigisMap.ol.refreshAuthorized = function(){
@@ -1241,9 +1246,9 @@ FigisMap.ol.refreshAuthorized = function(){
         //myMap.getLayersByName('Encounters')[0].visibility = false;
         myMap.getLayersByName('Encounters')[0].redraw(true);
         
-        myMap.getLayersByName('SurveyData')[0].mergeNewParams({'layers': FigisMap.ol.getAuthLayer('survey')});
-        //myMap.getLayersByName('SurveyData')[0].visibility = false;
-        myMap.getLayersByName('SurveyData')[0].redraw(true);
+        myMap.getLayersByName('Survey Data')[0].mergeNewParams({'layers': FigisMap.ol.getAuthLayer('survey')});
+        //myMap.getLayersByName('Survey Data')[0].visibility = false;
+        myMap.getLayersByName('Survey Data')[0].redraw(true);
 
 }
 
@@ -1273,14 +1278,14 @@ FigisMap.ol.refreshFilters = function (){
 	var year = FigisMap.ol.getSelectedYear();  
 	var owner = FigisMap.ol.getSelectedOwner();
 	
-	myMap.getLayersByName('Established VME areas')[0].mergeNewParams(
+	myMap.getLayersByName('VME areas')[0].mergeNewParams(
 		{'CQL_FILTER': 
 			"YEAR <= '" + year + "' AND END_YEAR >="+ year +
 			(owner ? " AND OWNER ='" + owner +"'" :"")
 		}
 	);
 	
-	myMap.getLayersByName('Established VME areas')[0].redraw(true);
+	myMap.getLayersByName('VME areas')[0].redraw(true);
 	myMap.getLayersByName('Encounters')[0].mergeNewParams(
 		{'CQL_FILTER': 
 			"YEAR = '"+ year +"'" +  
@@ -1288,13 +1293,13 @@ FigisMap.ol.refreshFilters = function (){
 		}
 	);
 	myMap.getLayersByName('Encounters')[0].redraw(true);
-	myMap.getLayersByName('SurveyData')[0].mergeNewParams(
+	myMap.getLayersByName('Survey Data')[0].mergeNewParams(
 		{'CQL_FILTER':
 			"YEAR = '" + year +"'"+
 			(owner ? " AND OWNER ='" + owner +"'" :"")
 		}
 	);
-	myMap.getLayersByName('SurveyData')[0].redraw(true);
+	myMap.getLayersByName('Survey Data')[0].redraw(true);
     
 }
 /*
@@ -1413,7 +1418,7 @@ FigisMap.renderer = function(options) {
 		// //////////////////////
 		// Tuna code
 		// ////////////////////// 
-		if(myMap.getLayersByName('Established VME areas')[0]){        
+		if(myMap.getLayersByName('VME areas')[0]){        
 			Ext.getCmp('years-slider').enable();
 			Ext.getCmp("year-min-largestep").enable(); 
 			Ext.getCmp("year-min-littlestep").enable(); 
@@ -1495,11 +1500,12 @@ FigisMap.renderer = function(options) {
 		var lSwitcher = new OpenLayers.Control.LayerSwitcher({div:div,ascending:false});			
 		myMap.addControl( lSwitcher );
 		lSwitcher.baseLbl.innerHTML = "Base layers";
+        lSwitcher.dataLbl.innerHTML = "";
 		
 		myMap.addControl( new OpenLayers.Control.Navigation({ zoomWheelEnabled: true }) );
 		myMap.addControl( new OpenLayers.Control.LoadingPanel());
 		FigisMap.rnd.watermarkControl( myMap, p );
-		
+
 		FigisMap.rnd.mouseControl( myMap, p );
 	
 		if ( p.attribution ) {
@@ -1572,7 +1578,7 @@ FigisMap.renderer = function(options) {
 			//myMap.addLayer( l.wms );
 			olLayers.push( l.wms );
 			
-			if (l.wms.name == 'Established VME areas' || l.wms.name == 'Footprints'  || l.wms.name == 'Encounters'  || l.wms.name == 'SurveyData'){
+			if (l.wms.name == 'VME areas' || l.wms.name == 'Footprints'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
 				vme.push(olLayers[i]);
 			}
 
@@ -1613,7 +1619,7 @@ FigisMap.renderer = function(options) {
 			autoZoom( layers );
 		}
 			// handlig the zoom/center/extent
-		if ( projection == 4326 ) myMap.addControl( new OpenLayers.Control.Graticule({ visible: false, layerName: FigisMap.label('Coordinates Grid', p), group: "Labels" }) );
+		if ( projection == 4326 ) myMap.addControl( new OpenLayers.Control.Graticule({ visible: false, layerName: FigisMap.label('Coordinates Grid', p), group: "Overlays" }) );
 		FigisMap.debug('myMap:', myMap );
 		return myMap;
 		

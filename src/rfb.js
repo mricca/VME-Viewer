@@ -7,7 +7,32 @@ function reset(){
 	document.getElementById("SelectSRS").value = '4326';
 	FigisMap.ol.clearPopupCache();
 	setRFBPage('e-link','rfbs-link', 'rfbs-html');
+    var years = Ext.getCmp('years-slider');	
+    years.setValue(0, new Date().getFullYear());	
+	Ext.getCmp('years-min-field').setValue(new Date().getFullYear());
+	updateVme();	
 	myMap.zoomToMaxExtent();
+}
+
+function updateVme(){
+
+    Ext.getCmp('years-slider').disable();
+    Ext.getCmp("year-min-largestep").disable(); 
+    Ext.getCmp("year-min-littlestep").disable(); 
+    Ext.getCmp("year-max-littlestep").disable(); 
+    Ext.getCmp("year-max-largestep").disable();
+    Ext.getCmp("last-year").disable(); 
+    Ext.getCmp("first-year").disable(); 
+    
+    FigisMap.ol.clearPopupCache();
+    FigisMap.ol.refreshFilters();
+	 //remove layer for hilighting
+	var hilayer = myMap.getLayersByName("highlight")[0];
+	if(hilayer ){
+		myMap.removeLayer(hilayer)
+	}
+   
+   
 }
 /**
 * function setZoom

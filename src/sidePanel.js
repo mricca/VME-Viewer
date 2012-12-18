@@ -72,7 +72,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
             var bounds = geom.clone().getBounds();
             var repro_bbox = repro_geom.getBounds();
             
-            myMap.getLayersByName("Established VME areas")[0].setVisibility(false);
+            myMap.getLayersByName("VME areas")[0].setVisibility(false);
             
 			if(Ext.isIE){
 			  myMap.zoomOut(); 
@@ -82,14 +82,15 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
             }
             zoomTo(settings,repro_bbox);
             
-            var year = selectedRecord.get("year");
+            //var year = selectedRecord.get("year");
+            var year = Ext.getCmp("id_selectYear").getValue() || selectedRecord.get("year");
             var slider = Ext.getCmp('years-slider');
             slider.setValue(year,true);
             Ext.getCmp('years-min-field').setValue(year);
             //TODO try use slider.updateVme();
             FigisMap.ol.refreshFilters();
             
-            myMap.getLayersByName("Established VME areas")[0].setVisibility(true);
+            myMap.getLayersByName("VME areas")[0].setVisibility(true);
                         
 			if(document.getElementById("SelectSRS").value == "4326"){
             	FigisMap.ol.emulatePopupFromGeom(geom);
@@ -185,6 +186,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 		}, 
 		{
 			fieldLabel: FigisMap.label('SEARCH_YEAR_LBL') +'[<a href="#">?</a>]',
+			id: "id_selectYear",
 			name: 'YEAR',
 			ref:'../year', 
 			emptyText:FigisMap.label('SEARCH_YEAR_EMP'),
