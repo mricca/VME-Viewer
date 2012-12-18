@@ -223,6 +223,8 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 		height: 300,
 		layout: "fit",
 		map: myMap,
+		unpinnable:false,
+		
 		items:[new Ext.TabPanel(
 			{
 				itemId:'tabPanel',
