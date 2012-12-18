@@ -771,7 +771,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hidden	: pars.isFIGIS,
 				type	: 'auto',
 				hideInSwitcher	: false,
-                dispOrder: 1,
+                dispOrder: 2,
 				isMasked: false
 			});
 		}	   
@@ -789,7 +789,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
-                dispOrder: 1,
+                dispOrder: 2,
 				hideInSwitcher	: false
 			});
 		}        
@@ -807,7 +807,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
-                dispOrder: 1,
+                dispOrder: 2,
 				hideInSwitcher	: false
 			});
 		}        
@@ -823,7 +823,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
-                dispOrder: 1,
+                dispOrder: 2,
 				hideInSwitcher	: false
 			});
 		}        
@@ -1139,7 +1139,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				dispOrder : 1,
 				style: sett.style,
                 showLegendGraphic: true,
-                group: "Overlays",
+                group: "VME-DB layers",
 				rule: "Area of competence (marine waters)",
                 hidden	: false,
 				hideInSwitcher: false,
@@ -1170,7 +1170,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				dispOrder : 1,
 				style: sett.style,		
                 showLegendGraphic: true,	
-                group: "Overlays",                
+                group: "VME-DB layers",                
 				rule: 'Regulatory area',
                 hidden	: false,
 				hideInSwitcher: false,
