@@ -80,28 +80,9 @@ Ext.ux.LazyJsonStore = Ext.extend(Ext.data.JsonStore,{
 });
 
 
-/*
-//get georeferences
-var MarineAreas = new Ext.ux.WFSStore({typeName:'fifao:MarineAreas'});
-MarineAreas.load({
-	callback:function(records,options,success){
-		var georeferences = {};
-		var GeoJsonFormat = new OpenLayers.Format.GeoJSON();
-		records= this.reader.jsonData.features;
-		for (var i=0; i<records.length; i++){
-			var selectedRecord = records[i]; 
-			var geoJsonGeom= selectedRecord["geometry"];
-			var geom = GeoJsonFormat.read(geoJsonGeom, "Geometry");
-			var name = selectedRecord["properties"].Name;
-			georeferences[name] = {
-				zoomExtent:geom.getBounds().toBBOX()
-			};
-			
-		}
-		console.log (JSON.stringify(georeferences));
-	}
-});
-*/
+
+
+
 	
 	
 /**
@@ -211,15 +192,9 @@ Vme.data={
 			new Ext.XTemplate(
 				'<tpl for=".">'+
 					'<div class="search-result">' +
-						'<em>Local Name:</em>{localname}<br/>'+
-						'<em>Status:</em><span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
+						'<em>Local Name:</em>{localname}<br/>'+				
 						'<em>Reporting Year:</em>{year} <br/> '+
-						'<em>Area Type:</em><span>{type}</span> <br/> '+
-						'<em>Geographic reference:</em><span class="geo_ref" >{geo_ref}</span> <br/>'+
-						
-						//'<span class="id" >{vme_id}</span><br/>'+
-						'<span class="own" >{owner}</span><br/>'+
-						'<span class="source" style="font-weight:bold">Vulnerable Marine Ecosystem Database</span>'+
+						'<em>Competent Authority:</em><span class="own" >{owner}</span><br/>'+
 					'</div>'+
 				'</tpl>',
 				{
@@ -590,7 +565,7 @@ Vme.data={
 			)
 	},
 	constants:{
-		pageSize:5
+		pageSize:8
 	}
 
 };
@@ -802,8 +777,28 @@ Vme.data.extensions ={
 	
 	}
 }
-
-
+/*
+//get georeferences
+var MarineAreas = new Vme.data.extensions.WFS.WFSStore({typeName:'fifao:oceans_'});
+MarineAreas.load({
+	callback:function(records,options,success){
+		var georeferences = {};
+		var GeoJsonFormat = new OpenLayers.Format.GeoJSON();
+		records= this.reader.jsonData.features;
+		for (var i=0; i<records.length; i++){
+			var selectedRecord = records[i]; 
+			var geoJsonGeom= selectedRecord["geometry"];
+			var geom = GeoJsonFormat.read(geoJsonGeom, "Geometry");
+			var name = selectedRecord["properties"].AREA_N;
+			georeferences[name] = {
+				zoomExtent:geom.getBounds().toBBOX()
+			};
+			
+		}
+		console.log (JSON.stringify(georeferences));
+	}
+});
+*/
 /**
  * Stores for data for Vme components
  */
