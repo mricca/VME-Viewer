@@ -757,64 +757,9 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 	if ( pars.basicsLayers ) {
 		var owner = FigisMap.ol.getSelectedOwner();
 		var year = FigisMap.ol.getSelectedYear();
-	   
-       
-       
-		//WMS Footprints
-		if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
-			layers.push({
-				layer	: FigisMap.fifao.vme_fp,
-				label	: 'Footprints',
-				group: "VME-DB layers",
-                showLegendGraphic: true,					
-				filter	:'*',
-				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
-				opacity	: 1.0,
-				hidden	: true,
-				type	: 'auto',
-                dispOrder: 1,
-				hideInSwitcher	: false
-			});
-		}        
-			//WMS SurveyData
-		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
-			layers.push({
-				layer	: FigisMap.ol.getAuthLayer('survey'),
-				label	: 'Survey Data',
-				singleTile	:false,
-				group: "VME-DB layers",
-                showLegendGraphic: true,
-				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
-				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
-                skipLegend	: true,
-				opacity	: 1.0,
-				hidden	: true,
-				type	: 'auto',
-                dispOrder: 1,
-				hideInSwitcher	: false
-			});
-		} 		
-		//WMS Encounters		
-		if ( ! layerTypes[ FigisMap.fifao.vme_agg_en ] ) {
-			layers.push({
-				layer	: FigisMap.ol.getAuthLayer('encounters'),
-				label	: 'Encounters',
-				group: "VME-DB layers",
-                showLegendGraphic: true,				
-				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
-				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
-                skipLegend	: true,
-				singleTile	:false,
-				opacity	: 1.0,
-				hidden	: true,
-				type	: 'auto',
-                dispOrder: 1,
-				hideInSwitcher	: false
-			});
-		} 			
 		//WMS Vme
 		if ( ! layerTypes[ FigisMap.fifao.vme ] ) {
-			layers.push({
+			layers.unshift({
 				layer	: FigisMap.fifao.vme,
 				label	: 'VME areas',
 				group: "VME-DB layers",
@@ -826,11 +771,78 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hidden	: pars.isFIGIS,
 				type	: 'auto',
 				hideInSwitcher	: false,
-                dispOrder: 1,
+                dispOrder: 2,
 				isMasked: false
 			});
-		}		
-	
+		}	   
+		//WMS Encounters		
+		if ( ! layerTypes[ FigisMap.fifao.vme_agg_en ] ) {
+			layers.unshift({
+				layer	: FigisMap.ol.getAuthLayer('encounters'),
+				label	: 'Encounters',
+				group: "VME-DB layers",
+                showLegendGraphic: true,				
+				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
+				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+                skipLegend	: true,
+				singleTile	:false,
+				opacity	: 1.0,
+				hidden	: true,
+				type	: 'auto',
+                dispOrder: 2,
+				hideInSwitcher	: false
+			});
+		}        
+			//WMS SurveyData
+		if ( ! layerTypes[ FigisMap.fifao.vme_sd ] ) {
+			layers.unshift({
+				layer	: FigisMap.ol.getAuthLayer('survey'),
+				label	: 'Survey Data',
+				singleTile	:false,
+				group: "VME-DB layers",
+                showLegendGraphic: true,
+				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
+				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+                skipLegend	: true,
+				opacity	: 1.0,
+				hidden	: true,
+				type	: 'auto',
+                dispOrder: 2,
+				hideInSwitcher	: false
+			});
+		}        
+		//WMS Footprints
+		if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
+			layers.unshift({
+				layer	: FigisMap.fifao.vme_fp,
+				label	: 'Footprints',
+				group: "VME-DB layers",
+                showLegendGraphic: true,					
+				filter	:'*',
+				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+				opacity	: 1.0,
+				hidden	: true,
+				type	: 'auto',
+                dispOrder: 2,
+				hideInSwitcher	: false
+			});
+		}     
+		//WMS Footprints
+		if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
+			layers.unshift({
+				layer	: FigisMap.fifao.vme_fp,
+				label	: 'Footprints',
+				group: "VME-DB layers",
+                showLegendGraphic: false,					
+				filter	:'*',
+				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+				opacity	: 1.0,
+				hidden	: true,
+				type	: 'auto',
+                dispOrder: 1,
+				hideInSwitcher	: true
+			});
+		}   		   
         /*
 		//WMS Area of competence
 		if ( ! layerTypes[ FigisMap.fifao.rfb ] ) {
@@ -1143,7 +1155,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				dispOrder : 1,
 				style: sett.style,
                 showLegendGraphic: true,
-                group: "VME-DB layers",
+                group: "Overlays",
 				rule: "Area of competence (marine waters)",
                 hidden	: false,
 				hideInSwitcher: false,
@@ -1174,7 +1186,7 @@ FigisMap.rfb.preparse = function( pars ) {
 				dispOrder : 1,
 				style: sett.style,		
                 showLegendGraphic: true,	
-                group: "VME-DB layers",                
+                group: "Overlays",                
 				rule: 'Regulatory area',
                 hidden	: false,
 				hideInSwitcher: false,
@@ -1505,7 +1517,6 @@ FigisMap.renderer = function(options) {
 		myMap.addControl( lSwitcher );
 		lSwitcher.baseLbl.innerHTML = "Base layers";
         lSwitcher.dataLbl.innerHTML = "";
-		
 		myMap.addControl( new OpenLayers.Control.Navigation({ zoomWheelEnabled: true }) );
 		myMap.addControl( new OpenLayers.Control.LoadingPanel());
 		FigisMap.rnd.watermarkControl( myMap, p );
@@ -1625,6 +1636,9 @@ FigisMap.renderer = function(options) {
 			// handlig the zoom/center/extent
 		if ( projection == 4326 ) myMap.addControl( new OpenLayers.Control.Graticule({ visible: false, layerName: FigisMap.label('Coordinates Grid', p), group: "Overlays" }) );
 		FigisMap.debug('myMap:', myMap );
+		//OpenLayers.Util.getElement()
+		//Ext.get("id_box").insertBefore(Ext.get("zoom_selector"));  
+		//document.getElementById("div_Overlays").insertBefore(document.getElementById("div_VME-DB layers"));
 		return myMap;
 		
 	} //function ends
