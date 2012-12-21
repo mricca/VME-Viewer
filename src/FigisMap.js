@@ -654,7 +654,7 @@ FigisMap.rnd.maxResolution = function( proj, pars ) {
 			case 'XS'	: return base * 4; break;
 			case 'S'	: return base * 2; break;
 			case 'M'	: return base * 2; break;
-			case 'L'	: return base;  break;
+			case 'L'	: return base / 2;  break; //original value "return base". adapted for figis-vme
 		}
 	} else if ( proj == 900913 ) {
 		base = 156543.03390625;
@@ -687,7 +687,7 @@ FigisMap.rnd.maxResolution = function( proj, pars ) {
 			case 'XS'	: return base; break;
 			case 'S'	: return base / 2; break;
 			case 'M'	: return base / 2; break;
-			case 'L'	: return base / 4; break;
+			case 'L'	: return base / 8; break; //original value "return base / 4". adapted for figis-vme
 		}
 	}
 };
@@ -763,7 +763,8 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				layer	: FigisMap.fifao.vme,
 				label	: 'VME areas',
 				group: "VME-DB layers",
-                showLegendGraphic: true,					
+                showLegendGraphic: true,
+                wrapDateLine: false,    
                 singleTile: true,
 				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + (owner ? " AND OWNER ='" + owner +"'" :"") ,
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
@@ -1504,9 +1505,23 @@ FigisMap.renderer = function(options) {
 		}
 		// add GEBCO WMS
 		if(projection== 4326){
+            
+            //FIGIS
+			/*myMap.addLayer( new OpenLayers.Layer.WMS("GEBCO imagery","http://figisapps.fao.org/figis/geoserver/fifao/wms",
+				{layers:"fifao:gebco1",format:"image/jpeg"}, {wrapDateLine: true}
+			));*/
+            
+            //originale
+/*
 			myMap.addLayer( new OpenLayers.Layer.WMS("GEBCO imagery","http://www.gebco.net/data_and_products/gebco_web_services/web_map_service/mapserv",
-				{layers:"gebco_08_grid",format:"image/jpeg"}
+				{layers:"gebco_08_grid",format:"image/jpeg"}, {wrapDateLine: true}
 			));
+  */          
+            //DEMO1
+			myMap.addLayer( new OpenLayers.Layer.WMS("GEBCO imagery","http://84.33.1.22/geoserver/gwc/service/wms",
+				{layers:"it.geosolutions:gebco1_fullres_ret",format:"image/jpeg",TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox}, {wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false}
+			));
+            
 			myMap.setLayerIndex(myMap.getLayersByName("GEBCO imagery")[0],1);
 		}
 
@@ -1572,6 +1587,7 @@ FigisMap.renderer = function(options) {
                 if ( l.group ) wp.options.group = l.group;
 				if ( l.hideInSwitcher ) wp.options.displayInLayerSwitcher = false;
 				if ( l.opacity ) wp.options.opacity = l.opacity;
+                if ( l.wrapDateLine ) wp.options.opacity = l.wrapDateLine;
 				if ( l.hidden ) wp.options.visibility = false;
 				if ( l.singleTile ) wp.options.singleTile = true;
 				else{l.tiled= true; l.tilesorigin= boundsOrigin;}

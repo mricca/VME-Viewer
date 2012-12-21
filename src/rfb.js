@@ -120,7 +120,31 @@ function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink,filter) {
 		projection	: projection/*,
 		countriesLegend	: 'MemberCountries'*/
 	};
-	if ( zoom != null ) pars.zoom = zoom;
+    
+    if ( zoom != null ) pars.zoom = zoom;
+
+	/*if ( zoom != null ){
+      pars.zoom = zoom;  
+    }else{    
+        switch(projection)
+        {
+            case '3031':
+              pars.zoom = (pars.rfb == 'NEAFC') || (pars.rfb == 'NAFO') ? zoom : 1;
+              break;
+            case '54009':
+              pars.zoom = (pars.rfb == 'NEAFC') || (pars.rfb == 'NAFO') ? zoom : 1;
+              break;
+            case '4326':
+              pars.zoom = zoom;
+              break;          
+            case '3349':
+              pars.zoom = (pars.rfb == 'NEAFC') || (pars.rfb == 'NAFO') ? zoom : 1;
+              break;                    
+            default:
+              pars.zoom = (pars.rfb == 'CCAMLR') ? 1 : zoom;
+        }
+    }*/
+	
 	if ( extent != null ) pars.extent = extent;
 	pars.filter = filter;
 	
