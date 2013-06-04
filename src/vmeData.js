@@ -586,12 +586,13 @@ Vme.data.models = {
 		[4, FigisMap.label('VME_TYPE_OTHER')]
 	],
 	VmeStatuses:[ 
-		[0, FigisMap.label("VME_STATUS_ENS")],
-		[1, FigisMap.label("VME_STATUS_UNDEST")],
-		[2, FigisMap.label("VME_STATUS_VOL")],
-		[3, FigisMap.label("VME_STATUS_EXP")],
-		[4, FigisMap.label("VME_STATUS_POT")],
-		[5, FigisMap.label("VME_STATUS_TEMP")]
+		[1, FigisMap.label("VME_STATUS_ENS")],
+		[2, FigisMap.label("VME_STATUS_UNDEST")],
+		[3, FigisMap.label("VME_STATUS_RSK")],
+		[4, FigisMap.label("VME_STATUS_VOL")],
+		[5, FigisMap.label("VME_STATUS_EXP")],
+		[6, FigisMap.label("VME_STATUS_POT")],
+		[7, FigisMap.label("VME_STATUS_TEMP")]
 		
 	],
 	VmeCriteria:[ 

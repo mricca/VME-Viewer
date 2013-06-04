@@ -443,6 +443,7 @@ var staticLabels = {
 	VME_TYPE_CLOSED		: { en:"Closed area"},
 	VME_TYPE_OTHER		: { en:"Other types of managed areas"},
 	//VME STATUSES 
+	VME_STATUS_RSK		: { en:"Risk"},
 	VME_STATUS_ENS		: { en:"Established"},
 	VME_STATUS_UNDEST	: { en:"Under establishment"},
 	VME_STATUS_VOL		: { en:"Voluntary"},
