@@ -578,6 +578,7 @@ Vme.data={
  */
 Vme.data.models = {
 	rfmos : [['CCAMLR','CCAMLR'],['NAFO','NAFO'],['NEAFC','NEAFC']],
+	rfmosUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
 	areaTypes : [
 		[1, FigisMap.label('VME_TYPE_VME')],
 		[2, FigisMap.label('VME_TYPE_RISK')],
@@ -585,6 +586,7 @@ Vme.data.models = {
 		[4, FigisMap.label('VME_TYPE_CLOSED')],
 		[5, FigisMap.label('VME_TYPE_OTHER')]
 	],
+    areaTypesUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/type/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/type/en/list",
 	VmeStatuses:[ 
 		[1, FigisMap.label("VME_STATUS_ENS")],
 		[2, FigisMap.label("VME_STATUS_UNDEST")],
@@ -593,9 +595,9 @@ Vme.data.models = {
 		[5, FigisMap.label("VME_STATUS_EXP")],
 		[6, FigisMap.label("VME_STATUS_POT")],
 		[7, FigisMap.label("VME_STATUS_TEMP")]
-
 		
 	],
+    VmeStatusesUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
 	VmeCriteria:[ 
 		[0, FigisMap.label("VME_CRITERIA_UNIQUE")],
 		[1, FigisMap.label("VME_CRITERIA_FUNCT")],
@@ -604,7 +606,9 @@ Vme.data.models = {
 		[4, FigisMap.label("VME_CRITERIA_STRUCT")],
 		[5, FigisMap.label("VME_CRITERIA_NOTS")]
 	],	
-	years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})()
+    VmeCriteriaUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list",
+	years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})(),
+    yearsUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list"
 
 };
 
@@ -805,15 +809,35 @@ MarineAreas.load({
  * Stores for data for Vme components
  */
 Vme.data.stores = {
-	rfmoStore: new Ext.data.ArrayStore({
+	rfmoStore:  new Ext.data.JsonStore({
+        //mode: "local",
+        url: Vme.data.models.rfmosUrl,
+        autoLoad: true,
+        remoteSort: false,
+        //idProperty: 'id',
+        root: 'resultList',
+        fields: [ "id", "name" ] // "lang"
+        //sortInfo: {field: "name", direction: "ASC"}             
+    }),
+	/*
+	new Ext.data.ArrayStore({
 		fields: [
 			'id',
             'name',
 				
         ],
 		data: Vme.data.models.rfmos
-	}),
-	areaTypeStore:  new Ext.data.ArrayStore({
+	}),*/
+
+	areaTypeStore: new Ext.data.JsonStore({
+        url: Vme.data.models.areaTypesUrl,
+        autoLoad: true,
+        remoteSort: false,
+        root: 'resultList',
+        fields: [ "id", {name:"displayText", mapping:"name"} ] // "lang"
+    }),
+    /*
+    new Ext.data.ArrayStore({
         id: 0,
         fields: [
             'id',
@@ -822,6 +846,9 @@ Vme.data.stores = {
 		data: Vme.data.models.areaTypes
         
     }),
+    */
+    
+    
 	VmeStatusStore: new Ext.data.ArrayStore({
         id: 0,
         fields: [
@@ -831,7 +858,16 @@ Vme.data.stores = {
 		data: Vme.data.models.VmeStatuses
 
     }),
-	VmeCriteriaStore: new Ext.data.ArrayStore({
+    
+	VmeCriteriaStore: new Ext.data.JsonStore({
+        url: Vme.data.models.VmeCriteriaUrl,
+        autoLoad: true,
+        remoteSort: false,
+        root: 'resultList',
+        fields: [ "id", {name:"displayText", mapping:"name"} ] // "lang"
+    }),
+    /*
+    new Ext.data.ArrayStore({
         id: 0,
         fields: [
             'id',
@@ -839,8 +875,15 @@ Vme.data.stores = {
         ],
 		data: Vme.data.models.VmeCriteria
 
-    }),    
-	yearStore:  new Ext.data.ArrayStore({id:0,data: Vme.data.models.years,fields:['year']}),
+    }),*/    
+	yearStore: new Ext.data.JsonStore({
+        url: Vme.data.models.yearsUrl,
+        autoLoad: true,
+        remoteSort: false,
+        root: 'resultList',
+        fields: [ "id", {name:"year", mapping:"name"} ] // "lang"
+    }),
+    //new Ext.data.ArrayStore({id:0,data: Vme.data.models.years,fields:['year']}),
 	
 	SearchResultStore:new Ext.ux.LazyJsonStore({
 		//combo:this,
