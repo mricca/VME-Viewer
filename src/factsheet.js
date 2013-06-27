@@ -35,15 +35,19 @@ Ext.IframeWindow = Ext.extend(Ext.Window, {
             }
         };
         Ext.IframeWindow.superclass.onRender.apply(this, arguments);
-        
-        Ext.EventManager.onWindowResize(function(w, h){
-            var tbarDiv = Ext.get('topBar');
-            var mainDiv = Ext.get('main');
-            this.setPosition(tbarDiv.getX()-5,tbarDiv.getY());
-            this.setWidth(tbarDiv.getWidth()+10);
-            this.setHeight(mainDiv.getHeight()+tbarDiv.getHeight());
-        }, this);
+        this.tbarDiv = Ext.get('topBar');
+        this.mainDiv = Ext.get('main');
+        Ext.EventManager.onWindowResize(this.resizeHandler, this);
 
+    }
+    ,onDestroy: function(){
+        Ext.EventManager.removeResizeListener(this.resizeHandler, this);
+        
+    }
+    ,resizeHandler: function(w, h){
+        this.setPosition(this.tbarDiv.getX()-5,this.tbarDiv.getY());
+        this.setWidth(this.tbarDiv.getWidth()+10);
+        this.setHeight(this.mainDiv.getHeight()+this.tbarDiv.getHeight());
     }
 });
 
