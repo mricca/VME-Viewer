@@ -19,6 +19,8 @@ var FigisMap = {
 	renderedMaps	: new Object(),
 	isTesting	: ( (document.domain.indexOf('figis02')==0 ||document.domain.indexOf('193.43.36.238')==0||document.domain.indexOf('www-data.fao.org')==0) ),
 	currentSiteURI	: location.href.replace(/^([^:]+:\/\/[^\/]+).*$/,"$1"),
+    proxy : '/http_proxy/proxy/?url=',
+    // proxy : '/figis/proxy/cgi-bin/proxy.cgi?url=',
 	debugLevel	: 0 // 0|false|null: debug off, 1|true:console, 2: console + error alert
 };
 
@@ -93,7 +95,7 @@ FigisMap.rnd.vars = {
 	absWfs			: FigisMap.geoServerAbsBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename='
 };
 
-if ( FigisMap.useProxy ) FigisMap.rnd.vars.wfs = FigisMap.currentSiteURI + '/figis/proxy/cgi-bin/proxy.cgi?url=' + escape( FigisMap.rnd.vars.absWfs );
+if ( FigisMap.useProxy ) FigisMap.rnd.vars.wfs = FigisMap.currentSiteURI + FigisMap.proxy + encodeURIComponent( FigisMap.rnd.vars.absWfs );
 
 FigisMap.console = function( args, doAlert ) {
 	var e;
