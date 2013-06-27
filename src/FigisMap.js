@@ -27,7 +27,7 @@ FigisMap.fifao = {
 	cbs : 'fifao:country_bounds',
 	cnt : 'fifao:UN_CONTINENT2',
 	div : 'fifao:FAO_DIV',
-	eez : 'fifao:EEZ',
+	eez : 'fifao:eez',
 	maj : 'fifao:FAO_MAJOR',
 	ma2 : 'fifao:FAO_MAJOR2',
 	mal : 'fifao:MarineAreas',
@@ -37,8 +37,8 @@ FigisMap.fifao = {
 	sdi : 'fifao:FAO_SUB_DIV',
 	spd : 'fifao:SPECIES_DIST', 
 	sub : 'fifao:FAO_SUB_AREA',
-	vme : 'fifao:Vme3', 
-	vme_fp : 'fifao:Footprints',
+	vme : 'fifao:vme-db', 
+	vme_fp : 'fifao:vme-db_footprints',
     vme_en : 'fifao:Encounters2',
     vme_sd : 'fifao:SurveyData2',
     vme_agg_en : 'fifao:AggregatedEncounters',    
@@ -69,7 +69,7 @@ FigisMap.useProxy = FigisMap.isDeveloper ? false : ( FigisMap.isTesting ? FigisM
 FigisMap.geoServerAbsBase = FigisMap.isDeveloper ? 'http://192.168.1.122:8484' : ( FigisMap.isTesting ? 'http://193.43.36.238:8484' : 'http://www.fao.org' );
 FigisMap.geoServerBase = '';
 
-FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figis/figis-vme/' : '/figis/figis-vme/' );
+FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figis/figis-vme/' : '/figis/geoserver/figis-vme/' );
 
 FigisMap.rnd.vars = {
 	geoserverURL		: FigisMap.geoServerBase + "/figis/geoserver",  //unused
@@ -1518,8 +1518,8 @@ FigisMap.renderer = function(options) {
 			));
   */          
             //DEMO1
-			myMap.addLayer( new OpenLayers.Layer.WMS("GEBCO imagery","http://84.33.1.22/geoserver/gwc/service/wms",
-				{layers:"it.geosolutions:gebco1_fullres_ret",format:"image/jpeg",TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox}, {wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false}
+			myMap.addLayer( new OpenLayers.Layer.WMS("GEBCO imagery","http://figisapps.fao.org/figis/geoserver/gwc/service/wms",
+				{layers:"fifao:gebco1",gridset:"EPSG:4326",format:"image/jpeg",TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox}, {wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false}
 			));
             
 			myMap.setLayerIndex(myMap.getLayersByName("GEBCO imagery")[0],1);
@@ -1564,6 +1564,7 @@ FigisMap.renderer = function(options) {
 				case FigisMap.fifao.ma2 : l.cached = true; break;
 				case FigisMap.fifao.nma : l.cached = true; break;
 				case FigisMap.fifao.mal : l.cached = true; break;
+				case FigisMap.fifao.maj : l.cached = true; break;
 				default : l.cached = false;
 			}
 			

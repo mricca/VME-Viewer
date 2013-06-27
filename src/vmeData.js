@@ -222,7 +222,7 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="factlink" target="_blank" href="http://www.fao.org/fishery/species/2525/en">link to factsheet </a><br/>' +
+							'<a class="factlink" href="javascript:void(0);" onClick="FigisMap.factsheetWin.show();">link to factsheet </a><br/>' +
 							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a><br/>' +
 							'{[this.getDownloadFDS(values)]}' +
 						'</div>' +
@@ -579,11 +579,11 @@ Vme.data={
 Vme.data.models = {
 	rfmos : [['CCAMLR','CCAMLR'],['NAFO','NAFO'],['NEAFC','NEAFC']],
 	areaTypes : [
-		[0, FigisMap.label('VME_TYPE_VME')],
-		[1, FigisMap.label('VME_TYPE_RISK')],
-		[2, FigisMap.label('VME_TYPE_BPA')],
-		[3, FigisMap.label('VME_TYPE_CLOSED')],
-		[4, FigisMap.label('VME_TYPE_OTHER')]
+		[1, FigisMap.label('VME_TYPE_VME')],
+		[2, FigisMap.label('VME_TYPE_RISK')],
+		[3, FigisMap.label('VME_TYPE_BPA')],
+		[4, FigisMap.label('VME_TYPE_CLOSED')],
+		[5, FigisMap.label('VME_TYPE_OTHER')]
 	],
 	VmeStatuses:[ 
 		[1, FigisMap.label("VME_STATUS_ENS")],
@@ -593,6 +593,7 @@ Vme.data.models = {
 		[5, FigisMap.label("VME_STATUS_EXP")],
 		[6, FigisMap.label("VME_STATUS_POT")],
 		[7, FigisMap.label("VME_STATUS_TEMP")]
+
 		
 	],
 	VmeCriteria:[ 
