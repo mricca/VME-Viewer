@@ -68,7 +68,7 @@ var rfbLayerSettings = {
 	PSC		: { type: 'M', style: 'rfb_marine_noborder', srs: '3349', isMasked: true,  globalZoom: false, centerCoords: new OpenLayers.LonLat(-17037508.34, 7800000.0), zoomExtent: new OpenLayers.Bounds(-5893240, 3922651, 5967525, 12804929.34) },
 	RECOFI		: { type: 'M', style: 'rfb_marine_border', srs: '4326', isMasked: true,  globalZoom: false,  centerCoords: new OpenLayers.LonLat(51, 27), zoomExtent: new OpenLayers.Bounds(31, 7, 65, 45) },
 	SEAFDEC		: { type: 'MI', style: 'rfb_marine_inland_unspecified_noborder', srs: '4326', isMasked: false, globalZoom: false,  centerCoords: new OpenLayers.LonLat(110, 10), zoomExtent: new OpenLayers.Bounds(70, -35, 155, 50)},
-*/	SEAFO		: { type: 'M', style: 'rfb_marine_border', srs: '4326', isMasked: true,  globalZoom: false,  centerCoords: new OpenLayers.LonLat(-5, -30), zoomExtent: new OpenLayers.Bounds(-25, -55, 37, 10) },
+*/	SEAFO		: { type: 'M', style: 'rfb_marine_border', srs: '4326', isMasked: true,  globalZoom: false,  centerCoords: new OpenLayers.LonLat(-5, -30), zoomExtent: new OpenLayers.Bounds(-25, -55, 37, 10) }
 /*	SIOFA		: { type: 'M', style: 'rfb_marine_noborder', srs: '4326', isMasked: true,  globalZoom: false, centerCoords: new OpenLayers.LonLat(80, -10), zoomExtent: new OpenLayers.Bounds(-25, -56, 150, 75) },
 	SPC		: { type: 'M', style: 'rfb_marine_border', srs: '3349', isMasked: true,  globalZoom: false, centerCoords: new OpenLayers.LonLat(-19600000, -3200000), zoomExtent: new OpenLayers.Bounds(-12000000, -9000000, 5000000, 3000000) },
 	SPRFMO		: { type: 'M', style: 'rfb_marine_noborder', srs: '3349', isMasked: true,  globalZoom: false, centerCoords: new OpenLayers.LonLat(-19600000, -3200000), zoomExtent: new OpenLayers.Bounds(-12000000, -9000000, 5000000, 3000000) },

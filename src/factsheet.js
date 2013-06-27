@@ -55,7 +55,7 @@ Ext.onReady(function(){
         src:"http://figisapps.fao.org/fishery/vme/10/en",
 		closeAction: 'hide',
 		draggable: false,
-        resizable: false,
+        resizable: false
 		//modal: true,
 	});
 	
