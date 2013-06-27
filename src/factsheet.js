@@ -47,7 +47,7 @@ Ext.IframeWindow = Ext.extend(Ext.Window, {
     ,resizeHandler: function(w, h){
         this.setPosition(this.tbarDiv.getX()-5,this.tbarDiv.getY());
         this.setWidth(this.tbarDiv.getWidth()+10);
-        this.setHeight(this.mainDiv.getHeight()+this.tbarDiv.getHeight());
+        this.setHeight(this.mainDiv.getHeight()+this.tbarDiv.getHeight()+55);
     }
 });
 
@@ -63,13 +63,13 @@ Ext.onReady(function(){
             x: tbarDiv.getX()-5,
             y: tbarDiv.getY(),
             width: tbarDiv.getWidth()+10,
-            height: mainDiv.getHeight()+tbarDiv.getHeight(),
+            height: mainDiv.getHeight()+tbarDiv.getHeight()+55,
             title: "Factsheet",
             src:"http://figisapps.fao.org/fishery/vme/10/en",
             closeAction: 'destroy',
             maximizable: true,
             draggable: false,
-            resizable: false,
+            resizable: false
         }).show();
     }
 	
