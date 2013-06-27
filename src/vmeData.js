@@ -222,7 +222,7 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="factlink" href="javascript:void(0);" onClick="FigisMap.factsheetWin.show();">link to factsheet </a><br/>' +
+							'<a class="factlink" href="javascript:void(0);" onClick="FigisMap.factsheetRel();">link to factsheet </a><br/>' +
 							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a><br/>' +
 							'{[this.getDownloadFDS(values)]}' +
 						'</div>' +

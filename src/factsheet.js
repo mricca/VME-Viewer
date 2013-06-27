@@ -28,36 +28,47 @@ Ext.IframeWindow = Ext.extend(Ext.Window, {
     onRender: function() {
         this.bodyCfg = {
             tag: 'iframe',
-            src: FigisMap.currentSiteURI + '/http_proxy/proxy/?url=' + encodeURIComponent( this.src ),
+            src: this.src,
             cls: this.bodyCls,
             style: {
                 border: '0px none'
             }
         };
         Ext.IframeWindow.superclass.onRender.apply(this, arguments);
+        
+        Ext.EventManager.onWindowResize(function(w, h){
+            var tbarDiv = Ext.get('topBar');
+            var mainDiv = Ext.get('main');
+            this.setPosition(tbarDiv.getX()-5,tbarDiv.getY());
+            this.setWidth(tbarDiv.getWidth()+10);
+            this.setHeight(mainDiv.getHeight()+tbarDiv.getHeight());
+        }, this);
+
     }
 });
 
 Ext.onReady(function(){
-	
-	var tbarDiv = Ext.get('topBar');
-    var mainDiv = Ext.get('main');
     //
 	//Factsheet window
 	//
-	FigisMap.factsheetWin= new Ext.IframeWindow({
-	    id:'factsheetWindow',
-	    x: tbarDiv.getX()-5,
-	    y: tbarDiv.getY(),
-        width: tbarDiv.getWidth()+10,
-        height: mainDiv.getHeight()+tbarDiv.getHeight(),
-		title: "Factsheet",
-        src:"http://figisapps.fao.org/fishery/vme/10/en",
-		closeAction: 'hide',
-		draggable: false,
-        resizable: false
-		//modal: true,
-	});
+    FigisMap.factsheetRel = function(){
+        var tbarDiv = Ext.get('topBar');
+        var mainDiv = Ext.get('main');
+        new Ext.IframeWindow({
+            id:'factsheetWindow',
+            x: tbarDiv.getX()-5,
+            y: tbarDiv.getY(),
+            width: tbarDiv.getWidth()+10,
+            height: mainDiv.getHeight()+tbarDiv.getHeight(),
+            title: "Factsheet",
+            src:"http://figisapps.fao.org/fishery/vme/10/en",
+            closeAction: 'destroy',
+            maximizable: true,
+            draggable: false,
+            resizable: false,
+        }).show();
+    }
+	
 	
 });
  
