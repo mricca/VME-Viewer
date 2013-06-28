@@ -39,70 +39,94 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 		if(layer){
 			myMap.removeLayer(layer,false);
 		}	
-		var projcode = "EPSG:4326";
-		var GeoJsonFormat = new OpenLayers.Format.GeoJSON();
-		var geoJsonGeom= selectedRecord.get("geometry");
-		var geom = GeoJsonFormat.read(geoJsonGeom, "Geometry");
 
-		if (geom == null){
-            Ext.MessageBox.show({
-                title: "Info",
-                msg: FigisMap.label("SIDP_NOGEOMETRY"),
-                buttons: Ext.Msg.OK,
-                icon: Ext.MessageBox.INFO,
-                scope: this
-            });  
-		}else{		
-            /*var center = geom.getCentroid();
-                    center = center.clone().transform(
+        var vmeId = 10; //selectedRecord.get("vmeId");
+        var layerName = FigisMap.fifao.vme.split(':',2)[1];
+        var featureid = layerName+'.'+vmeId;
+
+        Ext.Ajax.request({
+            url : FigisMap.rnd.vars.ows,
+            method: 'GET',
+            params :{
+                service:'WFS',
+                version:'1.0.0',
+                request:'GetFeature',
+                featureid: featureid,
+                outputFormat:'json'
+            },
+            success: function ( result, request ) {
+                var jsonData = Ext.util.JSON.decode(result.responseText);
+                
+                if (!jsonData.features || jsonData.features.length <= 0 || !jsonData.features[0].geometry){
+                    Ext.MessageBox.show({
+                        title: "Info",
+                        msg: FigisMap.label("SIDP_NOGEOMETRY"),
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.INFO,
+                        scope: this
+                    });  
+                }else{      
+                    var geoJsonGeom = jsonData.features[0].geometry;
+                    var projcode = "EPSG:4326";
+                    var GeoJsonFormat = new OpenLayers.Format.GeoJSON();
+    
+                    var geom = GeoJsonFormat.read(geoJsonGeom, "Geometry");
+                    
+                    layer = new OpenLayers.Layer.Vector("highlight",{
+                            displayInLayerSwitcher: false
+                    });
+                    var repro_geom = geom.clone().transform(
                         new OpenLayers.Projection(projcode),
                         myMap.getProjectionObject()
-                    );*/
-            //center = new OpenLayers.LonLat(center.x, center.y);
-            //var bounds = geom.getBounds();
-            layer = new OpenLayers.Layer.Vector("highlight",{
-                    displayInLayerSwitcher: false
-            });
-            var repro_geom = geom.clone().transform(
-                new OpenLayers.Projection(projcode),
-                myMap.getProjectionObject()
-            );
-            layer.addFeatures(new OpenLayers.Feature.Vector(repro_geom));
-            myMap.addLayer(layer);
-            var bounds = geom.clone().getBounds();
-            var repro_bbox = repro_geom.getBounds();
-            
-            myMap.getLayersByName("VME areas")[0].setVisibility(false);
-            
-			if(Ext.isIE){
-			  myMap.zoomOut(); 
-			}
-            var settings ={
-              zoomExtent: bounds.toBBOX(20)
-            }
-            zoomTo(settings,repro_bbox);
-            
-            //var year = selectedRecord.get("year");
-            var year = Ext.getCmp("id_selectYear").getValue() || selectedRecord.get("year");
-            var slider = Ext.getCmp('years-slider');
-            slider.setValue(year,true);
-            Ext.getCmp('years-min-field').setValue(year);
-            //TODO try use slider.updateVme();
-            FigisMap.ol.refreshFilters();
-            
-            myMap.getLayersByName("VME areas")[0].setVisibility(true);
-                        
-			if(document.getElementById("SelectSRS").value == "4326"){
-            	FigisMap.ol.emulatePopupFromGeom(geom);
-            }else{
-            	FigisMap.ol.emulatePopupFromGeom(repro_geom);
-            }
-         
-        }
+                    );
+                    layer.addFeatures(new OpenLayers.Feature.Vector(repro_geom));
+                    myMap.addLayer(layer);
+                    var bounds = geom.clone().getBounds();
+                    var repro_bbox = repro_geom.getBounds();
+                    
+                    myMap.getLayersByName("VME areas")[0].setVisibility(false);
+                    
+                    if(Ext.isIE){
+                      myMap.zoomOut(); 
+                    }
+                    var settings ={
+                      zoomExtent: bounds.toBBOX(20)
+                    }
+                    zoomTo(settings,repro_bbox);
+                    
+                    //var year = selectedRecord.get("year");
+                    var year = Ext.getCmp("id_selectYear").getValue() || selectedRecord.get("year");
+                    var slider = Ext.getCmp('years-slider');
+                    slider.setValue(year,true);
+                    Ext.getCmp('years-min-field').setValue(year);
+                    //TODO try use slider.updateVme();
+                    FigisMap.ol.refreshFilters();
+                    
+                    myMap.getLayersByName("VME areas")[0].setVisibility(true);
+                                
+                    if(document.getElementById("SelectSRS").value == "4326"){
+                        FigisMap.ol.emulatePopupFromGeom(geom);
+                    }else{
+                        FigisMap.ol.emulatePopupFromGeom(repro_geom);
+                    }
+                 
+                }
+          
+            },
+            failure: function ( result, request ) {
+                Ext.MessageBox.show({
+                    title: "Info",
+                    msg: FigisMap.label("SIDP_NOGEOMETRY"),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.INFO,
+                    scope: this
+                });  
+            },
+            scope: this
+        });
 		
-		
-      },
-      beforeclick: function(view,index,node,event){
+      }
+      ,beforeclick: function(view,index,node,event){
         //if( window.console ) console.log('dataView.beforeclick(%o,%o,%o,%o)',view,index,node,event);
       }
     }
@@ -155,21 +179,8 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			store:  Vme.data.stores.areaTypeStore,
 			valueField : 'displayText',
 			displayField: 'displayText'
-		},{
-			fieldLabel: FigisMap.label('SEARCH_STAT_LBL')+' [<a href="#">?</a>]',
-			name: 'STATUS',
-			ref: '../status', 
-			emptyText:  FigisMap.label('SEARCH_STAT_EMP'),
-			value:   FigisMap.label('SEARCH_STAT_EMP'),            
-			allowBlank:true,
-			forceSelection:true,
-			typeAhead: true,
-			triggerAction: 'all',
-			mode: 'local',
-			store:  Vme.data.stores.VmeStatusStore,
-			valueField : 'id',
-			displayField: 'displayText'
-		},{
+		},
+		{
 			fieldLabel: FigisMap.label('SEARCH_CRIT_LBL')+' [<a href="#">?</a>]',
 			name: 'vmeCriteria',
 			ref: '../vmeCriteria',

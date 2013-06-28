@@ -198,12 +198,7 @@ Vme.data={
 					'</div>'+
 				'</tpl>',
 				{
-					compiled:true,
-					writeStatus:function(status){
-						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
-						var text =statusRecord ? statusRecord.get('displayText'):status;
-						return text;
-					}
+					compiled:true
 				}
 			),
 			
@@ -214,7 +209,6 @@ Vme.data={
 						'<em>Local Name: </em>{localname}<br/>'+
 						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{type}</span> <br/> '+
-						'<em>Status: </em> <span class="status" >{[this.writeStatus(values.status)]}</span><br/>' +
 						'<em>Validity Period: </em><span>from 2007 up to 2014</span> <br/> '+
 						'<em>Reporting Year: </em>{year}<br/> '+
 						'<em>Competent Authority:</em><span class="own"> {owner}</span><br/>'+
@@ -238,11 +232,6 @@ Vme.data={
 				'</tpl>',
 				{
 					compiled:true,
-					writeStatus:function(status){
-						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
-						var text =statusRecord ? statusRecord.get('displayText'):status;
-						return text;
-					},
 					getBBOX:function(values){
 						var projcode = "EPSG:4326";
 						if(myMap.getProjection() == projcode ){
@@ -335,11 +324,6 @@ Vme.data={
 				'</tpl>',
 				{
 					compiled:true,
-					writeStatus:function(status){
-						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
-						var text =statusRecord ? statusRecord.get('displayText'):status;
-						return text;
-					},
 					getBBOX:function(values){
 						var projcode = "EPSG:4326";
 						if(myMap.getProjection() == projcode ){
@@ -422,11 +406,6 @@ Vme.data={
 				'</tpl>',
 				{
 					compiled:true,
-					writeStatus:function(status){
-						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
-						var text =statusRecord ? statusRecord.get('displayText'):status;
-						return text;
-					},
 					getBBOX:function(values){
 						var projcode = "EPSG:4326";
 						if(myMap.getProjection() == projcode ){
@@ -521,11 +500,6 @@ Vme.data={
 				'</tpl>',
 				{
 					compiled:true,
-					writeStatus:function(status){
-						var statusRecord=  Vme.data.stores.VmeStatusStore.getById(status);
-						var text =statusRecord ? statusRecord.get('displayText'):status;
-						return text;
-					},
 					getBBOX:function(values){
 						var projcode = "EPSG:4326";
 						if(myMap.getProjection() == projcode ){
@@ -819,15 +793,6 @@ Vme.data.stores = {
         fields: [ "id", "name" ] // "lang"
         //sortInfo: {field: "name", direction: "ASC"}             
     }),
-	/*
-	new Ext.data.ArrayStore({
-		fields: [
-			'id',
-            'name',
-				
-        ],
-		data: Vme.data.models.rfmos
-	}),*/
 
 	areaTypeStore: new Ext.data.JsonStore({
         url: Vme.data.models.areaTypesUrl,
@@ -836,18 +801,6 @@ Vme.data.stores = {
         root: 'resultList',
         fields: [ "id", {name:"displayText", mapping:"name"} ] // "lang"
     }),
-    /*
-    new Ext.data.ArrayStore({
-        id: 0,
-        fields: [
-            'id',
-            'displayText'
-        ],
-		data: Vme.data.models.areaTypes
-        
-    }),
-    */
-    
     
 	VmeStatusStore: new Ext.data.ArrayStore({
         id: 0,
@@ -866,16 +819,7 @@ Vme.data.stores = {
         root: 'resultList',
         fields: [ "id", {name:"displayText", mapping:"name"} ] // "lang"
     }),
-    /*
-    new Ext.data.ArrayStore({
-        id: 0,
-        fields: [
-            'id',
-            'displayText'
-        ],
-		data: Vme.data.models.VmeCriteria
 
-    }),*/    
 	yearStore: new Ext.data.JsonStore({
         url: Vme.data.models.yearsUrl,
         autoLoad: true,
@@ -883,7 +827,6 @@ Vme.data.stores = {
         root: 'resultList',
         fields: [ "id", {name:"year", mapping:"name"} ] // "lang"
     }),
-    //new Ext.data.ArrayStore({id:0,data: Vme.data.models.years,fields:['year']}),
 	
 	SearchResultStore:new Ext.ux.LazyJsonStore({
 		//combo:this,
