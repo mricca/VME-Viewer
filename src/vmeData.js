@@ -829,54 +829,62 @@ Vme.data.stores = {
     }),
 	
 	SearchResultStore:new Ext.ux.LazyJsonStore({
-		//combo:this,
+
 		method:'GET',
 		
-		root:'features',
+		root:'resultList',
 		messageProperty: 'crs',
 		autoLoad: false,
 		fields: [
-			{name: 'id', mapping: 'id'},
-			{name: 'geometry', mapping: 'geometry'},
-			{name: 'localname',  mapping: 'properties.LOCAL_NAME'},
-			{name: 'bbox',		mapping: 'properties.bbox'},
-			{name: 'vme_id',     mapping: 'properties.VME_ID'},
-			{name: 'status', 	 mapping: 'properties.STATUS'},
-			{name: 'year', mapping: 'properties.YEAR'},
-			{name: 'type', mapping: 'properties.VME_TYPE'},
-			{name: 'owner', mapping: 'properties.OWNER'},
-			{name: 'geo_ref', mapping: 'properties.GEO_AREA'}
-			
+			//{name: 'id', mapping: 'id'},
+			{name: 'localname',  mapping: 'localName'},
+			{name: 'factsheetUrl',		mapping: 'factsheetUrl'},
+			{name: 'vme_id',     mapping: 'vmeId'},
+			{name: 'year', mapping: 'year'},
+			{name: 'vmeType', mapping: 'vmeType'},
+			{name: 'owner', mapping: 'owner'},
+            {name: 'geoArea', mapping: 'geoArea'},
+            {name: 'envelope', mapping: 'envelope'},
+            {name: 'geographicLayerId', mapping: 'geographicLayerId'},
+            {name: 'validityPeriod', mapping: 'validityPeriod'}
 			
 		],
-		url: FigisMap.rnd.vars.ows,
+		
+		proxy : new Ext.data.HttpProxy({
+            method: 'GET',
+            url: "http://figisapps.fao.org/figis/ws/vme/webservice/search-params/*/*/*/*/search" // see options parameter for Ext.Ajax.request
+        }),
+		
+		
 		recordId: 'fid',
 		paramNames:{
 			start: "startindex",
 			limit: "maxfeatures",
 			sort: "sortBy"
 		},
-		baseParams:{
-			service:'WFS',
-			version:'1.0.0',
-			request:'GetFeature',
-			typeName: FigisMap.fifao.vme,
-			outputFormat:'json',
-			sortBy: 'VME_ID',
-			srs:'EPSG:4326'
-			
-		
-		},
 		listeners:{
-			beforeload: function(store){
-				
-			
+			beforeload: function(store, options){
+                // TODO: theese should be params, not baseParams
+			    var params = store.baseParams;
+			    var id_authority = '*', id_vme_type = '*', id_vme_criteria = '*', year = '*', text;
+                if (params.id_authority)
+                    id_authority = params.id_authority;
+                if (params.id_vme_type)
+                    id_vme_type = params.id_vme_type;
+                if (params.id_vme_criteria)
+                    id_vme_criteria = params.id_vme_criteria;
+                if (params.year)
+                    year = params.year;
+                    
+				// TODO: text search
+				store.proxy.setUrl("http://figisapps.fao.org/figis/ws/vme/webservice/search-params/"+id_authority+"/"+id_vme_type+"/"+id_vme_criteria+"/"+year+"/search");
 			}
 		}
 		
 		
 		
 	}),
+	
 	EncountersStore:new Ext.ux.LazyJsonStore({
 		//combo:this,
 		method:'GET',

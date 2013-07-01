@@ -165,6 +165,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			forceSelection:true,
 			triggerAction: 'all',
 			mode: 'local',
+            valueField : 'id',
 			displayField: 'name'
 		},{
 			fieldLabel: FigisMap.label('SEARCH_TYPE_LBL')+' [<a href="#">?</a>]',
@@ -261,6 +262,31 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 				store.removeAll();
 				var query = this.createFilter(Vme.form.panels.SearchForm.getForm().getFieldValues(true));
 				
+				// TODO: rewrite thie method removing the old behaviour
+				//       use params as GET params, not as part of the path
+				
+				var fields = Vme.form.panels.SearchForm.getForm().getFieldValues(true);
+				//console.log(fields);  // DEBUG
+				for (var key in fields){
+                    switch(key){
+                        //case 'text':
+                        //    return 'LOCAL_NAME ILIKE \'%' + value + '%\''; 
+                        case 'OWNER':
+                            store.setBaseParam("id_authority", fields[key]);
+                            break;
+                        case 'VME_TYPE':
+                            store.setBaseParam("id_vme_type", fields[key]);
+                            break;
+                        case 'vmeCriteria':
+                            store.setBaseParam("id_vme_criteria", fields[key]);
+                            break;
+                        case 'YEAR':
+                            store.setBaseParam("year", fields[key]);
+                            break;
+                        default:
+                            break;
+                    }
+				}
 				var params = {
 					startindex: 0,          
 					maxfeatures: Vme.data.constants.pageSize
