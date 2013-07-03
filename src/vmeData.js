@@ -207,7 +207,6 @@ Vme.data={
 				'<tpl for=".">'+
 					'<div class="search-result" style="text-align:left;position:relative">' +
 						'<em>Local Name: </em>{localname}<br/>'+
-						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{type}</span> <br/> '+
 						'<em>Validity Period: </em><span>from 2007 up to 2014</span> <br/> '+
 						'<em>Reporting Year: </em>{year}<br/> '+
