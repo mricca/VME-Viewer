@@ -207,6 +207,7 @@ Vme.data={
 				'<tpl for=".">'+
 					'<div class="search-result" style="text-align:left;position:relative">' +
 						'<em>Local Name: </em>{localname}<br/>'+
+						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{type}</span> <br/> '+
 						'<em>Validity Period: </em><span>from 2007 up to 2014</span> <br/> '+
 						'<em>Reporting Year: </em>{year}<br/> '+
@@ -852,35 +853,14 @@ Vme.data.stores = {
 		proxy : new Ext.data.HttpProxy({
             method: 'GET',
             url: "http://figisapps.fao.org/figis/ws/vme/webservice/search-params/*/*/*/*/search" // see options parameter for Ext.Ajax.request
-        }),
-		
+        }),	
 		
 		recordId: 'fid',
 		paramNames:{
 			start: "startindex",
 			limit: "maxfeatures",
 			sort: "sortBy"
-		},
-		listeners:{
-			beforeload: function(store, options){
-                // TODO: theese should be params, not baseParams
-			    var params = store.baseParams;
-			    var id_authority = '*', id_vme_type = '*', id_vme_criteria = '*', year = '*', text;
-                if (params.id_authority)
-                    id_authority = params.id_authority;
-                if (params.id_vme_type)
-                    id_vme_type = params.id_vme_type;
-                if (params.id_vme_criteria)
-                    id_vme_criteria = params.id_vme_criteria;
-                if (params.year)
-                    year = params.year;
-                    
-				// TODO: text search
-				store.proxy.setUrl("http://figisapps.fao.org/figis/ws/vme/webservice/search-params/"+id_authority+"/"+id_vme_type+"/"+id_vme_criteria+"/"+year+"/search");
-			}
-		}
-		
-		
+		}		
 		
 	}),
 	

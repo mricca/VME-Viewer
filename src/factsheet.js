@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2007 - 2012 GeoSolutions S.A.S.
+ *  Copyright (C) 2007 - 2013 GeoSolutions S.A.S.
  *  http://www.geo-solutions.it
  *
  *  GPLv3 + Classpath exception
@@ -37,6 +37,7 @@ Ext.IframeWindow = Ext.extend(Ext.Window, {
         Ext.IframeWindow.superclass.onRender.apply(this, arguments);
         this.tbarDiv = Ext.get('topBar');
         this.mainDiv = Ext.get('main');
+        this.disclaimerDiv = Ext.get('disclaimer');
         Ext.EventManager.onWindowResize(this.resizeHandler, this);
 
     }
@@ -47,7 +48,10 @@ Ext.IframeWindow = Ext.extend(Ext.Window, {
     ,resizeHandler: function(w, h){
         this.setPosition(this.tbarDiv.getX()-5,this.tbarDiv.getY());
         this.setWidth(this.tbarDiv.getWidth()+10);
-        this.setHeight(this.mainDiv.getHeight()+this.tbarDiv.getHeight()+55);
+        this.setHeight(this.mainDiv.getHeight()+
+                       this.tbarDiv.getHeight()+
+                       this.disclaimerDiv.getHeight()
+                       );
     }
 });
 
@@ -58,12 +62,13 @@ Ext.onReady(function(){
     FigisMap.factsheetRel = function(){
         var tbarDiv = Ext.get('topBar');
         var mainDiv = Ext.get('main');
+        var disclaimerDiv = Ext.get('disclaimer');
         new Ext.IframeWindow({
             id:'factsheetWindow',
             x: tbarDiv.getX()-5,
             y: tbarDiv.getY(),
             width: tbarDiv.getWidth()+10,
-            height: mainDiv.getHeight()+tbarDiv.getHeight()+55,
+            height: mainDiv.getHeight()+tbarDiv.getHeight()+disclaimerDiv.getHeight(),
             title: "Factsheet",
             src:"http://figisapps.fao.org/fishery/vme/10/en",
             closeAction: 'destroy',

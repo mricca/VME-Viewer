@@ -263,8 +263,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 				store.removeAll();
 				var query = this.createFilter(Vme.form.panels.SearchForm.getForm().getFieldValues(true));
 				
-				// TODO: rewrite thie method removing the old behaviour
-				//       use params as GET params, not as part of the path
+				// TODO: do not use baseParams or the last search will be retained
 				
 				var fields = Vme.form.panels.SearchForm.getForm().getFieldValues(true);
 				//console.log(fields);  // DEBUG
@@ -274,12 +273,15 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
                         //    return 'LOCAL_NAME ILIKE \'%' + value + '%\''; 
                         case 'OWNER':
                             store.setBaseParam("id_authority", fields[key]);
+                            store.setBaseParam("authority", fields[key]);
                             break;
                         case 'VME_TYPE':
                             store.setBaseParam("id_vme_type", fields[key]);
+                            store.setBaseParam("vme_type", fields[key]);
                             break;
                         case 'vmeCriteria':
                             store.setBaseParam("id_vme_criteria", fields[key]);
+                            store.setBaseParam("vme_criteria", fields[key]);
                             break;
                         case 'YEAR':
                             store.setBaseParam("year", fields[key]);
