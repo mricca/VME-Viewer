@@ -32,6 +32,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	loadingText:FigisMap.label('SEARCH_LOADING'),
 	listeners: {
       click: function(view,index,node,event){
+          
         //if( window.console ) console.log('dataView.click(%o,%o,%o,%o)',view,index,node,event);
 		var selectedRecord =this.store.getAt(index);
 		var layer = myMap.getLayersByName("highlight")[0];
@@ -345,9 +346,7 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 					bbar : new Ext.ux.LazyPagingToolbar({
 							store: Vme.data.stores.SearchResultStore,
 							pageSize: Vme.data.constants.pageSize
-							
-					})
-					
+					})	
 			}],
 			bbar:[{
 				xtype: 'button',
