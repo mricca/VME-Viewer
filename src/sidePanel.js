@@ -127,9 +127,9 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
         });
 		
       }
-      ,beforeclick: function(view,index,node,event){
+/*      ,beforeclick: function(view,index,node,event){
         //if( window.console ) console.log('dataView.beforeclick(%o,%o,%o,%o)',view,index,node,event);
-      }
+      }*/
     }
 	
 		
@@ -157,8 +157,8 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			ref:'../text',
 			emptyText: FigisMap.label("SEARCH_TEXT_EMP")
 		},{
-			fieldLabel: FigisMap.label('SEARCH_RFMO_LBL')+' [<a href="#">?</a>]',
-			name: 'OWNER',
+			fieldLabel: FigisMap.label('SEARCH_RFMO_LBL'),//+' [<a href="#">?</a>]',
+			name: 'authority',
 			ref:'../RFMO',
 			emptyText:  FigisMap.label('SEARCH_RFMO_EMP'),
 			store: Vme.data.stores.rfmoStore,
@@ -169,8 +169,8 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
             valueField : 'id',
 			displayField: 'name'
 		},{
-			fieldLabel: FigisMap.label('SEARCH_TYPE_LBL')+' [<a href="#">?</a>]',
-			name: 'VME_TYPE',
+			fieldLabel: FigisMap.label('SEARCH_TYPE_LBL'),//+' [<a href="#">?</a>]',
+			name: 'vme_type',
 			ref: '../AreaType',
 			emptyText:  FigisMap.label('SEARCH_TYPE_EMP'),
             value:   FigisMap.label('SEARCH_TYPE_EMP'),            
@@ -179,12 +179,12 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			triggerAction: 'all',
 			mode: 'local',
 			store:  Vme.data.stores.areaTypeStore,
-			valueField : 'displayText',
+			valueField : 'id',
 			displayField: 'displayText'
 		},
 		{
-			fieldLabel: FigisMap.label('SEARCH_CRIT_LBL')+' [<a href="#">?</a>]',
-			name: 'vmeCriteria',
+			fieldLabel: FigisMap.label('SEARCH_CRIT_LBL'),//+' [<a href="#">?</a>]',
+			name: 'vme_criteria',
 			ref: '../vmeCriteria',
 			emptyText:  FigisMap.label('SEARCH_CRIT_EMP'),
 			value:   FigisMap.label('SEARCH_CRIT_EMP'),   
@@ -198,9 +198,9 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			displayField: 'displayText'			
 		}, 
 		{
-			fieldLabel: FigisMap.label('SEARCH_YEAR_LBL') +'[<a href="#">?</a>]',
+			fieldLabel: FigisMap.label('SEARCH_YEAR_LBL'),//+'[<a href="#">?</a>]',
 			id: "id_selectYear",
-			name: 'YEAR',
+			name: 'year',
 			ref:'../year', 
 			emptyText:FigisMap.label('SEARCH_YEAR_EMP'),
 			allowBlank:true,
@@ -209,7 +209,6 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			triggerAction: 'all',
 			mode: 'local',
 			store:  Vme.data.stores.yearStore,
-			//valueType : 'id',
 			displayField: 'year',
             valueField: 'year'
 		}
@@ -228,80 +227,33 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			ref: '../Search',
 			iconCls: 'search-icon',
 			
-			createFilter: function(values){
-				var query;
-				
-				for (var key in values){
-					if (key != 'vmeCriteria') { //TODO
-						if(query){
-							query+= ' AND ';
-							query+= ' ( '+ this.generateFilterComponent(key,values[key]) +' ) ';
-						}else{
-							query= ' ( '+ this.generateFilterComponent(key,values[key]) +' ) ';
-						}
-
-					}
-				}
-				return query;
-			},
-			generateFilterComponent:function(key,value){
-				switch(key){
-					case 'text':
-						return 'LOCAL_NAME ILIKE \'%' + value + '%\''; 
-					case 'VME_TYPE':
-						return  'VME_TYPE ILIKE \'%' + value + '%\''; 
-					case 'YEAR':
-						return  'YEAR <= \''  + value + '\' AND END_YEAR > \''  + value + ' \''; 	
-					default:
-						return key + ' = \'' + value +'\'' ;
-				}
-
-			},
 			handler: function(){
 				var store = Vme.data.stores.SearchResultStore;
 				store.resetTotal();
 				store.removeAll();
-				var query = this.createFilter(Vme.form.panels.SearchForm.getForm().getFieldValues(true));
-				
-				// TODO: do not use baseParams or the last search will be retained
+				store.baseParams={};
 				
 				var fields = Vme.form.panels.SearchForm.getForm().getFieldValues(true);
-				//console.log(fields);  // DEBUG
-				for (var key in fields){
-                    switch(key){
-                        //case 'text':
-                        //    return 'LOCAL_NAME ILIKE \'%' + value + '%\''; 
-                        case 'OWNER':
-                            store.setBaseParam("id_authority", fields[key]);
-                            store.setBaseParam("authority", fields[key]);
-                            break;
-                        case 'VME_TYPE':
-                            store.setBaseParam("id_vme_type", fields[key]);
-                            store.setBaseParam("vme_type", fields[key]);
-                            break;
-                        case 'vmeCriteria':
-                            store.setBaseParam("id_vme_criteria", fields[key]);
-                            store.setBaseParam("vme_criteria", fields[key]);
-                            break;
-                        case 'YEAR':
-                            store.setBaseParam("year", fields[key]);
-                            break;
-                        default:
-                            break;
-                    }
-				}
-				var params = {
-					startindex: 0,          
-					maxfeatures: Vme.data.constants.pageSize
+				
+                var params = {
+					start: 0,          
+					rows: Vme.data.constants.pageSize
 				};
 				
-				if(query){
-					store.setBaseParam("cql_filter", query);
-					store.setBaseParam("srsName",'EPSG:4326');
-				}else{
-					if(store.baseParams["cql_filter"]){
-						delete store.baseParams["cql_filter"];
-					}
+				for (var key in fields){
+				    if(fields[key]!=""){
+                        switch(key){
+                            case 'authority':
+                            case 'vme_type':
+                            case 'vme_criteria':
+                            case 'year':
+                            case 'text':
+                                store.setBaseParam(key, fields[key]);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
 				}
 				
 				store.load({
@@ -310,7 +262,15 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 				Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-1');
 			}
 		}
-	]
+	],
+    listeners: {
+        afterRender: function(thisForm, options){
+            this.keyNav = new Ext.KeyNav( this.el, {                  
+                "enter": this.Search.handler,
+                scope: this
+            });
+        }
+    } 
 });
 
 /** 

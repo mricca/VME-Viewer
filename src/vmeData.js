@@ -192,9 +192,9 @@ Vme.data={
 			new Ext.XTemplate(
 				'<tpl for=".">'+
 					'<div class="search-result">' +
-						'<em>Local Name:</em>{localname}<br/>'+				
-						'<em>Reporting Year:</em>{year} <br/> '+
-						'<em>Competent Authority:</em><span class="own" >{owner}</span><br/>'+
+						'<em>Name: </em>{localname}<br/>'+				
+						'<em>Year: </em>{year} <br/> '+
+						'<em>Competent Authority: </em><span class="own">{owner}</span><br/>'+
 					'</div>'+
 				'</tpl>',
 				{
@@ -293,10 +293,7 @@ Vme.data={
 						if(!FigisMap.rnd.status.logged){
 							return "";
 						}
-						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Related Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Related</a>'
-						
-						
-						
+						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Related Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Related</a>';
 					}
 				}
 			),
@@ -530,9 +527,6 @@ Vme.data={
 							Vme.utils.generateFidFilter([values.id]),
 							"shape-zip"
 						)
-						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
-						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
-							
 					}
 					
 				}
@@ -551,8 +545,9 @@ Vme.data={
  *
  */
 Vme.data.models = {
-	rfmos : [['CCAMLR','CCAMLR'],['NAFO','NAFO'],['NEAFC','NEAFC']],
+	//rfmos : [['CCAMLR','CCAMLR'],['NAFO','NAFO'],['NEAFC','NEAFC']],
 	rfmosUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+	/*
 	areaTypes : [
 		[1, FigisMap.label('VME_TYPE_VME')],
 		[2, FigisMap.label('VME_TYPE_RISK')],
@@ -560,7 +555,9 @@ Vme.data.models = {
 		[4, FigisMap.label('VME_TYPE_CLOSED')],
 		[5, FigisMap.label('VME_TYPE_OTHER')]
 	],
+	*/
     areaTypesUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/type/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/type/en/list",
+	/*
 	VmeStatuses:[ 
 		[1, FigisMap.label("VME_STATUS_ENS")],
 		[2, FigisMap.label("VME_STATUS_UNDEST")],
@@ -571,7 +568,9 @@ Vme.data.models = {
 		[7, FigisMap.label("VME_STATUS_TEMP")]
 		
 	],
+	*/
     VmeStatusesUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+	/*
 	VmeCriteria:[ 
 		[0, FigisMap.label("VME_CRITERIA_UNIQUE")],
 		[1, FigisMap.label("VME_CRITERIA_FUNCT")],
@@ -579,9 +578,10 @@ Vme.data.models = {
 		[3, FigisMap.label("VME_CRITERIA_LIFE")],
 		[4, FigisMap.label("VME_CRITERIA_STRUCT")],
 		[5, FigisMap.label("VME_CRITERIA_NOTS")]
-	],	
+	],
+	*/
     VmeCriteriaUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list",
-	years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})(),
+	//years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})(),
     yearsUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list"
 
 };
@@ -746,7 +746,6 @@ Vme.data.extensions ={
 			},
 			listeners:{
 				beforeload: function(store,options){
-					//store.setBaseParam( 'srs',store.srsName );
 					if(!options.typeName){
 						store.setBaseParam( 'typeName',store.typeName);
 						
@@ -852,16 +851,16 @@ Vme.data.stores = {
 		
 		proxy : new Ext.data.HttpProxy({
             method: 'GET',
-            url: "http://figisapps.fao.org/figis/ws/vme/webservice/search-params/*/*/*/*/search" // see options parameter for Ext.Ajax.request
-        }),	
+            url: "http://figisapps.fao.org/figis/ws/vme/webservice/search" // see options parameter for Ext.Ajax.request
+        }),
+		
 		
 		recordId: 'fid',
 		paramNames:{
-			start: "startindex",
-			limit: "maxfeatures",
+			start: "start",
+			limit: "rows",
 			sort: "sortBy"
-		}		
-		
+		}
 	}),
 	
 	EncountersStore:new Ext.ux.LazyJsonStore({
