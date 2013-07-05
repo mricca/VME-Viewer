@@ -420,7 +420,7 @@ var staticLabels = {
 	SIDP_NOGEOMETRY     : {en:"Area isn't defined yet!"},    
 	//SEARCH FIELDS LABELS
 	SEARCH_TEXT_LBL		: {en:"Free text search"},
-	SEARCH_RFMO_LBL		: {en:"By competent authority"},
+	SEARCH_RFMO_LBL		: {en:"By Competent Authority"},
 	SEARCH_TYPE_LBL		: {en:"By Area Type"},
 	SEARCH_STAT_LBL		: {en:"By Status"},
 	SEARCH_CRIT_LBL		: {en:"By VME Criteria"},

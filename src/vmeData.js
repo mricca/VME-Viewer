@@ -208,10 +208,11 @@ Vme.data={
 					'<div class="search-result" style="text-align:left;position:relative">' +
 						'<em>Name: </em>{localname}<br/>'+
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
-						'<em>Area Type: </em><span>{type}</span> <br/> '+
-						'<em>Validity: </em><span>from 2007 up to 2014</span> <br/> '+
 						'<em>Year: </em>{year}<br/> '+
-						'<em>Competent Authority:</em><span class="own"> {owner}</span><br/>'+
+						'<em>Management Body/Authority(ies): </em><span class="own">{owner}</span><br/>'+
+						'<em>Area Type: </em><span>{type}</span> <br/> '+
+						'<em>UN Criteria: </em>{criteria}<br/> '+
+                        '<em>Validity: </em><span>from 2007 up to 2014</span> <br/> '+
 						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						'<br/><br/>'+
 						'<div>'+
@@ -263,7 +264,6 @@ Vme.data={
                         //TODO: remove this line when real factsheet are online
                         return("fishery/vme/10/en");
                         if(values.vme_id){
-                            // TODO: sono rimasto qui
                             //Ext..get(values.vme_id){ bla bla };
 /*/////////////////////                            
                             Ext.Ajax.request({
