@@ -216,7 +216,8 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="factlink" href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');">link to factsheet </a><br/>' +
+							'<a class="factlink" href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><em>Open Factsheet</em></a><br/>' +
+							'<br/>'+
 							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a><br/>' +
 							'{[this.getDownloadFDS(values)]}' +
 						'</div>' +
@@ -224,7 +225,7 @@ Vme.data={
 							'<a class="zoomlink" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
-							'">zoom</a>' +
+							'">Zoom</a>' +
 							'<br/>{[this.addProtectedLinks(values)]}' +
 						'</div>'+
 						'</div>'+
