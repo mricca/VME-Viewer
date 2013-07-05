@@ -12,6 +12,9 @@ function reset(){
 	Ext.getCmp('years-min-field').setValue(new Date().getFullYear());
 	updateVme();	
 	myMap.zoomToMaxExtent();
+	// Ensure that rfb.js is included AFTER vmeData.js, so theese are initialized
+	Vme.form.panels.SearchForm.getForm().reset();
+	Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-0');
 }
 
 function updateVme(){
