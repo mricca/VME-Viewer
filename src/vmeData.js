@@ -206,17 +206,17 @@ Vme.data={
 			new Ext.XTemplate(
 				'<tpl for=".">'+
 					'<div class="search-result" style="text-align:left;position:relative">' +
-						'<em>Local Name: </em>{localname}<br/>'+
-						'<em>Geographic reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						'<em>Name: </em>{localname}<br/>'+
+						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{type}</span> <br/> '+
-						'<em>Validity Period: </em><span>from 2007 up to 2014</span> <br/> '+
-						'<em>Reporting Year: </em>{year}<br/> '+
+						'<em>Validity: </em><span>from 2007 up to 2014</span> <br/> '+
+						'<em>Year: </em>{year}<br/> '+
 						'<em>Competent Authority:</em><span class="own"> {owner}</span><br/>'+
-						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
+						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="factlink" href="javascript:void(0);" onClick="FigisMap.factsheetRel();">link to factsheet </a><br/>' +
+							'<a class="factlink" href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');">link to factsheet </a><br/>' +
 							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a><br/>' +
 							'{[this.getDownloadFDS(values)]}' +
 						'</div>' +
@@ -255,6 +255,63 @@ Vme.data={
 						return "{x:"+vert.x+",y:"+vert.y+"}";
 						//return evt;
 					},
+                    /**
+                     * Download all vme areas
+                     */
+                    getFactsheetUrl: function(values){
+                        //TODO: remove this line when real factsheet are online
+                        return("fishery/vme/10/en");
+                        if(values.vme_id){
+                            // TODO: sono rimasto qui
+                            //Ext..get(values.vme_id){ bla bla };
+/*/////////////////////                            
+                            Ext.Ajax.request({
+                                url : 'http://figisapps.fao.org/figis/ws/vme/webservice/get',
+                                method: 'GET',
+                                params :{
+                                    id:values.vme_id
+                                },
+                                success: function ( result, request ) {
+                                    var jsonData = Ext.util.JSON.decode(result.responseText);
+                                    
+                                    if (!jsonData.factsheetUrl ){
+                                        /*
+                                        Ext.MessageBox.show({
+                                            title: "Info",
+                                            msg: FigisMap.label("SIDP_NOGEOMETRY"),
+                                            buttons: Ext.Msg.OK,
+                                            icon: Ext.MessageBox.INFO,
+                                            scope: this
+                                        });  
+                                    }else{      
+                                        console.log(jsonData.factsheetUrl);
+                                    }
+                                  
+                                },
+                                failure: function ( result, request ) {
+                                    /*
+                                    Ext.MessageBox.show({
+                                        title: "Info",
+                                    msg: FigisMap.label("SIDP_NOGEOMETRY"),
+                                        buttons: Ext.Msg.OK,
+                                        icon: Ext.MessageBox.INFO,
+                                        scope: this
+                                    });  
+                                },
+                                scope: this
+                            });
+      
+                            */
+                            
+///////////////////
+                            var vmeid = values.vme_id.split('_')[2];
+                            
+                            return("fishery/vme/"+vmeid+"/en");
+                        }else
+                        {
+                            return("fishery/vme/10/en");
+                        }
+                    },
 					/**
 					 * Download all vme areas
 					 */
@@ -844,7 +901,7 @@ Vme.data.stores = {
 			{name: 'owner', mapping: 'owner'},
             {name: 'geoArea', mapping: 'geoArea'},
             {name: 'envelope', mapping: 'envelope'},
-            {name: 'geographicLayerId', mapping: 'geographicLayerId'},
+            {name: 'geographicFeatureId', mapping: 'geographicFeatureId'},
             {name: 'validityPeriod', mapping: 'validityPeriod'}
 			
 		],

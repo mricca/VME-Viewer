@@ -41,9 +41,15 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 			myMap.removeLayer(layer,false);
 		}	
 
-        var vmeId = 10; //selectedRecord.get("vmeId");
+        var vmeId = 103; //selectedRecord.get("vmeId");
+        var geographicFeatureId = selectedRecord.get("geographicFeatureId");
+        // vecchi parametri
         var layerName = FigisMap.fifao.vme.split(':',2)[1];
         var featureid = layerName+'.'+vmeId;
+        //nuovi parametri
+        var typename = FigisMap.fifao.vme;
+        var CQL_FILTER = "VME_AREA_TIME = '"+geographicFeatureId+"'";
+
 
         Ext.Ajax.request({
             url : FigisMap.rnd.vars.ows,
@@ -52,7 +58,9 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
                 service:'WFS',
                 version:'1.0.0',
                 request:'GetFeature',
-                featureid: featureid,
+                //featureid: featureid,
+                typename: typename,
+                cql_filter: CQL_FILTER,
                 outputFormat:'json'
             },
             success: function ( result, request ) {

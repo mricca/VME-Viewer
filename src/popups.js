@@ -201,7 +201,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 	var reader = new OpenLayers.Format.WMSGetFeatureInfo();
 	var response = reader.read(e.text);
 	var store = FigisMap.ol.getStore(layer);
-	var template = FigisMap.ol.getTemplate
+	//var template = FigisMap.ol.getTemplate
 	store.loadData(response);
 	var name = FigisMap.ol.getTabTitle(layer);
 	var dv = new Ext.DataView({
@@ -292,7 +292,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
  */
 FigisMap.ol.createPopupControl = function(vme){
     FigisMap.ol.clearPopupCache();
-    var gml = true //getQSParam('gml');
+    var gml = true; //getQSParam('gml');
 		var info={controls : []};
 		var vmeLyr;
 		
