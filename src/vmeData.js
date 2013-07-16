@@ -604,7 +604,7 @@ Vme.data={
  */
 Vme.data.models = {
 	//rfmos : [['CCAMLR','CCAMLR'],['NAFO','NAFO'],['NEAFC','NEAFC']],
-	rfmosUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+	rfmosUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
 	/*
 	areaTypes : [
 		[1, FigisMap.label('VME_TYPE_VME')],
@@ -614,7 +614,7 @@ Vme.data.models = {
 		[5, FigisMap.label('VME_TYPE_OTHER')]
 	],
 	*/
-    areaTypesUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/type/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/type/en/list",
+    areaTypesUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/type/en/list",
 	/*
 	VmeStatuses:[ 
 		[1, FigisMap.label("VME_STATUS_ENS")],
@@ -627,7 +627,7 @@ Vme.data.models = {
 		
 	],
 	*/
-    VmeStatusesUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+    VmeStatusesUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",//) : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
 	/*
 	VmeCriteria:[ 
 		[0, FigisMap.label("VME_CRITERIA_UNIQUE")],
@@ -638,9 +638,9 @@ Vme.data.models = {
 		[5, FigisMap.label("VME_CRITERIA_NOTS")]
 	],
 	*/
-    VmeCriteriaUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list",
+    VmeCriteriaUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list",
 	//years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})(),
-    yearsUrl : FigisMap.useProxy === true ? FigisMap.currentSiteURI + FigisMap.proxy +encodeURIComponent("http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list") : "http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list"
+    yearsUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list"
 
 };
 
