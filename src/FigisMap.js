@@ -39,7 +39,7 @@ FigisMap.fifao = {
 	sdi : 'fifao:FAO_SUB_DIV',
 	spd : 'fifao:SPECIES_DIST', 
 	sub : 'fifao:FAO_SUB_AREA',
-	vme : 'fifao:vmeareas', 
+	vme : 'fifao:VMEAREAS', 
 	vme_fp : 'fifao:vme-db_footprints',
     vme_en : 'fifao:Encounters2',
     vme_sd : 'fifao:SurveyData2',
@@ -70,6 +70,8 @@ FigisMap.useProxy = FigisMap.isDeveloper ? false : ( FigisMap.isTesting ? FigisM
 
 FigisMap.geoServerAbsBase = FigisMap.isDeveloper ? 'http://192.168.1.122:8484' : ( FigisMap.isTesting ? 'http://193.43.36.238:8484' : 'http://www.fao.org' );
 FigisMap.geoServerBase = '';
+//FigisMap.geoServerBase = 'http://figisapps.fao.org'; //use this for tests
+
 
 FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figis/figis-vme/' : '/figis/geoserver/figis-vme/' );
 
@@ -1808,19 +1810,19 @@ FigisMap.renderer = function(options) {
 	
 } //FigisMap.renderer Class Ends
 Ext.onReady(function(){
-FigisMap.loginWin.on('login',function(user){
-		FigisMap.ol.refreshAuthorized();
-
-
-		FigisMap.ol.clearPopupCache();          
-});
-
-FigisMap.loginWin.on('logout',function(user){
-		for (var popupKey in FigisMap.popupCache){                
-                FigisMap.popupCache[popupKey].close();
-		}
-		
-        FigisMap.ol.refreshAuthorized();
-});
-
+    FigisMap.loginWin.on('login',function(user){
+    		FigisMap.ol.refreshAuthorized();
+    
+    
+    		FigisMap.ol.clearPopupCache();          
+    });
+    
+    FigisMap.loginWin.on('logout',function(user){
+    		for (var popupKey in FigisMap.popupCache){                
+                    FigisMap.popupCache[popupKey].close();
+    		}
+    		
+            FigisMap.ol.refreshAuthorized();
+    });
+    
 });
