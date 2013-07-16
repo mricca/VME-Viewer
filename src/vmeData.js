@@ -640,7 +640,9 @@ Vme.data.models = {
 	*/
     VmeCriteriaUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list",
 	//years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})(),
-    yearsUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list"
+    yearsUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list",
+    searchUrl: "http://figisapps.fao.org/figis/ws/vme/webservice/search" // see options parameter for Ext.Ajax.request
+
 
 };
 
@@ -909,7 +911,7 @@ Vme.data.stores = {
 		
 		proxy : new Ext.data.HttpProxy({
             method: 'GET',
-            url: "http://figisapps.fao.org/figis/ws/vme/webservice/search" // see options parameter for Ext.Ajax.request
+            url: Vme.data.models.searchUrl // see options parameter for Ext.Ajax.request
         }),
 		
 		
