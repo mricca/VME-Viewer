@@ -71,7 +71,7 @@ Ext.onReady(function(){
             y: tbarDiv.getY() + tbarDiv.getHeight() - 35,
             width: mainDiv.getWidth()+10,
             height: mainDiv.getHeight() +tbarDiv.getHeight() - 5,//+disclaimerDiv.getHeight(),
-            title: "Factsheet",
+            title: "VME fact sheet",
             src:"http://figisapps.fao.org/"+factsheetUrl,
             closeAction: 'destroy',
             maximizable: true,
