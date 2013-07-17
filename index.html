@@ -3,6 +3,7 @@
 <html lang="en">
 
 <head>
+    
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="description" content="Map application to display areas of Vulnerable Marine Ecosystems." />
 	<meta name="author-corporate" content="FAO of the UN" />
@@ -38,7 +39,7 @@
 	
 	<script type="text/javascript" src="src/FigisMap.js"></script>
     <!-- proxy overriding configuration: allows to use a proxy for test purpose -->
-    <!-- script type="text/javascript" src="src/proxy-ovr.js" defer="defer"></script -->
+    <script type="text/javascript" src="src/proxy-ovr.js" defer="defer"></script>
 	<script type="text/javascript" src="src/vmeData.js" ></script>
 	<script type="text/javascript" src="src/popups.js"></script>
 	<script type="text/javascript" src="src/sidePanel.js" ></script>
@@ -87,6 +88,37 @@
           }
 			
     </style>
+    <!-- header style -->
+    <style type="text/css">
+        #header {
+            width: 920px;
+            position: relative;
+            background-image: url(theme/img/patternbanner.jpg);
+            background-repeat: no-repeat;
+            background-position: left top;
+            height: 172px;
+        }
+        #header #logo {
+            width: 400px;
+        }
+        #header .info {
+            width: 360px;
+            position: absolute;
+            right: 20px;
+            top: 40px;
+            color: #fff;
+            font-family: Verdana, Helvetica, Arial, sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 16px;
+            text-align: left;
+            text-shadow: 1px 1px 2px #000;
+        }
+        img{
+            max-width: 100%
+        }
+</style>
 <script>
 //Workaround for IE7 IE8 http://trac.osgeo.org/openlayers/ticket/2304
 document.namespaces;
@@ -94,8 +126,9 @@ document.namespaces;
 </head>
 
 <body>
-
+<div id="page">
 	<div id="wrapper">
+    <!--
 		<div id="top">
 
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -115,25 +148,25 @@ document.namespaces;
 				</tr>			
 			</table>
 			
-		</div>
-		<span id="subTitle"></span>
+		</div> -->
+        <div  id="header">
+            <div id="logo"><img src="theme/img/logo.fw.png" width="377" height="172"  alt=""/></div>
+            <div id="subTitle" class="info">
+            	The Vulnerable Marine Ecosystem Database (VME-DB)<br />
+            	gathers information on VME areas stored in harmonized<br />
+            	way and disseminated through maps and fact sheets.
+            </div>
+        </div>
+		<span style="visibility:hidden" id="subtitle" ></span>
 		<br />
 
-		<div id="topBar">
+<div  style="display:none" id="topBar">
 			<span id="loginContainer" ></span>
-			<label id="lblFilRFB">Zoom to:</label>
-			<select id="FilterRFB" onchange="setZoom()"></select>
-			<label id="lblRFB">Filter by:</label>
-			<select id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>  
-			<label id="lblSRS">Change projection:</label>
-			<select id="SelectSRS" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')">
-				<option value='4326' default>WGS84 (4326)</option>
-				<option value='3349'>Mercator (3349)</option>
-				<option value='3031'>South Polar (3031)</option>
-				<!-- missing proj4js eck4.js file -->
-				<!-- <option value='54012'>EckertIV (54012)</option> -->
-				<option value='54009'>Mollweide (54009)</option>
-			</select>
+			<label id="lblFilRFB" style="visibility:hidden">Zoom to:</label>
+			<select  id="FilterRFB" onchange="setZoom()"></select>
+			<label style="visibility:hidden"id="lblRFB">Filter by:</label>
+			<select style="visibility:hidden" id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>  
+			
             <a id="lblReset" class="lblReset" onclick="reset()">Reset</a>            
 
 			<!--a href="javascript:embedLink();" id="EmbedLink" title="Link or embed this RFB map"><span>Link</span></a-->
@@ -156,12 +189,13 @@ document.namespaces;
 			       		<input id="opt" type="text" />
 			       	</li -->
 					
-		</div>
-		<div id="main">
-			<div id="map" class="map"></div>
+		 </div> 
+		<div style="position:relative" id="main">
+			<div id="map"  class="map"></div>
+            <div id="sidebar"></div>
 			<div id="vme_slider"></div>
-		</div>
-		<div id="sidebar">
+		
+		
 			<!--div id="e-link">
 
 				<div>
@@ -180,10 +214,24 @@ document.namespaces;
 			<div id="MemberCountries" class="legend"></div-->
 		</div>
 
-		<div id ="disclaimer">
-		</div>
+		
 
-		<div id="bottomBar1"><a href="http://www.geo-solutions.it" style="float:left;text-align:left;padding-left:2px;">Credits</a>
+		
+		<div  style="top:30px;position:relative" id="bottomBar2">
+        <label id="lblSRS">Change projection:</label>
+			<select id="SelectSRS" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')">
+				<option value='4326' default>WGS84 (4326)</option>
+				<option value='3349'>Mercator (3349)</option>
+				<option value='3031'>South Polar (3031)</option>
+				<!-- missing proj4js eck4.js file -->
+				<!-- <option value='54012'>EckertIV (54012)</option> -->
+				<option value='54009'>Mollweide (54009)</option>
+        </select>
+        </div>
+	</div>
+    
+</div>
+<div id="bottomBar1"><a href="http://www.geo-solutions.it" style="float:left;text-align:left;padding-left:2px;">Credits</a>
 			powered by
 			<a alt="FIGIS web site" title="FIGIS web site" href="http://www.fao.org/fishery/figis/en">FIGIS</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -194,8 +242,8 @@ document.namespaces;
 				&nbsp;
 			</a>
 		</div>
-		<div id="bottomBar2"></div>
-	</div>
+<div id ="disclaimer">
+		</div>
 	<script type="text/javascript" language="javascript">
 	// <![CDATA[
 		Ext.onReady(function(){
@@ -216,7 +264,6 @@ document.namespaces;
 		document.getElementById('subTitle').innerHTML = FigisMap.label('SUB_TITLE');
 	// ]]>
 	</script>
-
 	<!--<input type="button" id="addlayer" value="Show RFB" onclick="addLayer()"/>
 	<input type="button" id="addlayer" value="Show zoom" onclick="SLD()"/>-->
 	</body>

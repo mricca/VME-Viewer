@@ -62,15 +62,15 @@ Ext.onReady(function(){
     FigisMap.factsheetRel = function(factsheetUrl){
         if(!factsheetUrl)
             factsheetUrl = "fishery/vme/10/en";
-        var tbarDiv = Ext.get('topBar');
+        var tbarDiv = Ext.get('logo');
         var mainDiv = Ext.get('main');
         var disclaimerDiv = Ext.get('disclaimer');
         new Ext.IframeWindow({
             id:'factsheetWindow',
-            x: tbarDiv.getX()-5,
-            y: tbarDiv.getY(),
-            width: tbarDiv.getWidth()+10,
-            height: mainDiv.getHeight()+tbarDiv.getHeight()+disclaimerDiv.getHeight(),
+            x: tbarDiv.getX() -5,
+            y: tbarDiv.getY() + tbarDiv.getHeight() - 35,
+            width: mainDiv.getWidth()+10,
+            height: mainDiv.getHeight() +tbarDiv.getHeight() - 5,//+disclaimerDiv.getHeight(),
             title: "Factsheet",
             src:"http://figisapps.fao.org/"+factsheetUrl,
             closeAction: 'destroy',

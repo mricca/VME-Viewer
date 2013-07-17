@@ -21,7 +21,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	tpl: Vme.data.templates.searchResult,
 	pageSize:Vme.data.constants.pageSize,
 	singleSelect: true,
-	height:470,
+	height:440,
 	autoScroll:true,
 	//multiSelect: true,
 	itemSelector:'div.search-result',
@@ -333,6 +333,9 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 var sidePanel = new Ext.TabPanel({
 	//applyTo: 'side-bar',
 	//renderTo:'sidebar',
+    collapse:true,
+    collapsible:true,
+    header:true,
 	height:550,
 	autoTabs:true,
 	activeTab:0,
