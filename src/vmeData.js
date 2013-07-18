@@ -195,6 +195,15 @@ Vme.data={
 						'<em>Name: </em>{localname}<br/>'+				
 						'<em>Year: </em>{year} <br/> '+
 						'<em>Competent Authority: </em><span class="own">{owner}</span><br/>'+
+                        '<a onclick="Vme.clickOnFeature(\'{geographicFeatureId}\',{year},false)">'+
+                        '<img src="theme/img/icons/buttoninfo.png" />'+
+                        '</a> '+
+                        '<a onclick="Vme.clickOnFeature(\'{geographicFeatureId}\',{year},true)">'+
+                       '<img src="theme/img/icons/buttonzoom.png" />'+
+                        '</a> '+
+                        '<a onClick="FigisMap.factsheetRel(\'{vmeId}\');">'+
+                        '<img src="theme/img/icons/buttonfactsheet.png" />'+
+                        '</a> '+
 					'</div>'+
 				'</tpl>',
 				{
@@ -262,8 +271,8 @@ Vme.data={
                      */
                     getFactsheetUrl: function(values){
                         //TODO: remove this line when real factsheet are online
-                        return("fishery/vme/10/en");
-                        if(values.vme_id){
+                        //return("fishery/vme/10/en");
+                        if(values.vmeId){
                             //Ext..get(values.vme_id){ bla bla };
 /*/////////////////////                            
                             Ext.Ajax.request({
