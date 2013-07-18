@@ -21,7 +21,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	tpl: Vme.data.templates.searchResult,
 	pageSize:Vme.data.constants.pageSize,
 	singleSelect: true,
-	height:440,
+	//height:440,
 	autoScroll:true,
 	//multiSelect: true,
 	itemSelector:'div.search-result',
@@ -31,10 +31,23 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	emptyText: FigisMap.label('SEARCH_NO_RES'),
 	loadingText:FigisMap.label('SEARCH_LOADING'),
 	listeners: {
-      click: function(view,index,node,event){
+    /*
+      click: 
+/*      ,beforeclick: function(view,index,node,event){
+        //if( window.console ) console.log('dataView.beforeclick(%o,%o,%o,%o)',view,index,node,event);
+      }*/
+    }
+	
+		
+		
+});
+/**
+* clickOnResult
+*/
+Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
           
         //if( window.console ) console.log('dataView.click(%o,%o,%o,%o)',view,index,node,event);
-		var selectedRecord =this.store.getAt(index);
+		//var selectedRecord =this.store.getAt(index);
 		var layer = myMap.getLayersByName("highlight")[0];
 		//create layer
 		if(layer){
@@ -42,7 +55,7 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 		}	
 
         var vmeId = 103; //selectedRecord.get("vmeId");
-        var geographicFeatureId = selectedRecord.get("geographicFeatureId");
+        //var geographicFeatureId = selectedRecord.get("geographicFeatureId");
         // vecchi parametri
         var layerName = FigisMap.fifao.vme.split(':',2)[1];
         var featureid = layerName+'.'+vmeId;
@@ -98,13 +111,18 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
                     if(Ext.isIE){
                       myMap.zoomOut(); 
                     }
+                    
                     var settings ={
                       zoomExtent: bounds.toBBOX(20)
                     }
                     zoomTo(settings,repro_bbox);
                     
+                        
+                    
+                    myMap.paddingForPopups.right = 220; //TODO use this to center the popup when the search panel is opened!!! <--
+                    
                     //var year = selectedRecord.get("year");
-                    var year = Ext.getCmp("id_selectYear").getValue() || selectedRecord.get("year");
+                    var year = Ext.getCmp("id_selectYear").getValue() || rec_year;
                     var slider = Ext.getCmp('years-slider');
                     slider.setValue(year,true);
                     Ext.getCmp('years-min-field').setValue(year);
@@ -112,13 +130,13 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
                     FigisMap.ol.refreshFilters();
                     
                     myMap.getLayersByName("VME areas")[0].setVisibility(true);
-                                
-                    if(document.getElementById("SelectSRS").value == "4326"){
-                        FigisMap.ol.emulatePopupFromGeom(geom);
-                    }else{
-                        FigisMap.ol.emulatePopupFromGeom(repro_geom);
+                    if(!zoom){            
+                        if(document.getElementById("SelectSRS").value == "4326"){
+                            FigisMap.ol.emulatePopupFromGeom(geom);
+                        }else{
+                            FigisMap.ol.emulatePopupFromGeom(repro_geom);
+                        }
                     }
-                 
                 }
           
             },
@@ -135,14 +153,6 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
         });
 		
       }
-/*      ,beforeclick: function(view,index,node,event){
-        //if( window.console ) console.log('dataView.beforeclick(%o,%o,%o,%o)',view,index,node,event);
-      }*/
-    }
-	
-		
-		
-});
 
 /**
  * Vme.form.panels.SearchForm
@@ -311,7 +321,9 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 			},
 			items:[
 				{
+                    height:440,
 					xtype:'panel',
+                    layout:'fit',
 					items:[Vme.form.widgets.SearchResults],
 					bbar : new Ext.ux.LazyPagingToolbar({
 							store: Vme.data.stores.SearchResultStore,
@@ -333,7 +345,7 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 var sidePanel = new Ext.TabPanel({
 	//applyTo: 'side-bar',
 	//renderTo:'sidebar',
-    collapse:true,
+    collapsed:true,
     collapsible:true,
     header:true,
 	height:550,

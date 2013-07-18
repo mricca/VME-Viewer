@@ -47,11 +47,13 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 	  popup = new GeoExt.Popup({
 					title: 'Features Info',
 					width: 400,
+                    panIn:true,
 					height: 300,
 					layout: "accordion",
 					map: myMap,
 					location: e.xy,
 					listeners: {
+                        
 						close: (function(key) {
 							return function(panel){
 								delete FigisMap.popupCache[key];
@@ -64,7 +66,11 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 	}else{
 		popup = FigisMap.popupCache[popupKey];
 	}
-
+    popup.position();
+    
+    alert("SS");
+    popup.panIntoView();
+    
 	var addEncounters = function(btn){
 		Ext.MessageBox.show({
 			title: "Info",
@@ -219,6 +225,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 	if (!(popupKey in FigisMap.popupCache)){
 	  popup = new GeoExt.Popup({
 		//title: 'Features Info',
+        border:false,
 		width: 400,
 		height: 300,
 		layout: "fit",
@@ -344,10 +351,10 @@ FigisMap.ol.getVertFromGeom = function(geom){
  * emulate click on GetFeatureInfo control
  */
 FigisMap.ol.emulatePopupFromVert=function(vert){
+    var lonlat =new OpenLayers.LonLat(vert.x,vert.y);
 	var evt  ={
-		xy: myMap.getPixelFromLonLat(new OpenLayers.LonLat(vert.x,vert.y)  )
+		xy: myMap.getPixelFromLonLat( lonlat )
 	};
-	
 	FigisMap.ol.clearPopupCache();
 	var cc = myMap.getControlsByClass('OpenLayers.Control.WMSGetFeatureInfo');
 	for(var i = 0 ;i < cc.length ; i++) {cc[i].getInfoForClick(evt);}
