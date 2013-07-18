@@ -93,7 +93,7 @@ a.lblReset {
        border-left-color : #000;
                    float : right;
                font-size :  12px;
-                  height : 550px;
+                  
                  padding : 0;
                    width : 210px;
                 overflow :  auto ;
@@ -101,6 +101,11 @@ a.lblReset {
                 z-index:1000;
                 
                 top:0;right:0;
+}
+#sidebar .x-tab-panel-body,#sidebar .x-panel-body{
+    background: rgba(41, 171, 226, 0.5);
+    font-weight:bold;
+    
 }
 #sidebar .legend {
                  margin : .5em;
@@ -430,6 +435,11 @@ h3 {
 	margin:0;
 	padding: 6px 2px;
 	border-bottom:thin solid black;
+}
+#sidebar .search-result{
+
+        margin-left: 5px;
+    margin-right: 5px;
 }
 .search-result em{
 	font-weight: bold;
