@@ -152,6 +152,9 @@ a.lblReset {
     color:#666;
 }
 
+#sidebarP{
+    width:236px;margin-left:13px;
+}
 #sidebar .x-panel-body{
     background: rgba(41, 171, 226, 0.5);
     font-weight:bold;
@@ -160,6 +163,7 @@ a.lblReset {
     border-color: #000000;
     background-color: #94D5F0;
     background-color: rgba(41, 171, 226, 0.5);
+    background:linear-gradient(to bottom,rgba(41, 171, 226, 0.5) 70%,rgba(41, 171, 226, 0) ); 
 }
 
 #sidebar .x-panel-body .x-panel-body{
@@ -534,8 +538,8 @@ h3 {
 	font-weight: bold;
 }
 
-.x-view-over{background-color:#DBF1FF;cursor:pointer;}
-.x-view-selected{background-color:#A2CAE5}
+.x-view-over{background-color:rgba(219, 241, 255, 0.56);cursor:pointer;}
+.x-view-selected{background-color:rgba(162, 202, 229, 0.81)}
 
 /** ICONS **/
 .legend-icon{
