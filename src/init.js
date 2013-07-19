@@ -56,7 +56,7 @@ Ext.onReady(function(){
         xtype: 'panel',
         id: 'id_vmeSliderPanel',
 		renderTo: "vme_slider",
-        width : 815
+        width : 920
     });
 
 });

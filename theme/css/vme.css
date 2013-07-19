@@ -88,7 +88,64 @@ a.lblReset {
 	padding: 0;
 }
 */
+/* change projection */
+#lblSRS{
+    width:100%;
+    background-color: #94D5F0;
+    background-color: rgba(41, 171, 226, 0.4);
+    margin: 0 0;
+    height:13px;
+    font-size: 12px;
+    font-family: asap, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    background-color: rgba(255, 255, 255, 0.6);
+    cursor:pointer;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right:0px;
 
+}
+.blueglass{
+    
+    background-color: rgba(41, 171, 226, 0.2);
+    height:50px;
+    width:191px;
+}
+#lblSRS:hover{
+
+    background-color: rgba(242, 242, 242, 0.6);
+}
+#lblSRS.open{
+    background-color: rgba(41, 171, 226, 0.4);
+    
+
+}
+#SelectSRS{
+    background-color: rgba(255, 255, 255, 0.8);
+    height:0px;
+    width:191px;
+    overflow:hidden;
+    font-family:  Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 400;   
+}
+#SelectSRS div{
+    width:95px;
+    float:left;
+}
+#SelectSRS p{
+    padding:3px;
+    margin:0;
+}
+#bottomLeftPanel{
+    bottom:15px;
+    position:absolute;
+    z-index:5000;
+}
+
+/* side panel */
 #sidebar {
     border-left-color : #000;
     float : right;

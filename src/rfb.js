@@ -1,10 +1,44 @@
 var myMap = false;
 
+function getProjection(radioObj) {
+    var radioObj = document.getElementsByName("srs");
+	if(!radioObj)
+		return "";
+	var radioLength = radioObj.length;
+	if(radioLength == undefined)
+		if(radioObj.checked)
+			return radioObj.value;
+		else
+			return "";
+	for(var i = 0; i < radioLength; i++) {
+		if(radioObj[i].checked) {
+			return radioObj[i].value;
+		}
+	}
+	return "";
+}
+
+function setProjection(newValue) {
+    var radioObj =document.getElementsByName("srs");
+	if(!radioObj)
+		return;
+	var radioLength = radioObj.length;
+	if(radioLength == undefined) {
+		radioObj.checked = (radioObj.value == newValue.toString());
+		return;
+	}
+	for(var i = 0; i < radioLength; i++) {
+		radioObj[i].checked = false;
+		if(radioObj[i].value == newValue.toString()) {
+			radioObj[i].checked = true;
+		}
+	}
+}
 function reset(){
 	document.getElementById("FilterRFB").text = FigisMap.label('SELECT_AN_AREA');
 	document.getElementById("FilterRFB").value = "";
 	document.getElementById("SelectRFB").value = "";
-	document.getElementById("SelectSRS").value = '4326';
+	setProjection('4326');
 	FigisMap.ol.clearPopupCache();
 	setRFBPage('e-link','rfbs-link', 'rfbs-html');
     var years = Ext.getCmp('years-slider');	
@@ -76,7 +110,7 @@ function zoomTo(settings,geom) {
 			var newproj =bboxproj.split(":")[1];
 			setRFB(bbox, null, newproj, 'e-link','rfbs-link', 'rfbs-html');
 			myMap.zoomToExtent(bbox);
-			document.getElementById("SelectSRS").value = newproj;
+			setProjection(newproj);
 		
 		}
     }else{
@@ -95,8 +129,8 @@ function zoomTo(settings,geom) {
 **/
 function setRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink,filter) {
 	if ( ! mapProjection ) {
-		var settings = FigisMap.rfb.getSettings( document.getElementById("SelectRFB").value );
-		document.getElementById("SelectSRS").value = settings && settings.srs ? settings.srs : '4326';
+		var settings = FigisMap.rfb.getSettings( getProjection());
+		setProjection(settings && settings.srs ? settings.srs : '4326');
 	}
 	//Close popup when RFB change
 	FigisMap.ol.clearPopupCache();
@@ -280,7 +314,7 @@ function setRFBPage(elinkDiv, urlLink, htmlLink) {
 		if ( zoom != null ) zoom = parseInt( zoom );
 		
 		if ( prj == '' ) prj = null;
-		if ( prj != null ) document.getElementById("SelectSRS").value = prj;
+		setProjection( prj);
 	}
 	/*
 	* Load the RFB using the request parameters.
@@ -314,7 +348,7 @@ function setRFBEmbedLink(targetId, rfbsLinkId, rfbsHtmlId) {
 		baseURL += "?rfb=" + document.getElementById("SelectRFB").value
 			+ "&extent=" + myMap.getExtent().toBBOX()
 			+ "&zoom=" + myMap.getZoom()
-			+ "&prj=" + document.getElementById("SelectSRS").value;
+			+ "&prj=" + getProjection();
 		/*
 		* Setting the input fields of the embed-link div
 		*/

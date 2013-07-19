@@ -121,7 +121,7 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
                     new Ext.slider.SingleSlider({
                         id : 'years-slider',
                         vertical : false,
-                        width   : 600,
+                        width   : 705,
                         minValue: 2007,
                         maxValue: new Date().getFullYear(),
                         values  : [new Date().getFullYear()],

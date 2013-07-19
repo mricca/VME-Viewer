@@ -21,9 +21,9 @@
 	<link rel="stylesheet" type="text/css" href="lib/extjs/resources/css/xtheme-gray.css" />
 	<link rel="stylesheet" type="text/css" href="lib/GeoExt/resources/css/geoext-all.css" />
 
-	<!--	<link rel="stylesheet" type="text/css" href="lib/jQueryUI/development-bundle/themes/start/jquery-ui-1.8.2.custom.css" />
-  <script type="text/javascript" src="lib/jQueryUI/js/jquery-1.4.2.min.js" ></script>
-	<script type="text/javascript" src="lib/jQueryUI/js/jquery-ui-1.8.2.custom.min.js"></script> -->
+	<!--	<link rel="stylesheet" type="text/css" href="lib/jQueryUI/development-bundle/themes/start/jquery-ui-1.8.2.custom.css" /> -->
+    <!-- <script type="text/javascript" src="lib/jQueryUI/js/jquery-1.4.2.min.js" ></script> -->
+	<!-- <script type="text/javascript" src="lib/jQueryUI/js/jquery-ui-1.8.2.custom.min.js"></script> -->
 	
 	<script type="text/javascript" src="lib/OpenLayers/OpenLayers.js"></script>
 	<script type="text/javascript" src="lib/proj4js/lib/proj4js-compressed.js"></script>
@@ -39,7 +39,7 @@
 	
 	<script type="text/javascript" src="src/FigisMap.js"></script>
     <!-- proxy overriding configuration: allows to use a proxy for test purpose -->
-    <!-- <script type="text/javascript" src="src/proxy-ovr.js" defer="defer"></script>  -->
+    <!-- <script type="text/javascript" src="src/proxy-ovr.js" defer="defer"></script> -->
 	<script type="text/javascript" src="src/vmeData.js" ></script>
 	<script type="text/javascript" src="src/popups.js"></script>
 	<script type="text/javascript" src="src/sidePanel.js" ></script>
@@ -192,6 +192,22 @@ document.namespaces;
 		 </div> 
 		<div style="position:relative" id="main">
 			<div id="map"  class="map"></div>
+            <div  id="bottomLeftPanel">
+            <div id="lblSRS" onclick="var el = Ext.get('SelectSRS');el.getHeight()==0 ? el.setHeight(50,true):el.setHeight(0,true);Ext.get('lblSRS').toggleClass('open')">Change projection</div>
+                <div id="SelectSRS">
+                   <div> 
+                    <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='4326' checked> WGS84</input></p>
+                    <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3349'> Mercator</input><br/></p>
+                   </div>
+                   <div> 
+                    <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3031'> South Polar</input><br/></p>
+                    <!-- missing proj4js eck4.js file -->
+                    <!-- <option value='54012'>EckertIV (54012)</option> -->
+                   <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='54009'> Mollweide</input><br/></p>
+                   </div> 
+                </div>
+                <div class="blueglass"></div>
+            </div>
             <div id="sidebar">
                 <div id="leftTopPan">
                     <div id="searchtextwrapper"><input type="text" id="searchtext" name="searchtext" onkeydown="if (event.keyCode == 13) { Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');}"><div onclick=" Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');" id="simpleSearchButton"></div></div>
@@ -222,17 +238,7 @@ document.namespaces;
 			<div id="MemberCountries" class="legend"></div-->
 		</div>
 
-		<div  style="top:30px;position:relative" id="bottomBar2">
-        <label id="lblSRS">Change projection:</label>
-			<select id="SelectSRS" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')">
-				<option value='4326' default>WGS84 (4326)</option>
-				<option value='3349'>Mercator (3349)</option>
-				<option value='3031'>South Polar (3031)</option>
-				<!-- missing proj4js eck4.js file -->
-				<!-- <option value='54012'>EckertIV (54012)</option> -->
-				<option value='54009'>Mollweide (54009)</option>
-        </select>
-        </div>
+	
 	</div>
     
 </div>

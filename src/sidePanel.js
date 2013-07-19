@@ -131,7 +131,7 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                     
                     myMap.getLayersByName("VME areas")[0].setVisibility(true);
                     if(!zoom){            
-                        if(document.getElementById("SelectSRS").value == "4326"){
+                        if(getProjection() == "4326"){
                             FigisMap.ol.emulatePopupFromGeom(geom);
                         }else{
                             FigisMap.ol.emulatePopupFromGeom(repro_geom);
