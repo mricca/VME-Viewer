@@ -196,18 +196,27 @@ Vme.data={
 						'<em>Year: </em>{year} <br/> '+
 						'<em>Competent Authority: </em><span class="own">{owner}</span><br/>'+
                         '<a onclick="Vme.clickOnFeature(\'{geographicFeatureId}\',{year},false)">'+
-                        '<img src="theme/img/icons/buttoninfo.png" />'+
+                        '<img title="More information" src="theme/img/icons/buttoninfo.png" />'+
                         '</a> '+
                         '<a onclick="Vme.clickOnFeature(\'{geographicFeatureId}\',{year},true)">'+
-                       '<img src="theme/img/icons/buttonzoom.png" />'+
+                       '<img title="Zoom to area" src="theme/img/icons/buttonzoom.png" />'+
                         '</a> '+
-                        '<a onClick="FigisMap.factsheetRel(\'{vmeId}\');">'+
-                        '<img src="theme/img/icons/buttonfactsheet.png" />'+
+                        '<a onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');">'+
+                        '<img title="Open the fact sheet" src="theme/img/icons/buttonfactsheet.png" />'+
                         '</a> '+
 					'</div>'+
 				'</tpl>',
 				{
-					compiled:true
+					compiled:true,
+                    getFactsheetUrl: function(values){
+
+                        if(values.factsheetUrl){
+                            return(values.factsheetUrl);
+                        }else
+                        {
+                            return("fishery/vme/10/en");
+                        }
+                    }
 				}
 			),
 			
@@ -219,9 +228,9 @@ Vme.data={
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Year: </em>{year}<br/> '+
 						'<em>Management Body/Authority(ies): </em><span class="own">{owner}</span><br/>'+
-						'<em>Area Type: </em><span>{type}</span> <br/> '+
-						'<em>UN Criteria: </em>{criteria}<br/> '+
-                        '<em>Validity: </em><span>from 2007 up to 2014</span> <br/> '+
+						'<em>Area Type: </em><span>{vmeType}</span> <br/> '+
+						// '<em>UN Criteria: </em>{criteria}<br/> '+
+                        // '<em>Validity: </em><span>from 2007 up to 2014</span> <br/> '+
 						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						'<br/><br/>'+
 						'<div>'+
@@ -270,53 +279,9 @@ Vme.data={
                      * Download all vme areas
                      */
                     getFactsheetUrl: function(values){
-                        //TODO: remove this line when real factsheet are online
-                        //return("fishery/vme/10/en");
-                        if(values.vmeId){
-                            //Ext..get(values.vme_id){ bla bla };
-/*/////////////////////                            
-                            Ext.Ajax.request({
-                                url : 'http://figisapps.fao.org/figis/ws/vme/webservice/get',
-                                method: 'GET',
-                                params :{
-                                    id:values.vme_id
-                                },
-                                success: function ( result, request ) {
-                                    var jsonData = Ext.util.JSON.decode(result.responseText);
-                                    
-                                    if (!jsonData.factsheetUrl ){
-                                        /*
-                                        Ext.MessageBox.show({
-                                            title: "Info",
-                                            msg: FigisMap.label("SIDP_NOGEOMETRY"),
-                                            buttons: Ext.Msg.OK,
-                                            icon: Ext.MessageBox.INFO,
-                                            scope: this
-                                        });  
-                                    }else{      
-                                        console.log(jsonData.factsheetUrl);
-                                    }
-                                  
-                                },
-                                failure: function ( result, request ) {
-                                    /*
-                                    Ext.MessageBox.show({
-                                        title: "Info",
-                                    msg: FigisMap.label("SIDP_NOGEOMETRY"),
-                                        buttons: Ext.Msg.OK,
-                                        icon: Ext.MessageBox.INFO,
-                                        scope: this
-                                    });  
-                                },
-                                scope: this
-                            });
-      
-                            */
-                            
-///////////////////
-                            var vmeid = values.vme_id.split('_')[2];
-                            
-                            return("fishery/vme/"+vmeid+"/en");
+
+                        if(values.factsheetUrl){
+                            return(values.factsheetUrl);
                         }else
                         {
                             return("fishery/vme/10/en");
@@ -663,14 +628,20 @@ Vme.data.extensions ={
 				fields: [
 					{name: 'id', mapping: 'fid'},
 					{name: 'geometry', mapping: 'geometry'},
-					{name: 'localname',  mapping: 'attributes.LOCAL_NAME'},
-					{name: 'bbox',		mapping: 'bounds'},
-					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
+                    {name: 'vme_id',     mapping: 'attributes.VME_ID'},
 					{name: 'status', 	 mapping: 'attributes.STATUS'},
-					{name: 'year', mapping: 'attributes.YEAR'},
-					{name: 'type', mapping: 'attributes.VME_TYPE'},
-					{name: 'owner', mapping: 'attributes.OWNER'},
-					{name: 'geo_ref', mapping: 'attributes.GEO_AREA'}
+                    {name: 'year', mapping: 'attributes.YEAR'},
+                    {name: 'VME_AREA_TIME', mapping: 'attributes.VME_AREA_TIME'},
+                    {name: 'SHAPE_AREA', mapping:'attributes.SHAPE_AREA'},
+                    {name: 'envelope', mapping: 'attributes.envelope'},
+					{name: 'localname',  mapping: 'attributes.localName'},
+					{name: 'factsheetUrl',  mapping: 'attributes.factsheetUrl'},
+					{name: 'bbox',		mapping: 'bounds'},
+					{name: 'vmeType', mapping: 'attributes.vmeType'},
+					{name: 'owner', mapping: 'attributes.owner'},
+                    {name: 'validityPeriodFrom',		mapping: 'validityPeriodFrom'},
+					{name: 'validityPeriodTo',		mapping: 'validityPeriodTo'},
+					{name: 'geo_ref', mapping: 'attributes.geoArea'}
 					
 					
 				],
@@ -856,7 +827,8 @@ Vme.data.stores = {
         url: Vme.data.models.rfmosUrl,
         autoLoad: true,
         remoteSort: false,
-        //idProperty: 'id',
+        idProperty: 'id',
+        
         root: 'resultList',
         fields: [ "id", "name" ] // "lang"
         //sortInfo: {field: "name", direction: "ASC"}             

@@ -90,25 +90,106 @@ a.lblReset {
 */
 
 #sidebar {
-       border-left-color : #000;
-                   float : right;
-               font-size :  12px;
-                  
-                 padding : 0;
-                   width : 210px;
-                overflow :  auto ;
-                position:absolute;
-                z-index:1000;
-                
-                top:0;right:0;
+    border-left-color : #000;
+    float : right;
+    font-size :  12px;
+    padding : 0;
+    width : 248px;
+    position:absolute;
+    z-index:5000;
+
+    top:0;right:0;
+    
+
 }
-#sidebar .x-tab-panel-body,#sidebar .x-panel-body{
-    background: rgba(41, 171, 226, 0.5);
-    font-weight:bold;
+#sidebarP{
+    overflow :  auto ;
+}
+#leftTopPan{
+    -webkit-box-shadow: 0px 2px 5px -1px rgba(0, 79, 131, 0.5);
+    box-shadow: 0px 2px 5px rgba(0, 79, 131, 0.5);
+    border-color: #000000;
+    background-color: #94D5F0;
+    background-color: rgba(41, 171, 226, 0.5);
+    height:82px;
+
+}
+#searchtextwrapper{
+    background:url(../img/searchsimplebox.png) no-repeat;
+    padding-top: 13px;
+    margin-top:0px;
+    padding-left:15px;
+    padding-bottom:30px;
+    margin-bottom:0px;
+}
+#leftTopPan div{
+    margin-left: 20px;
+}
+#leftTopLinks{
+    padding-left:15px;
+    color: #FFFFFF;
+    font-family: asap, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    position:relative;
     
 }
+
+#leftTopLinks a,#leftTopLinks a:hover{
+    color: #FFFFFF;
+    text-decoration:none;
+}
+#searchtext{
+
+    height:20px;
+    background-color:transparent;
+    border: 0px solid;
+    height:20px;
+    width:155px;
+    padding-right:2px;
+    padding-left:2px;
+
+    color:#666;
+}
+
+#sidebar .x-panel-body{
+    background: rgba(41, 171, 226, 0.5);
+    font-weight:bold;
+    -webkit-box-shadow: 0px 2px 5px -1px rgba(0, 79, 131, 0.5);
+    box-shadow: 0px 2px 5px rgba(0, 79, 131, 0.5);
+    border-color: #000000;
+    background-color: #94D5F0;
+    background-color: rgba(41, 171, 226, 0.5);
+}
+
+#sidebar .x-panel-body .x-panel-body{
+    background: transparent !important;
+    font-weight:bold;
+    
+    
+}
+#simpleSearchButton{
+    height: 25px;
+    width: 29px;
+    position: absolute;
+    top: 10px;
+    left: 174px;
+    cursor: pointer;
+    margin: 0;
+}
+.xbutton-closepanels{
+    position:absolute;
+    right:10px;
+    top:-3px;
+    width:21px;
+    height:21px;
+    cursor:pointer;
+    background:url('../img/xbutton.png');
+    float:right;
+
+}
 #sidebar .legend {
-                 margin : .5em;
+        margin : .5em;
 }
 #sidebar .legendTitle {
 	font-weight: bold;

@@ -9,7 +9,7 @@
 	<meta name="author-corporate" content="FAO of the UN" />
 	<meta name="copyright" content="http://www.fao.org/corp/copyright/en/" />
 	<meta name="keywords" content="RFB, Regional Fishery Body, Map, FAO" />
-	<title>Vulnerable Marine Ecosystems Map Viewer</title>
+	<title>Vulnerable Marine Ecosystems Database</title>
 	
 	<link rel="stylesheet" type="text/css" href="lib/OpenLayers/theme/default/style.css">
 	<link rel="stylesheet" href="theme/css/style.css" type="text/css" />
@@ -39,7 +39,7 @@
 	
 	<script type="text/javascript" src="src/FigisMap.js"></script>
     <!-- proxy overriding configuration: allows to use a proxy for test purpose -->
-    <!-- <script type="text/javascript" src="src/proxy-ovr.js" defer="defer"></script> -->
+    <!-- <script type="text/javascript" src="src/proxy-ovr.js" defer="defer"></script>  -->
 	<script type="text/javascript" src="src/vmeData.js" ></script>
 	<script type="text/javascript" src="src/popups.js"></script>
 	<script type="text/javascript" src="src/sidePanel.js" ></script>
@@ -192,7 +192,15 @@ document.namespaces;
 		 </div> 
 		<div style="position:relative" id="main">
 			<div id="map"  class="map"></div>
-            <div id="sidebar"></div>
+            <div id="sidebar">
+                <div id="leftTopPan">
+                    <div id="searchtextwrapper"><input type="text" id="searchtext" name="searchtext" onkeydown="if (event.keyCode == 13) { Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');}"><div onclick=" Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');" id="simpleSearchButton"></div></div>
+                    <div id="leftTopLinks"> 
+                        <a onclick="sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('searchForm');Vme.form.panels.SearchPanel.doLayout()">Advanced Search</a> |
+                        <a onclick="sidePanel.layout.setActiveItem('legendPanel');sidePanel.expand();">Legend</a> <div class="xbutton-closepanels" onclick="sidePanel.collapse();" >  </div>
+                    </div>
+                </div>
+                <div id="sidebarP"></div></div>
 			<div id="vme_slider"></div>
 		
 		
@@ -214,9 +222,6 @@ document.namespaces;
 			<div id="MemberCountries" class="legend"></div-->
 		</div>
 
-		
-
-		
 		<div  style="top:30px;position:relative" id="bottomBar2">
         <label id="lblSRS">Change projection:</label>
 			<select id="SelectSRS" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')">
@@ -247,7 +252,7 @@ document.namespaces;
 	<script type="text/javascript" language="javascript">
 	// <![CDATA[
 		Ext.onReady(function(){
-			sidePanel.render(document.getElementById('sidebar'));
+			sidePanel.render(document.getElementById('sidebarP'));
 
 			setRFBPage('e-link','rfbs-link', 'rfbs-html');
 		});

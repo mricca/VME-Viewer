@@ -202,10 +202,53 @@ FigisMap.ol.getTemplate = function(layer){
  *  handler to parse GML response
  */
 FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
-	var popupKey = e.xy.x + "." + e.xy.y;
+	
 	var layer = e.object.layers[0];
 	var reader = new OpenLayers.Format.WMSGetFeatureInfo();
-	var response = reader.read(e.text);
+    var response = reader.read(e.text);
+    //request to the VME service VME
+    if(layer.params.LAYERS == FigisMap.fifao.vme){
+        /*
+            count the results, do an ajax call for every field,
+            merge the OpenLayers object "attributes" obj with the result
+        */
+        var count = 0;
+        for(var i = 0 ; i<response.length ; i++){
+            var inventoryIdentifier= response[i].attributes["VME_ID"];
+            
+            Ext.Ajax.request({
+                url: 'http://figisapps.fao.org/figis/ws/vme/webservice/get',
+                scope:response[i],
+                method:'GET',
+                params: { inventoryIdentifier: inventoryIdentifier },
+                success: function(resp,opt){
+                    var vmeDataParsed = Ext.decode(resp.responseText);
+                    
+                    Ext.apply(this.attributes,vmeDataParsed.resultList[0]);
+                    count++;
+                    
+                    if(count == response.length){
+                        FigisMap.ol.showPopup(e,response,layer);
+                    }
+                },
+                failure: function(){
+                  count++; //count anyway to show the popup
+                  if(count == response.length){
+                        FigisMap.ol.showPopup(e,response,layer);
+                  }
+                }
+            });
+        }
+        
+    
+    }else{
+        FigisMap.ol.showPopup(e,response,layer);
+    }
+	
+    
+}
+FigisMap.ol.showPopup= function(e,response,layer){
+    var popupKey = e.xy.x + "." + e.xy.y;
 	var store = FigisMap.ol.getStore(layer);
 	//var template = FigisMap.ol.getTemplate
 	store.loadData(response);
@@ -213,7 +256,6 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 	var dv = new Ext.DataView({
 		itemId: name,
 		title: name,
-		
 		itemSelector: 'span.x-editable',
 		autoScroll:true,
 		border:false,
@@ -290,6 +332,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 		  popup.show();
 	  }
 	}
+
 }
 
 /** 

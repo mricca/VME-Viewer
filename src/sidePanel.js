@@ -163,18 +163,19 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 	labelWidth: 75, // label settings here cascade unless overridden
 
 	bodyStyle:'padding:5px 5px 0',
-	
+	border: false,
 	labelAlign :'top',
 	defaults: {anchor:'100%' },
 	defaultType: 'combo',
+    id:'SearchForm',
 	items: [
-		{
+		/*{
 			fieldLabel: FigisMap.label("SEARCH_TEXT_LBL"),
 			xtype: 'textfield',
 			name : 'text',
 			ref:'../text',
 			emptyText: FigisMap.label("SEARCH_TEXT_EMP")
-		},{
+		},*/{
 			fieldLabel: FigisMap.label('SEARCH_RFMO_LBL'),//+' [<a href="#">?</a>]',
 			name: 'authority',
 			ref:'../RFMO',
@@ -246,39 +247,8 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			iconCls: 'search-icon',
 			
 			handler: function(){
-				var store = Vme.data.stores.SearchResultStore;
-				store.resetTotal();
-				store.removeAll();
-				store.baseParams={};
-				
-				var fields = Vme.form.panels.SearchForm.getForm().getFieldValues(true);
-				
-                var params = {
-					start: 0,          
-					rows: Vme.data.constants.pageSize
-				};
-				
-				for (var key in fields){
-				    if(fields[key]!=""){
-                        switch(key){
-                            case 'authority':
-                            case 'vme_type':
-                            case 'vme_criteria':
-                            case 'year':
-                            case 'text':
-                                store.setBaseParam(key, fields[key]);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-				}
-				
-				store.load({
-					params: params
-				});
-				Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-1');
-			}
+                Vme.search(true);
+            }
 		}
 	],
     listeners: {
@@ -290,7 +260,42 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
         }
     } 
 });
-
+Vme.search =function(advanced){
+    var store = Vme.data.stores.SearchResultStore;
+    store.resetTotal();
+    store.removeAll();
+    store.baseParams={};
+    var fields ={}
+    if(advanced){
+        var fields = Vme.form.panels.SearchForm.getForm().getFieldValues(true);
+    }
+    fields.text = document.getElementById('searchtext').value;
+    var params = {
+        start: 0,          
+        rows: Vme.data.constants.pageSize
+    };
+    
+    for (var key in fields){
+        if(fields[key]!=""){
+            switch(key){
+                case 'authority':
+                case 'vme_type':
+                case 'vme_criteria':
+                case 'year':
+                case 'text':
+                    store.setBaseParam(key, fields[key]);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    
+    store.load({
+        params: params
+    });
+    Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');
+}
 /** 
  * Vme.form.panels.SearchPanel
  * panel containing search form and search results dataview using
@@ -302,26 +307,28 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 	layout:'card',
 	activeItem: 0,
 	
-	
+	border: false,
 	defaults: {
 		border:false
 	},
 	items:[{
-			id: 'searchcard-0',
+			id: 'searchForm',
 			xtype:'panel',
+            border: false,
 			defaults: {
 				border:false
 			},
 			items:[Vme.form.panels.SearchForm]
 		},{
-			id: 'searchcard-1',
+			id: 'resultPanel',
 			xtype:'panel',
 			defaults: {
 				border:false
 			},
 			items:[
 				{
-                    height:440,
+                    height:460,
+                    border: false,
 					xtype:'panel',
                     layout:'fit',
 					items:[Vme.form.widgets.SearchResults],
@@ -334,7 +341,7 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 				xtype: 'button',
 				text: FigisMap.label('SEARCH_BACK_FORM'),
 				iconCls: 'back-search-icon',
-				handler: function(){Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-0')}
+				handler: function(){Vme.form.panels.SearchPanel.layout.setActiveItem('searchForm')}
 			}]
 		}
 	]
@@ -342,15 +349,15 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 });
 
 
-var sidePanel = new Ext.TabPanel({
+var sidePanel = new Ext.Panel({
 	//applyTo: 'side-bar',
 	//renderTo:'sidebar',
     collapsed:true,
-    collapsible:true,
-    header:true,
-	height:550,
-	autoTabs:true,
-	activeTab:0,
+    collapsible:false,
+	height:460,
+	
+	activeItem: 0,
+    layout:'card',
 	deferredRender:false,
 	border:false,
 	defaults:{
@@ -358,10 +365,10 @@ var sidePanel = new Ext.TabPanel({
 	},
 	items:[
 		{
+            id: 'legendPanel',
 			layout:'fit',
-			title:FigisMap.label('SIDP_MAP'),
-			//activeItem: 'legendpanel',
-			iconCls:'map-icon',			
+			//title:FigisMap.label('SIDP_MAP'),
+			//iconCls:'map-icon',			
 			renderHidden:true,
 			defaults:{
 				border:false
@@ -373,16 +380,11 @@ var sidePanel = new Ext.TabPanel({
 				autoScroll: true,
 				html:'<div id="layerswitcher"></div>'
 			
-			}/*,
-			{
-				id:'legendpanel',
-				title:FigisMap.label('SIDP_LEGEND'),
-				iconCls: 'legend-icon',	
-				html:'<div id="legend" class="legend"></div>'
-			}*/]
+			}]
 		},
 		{
-			title:FigisMap.label('SIDP_SEARCH'),
+            id: 'searchPanel',
+			//title:FigisMap.label('SIDP_SEARCH'),
 			iconCls: 'search-icon',
 			items:[Vme.form.panels.SearchPanel]
 		}
