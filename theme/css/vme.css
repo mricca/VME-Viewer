@@ -107,18 +107,30 @@ a.lblReset {
     padding-right:0px;
 
 }
+/*
 .blueglass{
-    
+    display:hidden;
     background-color: rgba(41, 171, 226, 0.2);
     height:50px;
     width:191px;
+}*/
+#lblSRS{
+    width:191px;
+
+    ;
+    color: #FFFFFF;
+    font-family: asap, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    position:relative;
+    background-color: rgba(41, 171, 226, 0.6);
 }
 #lblSRS:hover{
-
-    background-color: rgba(242, 242, 242, 0.6);
+    
+    background-color: rgba(41, 171, 226, 0.4);
 }
 #lblSRS.open{
-    background-color: rgba(41, 171, 226, 0.4);
+    background-color: rgba(41, 171, 226, 0.6);
     
 
 }
@@ -140,7 +152,7 @@ a.lblReset {
     margin:0;
 }
 #bottomLeftPanel{
-    bottom:15px;
+    bottom:65px;
     position:absolute;
     z-index:5000;
 }
@@ -187,7 +199,7 @@ a.lblReset {
     color: #FFFFFF;
     font-family: asap, sans-serif;
     font-size: 12px;
-    font-weight: 400;
+    font-weight: bold;
     position:relative;
     
 }
@@ -351,15 +363,17 @@ a.lblReset {
 }
 */
 #disclaimer{
-color: #FFFFFF;
-font-size: 10px;
-font-family: asap, sans-serif;
-font-weight: 400;
-  width : 920px;
-  margin-left: auto;
+/*color: #FFFFFF;*/
+    font-size: 10px;
+    font-family: asap, sans-serif;
+    font-weight: 400;
+    width : 920px;
+    margin-left: auto;
     margin-top:2px;
     margin-bottom:2px;
     margin-right: auto;
+    top:70px;
+    position:relative;
 }
 #disclaimer p {
                  padding :   0px  10px;
