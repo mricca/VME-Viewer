@@ -209,6 +209,7 @@ a.lblReset {
     color:#666;
 }
 
+
 #sidebarP{
     width:236px;margin-left:13px;
 }
@@ -586,8 +587,43 @@ h3 {
 .search-result em{
 	font-weight: bold;
 }
-
+/**
+ popup custom style
+ **/
+ .gx-popup.x-window{
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.5);
+    border-width: 1px;
+    border-style: solid;
+    border-color: #999999;
+    background-color: rgba(255, 255, 255, 0.8);
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    border-radius: 10px;
+}
+ .gx-popup .gx-popup, .gx-popup .x-tab-panel-body,.gx-popup .x-panel-body,.gx-popup .x-tab-panel-header,.gx-popup .x-tab-strip-wrap,.gx-popup  .x-tab-strip-wrap .x-tab-strip, .gx-popup .x-window-mc{
+    background:transparent;
+}
+.gx-popup.x-window-tc{   
+    height: 15px;
+    overflow: visible;
+}
+/** popup content */
+.popup-result h3{
+    font-family: asap, sans-serif;
+    font-size: 13px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0px;
+}
 .popup-result{
+    font-family: asap, sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.5;
+padding: 0px;
 	margin:0;
 	padding: 6px 2px;
 }

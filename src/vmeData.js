@@ -202,7 +202,7 @@ Vme.data={
                        '<img title="Zoom to area" src="theme/img/icons/buttonzoom.png" />'+
                         '</a> '+
                         '<a onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');">'+
-                        '<img title="Open the fact sheet" src="theme/img/icons/buttonfactsheet.png" />'+
+                        '<img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" />'+
                         '</a> '+
 					'</div>'+
 				'</tpl>',
@@ -223,8 +223,8 @@ Vme.data={
 		vme: 
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="search-result" style="text-align:left;position:relative">' +
-						'<em>Name: </em>{localname}<br/>'+
+					'<div class="popup-result" style="text-align:left;position:relative">' +
+						'<h3>{localname}</h3>'+
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Year: </em>{year}<br/> '+
 						'<em>Management Body/Authority(ies): </em><span class="own">{owner}</span><br/>'+
@@ -232,23 +232,17 @@ Vme.data={
 						// '<em>UN Criteria: </em>{criteria}<br/> '+
                         // '<em>Validity: </em><span>from 2007 up to 2014</span> <br/> '+
 						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
-						'<br/><br/>'+
 						'<div>'+
-						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="factlink" href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><em>Open Factsheet</em></a><br/>' +
-							'<br/>'+
-							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a><br/>' +
+						'<div style="width:100%;text-align:right;bottom:3px;">' +
+							'<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +
+							'<a  target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							'{[this.getDownloadFDS(values)]}' +
-						'</div>' +
-						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
-							'<a class="zoomlink" onClick="'+
+							'<a onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
-							'">Zoom</a>' +
+							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
 							'<br/>{[this.addProtectedLinks(values)]}' +
-						'</div>'+
-						'</div>'+
-					'</div>'+
+					'</div><hr/>'+
 				'</tpl>',
 				{
 					compiled:true,

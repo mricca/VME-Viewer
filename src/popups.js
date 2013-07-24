@@ -319,7 +319,7 @@ FigisMap.ol.showPopup= function(e,response,layer){
 			  title: name,
 			  layout: "fit",
 			  border:false,
-			  bodyStyle: 'padding:0px;background-color:#F5F5DC',
+			  bodyStyle: 'padding:0px;',
 			  items:[dv],
 			  autoWidth: true,
 			  collapsible: false
