@@ -372,7 +372,7 @@ a.lblReset {
     margin-top:2px;
     margin-bottom:2px;
     margin-right: auto;
-    top:70px;
+    top:-70px;
     position:relative;
 }
 #disclaimer p {
