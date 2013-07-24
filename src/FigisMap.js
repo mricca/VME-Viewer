@@ -1482,7 +1482,12 @@ FigisMap.renderer = function(options) {
 				restrictedExtent: ( projection == 3031 ? myBounds : null ),
 				maxResolution: mapMaxRes,
 				projection: new OpenLayers.Projection( 'EPSG:' + projection ),
-				units: ( projection == 4326  ? 'degrees' : 'm' )
+				units: ( projection == 4326  ? 'degrees' : 'm' ),
+                controls:[ new OpenLayers.Control.Navigation(),
+                                  new GlassyPanZoom(),
+                                  new OpenLayers.Control.ArgParser(),
+                                  new OpenLayers.Control.Attribution()
+                                ]
 			}
 		);
 		
