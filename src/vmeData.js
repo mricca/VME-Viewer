@@ -235,13 +235,13 @@ Vme.data={
 						'<div>'+
 						'<div style="width:100%;text-align:right;bottom:3px;">' +
 							'<a  target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
-							'{[this.getDownloadFDS(values)]}' +
+							//'{[this.getDownloadFDS(values)]}' +
                             '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +
 							'&nbsp;&nbsp;<a onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
-							'<br/>{[this.addProtectedLinks(values)]}' +
+							//'<br/>{[this.addProtectedLinks(values)]}' +
 					'</div><hr/>'+
 				'</tpl>',
 				{
