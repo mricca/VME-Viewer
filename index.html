@@ -162,13 +162,13 @@ document.namespaces;
 		<br />
 
 <div  style="display:none" id="topBar">
-			<span id="loginContainer" ></span>
+			
 			<label id="lblFilRFB" style="visibility:hidden">Zoom to:</label>
 			<select  id="FilterRFB" onchange="setZoom()"></select>
 			<label style="visibility:hidden"id="lblRFB">Filter by:</label>
 			<select style="visibility:hidden" id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>  
 			
-            <a id="lblReset" class="lblReset" onclick="reset()">Reset</a>            
+                        
 
 			<!--a href="javascript:embedLink();" id="EmbedLink" title="Link or embed this RFB map"><span>Link</span></a-->
 			<input id="txtCql" type="hidden" />
@@ -209,6 +209,9 @@ document.namespaces;
                 </div>
                 
             </div>
+            <div id="loginContainer" class="figisButton" onclick="FigisMap.logInOut()">Login</div>
+
+            <div id="lblReset" class="lblReset figisButton" style="" onclick="reset()">Reset</div>
             <div id="sidebar">
                 <div id="leftTopPan">
                     <div id="searchtextwrapper"><input type="text" id="searchtext" name="searchtext" onkeydown="if (event.keyCode == 13) { Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');}"><div onclick=" Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');" id="simpleSearchButton"></div></div>

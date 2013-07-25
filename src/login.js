@@ -101,13 +101,14 @@ Ext.onReady(function(){
 					FigisMap.loginWin.userField.setValue("");
 					FigisMap.loginWin.passwordField.setValue("");
 					//Remove User button and add login button
-					Ext.DomHelper.overwrite(document.getElementById("loginContainer"),{});
-					new Ext.Button({
+					Ext.DomHelper.overwrite(document.getElementById("loginContainer"),{html:'Login'});
+					/*new Ext.Button({
 						renderTo : 'loginContainer',
 						handler : FigisMap.logInOut,
 						text : 'Login',
 						iconCls: 'icon-login'
 					});
+                    */
 					//Ext.DomHelper.overwrite(document.getElementById("user"),{
 					//	tag:'span',
 					//	id:'user',
@@ -148,9 +149,13 @@ Ext.onReady(function(){
 					tag:'span',
 					id:'login',
 					//'class':'user-logout',
-					html:'<span id="usermenu"></span>'
+					//html:'<span id="usermenu"></span>',
+                    html:'Logout'
 				});
-				var sp =  new Ext.Toolbar.SplitButton({
+                /**
+                 * to enable the user menu uncomment sp and html:'<span id="usermenu"></span>'
+                 */
+				/*var sp =  new Ext.Toolbar.SplitButton({
 						text: user,
 						//handler: onButtonClick,
 						renderTo :'usermenu',
@@ -164,7 +169,7 @@ Ext.onReady(function(){
 								handler: FigisMap.logInOut
 							}]
 						}
-					});
+					});*/
 
 				//fires event login
 				w.fireEvent('login',user);
@@ -184,12 +189,13 @@ Ext.onReady(function(){
 	};
 	
 	//Setup login button at startup
+/*
 	new Ext.Button({
 		renderTo : 'loginContainer',
 		handler : FigisMap.logInOut,
 		text : 'Login',
 		iconCls: 'icon-login'
 	});
-	
+*/
 });
  

@@ -1484,7 +1484,10 @@ FigisMap.renderer = function(options) {
 				projection: new OpenLayers.Projection( 'EPSG:' + projection ),
 				units: ( projection == 4326  ? 'degrees' : 'm' ),
                 controls:[ new OpenLayers.Control.Navigation(),
-                                  new GlassyPanZoom(),
+                                  new OpenLayers.Control.Button({
+                                    displayClass: "MyButton", trigger: function(){alert("login")}
+                                    }),
+                                  new GlassyPanZoom({position:new OpenLayers.Pixel(4,40)}),
                                   new OpenLayers.Control.ArgParser(),
                                   new OpenLayers.Control.Attribution()
                                 ]
