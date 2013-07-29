@@ -38,7 +38,8 @@ function reset(){
 	document.getElementById("FilterRFB").text = FigisMap.label('SELECT_AN_AREA');
 	document.getElementById("FilterRFB").value = "";
 	document.getElementById("SelectRFB").value = "";
-	setProjection('4326');
+	setProjection('3349');
+    closeProjectionPanel();
 	FigisMap.ol.clearPopupCache();
 	setRFBPage('e-link','rfbs-link', 'rfbs-html');
     var years = Ext.getCmp('years-slider');	
@@ -367,4 +368,18 @@ function setRFBEmbedLink(targetId, rfbsLinkId, rfbsHtmlId) {
 		linkId.value = "";
 		htmlId.value = "";
 	}
+}
+
+
+/* GUI changes - TODO move it in a separeate file */
+
+function toggleProjectionPanel(){
+    var el = Ext.get('SelectSRS');
+    el.getHeight()==0 ? el.setHeight(50,true):el.setHeight(0,true);
+    Ext.get('lblSRS').toggleClass('open');
+}
+function closeProjectionPanel(){
+    var el = Ext.get('SelectSRS');
+    el.setHeight(0,true);
+    Ext.get('lblSRS').removeClass('open');
 }

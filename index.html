@@ -47,7 +47,7 @@
 	<script type="text/javascript" src="src/rfb.js"></script>
 
 	<script type="text/javascript" src="src/Watermark.js" defer="defer"></script>
-
+    
       <style type="text/css">
           	
           table.featureInfo, table.featureInfo td, table.featureInfo th {
@@ -120,6 +120,10 @@
             max-width: 100%
         }
 </style>
+<!--[if lt IE 9]>
+    <link rel="stylesheet" href="theme/css/oldie.css" type="text/css" />
+
+    <![endif]-->
 <script>
 //Workaround for IE7 IE8 http://trac.osgeo.org/openlayers/ticket/2304
 document.namespaces;
@@ -127,6 +131,7 @@ document.namespaces;
 </head>
 
 <body>
+
 <div id="page">
 	<div id="wrapper">
     <!--
@@ -200,11 +205,12 @@ document.namespaces;
 		<div style="position:relative" id="main">
 			<div id="map"  class="map"></div>
             <div  id="bottomLeftPanel">
-            <div id="lblSRS" onclick="var el = Ext.get('SelectSRS');el.getHeight()==0 ? el.setHeight(50,true):el.setHeight(0,true);Ext.get('lblSRS').toggleClass('open')">Change projection</div>
+            <div id="lblSRS" onclick="toggleProjectionPanel();">Change projection</div>
                 <div id="SelectSRS">
                    <div> 
-                    <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='4326' checked> WGS84</input></p>
-                    <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3349'> Mercator</input><br/></p>
+                   <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3349' checked> Mercator</input><br/></p>
+
+                    <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='4326' > WGS84</input></p>
                    </div>
                    <div> 
                     <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3031'> South Polar</input><br/></p>

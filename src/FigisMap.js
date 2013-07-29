@@ -78,7 +78,7 @@ FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figi
 FigisMap.rnd.vars = {
 	geoserverURL		: FigisMap.geoServerBase + "/figis/geoserver",  //unused
 	geowebcacheURL		: FigisMap.geoServerBase + "/figis/geoserver/gwc/service",
-	logoURL			: FigisMap.httpBaseRoot + "theme/img/FAO_blue_20_transp.gif",
+	logoURL			: FigisMap.httpBaseRoot + "theme/img/FAO_blue_20.png",
 	logoURLFirms		: FigisMap.httpBaseRoot + "theme/img/logoFirms60.gif",
 	FAO_fishing_legendURL	: FigisMap.httpBaseRoot + "theme/img/FAO_fishing_legend.png",
 	EEZ_legendURL		: FigisMap.httpBaseRoot + "theme/img/EEZ_legend.png",
@@ -415,7 +415,9 @@ FigisMap.parser.projection = function( p ) {
 		case   3031	: break;
 		//case  54012 : break;
 		case  54009 : break;
-		default		: proj = 4326;
+        case 4326:break;
+
+		default		: proj = 900913;
 	}
 	return proj;
 };
@@ -427,7 +429,9 @@ FigisMap.parser.watermark = function( p ) {
 		w.src = FigisMap.rnd.vars.logoURLFirms;
 		w.width = 60;
 		w.height = 29;
-	};
+	}else{
+        w.displayClass = "olFAOLogo";
+    }
 	if ( p && p.watermark != null ) {
 		if ( typeof p.watermark == 'object' ) {
 			for ( var i in p.watermark ) w[i] = p.watermark[i];
@@ -699,11 +703,14 @@ FigisMap.rnd.maxResolution = function( proj, pars ) {
 FigisMap.rnd.watermarkControl = function( map, pars ) {
 	if ( ! pars.watermark ) return false;
 	var poweredByControl = new OpenLayers.Control();
+    
 	OpenLayers.Util.extend(
 		poweredByControl,
 		{
 			draw: function () {
+                
 				OpenLayers.Control.prototype.draw.apply(this, arguments);
+                this.div.className+= ' ' +pars.watermark.displayClass;
 				this.div.innerHTML = '<img' +
 					( pars.watermark.src ? ' src="' + pars.watermark.src + '"' : '' ) +
 					( pars.watermark.width ? ' width="' + pars.watermark.width + '"' : '' ) +
