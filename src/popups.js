@@ -170,11 +170,11 @@ FigisMap.ol.getTabTitle=function(layer){
     case layernames.vme_fp : 
       return "Footprints";
     case layernames.vme_en : 
-      return "Encounter data";
+      return "Encounters";
     case layernames.vme_sd :   
       return "Survey data";
     case  layernames.vme_agg_en : 
-	   return "Encounter data";	  
+	   return "Encounters";	  
 	case  layernames.vme_agg_sd : 
 	   return "Survey data";
   }
