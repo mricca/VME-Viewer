@@ -334,13 +334,11 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a>' +
-						'</div>' +
-						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
-							'<a class="zoomlink" onClick="'+
+							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
+							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
-							'">zoom</a>' +
+							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
 						'</div>'+
 						'</div>'+
 					'</div>'+
@@ -416,13 +414,11 @@ Vme.data={
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile</a>' +
-						'</div>' +
-						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
-							'<a class="zoomlink" onClick="'+
+							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
+							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
-							'">zoom</a>' +
+							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
 						'</div>'+
 						'</div>'+
 					'</div>'+
@@ -504,19 +500,17 @@ Vme.data={
 		footprints :
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="search-result" style="text-align:left;position:relative;">' +
-						'<em>VME_NAFO bottom fishing areas ("footprint") </em>{localname}<br/>'+
-						'<em>Last referene Year: </em>{year}<br/> '+
+					'<div class="popup-result" style="text-align:left;position:relative;">' +
+						'<h3>{localname}</h3>'+
+						'<em>Year: </em>{year}<br/> '+
 						'<br/><br/>'+
 						'<div>'+
 						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
-							'<a class="zipmlink" target="_blank" href="{[this.getDownloadLink(values)]}">Download ShapeFile </a>' +
-						'</div>' +
-						'<div style="position:absolute;left:5px;text-align:left;bottom:3px;">' +
-							'<a class="zoomlink" onClick="'+
+							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
+							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
-							'">zoom</a>' +
+							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
 						'</div>'+
 						'</div>'+
 					'</div>'+
@@ -713,14 +707,14 @@ Vme.data.extensions ={
 				fields: [
 					{name: 'id', mapping: 'fid'},
 					{name: 'geometry', mapping: 'geometry'},
-					{name: 'localname',  mapping: 'attributes.LOCAL_NAME'},
+					{name: 'localname',  mapping: 'attributes.Name'},
 					{name: 'bbox',		mapping: 'bounds'},
 					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
 					{name: 'status', 	 mapping: 'attributes.STATUS'},
-					{name: 'year', mapping: 'attributes.YEAR'},
+					{name: 'year', mapping: 'attributes.Year'},
 					{name: 'type', mapping: 'attributes.VME_TYPE'},
 					{name: 'owner', mapping: 'attributes.OWNER'},
-					{name: 'geo_ref', mapping: 'attributes.GEO_AREA'}
+					{name: 'obj_id', mapping: 'attributes.OBJECTID'}
 					
 					
 				],
