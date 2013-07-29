@@ -236,7 +236,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 	buttons: [{
 			text: FigisMap.label('SIDP_CLEAR'),
 			ref: '../Clear',
-			iconCls:'clear-icon',
+			cls:'figisButton',
 			handler: function(){
 				Vme.form.panels.SearchForm.getForm().reset();
 			}
@@ -244,7 +244,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 		},{
 			text: FigisMap.label('SIDP_SEARCH'),
 			ref: '../Search',
-			iconCls: 'search-icon',
+			cls: 'figisButton',
 			
 			handler: function(){
                 Vme.search(true);
