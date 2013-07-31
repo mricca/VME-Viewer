@@ -33,6 +33,7 @@ FigisMap.fifao = {
 	maj : 'fifao:FAO_MAJOR',
 	ma2 : 'fifao:FAO_MAJOR2',
 	mal : 'fifao:MarineAreas',
+    gup : 'fifao:gebco_underseafeatures_points',
 	nma : 'fifao:eez2',
 	RFB : 'fifao:RFB',
 	rfb : 'fifao:RFB_COMP',
@@ -923,7 +924,20 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			skipLegend	: true,
 			hideInSwitcher	: false
 		} );
-    
+    layers.push( {
+			layer		: FigisMap.fifao.gup,
+			cached		: true,
+			filter		: '*',
+			type		: 'auto',
+			style		: '',
+            group: "Overlays",
+            label	: 'Gebco Undersea Features',
+			remote		: false,
+            showLegendGraphic: false,	            
+			skipLegend	: true,
+                 hidden : true,
+			hideInSwitcher	: false
+		} );
 	return layers;
 };
 

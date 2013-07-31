@@ -223,7 +223,7 @@ Vme.data={
 		vme: 
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="popup-result" style="text-align:left;position:relative">' +
+					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{localname}</h3>'+
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Year: </em>{year}<br/> '+
@@ -232,8 +232,8 @@ Vme.data={
 						// '<em>UN Criteria: </em>{criteria}<br/> '+
                         // '<em>Validity: </em><span>from 2007 up to 2014</span> <br/> '+
 						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
-						'<div>'+
-						'<div style="width:100%;text-align:right;bottom:3px;">' +
+						
+						'<div style="text-align:right;">' +
 							'<a  target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							//'{[this.getDownloadFDS(values)]}' +
                             '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +
@@ -242,7 +242,8 @@ Vme.data={
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
 							//'<br/>{[this.addProtectedLinks(values)]}' +
-					'</div><hr/>'+
+                        '</div><hr/>'+
+                    '</div>'+
 				'</tpl>',
 				{
 					compiled:true,
@@ -326,20 +327,20 @@ Vme.data={
 		encounters :
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="search-result" style="text-align:left;position:relative">' +						
+					'<div class="search-result" style="text-align:left;">' +						
 						'<em>Taxa: </em><span>{taxa}</span> <br/> '+
 						'<em>Reporting Year: </em>{year}<br/> '+
 						'<em>Quantity: </em><span>{quantity} {unit}</span> <br/> '+
 						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						'<br/><br/>'+
-						'<div>'+
-						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
+						
+						'<div style="text-align:right;">' +
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
-						'</div>'+
+						
 						'</div>'+
 					'</div>'+
 				'</tpl>',
@@ -406,20 +407,18 @@ Vme.data={
 		surveydata :
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="search-result"  style="text-align:left;position:relative">' +						
+					'<div class="search-result"  style="text-align:left;">' +						
 						'<em>Taxa: </em><span>{taxa}</span> <br/> '+
 						'<em>Reporting Year: </em>{year}<br/> '+
 						'<em>Quantity: </em><span>{quantity} {unit}</span> <br/> '+
 						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						'<br/><br/>'+
-						'<div>'+
-						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
+						'<div style="text-align:right;">' +
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
-						'</div>'+
 						'</div>'+
 					'</div>'+
 				'</tpl>',
@@ -500,12 +499,12 @@ Vme.data={
 		footprints :
 			new Ext.XTemplate(
 				'<tpl for=".">'+
-					'<div class="popup-result" style="text-align:left;position:relative;">' +
+					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{localname}</h3>'+
 						'<em>Year: </em>{year}<br/> '+
 						'<br/><br/>'+
 						'<div>'+
-						'<div style="position:absolute;right:5px;text-align:right;bottom:3px;">' +
+						'<div style="text-align:right;">' +
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
