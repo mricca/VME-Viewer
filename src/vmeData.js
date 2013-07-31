@@ -223,6 +223,9 @@ Vme.data={
 		vme: 
 			new Ext.XTemplate(
 				'<tpl for=".">'+
+                    '<tpl if="[xindex] &gt; \'1\'">'+
+                        '<hr/>'+
+                    '</tpl>'+
 					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{localname}</h3>'+
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
@@ -236,13 +239,14 @@ Vme.data={
 						'<div style="text-align:right;">' +
 							'<a  target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							//'{[this.getDownloadFDS(values)]}' +
-                            '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +
 							'&nbsp;&nbsp;<a onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
+                            '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +
+
 							//'<br/>{[this.addProtectedLinks(values)]}' +
-                        '</div><hr/>'+
+                        '</div>'+
                     '</div>'+
 				'</tpl>',
 				{
