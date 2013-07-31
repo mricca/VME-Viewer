@@ -661,11 +661,14 @@ a.lblReset {
 }
 #sidebar .search-result{
 
-        margin-left: 5px;
+    margin-left: 5px;
     margin-right: 5px;
 }
 .search-result em{
 	font-weight: bold;
+}
+.search-result .searchResultValue{
+	font-weight: normal;
 }
 /**
  popup custom style

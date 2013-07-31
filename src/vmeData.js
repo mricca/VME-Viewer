@@ -192,9 +192,9 @@ Vme.data={
 			new Ext.XTemplate(
 				'<tpl for=".">'+
 					'<div class="search-result">' +
-						'<em>Name: </em>{localname}<br/>'+				
-						'<em>Year: </em>{year} <br/> '+
-						'<em>Competent Authority: </em><span class="own">{owner}</span><br/>'+
+						'<em>Name: </em><span class="searchResultValue">{localname}</span><br/>'+				
+						'<em>Year: </em><span class="searchResultValue">{year}</span> <br/> '+
+						'<em>Competent Authority: </em><span class="searchResultValue">{owner}</span><br/>'+
                         '<a onclick="Vme.clickOnFeature(\'{geographicFeatureId}\',{year},false)">'+
                         '<img title="More information" src="theme/img/icons/buttoninfo.png" />'+
                         '</a> '+
