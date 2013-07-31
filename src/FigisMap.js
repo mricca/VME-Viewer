@@ -935,7 +935,6 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			remote		: false,
             showLegendGraphic: false,	            
 			skipLegend	: true,
-                 hidden : true,
 			hideInSwitcher	: false
 		} );
 	return layers;
