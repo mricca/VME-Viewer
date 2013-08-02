@@ -326,9 +326,10 @@ li {
                     position: relative;
                     margin: 0 auto;
                     width:920px;
-                    color: navy;
+                    opacity:.7;
                     top:-30px;
                    clear : both;
+                   color : black;
                font-size :  12px;
                font-weight:bold;
              line-height : 1.5em;
@@ -337,13 +338,11 @@ li {
 }
 #bottomBar1 a,
 #bottomBar1 a:visited {
-            color: #12c;
-           text-decoration: underline;
+                   color : #000;
 }
 #bottomBar1 a:hover,
 #bottomBar1 a:active {
-            color: #12c;
-            text-decoration: underline;
+                   color : #f90;
 }
 /*
 #bottomBar2 {
