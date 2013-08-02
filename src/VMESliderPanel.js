@@ -75,8 +75,8 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
                             var years = Ext.getCmp('years-slider');	
                             var yr_end = years.getValues()[0];
                             
-                            years.setValue(0, '2007');
-                            Ext.getCmp('years-min-field').setValue('2007');
+                            years.setValue(0, '2006');
+                            Ext.getCmp('years-min-field').setValue('2006');
                             
                             slider.updateVme();
                         }
@@ -122,7 +122,7 @@ VMESliderPanel = Ext.extend(Ext.Panel, {
                         id : 'years-slider',
                         vertical : false,
                         width   : 705,
-                        minValue: 2007,
+                        minValue: 2006,
                         maxValue: new Date().getFullYear(),
                         values  : [new Date().getFullYear()],
                         plugins : new Ext.slider.Tip({
