@@ -194,7 +194,7 @@ Vme.data={
 					'<div class="search-result">' +
 						'<em>Name: </em><span class="searchResultValue">{localname}</span><br/>'+				
 						'<em>Year: </em><span class="searchResultValue">{year}</span> <br/> '+
-						'<em>Competent Authority: </em><span class="searchResultValue">{owner}</span><br/>'+
+						'<em>Management Body/Authority(ies): </em><span class="searchResultValue">{owner}</span><br/>'+
                         '<a onclick="Vme.clickOnFeature(\'{geographicFeatureId}\',{year},false)">'+
                         '<img title="More information" src="theme/img/icons/buttoninfo.png" />'+
                         '</a> '+
