@@ -193,7 +193,8 @@ Vme.data={
 				'<tpl for=".">'+
 					'<div class="search-result">' +
 						'<em>Name: </em><span class="searchResultValue">{localname}</span><br/>'+				
-						'<em>Year: </em><span class="searchResultValue">{year}</span> <br/> '+
+						'<em>Validity: </em><span class="searchResultValue">{[this.getValidity(values)]}</span> <br/> '+	
+						//'<em>Year: </em><span class="searchResultValue">{year}</span> <br/> '+
 						'<em>Management Body/Authority(ies): </em><span class="searchResultValue">{owner}</span><br/>'+
                         '<a onclick="Vme.clickOnFeature(\'{geographicFeatureId}\',{year},false)">'+
                         '<img title="More information" src="theme/img/icons/buttoninfo.png" />'+
@@ -216,7 +217,25 @@ Vme.data={
                         {
                             return("fishery/vme/10/en");
                         }
+                    },
+                    /**
+                     * Returns Validity String
+                     * "validityFrom - validityTo" or "from validityFrom"
+                     * 
+                     */
+                    getValidity: function(values){
+                        if(values.validityPeriodFrom){
+                            if(values.validityPeriodTo && values.validityPeriodTo != 9999){
+                                return values.validityPeriodFrom + " - " + values.validityPeriodTo;
+                            }else{
+                                return "from "+ values.validityPeriodFrom;
                     }
+                        }else
+                        {
+                            return("Not Found");
+                        }
+                    }
+
 				}
 			),
 			
@@ -229,11 +248,11 @@ Vme.data={
 					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{localname}</h3>'+
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
-						'<em>Year: </em>{year}<br/> '+
+						'<em>Validity: </em><span>{[this.getValidity(values)]}</span> <br/> '+
+						//'<em>Year: </em>{year}<br/> '+
 						'<em>Management Body/Authority(ies): </em><span class="own">{owner}</span><br/>'+
 						'<em>Area Type: </em><span>{vmeType}</span> <br/> '+
 						// '<em>UN Criteria: </em>{criteria}<br/> '+
-                        // '<em>Validity: </em><span>from 2007 up to 2014</span> <br/> '+
 						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						
 						'<div style="text-align:right;">' +
@@ -275,7 +294,24 @@ Vme.data={
 						//return evt;
 					},
                     /**
-                     * Download all vme areas
+                     * Returns Validity String
+                     * "validityFrom - validityTo" or "from validityFrom"
+                     * 
+                     */
+                    getValidity: function(values){
+                        if(values.validityPeriodFrom){
+                            if(values.validityPeriodTo && values.validityPeriodTo != 9999){
+                                return values.validityPeriodFrom + " - " + values.validityPeriodTo;
+                            }else{
+                                return "from "+ values.validityPeriodFrom;
+                            }
+                        }else
+                        {
+                            return("Not Found");
+                        }
+                    },
+                    /**
+                     * Returns the link to the factsheet
                      */
                     getFactsheetUrl: function(values){
 
@@ -630,8 +666,8 @@ Vme.data.extensions ={
 					{name: 'bbox',		mapping: 'bounds'},
 					{name: 'vmeType', mapping: 'attributes.vmeType'},
 					{name: 'owner', mapping: 'attributes.owner'},
-                    {name: 'validityPeriodFrom',		mapping: 'validityPeriodFrom'},
-					{name: 'validityPeriodTo',		mapping: 'validityPeriodTo'},
+                    {name: 'validityPeriodFrom', mapping: 'attributes.validityPeriodFrom'},
+					{name: 'validityPeriodTo', mapping: 'attributes.validityPeriodTo'},
 					{name: 'geo_ref', mapping: 'attributes.geoArea'}
 					
 					
@@ -877,7 +913,8 @@ Vme.data.stores = {
             {name: 'geoArea', mapping: 'geoArea'},
             {name: 'envelope', mapping: 'envelope'},
             {name: 'geographicFeatureId', mapping: 'geographicFeatureId'},
-            {name: 'validityPeriod', mapping: 'validityPeriod'}
+            {name: 'validityPeriodFrom', mapping: 'validityPeriodFrom'},
+            {name: 'validityPeriodTo', mapping: 'validityPeriodTo'}
 			
 		],
 		
