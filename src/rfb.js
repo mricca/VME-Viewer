@@ -147,9 +147,13 @@ function setRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink,filter
 *       htmlLink -> The id of the html input field of the embed-link (optional if not using the embed link div).
 **/
 function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink,filter) {
-	//sets the zoom dropdown to default values ​​when the area selection and the selection of projection change
+	//sets the zoom dropdown to default values when the area selection and the selection of projection change
 		populateZoomAreaOptions('FilterRFB');
 	
+	/*
+	 * target: where to create the map
+	 * center: where to center the map after the creation (OpenLayers.LonLat object with values in 'EPSG:4326' projection)
+	 */
 	var pars = {
 		rfb		: document.getElementById("SelectRFB").value,
 		target		: 'map',
@@ -284,7 +288,7 @@ function populateZoomAreaOptions(id) {
 */
 function setRFBPage(elinkDiv, urlLink, htmlLink) {
 	populateRfbOptions('SelectRFB');
-	//sets the zoom dropdown to default values ​​when the area selection and the selection of projection change
+	//sets the zoom dropdown to default values when the area selection and the selection of projection change
 	//populateZoomAreaOptions('FilterRFB');
 	var layer, extent, zoom, prj;
 	

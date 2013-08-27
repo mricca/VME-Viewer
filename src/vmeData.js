@@ -46,7 +46,7 @@ Ext.ux.LazyJsonStore = Ext.extend(Ext.data.JsonStore,{
 				return  store.tot || 100000000000000000; 
 			}
 
-		}
+		};
 		o.totalRecords = estimateTotal(o,options,this);
 		//end of custom total workaround
 		
@@ -128,7 +128,7 @@ Ext.ux.LazyPagingToolbar = Ext.extend(Ext.PagingToolbar,{
 				
 			}
 		}
-})
+});
 
 var Vme={
 	utils: {
@@ -164,13 +164,13 @@ var Vme={
 			for (var i=1; i<len ;i++){
 				filter += ",'" +fids[i]+ "'";
 			} 
-			filter += ")"
+			filter += ")";
 			return filter;
 		
 		},
 		generateVMEFilter:function(vme_id){
 			if (vme_id ==undefined) return ;
-			return "VME_ID = '" +vme_id +"'"
+			return "VME_ID = '" +vme_id +"'";
 		}
 		
 	}
@@ -332,7 +332,7 @@ Vme.data={
 							Vme.utils.generateVMEFilter(values.vme_id),
 							"shape-zip",
 							{format_options:"filename:VME-DB_"+values.vme_id+".zip"}
-						)
+						);
 						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
 						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
 							
@@ -419,7 +419,7 @@ Vme.data={
 							Vme.utils.generateFidFilter(values.id),
 							"shape-zip",
 							{format_options:"filename:VME-DB_ENC_"+values.vme_id+"_SP.zip"}
-						)
+						);
 						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
 						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
 							
@@ -497,7 +497,7 @@ Vme.data={
 							Vme.utils.generateFidFilter(values.id),
 							"shape-zip",
 							{format_options:"filename:VME-DB_SD_"+values.vme_id+"_SP.zip"}
-						)
+						);
 						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
 						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
 							
@@ -585,7 +585,7 @@ Vme.data={
 							FigisMap.fifao.vme_fp,
 							Vme.utils.generateFidFilter([values.id]),
 							"shape-zip"
-						)
+						);
 					}
 					
 				}
@@ -822,7 +822,7 @@ Vme.data.extensions ={
 		})
 	
 	}
-}
+};
 /*
 //get georeferences
 var MarineAreas = new Vme.data.extensions.WFS.WFSStore({typeName:'fifao:oceans_'});
@@ -1017,4 +1017,4 @@ Vme.data.stores = {
 		}
 	})
 
-}
+};

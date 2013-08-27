@@ -121,21 +121,21 @@ FigisMap.console = function( args, doAlert ) {
 			alert( txt );
 		}
 	}
-}
+};
 
 FigisMap.debug = function() {
 	if ( FigisMap.debugLevel ) {
 		var args = new Array(' --- debug information --- ');
 		for ( var i = 0; i < arguments.length; i++ ) args.push( arguments[i] );
-		FigisMap.console( args )
+		FigisMap.console( args );
 	};
-}
+};
 
 FigisMap.error = function() {
 	var args = new Array(' --- error information --- ');
 	for ( var i = 0; i < arguments.length; i++ ) args.push( arguments[i] );
 	FigisMap.console( args, (FigisMap.isTesting || FigisMap.isDeveloper) );
-}
+};
 
 FigisMap.label = function( label, p ) {
 	var lang = p && p.lang ? p.lang : ( FigisMap.lang ? FigisMap.lang : FigisMap.defaults.lang );
@@ -154,7 +154,7 @@ FigisMap.label = function( label, p ) {
 		}
 	}
 	return label;
-}
+};
 
 FigisMap.isFaoArea = function( layerName ) {
 	switch ( layerName ) {
@@ -471,7 +471,7 @@ FigisMap.parser.checkLayerTitles = function( layers, pars ) {
 		t += FigisMap.label( layers[i].layer.replace(/^[^:]+:(.+)/,"$1"), pars );
 		layers[i].title = t;
 	}
-}
+};
 
 FigisMap.parser.parse = function( p ) {
 	
@@ -564,7 +564,7 @@ FigisMap.parser.parse = function( p ) {
 	}
 	
 	return p;
-}
+};
 
 FigisMap.fs.parse = function( p ) {
 	if ( ! p.staticLabels ) p.staticLabels = new Object();
@@ -752,7 +752,7 @@ FigisMap.rnd.initLayers = function( pars ) {
 		if ( l.layer != '' && l.filter != '' ) {
 			var nl = new Object();
 			for ( var j in l ) nl[j] = l[j];
-			if ( nl.rfb && nl.rfb != '' && ! nl.settings ) nl.settings = FigisMap.rfb.getSettings( nl.rfb )
+			if ( nl.rfb && nl.rfb != '' && ! nl.settings ) nl.settings = FigisMap.rfb.getSettings( nl.rfb );
 			if ( nl.dispOrder == null && nl.filter.toLowerCase().indexOf("disporder") != -1 ) {
 				nl.dispOrder = parseInt( l.filter.replace(/^.*DispOrder[^0-9]+([0-9]+).*$/i,"$1") );
 				if ( isNaN( nl.dispOrder ) ) nl.dispOrder = false;
@@ -1103,7 +1103,7 @@ FigisMap.ol.list = function() {
 	var ans = [];
 	if ( georeferences_data ){
 		for ( var i in georeferences_data ){
-		  ans.push( i )
+		  ans.push( i );
 		}
 	}
 	return ans;
@@ -1126,7 +1126,7 @@ FigisMap.ol.checkValidBbox = function (projections,bboxs) {
 	}else{
 		return true; 		
 	}
-}
+};
 
 //returns selected zoom area
 FigisMap.ol.getSettings = function( rfb, pars ) {
@@ -1147,14 +1147,14 @@ FigisMap.rfb.getDescriptor = function( layerName, pars ) {
 	if ( ld.link ) return '<a href="' + ld.link + '" title="' + title + '" target="_blank"><b>' + title + '</b></a>';
 	if ( title ) return '<b>'+ title + '</b>';
 	return '';
-}
+};
 
 FigisMap.rfb.getCountries = function( layerName ) {
 	if ( ! rfbLayerCountries ) return null;
 	layerName = layerName.replace(/[' ]/g,'').toUpperCase();
 	if ( layerName.indexOf("_DEP") > 0) layerName = layerName.replace(/_DEP$/,'');
 	return rfbLayerCountries[ layerName ];
-}
+};
 
 FigisMap.rfb.preparse = function( pars ) {
 	if ( pars.rfbPreparsed || pars.rfb == null ) return false;
@@ -1262,7 +1262,7 @@ FigisMap.getStyleRuleDescription = function(STYLE, pars) {
 // 	if ( pars.isFIGIS ) l = l.replace(/&nbsp;/g,' ');
 	if ( l == STYLE ) return '';
 	return l;
-}
+};
 
 /**
  * FigisMap.ol.getAuthLayer
@@ -1275,7 +1275,7 @@ FigisMap.ol.getAuthLayer = function (type){
 	if(type=='survey'){
 		return FigisMap.rnd.status.logged ? FigisMap.fifao.vme_sd: FigisMap.fifao.vme_agg_sd;
 	}
-}
+};
 
 /**
  * FigisMap.ol.refreshAuthorized
@@ -1291,7 +1291,7 @@ FigisMap.ol.refreshAuthorized = function(){
         //myMap.getLayersByName('Survey Data')[0].visibility = false;
         myMap.getLayersByName('Survey Data')[0].redraw(true);
 
-}
+};
 
 /**
  * FigisMap.ol.getSelectedYear returns the selected year in the slider
@@ -1300,16 +1300,16 @@ FigisMap.ol.getSelectedYear= function(){
 	var yr;
 	try{
 		yr = Ext.getCmp('years-slider').getValues()[0];
-	}catch (e){ yr = 2012};
+	}catch (e){ yr = 2012; };
 	return yr;
-}
+};
 /**
  * FigisMap.ol.getSelectedYear returns the selected year in the slider
  */
 FigisMap.ol.getSelectedOwner= function(){
 	return	document.getElementById("SelectRFB").value;
 
-}
+};
 /** 
  * FigisMap.ol.refreshFilters 
  * refresh filters when year/filter are changes
@@ -1342,7 +1342,7 @@ FigisMap.ol.refreshFilters = function (){
 	);
 	myMap.getLayersByName('Survey Data')[0].redraw(true);
     
-}
+};
 /*
 	Drawing function: FigisMap.draw( pars );
 		pars --> map parameters, an object with properties:
@@ -1491,7 +1491,7 @@ FigisMap.renderer = function(options) {
 		boundsBox = new Array( myBounds.left, myBounds.bottom, myBounds.right, myBounds.top );
 		
 		// empty map DIV - the map, if any, is destroyed before calling
-		while ( p.target.div.firstChild ) { p.target.div.removeChild(p.target.div.firstChild) }
+		while ( p.target.div.firstChild ) { p.target.div.removeChild(p.target.div.firstChild); }
 		
 		target = p.target.id;
 		
@@ -1505,7 +1505,7 @@ FigisMap.renderer = function(options) {
 				units: ( projection == 4326  ? 'degrees' : 'm' ),
                 controls:[ new OpenLayers.Control.Navigation(),
                                   new OpenLayers.Control.Button({
-                                    displayClass: "MyButton", trigger: function(){alert("login")}
+                                    displayClass: "MyButton", trigger: function(){alert("login");}
                                     }),
                                   new GlassyPanZoom({position:new OpenLayers.Pixel(4,40)}),
                                   new OpenLayers.Control.ArgParser(),
@@ -1690,7 +1690,7 @@ FigisMap.renderer = function(options) {
 		//document.getElementById("div_Overlays").insertBefore(document.getElementById("div_VME-DB layers"));
 		return myMap;
 		
-	} //function ends
+	}; //function ends
 	
 	function finalizeMap() {
 		FigisMap.debug('Finalizing map:', myMap, 'olLayers:',olLayers);
@@ -1836,7 +1836,7 @@ FigisMap.renderer = function(options) {
 	} // function ends
 	*/
 	
-} //FigisMap.renderer Class Ends
+}; //FigisMap.renderer Class Ends
 Ext.onReady(function(){
     FigisMap.loginWin.on('login',function(user){
     		FigisMap.ol.refreshAuthorized();

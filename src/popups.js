@@ -33,7 +33,7 @@ FigisMap.ol.clearPopupCache=function(){
   }
   //init
   FigisMap.popupCache ={};  
-}
+};
 
 /**
  * FigisMap.ol.getFeatureInfoHandler
@@ -79,7 +79,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 			icon: Ext.MessageBox.INFO,
 			scope: this
 		});  
-	}
+	};
 	
 	var addSurveyData = function(btn) {
 		Ext.MessageBox.show({
@@ -90,7 +90,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 			scope: this
 		}); 
 		
-	}
+	};
 	
 	var buttonsVme = [];
 			
@@ -109,12 +109,12 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 			  //pressed :myMap.getLayersByName('SurveyData')[0].visibility,
 			  handler : addSurveyData
 		  }
-		]
+		];
 
 	}
 	var res = e.text.match(/<body[^>]*>([\s]*)<\/body>/);
 
-	e.object.layers[0].name
+	e.object.layers[0].name;
 	if(!res){
 	  var oldItem;
 	  if (popup.items){
@@ -139,7 +139,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 		  popup.show();
 	  }
 	}
-}
+};
 
 FigisMap.ol.getStore = function(layer){
   var name = layer.params.LAYERS;
@@ -159,7 +159,7 @@ FigisMap.ol.getStore = function(layer){
 	     return new featureInfoStores.AggregateDataStore();
   }
   //return new Vme.data.extensions.FeatureInfo.VmeStore();
-}
+};
 FigisMap.ol.getTabTitle=function(layer){
   var name = layer.params.LAYERS;
   var layernames = FigisMap.fifao;
@@ -178,7 +178,7 @@ FigisMap.ol.getTabTitle=function(layer){
 	case  layernames.vme_agg_sd : 
 	   return "Survey data";
   }
-}
+};
 FigisMap.ol.getTemplate = function(layer){
   var name = layer.params.LAYERS;
   var layernames = FigisMap.fifao;
@@ -196,7 +196,7 @@ FigisMap.ol.getTemplate = function(layer){
 	  case  layernames.vme_agg_sd : 
 	     return  templates.aggregate;
   }
-}
+};
 /**
  *  FigisMap.ol.getFeatureInfoHandlerGML
  *  handler to parse GML response
@@ -246,7 +246,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
     }
 	
     
-}
+};
 FigisMap.ol.showPopup= function(e,response,layer){
     var popupKey = e.xy.x + "." + e.xy.y;
 	var store = FigisMap.ol.getStore(layer);
@@ -333,7 +333,7 @@ FigisMap.ol.showPopup= function(e,response,layer){
 	  }
 	}
 
-}
+};
 
 /** 
  * FigisMap.ol.createPopupControl(layers)
@@ -370,26 +370,26 @@ FigisMap.ol.createPopupControl = function(vme){
 				  }, 
 				  getfeatureinfo: gml ? FigisMap.ol.getFeatureInfoHandlerGML : FigisMap.ol.getFeatureInfoHandler
 			  }
-	    })  
+	    });
       info.controls.push(control);  
     };
     return info.controls;
     
-}
+};
 /** 
  * Emulate the popup control on a vertext of a geom
  */
 FigisMap.ol.emulatePopupFromGeom = function(geom){
 	var vert = FigisMap.ol.getVertFromGeom(geom);
 	FigisMap.ol.emulatePopupFromVert(vert);
-}
+};
 /**
  * Get a evt with xy element from geometry to perform get feature info
  */
 FigisMap.ol.getVertFromGeom = function(geom){
 	return geom.getVertices()[0];
 	
-}
+};
 /**
  * emulate click on GetFeatureInfo control
  */

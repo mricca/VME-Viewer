@@ -114,7 +114,7 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                     
                     var settings ={
                       zoomExtent: bounds.toBBOX(20)
-                    }
+                    };
                     zoomTo(settings,repro_bbox);
                     
                         
@@ -152,7 +152,7 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
             scope: this
         });
 		
-      }
+      };
 
 /**
  * Vme.form.panels.SearchForm
@@ -265,7 +265,7 @@ Vme.search =function(advanced){
     store.resetTotal();
     store.removeAll();
     store.baseParams={};
-    var fields ={}
+    var fields ={};
     if(advanced){
         var fields = Vme.form.panels.SearchForm.getForm().getFieldValues(true);
     }
@@ -295,7 +295,7 @@ Vme.search =function(advanced){
         params: params
     });
     Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');
-}
+};
 /** 
  * Vme.form.panels.SearchPanel
  * panel containing search form and search results dataview using
@@ -341,7 +341,7 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 				xtype: 'button',
 				text: FigisMap.label('SEARCH_BACK_FORM'),
 				iconCls: 'back-search-icon',
-				handler: function(){Vme.form.panels.SearchPanel.layout.setActiveItem('searchForm')}
+				handler: function(){Vme.form.panels.SearchPanel.layout.setActiveItem('searchForm');}
 			}]
 		}
 	]
