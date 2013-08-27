@@ -157,6 +157,7 @@ function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink,filter) {
 		legend		: 'legend',
 		projection	: projection/*,
 		countriesLegend	: 'MemberCountries'*/
+		,center : new OpenLayers.LonLat(14, -26)
 	};
     
     if ( zoom != null ) pars.zoom = zoom;
