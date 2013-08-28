@@ -147,6 +147,60 @@ li {
     z-index:5000;
 }
 
+#bottomRightPanel {
+    height:60px;
+    width:165px;
+    bottom: 6px;
+    position: absolute;
+    right: 68px;
+    z-index: 5000;
+}
+#bottomRightPanel div {
+    float:left;
+}
+
+#yearLess{
+    width: 42px;
+    height: 60px;
+    background-image: url('../img/asaparrowleft.png');
+    background-repeat:no-repeat;
+    background-position: center center;
+}
+
+#yearCurrent{
+    width: 69px;
+    height: 60px;
+    text-align:center;
+    line-height: 60px;
+    font-family: asap,sans-serif;
+    font-size: 32px;
+    font-weight: 400;
+    text-shadow: 1px 2px 2px #101010;
+    color:#FFFFFF;
+}
+
+#yearCurrent.ie {
+    width: 70px;
+    height: 60px;
+    text-align:center;
+    line-height: 60px;
+    font-family: asap,sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+    color:#FFFFFF;
+    zoom: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.DropShadow(Color=#868686, OffX=1, OffY=2)"; 
+    filter: progid:DXImageTransform.Microsoft.DropShadow(OffX=1, OffY=2, Color=#868686);
+}
+
+
+#yearMore{
+    width: 42px;
+    height: 60px;
+    background-image: url('../img/asaparrowright.png');
+    background-repeat:no-repeat;
+    background-position: center center;
+}
 /* side panel */
 #sidebar {
     border-left-color : #000;
@@ -644,7 +698,7 @@ a.lblReset {
 	display:none;
 }
 #layerswitcher div.layersDiv{
-	margin:20px;
+	margin: 10px 20px;
 	display:block;
 }
 

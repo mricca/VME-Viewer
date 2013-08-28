@@ -14,6 +14,7 @@
 	<link rel="stylesheet" type="text/css" href="lib/OpenLayers/theme/default/style.css" />
 	<link rel="stylesheet" href="theme/css/style.css" type="text/css" />
 	<link rel="stylesheet" href="theme/css/vme.css" type="text/css" />
+    <link rel="stylesheet" href="theme/css/vmefonts.css" type="text/css" />
 	
 	<script type="text/javascript" src="lib/extjs/adapter/ext/ext-base.js"></script>
 	<script type="text/javascript" src="lib/extjs/ext-all.js"></script>
@@ -235,6 +236,13 @@ document.namespaces;
                 </div>
                 
             </div>
+            <div  id="bottomRightPanel">
+                <div id="yearLess" onClick="javascript:Ext.getCmp('year-min-littlestep').handler();Ext.get('yearCurrent').update(FigisMap.ol.getSelectedYear())"></div>
+                <div id="yearCurrent">
+                    2013
+                </div>
+                <div id="yearMore" onClick="javascript:Ext.getCmp('year-max-littlestep').handler();Ext.get('yearCurrent').update(FigisMap.ol.getSelectedYear())"></div>
+            </div>
             <div id="loginContainer" class="figisButton" onclick="FigisMap.logInOut()">Login</div>
 
             <div id="lblReset" class="lblReset figisButton" style="" onclick="reset()">Reset</div>
@@ -304,6 +312,8 @@ document.namespaces;
 		updateCopyYear();
 		document.getElementById('disclaimer').innerHTML = FigisMap.label('DISCLAIMER', '<p></p>');
 		document.getElementById('subTitle').innerHTML = FigisMap.label('SUB_TITLE');
+		if(Ext.isIE7 || Ext.isIE8 || Ext.isIE9)
+		  Ext.get('yearCurrent').addClass('ie');
 	// ]]>
 	</script>
 	<!--<input type="button" id="addlayer" value="Show RFB" onclick="addLayer()"/>

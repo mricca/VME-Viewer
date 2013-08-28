@@ -327,7 +327,7 @@ Vme.form.panels.SearchPanel = new Ext.Panel({
 			},
 			items:[
 				{
-                    height:460,
+                    height:390,
                     border: false,
 					xtype:'panel',
                     layout:'fit',
@@ -354,7 +354,7 @@ var sidePanel = new Ext.Panel({
 	//renderTo:'sidebar',
     collapsed:true,
     collapsible:false,
-	height:460,
+	height:394,
 	
 	activeItem: 0,
     layout:'card',
