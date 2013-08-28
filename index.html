@@ -36,8 +36,6 @@
 	<script type="text/javascript" src="src/georeferences.js"></script>
 	<script type="text/javascript" src="src/login.js"></script>	
     <script type="text/javascript" src="src/factsheet.js"></script> 
-	<script type="text/javascript" src="src/init.js" ></script>	
-	<script type="text/javascript" src="src/VMESliderPanel.js" ></script>
 	
 	<script type="text/javascript" src="src/FigisMap.js"></script>
     <!-- proxy overriding configuration: allows to use a proxy for test purpose -->
@@ -255,8 +253,6 @@ document.namespaces;
                     </div>
                 </div>
                 <div id="sidebarP"></div></div>
-			<div id="vme_slider"></div>
-		
 		
 			<!--div id="e-link">
 
@@ -300,6 +296,13 @@ document.namespaces;
 			sidePanel.render(document.getElementById('sidebarP'));
 
 			setRFBPage('e-link','rfbs-link', 'rfbs-html');
+			
+            Ext.QuickTips.init();
+
+            Ext.get('yearCurrent').update(FigisMap.ol.getSelectedYear());
+    		if(Ext.isIE7 || Ext.isIE8 || Ext.isIE9)
+                Ext.get('yearCurrent').addClass('ie');
+
 		});
 		function updateCopyYear() {
 			var uy = new Date();
@@ -312,8 +315,6 @@ document.namespaces;
 		updateCopyYear();
 		document.getElementById('disclaimer').innerHTML = FigisMap.label('DISCLAIMER', '<p></p>');
 		document.getElementById('subTitle').innerHTML = FigisMap.label('SUB_TITLE');
-		if(Ext.isIE7 || Ext.isIE8 || Ext.isIE9)
-		  Ext.get('yearCurrent').addClass('ie');
 	// ]]>
 	</script>
 	<!--<input type="button" id="addlayer" value="Show RFB" onclick="addLayer()"/>

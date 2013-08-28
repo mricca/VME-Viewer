@@ -18,7 +18,7 @@ body {
 #page {
     z-index: 1;
     width: 960px;
-    height: 900px;
+    height: 860px;
     background-image: none;
     border-width: 1px;
     border-style: solid;
@@ -58,9 +58,6 @@ li {
                    float : left;
                   height : 550px;
                    width : 920px;
-}
-#vme_slider{
-					margin-top: 10px;
 }
 
 /*
