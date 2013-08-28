@@ -59,4 +59,5 @@ Ext.onReady(function(){
         width : 920
     });
 
+    Ext.get('yearCurrent').update(FigisMap.ol.getSelectedYear());
 });

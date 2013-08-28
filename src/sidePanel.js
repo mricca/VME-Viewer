@@ -123,10 +123,14 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                     
                     //var year = selectedRecord.get("year");
                     var year = Ext.getCmp("id_selectYear").getValue() || rec_year;
+                    /*
                     var slider = Ext.getCmp('years-slider');
                     slider.setValue(year,true);
                     Ext.getCmp('years-min-field').setValue(year);
+                    */
+                    FigisMap.ol.setSelectedYear(year);
                     //TODO try use slider.updateVme();
+
                     FigisMap.ol.refreshFilters();
                     
                     myMap.getLayersByName("VME areas")[0].setVisibility(true);

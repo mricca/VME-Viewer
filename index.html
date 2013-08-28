@@ -237,11 +237,11 @@ document.namespaces;
                 
             </div>
             <div  id="bottomRightPanel">
-                <div id="yearLess" onClick="javascript:Ext.getCmp('year-min-littlestep').handler();Ext.get('yearCurrent').update(FigisMap.ol.getSelectedYear())"></div>
+                <div id="yearLess" onClick="javascript:FigisMap.ol.decrementYear()" unselectable="on"></div>
                 <div id="yearCurrent">
                     2013
                 </div>
-                <div id="yearMore" onClick="javascript:Ext.getCmp('year-max-littlestep').handler();Ext.get('yearCurrent').update(FigisMap.ol.getSelectedYear())"></div>
+                <div id="yearMore" onClick="javascript:FigisMap.ol.incrementYear()" unselectable="on"></div>
             </div>
             <div id="loginContainer" class="figisButton" onclick="FigisMap.logInOut()">Login</div>
 

@@ -1294,17 +1294,62 @@ FigisMap.ol.refreshAuthorized = function(){
 };
 
 /**
+ * Stores the current selected year 
+ * default: the system Date() year
+ */
+FigisMap.ol.selectedYear = new Date().getFullYear();
+
+
+/**
+ * Define min and max choosable year 
+ * default: from 2006 to today
+ */
+FigisMap.ol.minYear = 2006;
+FigisMap.ol.maxYear = new Date().getFullYear();
+
+/*
+ * Move year selector forward by 1
+ */
+FigisMap.ol.incrementYear = function(){
+    var newyear = FigisMap.ol.selectedYear + 1;
+    if(newyear <= FigisMap.ol.maxYear && newyear != FigisMap.ol.selectedYear){
+        FigisMap.ol.selectedYear++;
+        updateVme();
+        Ext.get('yearCurrent').update(FigisMap.ol.selectedYear);
+    }
+};
+
+/*
+ * Move year selector backward by 1
+ */
+FigisMap.ol.decrementYear = function(){
+    var newyear = FigisMap.ol.selectedYear - 1;
+    if(newyear >= FigisMap.ol.minYear && newyear != FigisMap.ol.selectedYear){
+        FigisMap.ol.selectedYear--;
+        updateVme();
+        Ext.get('yearCurrent').update(FigisMap.ol.selectedYear);
+    }
+};
+
+/**
  * FigisMap.ol.getSelectedYear returns the selected year in the slider
  */
 FigisMap.ol.getSelectedYear= function(){
-	var yr;
-	try{
-		yr = Ext.getCmp('years-slider').getValues()[0];
-	}catch (e){ yr = 2012; };
-	return yr;
+	return FigisMap.ol.selectedYear;
 };
+
 /**
  * FigisMap.ol.getSelectedYear returns the selected year in the slider
+ */
+FigisMap.ol.setSelectedYear= function(newyear){
+    if(newyear <= FigisMap.ol.maxYear && newyear >= FigisMap.ol.minYear && newyear != FigisMap.ol.selectedYear){
+        FigisMap.ol.selectedYear = newyear;
+        Ext.get('yearCurrent').update(FigisMap.ol.selectedYear);
+    }
+};
+
+/**
+ * FigisMap.ol.getSelectedOwner returns the selected value in the Authority combo box
  */
 FigisMap.ol.getSelectedOwner= function(){
 	return	document.getElementById("SelectRFB").value;
@@ -1459,6 +1504,7 @@ FigisMap.renderer = function(options) {
 		// //////////////////////
 		// Tuna code
 		// ////////////////////// 
+		/*
 		if(myMap.getLayersByName('VME areas')[0]){        
 			Ext.getCmp('years-slider').enable();
 			Ext.getCmp("year-min-largestep").enable(); 
@@ -1467,7 +1513,7 @@ FigisMap.renderer = function(options) {
 			Ext.getCmp("year-max-largestep").enable();
 			Ext.getCmp("last-year").enable(); 
 			Ext.getCmp("first-year").enable(); 
-		}
+		}*/
 	};
 		
 		FigisMap.debug( 'FigisMap.renderer render pars:', pars );

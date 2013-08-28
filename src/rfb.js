@@ -42,9 +42,12 @@ function reset(){
     closeProjectionPanel();
 	FigisMap.ol.clearPopupCache();
 	setRFBPage('e-link','rfbs-link', 'rfbs-html');
+    /*
     var years = Ext.getCmp('years-slider');	
     years.setValue(0, new Date().getFullYear());	
 	Ext.getCmp('years-min-field').setValue(new Date().getFullYear());
+	*/
+	FigisMap.ol.selectedYear = new Date().getFullYear();
 	updateVme();	
 	myMap.zoomToMaxExtent();
 	// Ensure that rfb.js is included AFTER vmeData.js, so theese are initialized
@@ -53,7 +56,7 @@ function reset(){
 }
 
 function updateVme(){
-
+/* TODO: maybe block year changes ?
     Ext.getCmp('years-slider').disable();
     Ext.getCmp("year-min-largestep").disable(); 
     Ext.getCmp("year-min-littlestep").disable(); 
@@ -61,7 +64,7 @@ function updateVme(){
     Ext.getCmp("year-max-largestep").disable();
     Ext.getCmp("last-year").disable(); 
     Ext.getCmp("first-year").disable(); 
-    
+    */
     FigisMap.ol.clearPopupCache();
     FigisMap.ol.refreshFilters();
 	 //remove layer for hilighting
