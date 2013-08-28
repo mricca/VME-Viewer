@@ -79,7 +79,7 @@ OpenLayers.Layer.Watermark = OpenLayers.Class(OpenLayers.Layer.Grid, {
      *          parameters
      */
     getURL: function () {
-        return this.url
+        return this.url;
     },
 
     /**

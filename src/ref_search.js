@@ -51,7 +51,7 @@ RS.internal.init2 = function() {
 	RS.spc.init();
 	RS.prop.initOk = true;
 	setSpeciesPage('e-link', 'url-link', 'html-link');
-}
+};
 
 RS.internal.loadSpecies = function( req, status ) {
 	var xml;
@@ -96,7 +96,7 @@ RS.internal.loadSpecies = function( req, status ) {
 	RS.speciesLoading = false;
 	RS.speciesLoaded = true;
 	RS.internal.init2();
-}
+};
 
 RS.loadSpecies = function() {
 	OpenLayers.Request.GET({ url: RS.spXmlUri, callback: RS.internal.loadSpecies });
@@ -150,7 +150,7 @@ RS.internal.addField = function( n, v ) {
 		setAttribute('value', v );
 	}
 	RS.obj.tgtForm.appendChild( el );
-}
+};
 
 RS.tgtFormClean = function() {
 	RS.internal.cleanFields();
@@ -184,9 +184,9 @@ RS.tgtFormUpdate = function() {
 	}
 };
 
-RS.setField = function( k, v ) { RS.obj.fields[ k ] = v };
+RS.setField = function( k, v ) { RS.obj.fields[ k ] = v; };
 
-RS.getField = function( k ) { return RS.obj.fields[ k ] };
+RS.getField = function( k ) { return RS.obj.fields[ k ]; };
 
 RS.addField = function( k, v ) { RS.setField( k, v ); RS.tgtFormUpdate(); };
 
@@ -241,7 +241,7 @@ RS.wa.add = function( a ) {
 				var txt = String(newVals[ i ]);
 				var li = document.createElement('li');
 				li.appendChild( document.createTextNode( txt ) );
-				li.onclick = function() { RS.wa.add( this.innerHTML ) };
+				li.onclick = function() { RS.wa.add( this.innerHTML ); };
 				li.className = 'bold pointer';
 				li.setAttribute( 'onclick', 'RS.wa.add('+newVals[i]+')');
 				li.setAttribute( 'title', '[' + RS.label.clear + '] ' + txt );

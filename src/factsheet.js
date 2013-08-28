@@ -78,7 +78,7 @@ Ext.onReady(function(){
             draggable: false,
             resizable: false
         }).show();
-    }
+    };
 	
 	
 });

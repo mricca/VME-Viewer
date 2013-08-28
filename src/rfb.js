@@ -67,7 +67,7 @@ function updateVme(){
 	 //remove layer for hilighting
 	var hilayer = myMap.getLayersByName("highlight")[0];
 	if(hilayer ){
-		myMap.removeLayer(hilayer)
+		myMap.removeLayer(hilayer);
 	}
    
    

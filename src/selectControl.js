@@ -635,7 +635,7 @@ OpenLayers.Control.SelectFeature = OpenLayers.Class(OpenLayers.Control.SelectFea
 	        BL : {src:'/js/OpenLayers/img/' + color + '/botl.png', sizing: 'scale'},
 	        BM : {src:'/js/OpenLayers/img/' + color + '/botm.png', sizing: 'crop'},
 	        BR : {src:'/js/OpenLayers/img/' + color + '/botr.png', sizing: 'scale'}
-	    }
+	    };
 	},
 
        /** @final @type String */

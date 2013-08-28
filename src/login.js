@@ -68,14 +68,14 @@ Ext.onReady(function(){
 			ref: '../loginButton',
 			iconCls: 'icon-login',
 			handler: function(){
-				FigisMap.submitLogin()
+				FigisMap.submitLogin();
 			}
 		}],
         keys: [{ 
             key: [Ext.EventObject.ENTER],
             scope: this,
             handler: function(){
-            	FigisMap.submitLogin()
+            	FigisMap.submitLogin();
         	}
         }],
 		events:{
