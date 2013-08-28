@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
     
@@ -11,7 +11,7 @@
 	<meta name="keywords" content="RFB, Regional Fishery Body, Map, FAO" />
 	<title>Vulnerable Marine Ecosystems Database</title>
 	
-	<link rel="stylesheet" type="text/css" href="lib/OpenLayers/theme/default/style.css">
+	<link rel="stylesheet" type="text/css" href="lib/OpenLayers/theme/default/style.css" />
 	<link rel="stylesheet" href="theme/css/style.css" type="text/css" />
 	<link rel="stylesheet" href="theme/css/vme.css" type="text/css" />
 	
@@ -124,7 +124,7 @@
     <link rel="stylesheet" href="theme/css/oldie.css" type="text/css" />
 
     <![endif]-->
-<script>
+<script type="text/javascript">
 //Workaround for IE7 IE8 http://trac.osgeo.org/openlayers/ticket/2304
 document.namespaces;
 </script>
@@ -157,7 +157,7 @@ document.namespaces;
 		</div> -->
         <div>
             <div class="ribbon" style="position:absolute;right:0px;top:0px;z-index:5000">
-               <img src="theme/img/beta-ribbon.png">
+               <img src="theme/img/beta-ribbon.png" alt="Beta"/>
             </div> 
         </div>
 
@@ -169,14 +169,14 @@ document.namespaces;
             	way and disseminated through maps and fact sheets.
             </div>
         </div>
-		<span style="visibility:hidden" id="subtitle" ></span>
+		<span style="visibility:hidden" id="subtitle" >This element is (hidden) between the header and the map</span>
 		<br />
 
 <div  style="display:none" id="topBar">
 			
 			<label id="lblFilRFB" style="visibility:hidden">Zoom to:</label>
 			<select  id="FilterRFB" onchange="setZoom()"></select>
-			<label style="visibility:hidden"id="lblRFB">Filter by:</label>
+			<label style="visibility:hidden" id="lblRFB">Filter by:</label>
 			<select style="visibility:hidden" id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>  
 			
                         
@@ -205,18 +205,32 @@ document.namespaces;
 		<div style="position:relative" id="main">
 			<div id="map"  class="map"></div>
             <div  id="bottomLeftPanel">
-            <div id="lblSRS" onclick="toggleProjectionPanel();">Change projection</div>
+                        <div id="lblSRS" onclick="toggleProjectionPanel();">
+                            Change projection
+                        </div>
                 <div id="SelectSRS">
                    <div> 
-                   <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3349' checked> Mercator</input><br/></p>
+                                <p>
+                                    <input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3349' checked="checked" />
+                                    <label>Mercator</label>
+                                </p>
 
-                    <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='4326' > WGS84</input></p>
+                                <p>
+                                    <input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='4326' />
+                                    <label>WGS84</label>
+                                </p>
                    </div>
                    <div> 
-                    <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3031'> South Polar</input><br/></p>
+                                <p>
+                                    <input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3031' />
+                                    <label>South Polar</label>
+                                </p>
                     <!-- missing proj4js eck4.js file -->
                     <!-- <option value='54012'>EckertIV (54012)</option> -->
-                   <p><input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='54009'> Mollweide</input><br/></p>
+                                <p>
+                                    <input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='54009' />
+                                    <label>Mollweide</label>
+                                </p>
                    </div> 
                 </div>
                 
@@ -226,7 +240,7 @@ document.namespaces;
             <div id="lblReset" class="lblReset figisButton" style="" onclick="reset()">Reset</div>
             <div id="sidebar">
                 <div id="leftTopPan">
-                    <div id="searchtextwrapper"><input type="text" id="searchtext" name="searchtext" onkeydown="if (event.keyCode == 13) { Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');}"><div onclick=" Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');" id="simpleSearchButton"></div></div>
+                    <div id="searchtextwrapper"><input type="text" id="searchtext" name="searchtext" onkeydown="if (event.keyCode == 13) { Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');}"/><div onclick=" Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');" id="simpleSearchButton"></div></div>
                     <div id="leftTopLinks"> 
                         <a onclick="sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('searchForm');Vme.form.panels.SearchPanel.doLayout()">Advanced Search</a> |
                         <a onclick="sidePanel.layout.setActiveItem('legendPanel');sidePanel.expand();">Legend</a> <div class="xbutton-closepanels" onclick="sidePanel.collapse();" >  </div>
@@ -263,16 +277,16 @@ document.namespaces;
 		</div>
 <div id="bottomBar1"><a href="http://www.geo-solutions.it" style="float:left;text-align:left;padding-left:2px;">Credits</a>
 			powered by
-			<a alt="FIGIS web site" title="FIGIS web site" href="http://www.fao.org/fishery/figis/en">FIGIS</a>
+			<a title="FIGIS web site" href="http://www.fao.org/fishery/figis/en">FIGIS</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-			<a alt="FAO (C)Copyright" title="FAO Copyright" target="_blank" href="http://www.fao.org/corp/copyright/en/">
+			<a title="FAO Copyright" target="_blank" href="http://www.fao.org/corp/copyright/en/">
 				&copy;&nbsp;FAO,
 				<span id="copyYear">2011</span>
 				&nbsp;
 			</a>
 		</div>
-	<script type="text/javascript" language="javascript">
+	<script type="text/javascript">
 	// <![CDATA[
 		Ext.onReady(function(){
 			sidePanel.render(document.getElementById('sidebarP'));
