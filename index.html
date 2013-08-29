@@ -299,7 +299,7 @@ document.namespaces;
 			
             Ext.QuickTips.init();
 
-            Ext.get('yearCurrent').update(FigisMap.ol.getSelectedYear());
+            FigisMap.ol.setSelectedYear(new Date().getFullYear());
     		if(Ext.isIE7 || Ext.isIE8 || Ext.isIE9)
                 Ext.get('yearCurrent').addClass('ie');
 

@@ -47,7 +47,7 @@ function reset(){
     years.setValue(0, new Date().getFullYear());	
 	Ext.getCmp('years-min-field').setValue(new Date().getFullYear());
 	*/
-	FigisMap.ol.selectedYear = new Date().getFullYear();
+	FigisMap.ol.setSelectedYear(new Date().getFullYear());
 	updateVme();	
 	myMap.zoomToMaxExtent();
 	// Ensure that rfb.js is included AFTER vmeData.js, so theese are initialized

@@ -1313,7 +1313,7 @@ FigisMap.ol.maxYear = new Date().getFullYear();
 FigisMap.ol.incrementYear = function(){
     var newyear = FigisMap.ol.selectedYear + 1;
     if(newyear <= FigisMap.ol.maxYear && newyear != FigisMap.ol.selectedYear){
-        FigisMap.ol.selectedYear++;
+        FigisMap.ol.setSelectedYear(newyear);
         updateVme();
         Ext.get('yearCurrent').update(FigisMap.ol.selectedYear);
     }
@@ -1325,7 +1325,7 @@ FigisMap.ol.incrementYear = function(){
 FigisMap.ol.decrementYear = function(){
     var newyear = FigisMap.ol.selectedYear - 1;
     if(newyear >= FigisMap.ol.minYear && newyear != FigisMap.ol.selectedYear){
-        FigisMap.ol.selectedYear--;
+        FigisMap.ol.setSelectedYear(newyear);
         updateVme();
         Ext.get('yearCurrent').update(FigisMap.ol.selectedYear);
     }
@@ -1346,6 +1346,16 @@ FigisMap.ol.setSelectedYear= function(newyear){
         FigisMap.ol.selectedYear = newyear;
         Ext.get('yearCurrent').update(FigisMap.ol.selectedYear);
     }
+    if(newyear == FigisMap.ol.minYear){
+        Ext.get('yearLess').addClass('nobackground');
+    }
+    else if( newyear == FigisMap.ol.maxYear){
+        Ext.get('yearMore').addClass('nobackground');
+    }else{
+        Ext.get('yearMore').removeClass('nobackground');
+        Ext.get('yearLess').removeClass('nobackground');
+    }
+
 };
 
 /**
