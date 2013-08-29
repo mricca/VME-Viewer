@@ -247,10 +247,10 @@ Vme.data={
                     '</tpl>'+
 					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{localname}</h3>'+
-						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Validity: </em><span>{[this.getValidity(values)]}</span> <br/> '+
 						//'<em>Year: </em>{year}<br/> '+
 						'<em>Management Body/Authority(ies): </em><span class="own">{owner}</span><br/>'+
+						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{vmeType}</span> <br/> '+
 						// '<em>UN Criteria: </em>{criteria}<br/> '+
 						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
