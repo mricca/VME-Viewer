@@ -35,7 +35,7 @@ Ext.IframeWindow = Ext.extend(Ext.Window, {
             }
         };
         Ext.IframeWindow.superclass.onRender.apply(this, arguments);
-        this.tbarDiv = Ext.get('topBar');
+        this.tbarDiv = Ext.get('logo');
         this.mainDiv = Ext.get('main');
         this.disclaimerDiv = Ext.get('disclaimer');
         Ext.EventManager.onWindowResize(this.resizeHandler, this);
@@ -46,12 +46,9 @@ Ext.IframeWindow = Ext.extend(Ext.Window, {
         
     }
     ,resizeHandler: function(w, h){
-        this.setPosition(this.tbarDiv.getX()-5,this.tbarDiv.getY());
-        this.setWidth(this.tbarDiv.getWidth()+10);
-        this.setHeight(this.mainDiv.getHeight()+
-                       this.tbarDiv.getHeight()+
-                       this.disclaimerDiv.getHeight()
-                       );
+        this.setPosition(this.tbarDiv.getX() -5 , this.tbarDiv.getY() + this.tbarDiv.getHeight() - 70 );
+        this.setWidth(this.mainDiv.getWidth() + 10 );
+        this.setHeight(this.mainDiv.getHeight() + this.tbarDiv.getHeight() + 30 );
     }
 });
 
@@ -64,19 +61,20 @@ Ext.onReady(function(){
             factsheetUrl = "fishery/vme/10/en";
         var tbarDiv = Ext.get('logo');
         var mainDiv = Ext.get('main');
-        var disclaimerDiv = Ext.get('disclaimer');
+        //var disclaimerDiv = Ext.get('disclaimer');
         new Ext.IframeWindow({
             id:'factsheetWindow',
             x: tbarDiv.getX() -5,
-            y: tbarDiv.getY() + tbarDiv.getHeight() - 35,
+            y: tbarDiv.getY() + tbarDiv.getHeight() - 70,
             width: mainDiv.getWidth()+10,
-            height: mainDiv.getHeight() +tbarDiv.getHeight() - 5,//+disclaimerDiv.getHeight(),
+            height: mainDiv.getHeight() +tbarDiv.getHeight() +30,//+disclaimerDiv.getHeight(),
             title: "VME fact sheet <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;back to map&nbsp;</a>",
             src:"http://figisapps.fao.org/"+factsheetUrl,
             closeAction: 'destroy',
             maximizable: true,
             draggable: false,
-            resizable: false
+            resizable: false,
+            shadow: false
         }).show();
     };
 	
