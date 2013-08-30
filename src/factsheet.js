@@ -46,9 +46,9 @@ Ext.IframeWindow = Ext.extend(Ext.Window, {
         
     }
     ,resizeHandler: function(w, h){
-        this.setPosition(this.tbarDiv.getX() -5 , this.tbarDiv.getY() + this.tbarDiv.getHeight() - 70 );
+        this.setPosition(this.tbarDiv.getX() -5 , this.tbarDiv.getY() + this.tbarDiv.getHeight() - 31 );
         this.setWidth(this.mainDiv.getWidth() + 10 );
-        this.setHeight(this.mainDiv.getHeight() + this.tbarDiv.getHeight() + 30 );
+        this.setHeight(this.mainDiv.getHeight() + this.tbarDiv.getHeight() - 49 );
     }
 });
 
@@ -65,9 +65,9 @@ Ext.onReady(function(){
         new Ext.IframeWindow({
             id:'factsheetWindow',
             x: tbarDiv.getX() -5,
-            y: tbarDiv.getY() + tbarDiv.getHeight() - 70,
+            y: tbarDiv.getY() + tbarDiv.getHeight() - 31,
             width: mainDiv.getWidth()+10,
-            height: mainDiv.getHeight() +tbarDiv.getHeight() +30,//+disclaimerDiv.getHeight(),
+            height: mainDiv.getHeight() +tbarDiv.getHeight() - 49,//+disclaimerDiv.getHeight(),
             title: "VME fact sheet <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;back to map&nbsp;</a>",
             src:"http://figisapps.fao.org/"+factsheetUrl,
             closeAction: 'destroy',
