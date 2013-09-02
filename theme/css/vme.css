@@ -106,7 +106,7 @@ li {
     color: #FFFFFF;
     font-family: asap, sans-serif;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 400;
     position:relative;
     background-color: rgba(41, 171, 226, 0.6);
 }
@@ -270,7 +270,7 @@ li {
     color: #FFFFFF;
     font-family: asap, sans-serif;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 400;
     position:relative;
     
 }
@@ -658,7 +658,7 @@ h3 {
     font-style: normal;
     background-color: #57BCE6; 
     background-color: rgba(41, 171, 226, 0.5);
-    z-index:1000;
+    z-index:1050;
 }
 #sidebar .figisButton .x-btn-tl,#sidebar .figisButton .x-btn-tr,#sidebar .figisButton .x-btn-tc,
 #sidebar .figisButton .x-btn-ml,#sidebar .figisButton .x-btn-mr,#sidebar .figisButton .x-btn-mc,
@@ -779,9 +779,8 @@ a.lblReset {
 /** popup content */
 .popup-result h3{
     font-family: asap, sans-serif;
-    font-size: 13px;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 22px;
+    font-weight: 400;
     padding: 0px;
 }
 .popup-result{
