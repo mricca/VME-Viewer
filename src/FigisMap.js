@@ -64,7 +64,9 @@ FigisMap.defaults = {
 	mapSize		: 'S',
 	layerFilter	: '',
 	layerStyle	: '*',
-	layerStyles	: { distribution : 'all_fao_areas_style', intersecting : '*', associated : '*' }
+	layerStyles	: { distribution : 'all_fao_areas_style', intersecting : '*', associated : '*' },
+	mapCenter : new OpenLayers.LonLat(14, -26),
+	mapCenterProjection : 4326
 };
 
 FigisMap.useProxy = FigisMap.isDeveloper ? false : ( FigisMap.isTesting ? FigisMap.currentSiteURI.indexOf(':8484') < 1 : ( FigisMap.currentSiteURI.indexOf('http://www.fao.org') != 0 ) );
@@ -1551,6 +1553,22 @@ FigisMap.renderer = function(options) {
 		
 		target = p.target.id;
 		
+		// redefine zoomworld button to zoom to default FigisMap center
+		var figisPanZoom = new GlassyPanZoom({position:new OpenLayers.Pixel(4,40)});
+        if ( FigisMap.defaults.mapCenter ){
+            figisPanZoom.buttonDown = function (evt) {
+                OpenLayers.Control.PanZoom.prototype.buttonDown.apply(this, arguments);
+                switch (this.action) {
+                    case "zoomworld":
+                        myMap.setCenter( FigisMap.ol.reCenter( FigisMap.defaults.mapCenterProjection, myMap.getProjection() , FigisMap.defaults.mapCenter) );
+                        break;
+                    default: break;
+                }
+ 
+                OpenLayers.Event.stop(evt);
+            };
+         }
+		
 		myMap = new OpenLayers.Map(
 			p.target.id,
 			{
@@ -1563,7 +1581,7 @@ FigisMap.renderer = function(options) {
                                   new OpenLayers.Control.Button({
                                     displayClass: "MyButton", trigger: function(){alert("login");}
                                     }),
-                                  new GlassyPanZoom({position:new OpenLayers.Pixel(4,40)}),
+                                  figisPanZoom,
                                   new OpenLayers.Control.ArgParser(),
                                   new OpenLayers.Control.Attribution()
                                 ]

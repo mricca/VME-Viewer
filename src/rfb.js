@@ -50,6 +50,9 @@ function reset(){
 	FigisMap.ol.setSelectedYear(new Date().getFullYear());
 	updateVme();	
 	myMap.zoomToMaxExtent();
+	if ( FigisMap.defaults.mapCenter ){
+        myMap.setCenter( FigisMap.ol.reCenter( FigisMap.defaults.mapCenterProjection, myMap.getProjection() , FigisMap.defaults.mapCenter) );
+    }
 	// Ensure that rfb.js is included AFTER vmeData.js, so theese are initialized
 	Vme.form.panels.SearchForm.getForm().reset();
 	Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-0');
