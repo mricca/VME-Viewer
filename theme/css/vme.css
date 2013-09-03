@@ -293,7 +293,7 @@ li {
 
 
 #sidebarP{
-    width:236px;margin-left:13px;
+    width:236px; margin-left:12px;
      -webkit-box-shadow: 0px 2px 5px -1px rgba(0, 79, 131, 0.5);
     box-shadow: 0px 2px 5px rgba(0, 79, 131, 0.5);
 }
@@ -735,6 +735,9 @@ a.lblReset {
 	
 }
 
+.dataLbl {
+    display: none;
+}
 /** Search Results **/
 .search-result{
 	margin:0;
@@ -788,7 +791,6 @@ a.lblReset {
     font-size: 12px;
     font-weight: normal;
     line-height: 1.5;
-padding: 0px;
 	margin:0;
 	padding: 6px 2px;
 }
