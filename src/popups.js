@@ -215,12 +215,16 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
         var count = 0;
         for(var i = 0 ; i<response.length ; i++){
             var inventoryIdentifier= response[i].attributes["VME_ID"];
+            var year = FigisMap.ol.getSelectedYear();
             
             Ext.Ajax.request({
                 url: 'http://figisapps.fao.org/figis/ws/vme/webservice/get',
                 scope:response[i],
                 method:'GET',
-                params: { inventoryIdentifier: inventoryIdentifier },
+                params: { 
+                    inventoryIdentifier: inventoryIdentifier,
+                    year: year
+                    },
                 success: function(resp,opt){
                     var vmeDataParsed = Ext.decode(resp.responseText);
                     
