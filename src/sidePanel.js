@@ -243,6 +243,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			cls:'figisButton',
 			handler: function(){
 				Vme.form.panels.SearchForm.getForm().reset();
+				document.getElementById('searchtext').value = "";
 			}
 			
 		},{
