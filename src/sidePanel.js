@@ -169,7 +169,10 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 	bodyStyle:'padding:5px 5px 0',
 	border: false,
 	labelAlign :'top',
-	defaults: {anchor:'100%' },
+	defaults: {
+	    anchor:'100%',
+        shadow:false
+    },
 	defaultType: 'combo',
     id:'SearchForm',
 	items: [
@@ -203,7 +206,17 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			mode: 'local',
 			store:  Vme.data.stores.areaTypeStore,
 			valueField : 'id',
-			displayField: 'displayText'
+			displayField: 'displayText',
+			listAlign: ['tr-br?', [17,0]],
+			listeners:{
+			    expand:{
+			        single:true,
+			        fn: function( comboBox ){
+                          comboBox.list.setWidth( 'auto' );
+                          comboBox.innerList.setWidth( 'auto' );
+                        }
+			    }
+			}
 		},
 		{
 			fieldLabel: FigisMap.label('SEARCH_CRIT_LBL'),//+' [<a href="#">?</a>]',

@@ -717,8 +717,12 @@ a.lblReset {
 	font-weight:bold;
 }
 
+.x-combo-list {
+    text-align : left;
+}
+
 .x-combo-list-item {
-	text-align:left;
+    text-align : left;
 }
 
 #layerswitcher >div{
