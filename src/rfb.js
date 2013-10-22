@@ -56,6 +56,68 @@ function reset(){
 	// Ensure that rfb.js is included AFTER vmeData.js, so theese are initialized
 	Vme.form.panels.SearchForm.getForm().reset();
 	Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-0');
+	
+	//
+	// Reset toggle buttons for VMW areas and footprints
+	//
+	var el = document.getElementById("lblVME");	
+	if(el){
+		el.className = "lblVME figisButtonToggle";
+	}		
+	
+	el = document.getElementById("lblFootprints");										
+    if(el){
+		el.className = "lblFootprints figisButton";
+	}
+}
+
+/**
+* function toggleStyle
+*
+* Manages toggle buttons style and enables/disables visibility interacting LayerSwitcher
+**/
+function toggleStyle(el, isButton){
+	if(isButton){
+		if(el.className ==  "lblVME figisButton") {
+			toogleWME(false);
+		}else if(el.className ==  "lblFootprints figisButton"){
+			toogleFootprints(false);
+		}else if(el.className ==  "lblVME figisButtonToggle"){
+			toogleWME(true);
+		}else if(el.className ==  "lblFootprints figisButtonToggle"){
+			toogleFootprints(true);
+		}
+	}else{
+		if(el.className ==  "lblVME figisButton") {
+			el.className = "lblVME figisButtonToggle";
+		}else if(el.className ==  "lblFootprints figisButton"){
+			el.className = "lblFootprints figisButtonToggle";
+		}else if(el.className ==  "lblVME figisButtonToggle"){
+			el.className = "lblVME figisButton";
+		}else if(el.className ==  "lblFootprints figisButtonToggle"){
+			el.className = "lblFootprints figisButton";
+		}
+	}
+}
+	
+/**
+* function toogleWME
+*
+* Enables/Disables 'VME areas' layer in LayerSwitcher 
+**/	
+function toogleWME(pressed){
+	var vme = myMap.getLayersByName('VME areas')[0];
+	vme.setVisibility(!pressed);
+}
+
+/**
+* function toogleFootprints
+*
+* Enables/Disables 'Footprints' layer in LayerSwitcher 
+**/	
+function toogleFootprints(pressed){
+	var footprint = myMap.getLayersByName('Footprints')[0];
+	footprint.setVisibility(!pressed);
 }
 
 function updateVme(){
@@ -93,7 +155,7 @@ function setZoom() {
 * function zoomTo
 *
 **/
-function zoomTo(settings,geom) {
+function zoomTo(settings,geom,zoom) {
 	if (settings != null){
 		var bbox = geom ? geom : OpenLayers.Bounds.fromString(settings.zoomExtent,false);
 		var curr_proj = myMap.getProjection();
@@ -104,17 +166,26 @@ function zoomTo(settings,geom) {
 		var valid = FigisMap.ol.checkValidBbox(projcode,settings);
 		
 		if(valid){
-			if(geom){
-				myMap.zoomToExtent(bbox);
-			}else{
+			if(!geom){
 				bbox = bbox.clone().transform(
 					new OpenLayers.Projection(bboxproj),
 					new OpenLayers.Projection(curr_proj)
-				);
-				myMap.zoomToExtent(bbox);			
+				);			
+			}
+			
+			if(zoom){
+				myMap.zoomToExtent(bbox);
+			}else{
+				myMap.moveTo(bbox.getCenterLonLat());
+				
+				/*var xy = myMap.getPixelFromLonLat( bbox.getCenterLonLat() );
+				myMap.pan(xy.x, xy.y, {
+					animate: false,
+					dragging: false
+				});*/
 			}
 		}else{
-			var newproj =bboxproj.split(":")[1];
+			var newproj = bboxproj.split(":")[1];
 			setRFB(bbox, null, newproj, 'e-link','rfbs-link', 'rfbs-html');
 			myMap.zoomToExtent(bbox);
 			setProjection(newproj);
@@ -226,7 +297,9 @@ function addRFB(extent, zoom, projection, elinkDiv, urlLink, htmlLink,filter) {
 			}
 		}
 		
-		
+		if(projection == "3031"){
+			myMap.zoomIn();
+		}		
 	}
 }
 

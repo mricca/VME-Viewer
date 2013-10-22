@@ -833,23 +833,25 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				label	: 'Footprints',
 				group: "VME-DB layers",
                 showLegendGraphic: true,					
-				filter	:'*',
+				//filter	:'*',
+				filter	:"Year = '"+ year + "'",
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: true,
 				type	: 'auto',
-                dispOrder: 2,
+                dispOrder: 1,
 				hideInSwitcher	: false
 			});
 		}     
 		//WMS Footprints
-		if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
+		/*if ( ! layerTypes[ FigisMap.fifao.vme_fp ] ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme_fp,
 				label	: 'Footprints',
 				group: "VME-DB layers",
                 showLegendGraphic: false,					
-				filter	:'*',
+				//filter	:'*',
+				filter	:"Year = '"+ year + "'",
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: true,
@@ -857,7 +859,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
                 dispOrder: 1,
 				hideInSwitcher	: true
 			});
-		}   		   
+		}*/   		   
         /*
 		//WMS Area of competence
 		if ( ! layerTypes[ FigisMap.fifao.rfb ] ) {
@@ -1376,6 +1378,7 @@ FigisMap.ol.refreshFilters = function (){
 	var year = FigisMap.ol.getSelectedYear();  
 	var owner = FigisMap.ol.getSelectedOwner();
 	
+	// VME Areas
 	myMap.getLayersByName('VME areas')[0].mergeNewParams(
 		{'CQL_FILTER': 
 			"YEAR <= '" + year + "' AND END_YEAR >="+ year +
@@ -1384,6 +1387,8 @@ FigisMap.ol.refreshFilters = function (){
 	);
 	
 	myMap.getLayersByName('VME areas')[0].redraw(true);
+	
+	// Encounters
 	myMap.getLayersByName('Encounters')[0].mergeNewParams(
 		{'CQL_FILTER': 
 			"YEAR = '"+ year +"'" +  
@@ -1391,6 +1396,8 @@ FigisMap.ol.refreshFilters = function (){
 		}
 	);
 	myMap.getLayersByName('Encounters')[0].redraw(true);
+	
+	// Survey Data
 	myMap.getLayersByName('Survey Data')[0].mergeNewParams(
 		{'CQL_FILTER':
 			"YEAR = '" + year +"'"+
@@ -1398,6 +1405,17 @@ FigisMap.ol.refreshFilters = function (){
 		}
 	);
 	myMap.getLayersByName('Survey Data')[0].redraw(true);
+	
+	var m = myMap;	
+	var f = m.getLayersByName('Footprints')[0];
+	
+	// Footprints
+	f.mergeNewParams(
+		{'CQL_FILTER':
+			"Year = '" + year +"'"
+		}
+	);
+	f.redraw(true);
     
 };
 /*
@@ -1638,6 +1656,31 @@ FigisMap.renderer = function(options) {
 		myMap.addControl( lSwitcher );
 		lSwitcher.baseLbl.innerHTML = "Base layers";
         lSwitcher.dataLbl.innerHTML = "";
+		
+		// //////////////////////////////////////////////////////////
+		// Manages toggle button for VME areas and Footprints when 
+		// layer is clicked on LayerSwitcher
+		// //////////////////////////////////////////////////////////
+		myMap.events.register("changelayer", this, function(e){
+			var property = e.property;
+			
+			if(property == "visibility"){
+				var layer = e.layer;
+				var name = layer.name;
+				
+				var el;
+				if(name == "VME areas"){
+					el = document.getElementById("lblVME");										
+				}else if(name == "Footprints"){
+					el = document.getElementById("lblFootprints");										
+				}
+				
+				if(el){
+					toggleStyle(el);
+				}
+			}
+		});
+
 		myMap.addControl( new OpenLayers.Control.Navigation({ zoomWheelEnabled: true }) );
 		myMap.addControl( new OpenLayers.Control.LoadingPanel());
 		FigisMap.rnd.watermarkControl( myMap, p );

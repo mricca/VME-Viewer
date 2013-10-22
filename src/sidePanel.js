@@ -112,12 +112,11 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                       myMap.zoomOut(); 
                     }
                     
-                    var settings ={
+                    var settings = {
                       zoomExtent: bounds.toBBOX(20)
                     };
-                    zoomTo(settings,repro_bbox);
                     
-                        
+					zoomTo(settings,repro_bbox,zoom);
                     
                     myMap.paddingForPopups.right = 240; //TODO use this to center the popup when the search panel is opened!!! <--
                     

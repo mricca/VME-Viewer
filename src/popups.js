@@ -48,7 +48,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 					title: 'Features Info',
 					width: 400,
                     panIn:true,
-					height: 300,
+					height: 240,
 					layout: "accordion",
 					map: myMap,
 					location: e.xy,
@@ -273,7 +273,7 @@ FigisMap.ol.showPopup= function(e,response,layer){
 		//title: 'Features Info',
         border:false,
 		width: 400,
-		height: 300,
+		height: 240,
 		layout: "fit",
 		map: myMap,
 		unpinnable:false,
@@ -399,7 +399,7 @@ FigisMap.ol.getVertFromGeom = function(geom){
  */
 FigisMap.ol.emulatePopupFromVert=function(vert){
     var lonlat =new OpenLayers.LonLat(vert.x,vert.y);
-	var evt  ={
+	var evt = {
 		xy: myMap.getPixelFromLonLat( lonlat )
 	};
 	FigisMap.ol.clearPopupCache();

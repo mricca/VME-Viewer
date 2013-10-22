@@ -240,8 +240,13 @@ document.namespaces;
                 <div id="yearMore" onClick="javascript:FigisMap.ol.incrementYear()" unselectable="on"></div>
             </div>
             <div id="loginContainer" class="figisButton" onclick="FigisMap.logInOut()">Login</div>
-
-            <div id="lblReset" class="lblReset figisButton" style="" onclick="reset()">Reset</div>
+	
+			<div id="lblVME" class="lblVME figisButtonToggle" style="" onclick="toggleStyle(this, true)">VME areas</div>
+			
+			<div id="lblFootprints" class="lblFootprints figisButton" style="" onclick="toggleStyle(this, true)">Footprints</div>			
+			
+			<div id="lblReset" class="lblReset figisButton" style="" onclick="reset()">Reset</div>
+			
             <div id="sidebar">
                 <div id="leftTopPan">
                     <div id="searchtextwrapper"><input type="text" id="searchtext" name="searchtext" onkeydown="if (event.keyCode == 13) { Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');}"/><div onclick=" Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');" id="simpleSearchButton"></div></div>
