@@ -97,7 +97,15 @@ FigisMap.rnd.vars = {
 	},
 	Legend_Base_Request	: FigisMap.geoServerBase + "/figis/geoserver" + "/wms" + "?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&WIDTH=30&HEIGHT=20",
 	wfs			: FigisMap.geoServerBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename=',
-	absWfs			: FigisMap.geoServerAbsBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename='
+	absWfs			: FigisMap.geoServerAbsBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename=',
+	vmeSearchZoomTo: {
+		wfsUrl: FigisMap.geoServerBase + "/figis/geoserver" + "/wfs",
+		wfsVersion: "1.1.0",
+		filterProperty: "RFB",
+	    featureType: "RFB_COMP",
+	    featurePrefix: "fifao",
+	    srsName: "EPSG:4326"
+	}
 };
 
 if ( FigisMap.useProxy ) FigisMap.rnd.vars.wfs = FigisMap.currentSiteURI + FigisMap.proxy + encodeURIComponent( FigisMap.rnd.vars.absWfs );

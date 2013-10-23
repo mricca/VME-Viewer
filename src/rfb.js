@@ -57,18 +57,8 @@ function reset(){
 	Vme.form.panels.SearchForm.getForm().reset();
 	Vme.form.panels.SearchPanel.layout.setActiveItem('searchcard-0');
 	
-	//
-	// Reset toggle buttons for VMW areas and footprints
-	//
-	var el = document.getElementById("lblVME");	
-	if(el){
-		el.className = "lblVME figisButtonToggle";
-	}		
-	
-	el = document.getElementById("lblFootprints");										
-    if(el){
-		el.className = "lblFootprints figisButton";
-	}
+	// Restore toggle
+	restoreToggleButtons();
 }
 
 /**
@@ -177,19 +167,18 @@ function zoomTo(settings,geom,zoom) {
 				myMap.zoomToExtent(bbox);
 			}else{
 				myMap.moveTo(bbox.getCenterLonLat());
-				
-				/*var xy = myMap.getPixelFromLonLat( bbox.getCenterLonLat() );
-				myMap.pan(xy.x, xy.y, {
-					animate: false,
-					dragging: false
-				});*/
 			}
 		}else{
 			var newproj = bboxproj.split(":")[1];
+			
+			bbox = bbox.clone().transform(
+				new OpenLayers.Projection(curr_proj),
+				new OpenLayers.Projection(bboxproj)
+			);	
+			
 			setRFB(bbox, null, newproj, 'e-link','rfbs-link', 'rfbs-html');
 			myMap.zoomToExtent(bbox);
-			setProjection(newproj);
-		
+			setProjection(newproj);		
 		}
     }else{
     	myMap.zoomToMaxExtent();
@@ -210,9 +199,30 @@ function setRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink,filter
 		var settings = FigisMap.rfb.getSettings( getProjection());
 		setProjection(settings && settings.srs ? settings.srs : '4326');
 	}
-	//Close popup when RFB change
+	
+	// Close popup when RFB change
 	FigisMap.ol.clearPopupCache();
 	addRFB( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink,filter );
+	
+	// Restore toggle
+	restoreToggleButtons();
+}
+
+/**
+* function restoreToggleButtons
+*
+* Restore toggle buttons status for VMW areas and footprints.
+**/
+function restoreToggleButtons(){
+	var el = document.getElementById("lblVME");	
+	if(el){
+		el.className = "lblVME figisButtonToggle";
+	}		
+	
+	el = document.getElementById("lblFootprints");										
+    if(el){
+		el.className = "lblFootprints figisButton";
+	}
 }
 
 /**

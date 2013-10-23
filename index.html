@@ -208,7 +208,7 @@ document.namespaces;
                 <div id="SelectSRS">
                    <div> 
                                 <p>
-                                    <input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3349' checked="checked" />
+                                    <input id="mercatorRadio" type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3349' checked="checked" />
                                     <label>Mercator</label>
                                 </p>
 
@@ -222,8 +222,8 @@ document.namespaces;
                                     <input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3031' />
                                     <label>South Polar</label>
                                 </p>
-                    <!-- missing proj4js eck4.js file -->
-                    <!-- <option value='54012'>EckertIV (54012)</option> -->
+								<!-- missing proj4js eck4.js file -->
+								<!-- <option value='54012'>EckertIV (54012)</option> -->
                                 <p>
                                     <input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='54009' />
                                     <label>Mollweide</label>
@@ -305,8 +305,15 @@ document.namespaces;
             FigisMap.ol.setSelectedYear(new Date().getFullYear());
     		if(Ext.isIE7 || Ext.isIE8 || Ext.isIE9)
                 Ext.get('yearCurrent').addClass('ie');
-
+				
+			// //////////////////////////////////////////////////
+			// Mercator Radio Button checked as default.
+			// //////////////////////////////////////////////////
+			
+			var mercatorRadio = document.getElementById("mercatorRadio");
+			mercatorRadio.checked = true;
 		});
+		
 		function updateCopyYear() {
 			var uy = new Date();
 			uy = parseInt(uy.getFullYear() ? uy.getFullYear() : uy.getYear());

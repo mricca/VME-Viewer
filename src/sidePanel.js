@@ -185,6 +185,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			fieldLabel: FigisMap.label('SEARCH_RFMO_LBL'),//+' [<a href="#">?</a>]',
 			name: 'authority',
 			ref:'../RFMO',
+			id: "RFMOCombo",
 			emptyText:  FigisMap.label('SEARCH_RFMO_EMP'),
 			store: Vme.data.stores.rfmoStore,
 			allowBlank:true,
@@ -277,42 +278,136 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
         }
     } 
 });
-Vme.search =function(advanced){
-    var store = Vme.data.stores.SearchResultStore;
-    store.resetTotal();
-    store.removeAll();
-    store.baseParams={};
-    var fields ={};
-    if(advanced){
-        var fields = Vme.form.panels.SearchForm.getForm().getFieldValues(true);
-    }
-    fields.text = document.getElementById('searchtext').value;
-    var params = {
-        start: 0,          
-        rows: Vme.data.constants.pageSize
-    };
-    
-    for (var key in fields){
-        if(fields[key]!=""){
-            switch(key){
-                case 'authority':
-                case 'vme_type':
-                case 'vme_criteria':
-                case 'year':
-                case 'text':
-                    store.setBaseParam(key, fields[key]);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-    
-    store.load({
-        params: params
-    });
-    Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');
+
+/**
+ * Vme.search
+ * Search VMEs zooming to the VME autority area.
+ * 
+ */
+Vme.search = function(advanced){
+
+	// ///////////////////////////////////////////////////
+	// Retrieve Autority area extent to perform a zoomTo.
+	// ///////////////////////////////////////////////////
+	
+	var RFMOCombo = Ext.getCmp("RFMOCombo");
+	var RFMStore = RFMOCombo.getStore();
+	var value = RFMOCombo.getValue();
+	
+	var dIndex = RFMStore.find("id", value);
+	if(dIndex > -1){
+		var r = RFMStore.getAt(dIndex);	
+		var rfmName = r.data.name;
+		
+		var filter = new OpenLayers.Filter.Comparison({
+			type: OpenLayers.Filter.Comparison.EQUAL_TO,
+			property: FigisMap.rnd.vars.vmeSearchZoomTo.filterProperty,    // "RFB",
+			value: rfmName
+		});
+		
+		var protocol = new OpenLayers.Protocol.WFS({
+		   version: FigisMap.rnd.vars.vmeSearchZoomTo.wfsVersion,          // "1.1.0",					
+		   url: FigisMap.rnd.vars.vmeSearchZoomTo.wfsUrl,                  // "http://figisapps.fao.org/figis/geoserver/" + "wfs",									   
+		   featureType: FigisMap.rnd.vars.vmeSearchZoomTo.featureType,     // "RFB_COMP",
+		   featurePrefix: FigisMap.rnd.vars.vmeSearchZoomTo.featurePrefix, // "fifao",
+		   srsName: FigisMap.rnd.vars.vmeSearchZoomTo.srsName,             // "EPSG:4326",
+		   defaultFilter: filter
+		});
+		
+		var mask = new Ext.LoadMask(Ext.getBody(), {msg: "Please wait ..."});
+		
+		var callback = function(r) {
+			var features = r.features;
+			
+			// ///////////////////////////
+			// Get the bigger extent
+			// ///////////////////////////
+			var size = features.length;
+			var bounds = features[0].bounds;
+			for(var i=1; i<size; i++){
+				var b = features[i].bounds;
+				if(!b){
+					continue;
+				}
+				if(bounds && b.contains(bounds)){
+					bounds = b;
+				}			
+			}
+			
+			//var test = new OpenLayers.Layer.Vector("test", {
+			//		displayInLayerSwitcher: true
+			//});
+			
+			var repro_geom = bounds.toGeometry().transform(
+				new OpenLayers.Projection(FigisMap.rnd.vars.vmeSearchZoomTo.srsName),
+				myMap.getProjectionObject()
+			);
+			
+			//test.addFeatures(new OpenLayers.Feature.Vector(repro_geom));	
+			//myMap.addLayers([test]);
+			
+			var repro_bbox = repro_geom.getBounds();
+			var settings = {
+				zoomExtent: bounds.toBBOX(20)
+			};
+			
+			zoomTo(settings, repro_bbox, true);
+			
+			vmeSearch(advanced);
+			
+			mask.hide();
+		};
+		
+		mask.show();
+		var response = protocol.read({
+			callback: callback
+		});	
+	}else{
+		vmeSearch(advanced);
+	}
 };
+
+function vmeSearch(advanced){
+	// ///////////////////
+	// Perform search
+	// ///////////////////
+	var store = Vme.data.stores.SearchResultStore;
+	store.resetTotal();
+	store.removeAll();
+	store.baseParams={};
+	var fields = {};
+	if(advanced){
+		var fields = Vme.form.panels.SearchForm.getForm().getFieldValues(true);
+	}
+	fields.text = document.getElementById('searchtext').value;
+	var params = {
+		start: 0,          
+		rows: Vme.data.constants.pageSize
+	};
+	
+	for (var key in fields){
+		if(fields[key]!=""){
+			switch(key){
+				case 'authority':
+				case 'vme_type':
+				case 'vme_criteria':
+				case 'year':
+				case 'text':
+					store.setBaseParam(key, fields[key]);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	
+	store.load({
+		params: params
+	});
+	
+	Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');
+}
+
 /** 
  * Vme.form.panels.SearchPanel
  * panel containing search form and search results dataview using
