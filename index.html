@@ -13,6 +13,7 @@
 	
 	<link rel="stylesheet" type="text/css" href="lib/OpenLayers/theme/default/style.css" />
 	<link rel="stylesheet" href="theme/css/style.css" type="text/css" />
+	<link rel="stylesheet" href="theme/css/html.css" type="text/css" />
 	<link rel="stylesheet" href="theme/css/vme.css" type="text/css" />
     <link rel="stylesheet" href="theme/css/vmefonts.css" type="text/css" />
 	
@@ -39,15 +40,15 @@
 	
 	<script type="text/javascript" src="src/FigisMap.js"></script>
     <!-- proxy overriding configuration: allows to use a proxy for test purpose -->
-    <!-- <script type="text/javascript" src="src/proxy-ovr.js" defer="defer"></script> -->
+    <script type="text/javascript" src="src/proxy-ovr.js" defer="defer"></script>
 	<script type="text/javascript" src="src/vmeData.js" ></script>
 	<script type="text/javascript" src="src/popups.js"></script>
 	<script type="text/javascript" src="src/sidePanel.js" ></script>
-	<script type="text/javascript" src="src/rfb.js"></script>
+	<script type="text/javascript" src="src/vme.js"></script>
 
 	<script type="text/javascript" src="src/Watermark.js" defer="defer"></script>
     
-      <style type="text/css">
+    <style type="text/css">
           	
           table.featureInfo, table.featureInfo td, table.featureInfo th {
                   border:1px solid #15428B; 
@@ -169,36 +170,33 @@ document.namespaces;
             </div>
         </div>
 
-<div  style="display:none" id="topBar">
-			
+		<div  style="display:none" id="topBar">			
 			<label id="lblFilRFB" style="visibility:hidden">Zoom to:</label>
 			<select  id="FilterRFB" onchange="setZoom()"></select>
 			<label style="visibility:hidden" id="lblRFB">Filter by:</label>
-			<select style="visibility:hidden" id="SelectRFB" onchange="setRFB(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>  
-			
-                        
+			<select style="visibility:hidden" id="SelectRFB" onchange="setVME(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>  
 
 			<!--a href="javascript:embedLink();" id="EmbedLink" title="Link or embed this RFB map"><span>Link</span></a-->
 			<input id="txtCql" type="hidden" />
 			<input id="command" type="hidden" />
 
 			<input id="opt" type="hidden" />
-			       	<!-- li>
-			       		<label id="lblCQL">Provide CQL Query</label>
-			       		<input id="txtCql" type="text" />
-			       		<input id="btnUpdate" type="button" value="UPDATE" onClick="addRFBCQL()"/>
-			       	</li>
-			       	<li>
-						<label id="lblCQL">Enter Command</label>
-			       		<input id="command" type="text" />
-			       		<input id="cmdbtn" type="button" value="UPDATE" onClick="Command()"/>
-			       	</li>
-					<li>
-						<label id="lblCQL">Optional Arguments</label>
-			       		<input id="opt" type="text" />
-			       	</li -->
-					
-		 </div> 
+			<!-- li>
+				<label id="lblCQL">Provide CQL Query</label>
+				<input id="txtCql" type="text" />
+				<input id="btnUpdate" type="button" value="UPDATE" onClick="addRFBCQL()"/>
+			</li>
+			<li>
+				<label id="lblCQL">Enter Command</label>
+				<input id="command" type="text" />
+				<input id="cmdbtn" type="button" value="UPDATE" onClick="Command()"/>
+			</li>
+			<li>
+				<label id="lblCQL">Optional Arguments</label>
+				<input id="opt" type="text" />
+			</li -->					
+		</div> 
+		
 		<div style="position:relative" id="main">
 			<div id="map"  class="map"></div>
             <div  id="bottomLeftPanel">
@@ -208,24 +206,24 @@ document.namespaces;
                 <div id="SelectSRS">
                    <div> 
                                 <p>
-                                    <input id="mercatorRadio" type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3349' checked="checked" />
+                                    <input id="mercatorRadio" type="radio" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3349' checked="checked" />
                                     <label>Mercator</label>
                                 </p>
 
                                 <p>
-                                    <input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='4326' />
+                                    <input type="radio" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='4326' />
                                     <label>WGS84</label>
                                 </p>
                    </div>
                    <div> 
                                 <p>
-                                    <input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='3031' />
+                                    <input type="radio" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3031' />
                                     <label>South Polar</label>
                                 </p>
 								<!-- missing proj4js eck4.js file -->
 								<!-- <option value='54012'>EckertIV (54012)</option> -->
                                 <p>
-                                    <input type="radio" onchange="setRFB(null, null, this.value, 'e-link','rfbs-link', 'rfbs-html')" name="srs" value='54009' />
+                                    <input type="radio" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='54009' />
                                     <label>Mollweide</label>
                                 </p>
                    </div> 
@@ -252,34 +250,32 @@ document.namespaces;
                     <div id="searchtextwrapper"><input type="text" id="searchtext" name="searchtext" onkeydown="if (event.keyCode == 13) { Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');}"/><div onclick=" Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');" id="simpleSearchButton"></div></div>
                     <div id="leftTopLinks"> 
                         <a onclick="sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('searchForm');Vme.form.panels.SearchPanel.doLayout()">Advanced Search</a> |
-                        <a onclick="sidePanel.layout.setActiveItem('legendPanel');sidePanel.expand();">Legend</a> <div class="xbutton-closepanels" onclick="sidePanel.collapse();" >  </div>
+                        <a onclick="sidePanel.layout.setActiveItem('legendPanel');sidePanel.expand();">Legend</a> <div class="xbutton-closepanels" onclick="sidePanel.collapse();" >  </div> |
+						<a onclick="sidePanel.layout.setActiveItem('embed-link');sidePanel.expand();setVMEEmbedLink('embed-url', 'embed-iframe');">EmbedLink</a> <div class="xbutton-closepanels" onclick="sidePanel.collapse();" >  </div>
                     </div>
                 </div>
+				
                 <div id="sidebarP"></div></div>
 		
-			<!--div id="e-link">
+				<!--div id="e-link">
+					<div>
+						<label for="rfbs-link">Paste the link in email or chat</label>
+						<input id="rfbs-link" type="text" readonly="readonly" value="" onclick="this.focus();this.select();"/>
+					</div>
+					<div>
+						<label for="rfbs-html">Paste the HTML in a web site</label>
+						<input id="rfbs-html" type="text" readonly="readonly" value="" onclick="this.focus();this.select();"/>
+					</div>
 
-				<div>
-					<label for="rfbs-link">Paste the link in email or chat</label>
-					<input id="rfbs-link" type="text" readonly="readonly" value="" onclick="this.focus();this.select();"/>
-				</div>
-				<div>
-					<label for="rfbs-html">Paste the HTML in a web site</label>
-					<input id="rfbs-html" type="text" readonly="readonly" value="" onclick="this.focus();this.select();"/>
-				</div>
-
-			</div-->
-			<!-- <div class="legend legendTitle" id="legendLegendTitle">Legend</div>
-			<div id="legend" class="legend"></div> -->
-			<!--div class="legend legendTitle" id="legendMembersTitle">List of Members</div>
-			<div id="MemberCountries" class="legend"></div-->
-		</div>
-
-	
+				</div-->
+				<!-- <div class="legend legendTitle" id="legendLegendTitle">Legend</div>
+				<div id="legend" class="legend"></div> -->
+				<!--div class="legend legendTitle" id="legendMembersTitle">List of Members</div>
+				<div id="MemberCountries" class="legend"></div-->
+		</div>	
 	</div>
-    
-
 </div>
+
 <div id ="disclaimer">
 		</div>
 <div id="bottomBar1"><a href="http://www.geo-solutions.it" style="float:left;text-align:left;padding-left:2px;">Credits</a>
@@ -298,20 +294,14 @@ document.namespaces;
 		Ext.onReady(function(){
 			sidePanel.render(document.getElementById('sidebarP'));
 
-			setRFBPage('e-link','rfbs-link', 'rfbs-html');
+			setVMEPage('embed-link','embed-url', 'embed-iframe');
 			
             Ext.QuickTips.init();
 
-            FigisMap.ol.setSelectedYear(new Date().getFullYear());
+            //FigisMap.ol.setSelectedYear(new Date().getFullYear());  // moved in setVMEPage to manage embed link
+			
     		if(Ext.isIE7 || Ext.isIE8 || Ext.isIE9)
                 Ext.get('yearCurrent').addClass('ie');
-				
-			// //////////////////////////////////////////////////
-			// Mercator Radio Button checked as default.
-			// //////////////////////////////////////////////////
-			
-			var mercatorRadio = document.getElementById("mercatorRadio");
-			mercatorRadio.checked = true;
 		});
 		
 		function updateCopyYear() {

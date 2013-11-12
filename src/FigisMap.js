@@ -72,8 +72,8 @@ FigisMap.defaults = {
 FigisMap.useProxy = FigisMap.isDeveloper ? false : ( FigisMap.isTesting ? FigisMap.currentSiteURI.indexOf(':8484') < 1 : ( FigisMap.currentSiteURI.indexOf('http://www.fao.org') != 0 ) );
 
 FigisMap.geoServerAbsBase = FigisMap.isDeveloper ? 'http://192.168.1.122:8484' : ( FigisMap.isTesting ? 'http://193.43.36.238:8484' : 'http://www.fao.org' );
-FigisMap.geoServerBase = '';
-//FigisMap.geoServerBase = 'http://figisapps.fao.org'; //use this for tests
+//FigisMap.geoServerBase = '';
+FigisMap.geoServerBase = 'http://figisapps.fao.org'; //use this for tests
 
 
 FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figis/figis-vme/' : '/figis/geoserver/figis-vme/' );
@@ -1481,7 +1481,7 @@ FigisMap.ol.refreshFilters = function (){
 		In case no valid layers are found, the property will be valued with false.
 	
 */
-FigisMap.draw = function( pars ) {
+FigisMap.draw = function( pars, visibleLayers ) {
 	
 	FigisMap.rfb.preparse( pars );
 	pars = FigisMap.parser.parse( pars );
@@ -1500,7 +1500,7 @@ FigisMap.draw = function( pars ) {
 	}
 	
 	var rnd = new FigisMap.renderer( { debug: pars.debug } );
-	var theMap = rnd.render( pars );
+	var theMap = rnd.render( pars, visibleLayers );
 	
 	FigisMap.lastMap = ( theMap && theMap.id && theMap.id.indexOf('OpenLayers.')==0 ) ? theMap : false;
 	FigisMap.renderedMaps[ pars.target.id ] = FigisMap.lastMap;
@@ -1527,7 +1527,7 @@ FigisMap.renderer = function(options) {
 	OpenLayers.DOTS_PER_INCH = 25.4 / 0.28;
 	OpenLayers.Util.onImageLoadErrorColor = 'transparent';
 
-	this.render = function( pars ) {
+	this.render = function( pars, visibleLayers ) {
 	
 	OpenLayers.Util.onImageLoad = function(){
 		// //////////////////////
@@ -1650,8 +1650,22 @@ FigisMap.renderer = function(options) {
 			));
   */          
             //DEMO1
-			myMap.addLayer( new OpenLayers.Layer.WMS("GEBCO imagery","http://figisapps.fao.org/figis/geoserver/gwc/service/wms",
-				{layers:"fifao:gebco1",gridset:"EPSG:4326",format:"image/jpeg",TILED: true, TILESORIGIN: boundsOrigin, BBOX: boundsBox}, {wrapDateLine: true, buffer: 0, ratio: 1, singleTile: false}
+			myMap.addLayer( new OpenLayers.Layer.WMS(
+				"GEBCO imagery",
+				"http://figisapps.fao.org/figis/geoserver/gwc/service/wms",
+				{
+					layers:"fifao:gebco1",
+					gridset:"EPSG:4326",
+					format:"image/jpeg",
+					TILED: true, 
+					TILESORIGIN: boundsOrigin, 
+					BBOX: boundsBox
+				}, {
+					wrapDateLine: true, 
+					buffer: 0, 
+					ratio: 1, 
+					singleTile: false
+				}
 			));
             
 			myMap.setLayerIndex(myMap.getLayersByName("GEBCO imagery")[0],1);
@@ -1796,14 +1810,14 @@ FigisMap.renderer = function(options) {
 		if ( p.global ) {
 			myMap.zoomToMaxExtent();
 			FigisMap.debug('Render for p.global');
-			finalizeMap();
+			finalizeMap(visibleLayers);
 		} else if ( p.extent || p.center || p.zoom ) {
 			myMap.zoomToMaxExtent();
 			FigisMap.debug('Render for Extent', p.extent, 'Zoom', p.zoom, 'Center', p.center );
 			if ( p.extent ) myMap.zoomToExtent( FigisMap.ol.reBound( p.dataProj, projection, p.extent ), false);
 			if ( p.zoom ) myMap.zoomTo( p.zoom, true );
 			if ( p.center ) myMap.setCenter( FigisMap.ol.reCenter( p.dataProj, projection, p.center) );
-			finalizeMap();
+			finalizeMap(visibleLayers);
 		} else {
 			autoZoom( layers );
 		}
@@ -1817,10 +1831,56 @@ FigisMap.renderer = function(options) {
 		
 	}; //function ends
 	
-	function finalizeMap() {
+	function finalizeMap(visibleLayers) {
 		FigisMap.debug('Finalizing map:', myMap, 'olLayers:',olLayers);
 		myMap.updateSize();
+		
+	    // ///////////////////////////////////////////
+		// Set layers visibility if 'layers' in URL
+		// ///////////////////////////////////////////
+		if(visibleLayers){
+			var olLayersNames = visibleLayers.split(";");
+			
+			//
+			// hide all layers before
+			//			
+			var size = olLayers.length;
+			
+			for(var i=0; i<size; i++){
+				var layer = olLayers[i];
+
+				if(layer){
+				    var layerName = layer.name;
+					layer.setVisibility(false);
+					
+					for(var y=0; y<olLayersNames.length; y++){
+						if(layerName == decodeURIComponent(olLayersNames[y])){
+							layer.setVisibility(true);
+						}
+					}
+
+					var el;
+					if(layerName == "VME areas"){
+						el = document.getElementById("lblVME");	
+						if(layer.getVisibility()){
+							el.className = "lblVME figisButtonToggle";
+						}else{
+							el.className = "lblVME figisButton";
+						}							
+					}else if(layerName == "Footprints"){
+						el = document.getElementById("lblFootprints");				
+						if(layer.getVisibility()){
+							el.className = "lblFootprints figisButtonToggle";
+						}else{
+							el.className = "lblFootprints figisButton";
+						}					
+					}					
+				}
+			}
+		}
+		
 		myMap.addLayers( olLayers );
+		
 		if ( FigisMap.isDeveloper || FigisMap.isTesting ) {
 			myMap.events.register(
 				'moveend',

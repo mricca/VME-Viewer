@@ -466,8 +466,7 @@ var sidePanel = new Ext.Panel({
 	//renderTo:'sidebar',
     collapsed:true,
     collapsible:false,
-	height:460,
-	
+	height:460,	
 	activeItem: 0,
     layout:'card',
 	deferredRender:false,
@@ -476,6 +475,31 @@ var sidePanel = new Ext.Panel({
 		border:false
 	},
 	items:[
+		{
+			xtype: "form",
+			id: "embed-link",
+			bodyStyle: 'padding:5px 5px 0',
+			border: false,
+			labelAlign :'top',
+			defaults: {
+				anchor: '100%',
+				shadow: false
+			},
+			items:[
+				{
+					xtype: "textfield",
+					id: "embed-url",
+					selectOnFocus: true,
+					fieldLabel: "Paste the link in mail or chat"					
+				},
+				{
+					xtype: "textfield",
+					id: "embed-iframe",
+					selectOnFocus: true,
+					fieldLabel: "Paste the HTML in a web site"					
+				}
+			]
+		},
 		{
             id: 'legendPanel',
 			layout:'fit',

@@ -1,7 +1,3 @@
-html
-{
-	background: #29ABE2 url("../img/patternoceanfish.png") repeat center center fixed;
-}
 body {
     font : normal  12px;
     font-family : "Liberation Sans", Arial, Helvetica, sans-serif;
@@ -30,6 +26,23 @@ body {
     /*margin-bottom:20px;*/
     margin-right: auto;
 }
+
+#page_e {
+    z-index: 1;
+    width: 960px;
+    height: 728px;
+    background-image: none;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #000000;
+    background-color: #FFFFFF;
+    padding-bottom: 0px;
+    margin-left: auto;
+    margin-top:20px;
+    /*margin-bottom:20px;*/
+    margin-right: auto;
+}
+
 #wrapper{
     margin: 20px;
 
@@ -234,13 +247,10 @@ li {
     float : right;
     font-size :  12px;
     padding : 0;
-    width : 248px;
+    width : 275px;
     position:absolute;
     z-index:5000;
-
     top:0;right:0;
-    
-
 }
 #sidebarP{
     overflow :  auto ;
@@ -470,10 +480,10 @@ li {
 #embed-code textarea {
                   height : 300px;
 }
-.embed-link {
+/*.embed-link {
                    color : black;
          text-decoration : underline;
-}
+}*/
 .olControlLoadingPanel {
         background-image : url(../img/loading.gif);
      background-position : center;
@@ -527,18 +537,18 @@ li {
           vertical-align : middle;
 }
 #e-link {
-        background-color : rgb(51, 102, 153);
-                 display : none;
-                 height : 100px;
-                 padding: .5em 0;
+        /*background-color : rgb(51, 102, 153);*/
+        /*display : none;*/
+        height : 100px;
+        padding: .5em 0;
 }
 #e-link div {
-                   color : white;
-                 padding : .5em 0;
-              text-align : center;
+        color : white;
+        padding : .5em 0;
+        text-align : center;
 }
 #e-link label {
-               font-size :  10px;
+        font-size :  10px;
 }
 #legend {
            margin-bottom :   0px;
@@ -679,12 +689,11 @@ h3 {
 .figisButton:hover{
     line-height: 1.3;
 }
-a.lblReset {
-    
-    /*background-image: url(../img/house.png);*/
-   
-    
+
+a.lblReset {    
+    /*background-image: url(../img/house.png);*/    
 }
+
 #lblReset{
     position:absolute;
     top:300px;
