@@ -1583,9 +1583,9 @@ FigisMap.renderer = function(options) {
         if ( FigisMap.defaults.mapCenter ){
             figisPanZoom.onButtonClick = function (evt) {
                 OpenLayers.Control.PanZoom.prototype.onButtonClick.apply(this, arguments);
-                switch (this.action) {
+                switch (evt.buttonElement.action) {
                     case "zoomworld":
-                        myMap.setCenter( FigisMap.ol.reCenter( FigisMap.defaults.mapCenterProjection, myMap.getProjection() , FigisMap.defaults.mapCenter) );
+                        myMap.setCenter( FigisMap.ol.reCenter( FigisMap.defaults.mapCenterProjection, myMap.getProjection(), FigisMap.defaults.mapCenter) );
                         break;
                     default: break;
                 }
