@@ -231,11 +231,11 @@ document.namespaces;
                 
             </div>
             <div  id="bottomRightPanel">
-                <div id="yearLess" onClick="javascript:FigisMap.ol.decrementYear()" unselectable="on"></div>
+                <div id="yearLess" onClick="FigisMap.ol.decrementYear(); setVMEEmbedLink('embed-url', 'embed-iframe');" unselectable="on"></div>
                 <div id="yearCurrent">
                     2013
                 </div>
-                <div id="yearMore" onClick="javascript:FigisMap.ol.incrementYear()" unselectable="on"></div>
+                <div id="yearMore" onClick="FigisMap.ol.incrementYear(); setVMEEmbedLink('embed-url', 'embed-iframe');" unselectable="on"></div>
             </div>
             <div id="loginContainer" class="figisButton" onclick="FigisMap.logInOut()">Login</div>
 	

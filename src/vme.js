@@ -217,17 +217,43 @@ function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filte
 /**
 * function restoreToggleButtons
 *
-* Restore toggle buttons status for VMW areas and footprints.
+* Restore toggle buttons status for VMW areas and footprints. 
 **/
 function restoreToggleButtons(){
 	var el = document.getElementById("lblVME");	
 	if(el){
-		el.className = "lblVME figisButtonToggle";
+		var vme = myMap.getLayersByName('VME areas')[0];
+		
+		// ///////////////////////////////////////////////
+		// If there are Embed URL params concerning VME 
+		// these should be maintained for the status 
+		// (see also FigisMap.finalizeMap).
+		// ///////////////////////////////////////////////
+		if(vme.getVisibility()){
+			el.className = "lblVME figisButtonToggle";
+		}else{
+			el.className = "lblVME figisButton";
+		}							
+
+		//el.className = "lblVME figisButtonToggle";
 	}		
 	
 	el = document.getElementById("lblFootprints");										
     if(el){
-		el.className = "lblFootprints figisButton";
+		var footprints = myMap.getLayersByName('Footprints')[0];
+			
+		// /////////////////////////////////////////////////////
+		// If there are Embed URL params concerning Footprints 
+		// these should be maintained for the status 
+		// (see also FigisMap.finalizeMap).
+		// /////////////////////////////////////////////////////	
+		if(footprints.getVisibility()){
+			el.className = "lblFootprints figisButtonToggle";
+		}else{
+			el.className = "lblFootprints figisButton";
+		}					
+	
+		//el.className = "lblFootprints figisButton";
 	}
 }
 
@@ -519,6 +545,12 @@ function toggleProjectionPanel(){
 }
 function closeProjectionPanel(){
     var el = Ext.get('SelectSRS');
-    el.setHeight(0,true);
-    Ext.get('lblSRS').removeClass('open');
+	if(el){
+		el.setHeight(0,true);
+	}
+	
+	el = Ext.get('lblSRS');	
+	if(el){
+		el.removeClass('open');
+	}
 }
