@@ -193,7 +193,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			triggerAction: 'all',
 			mode: 'local',
             valueField : 'id',
-			displayField: 'name'
+			displayField: 'acronym'
 		},{
 			fieldLabel: FigisMap.label('SEARCH_TYPE_LBL'),//+' [<a href="#">?</a>]',
 			name: 'vme_type',
@@ -297,7 +297,7 @@ Vme.search = function(advanced){
 	var dIndex = RFMStore.find("id", value);
 	if(dIndex > -1){
 		var r = RFMStore.getAt(dIndex);	
-		var rfmName = r.data.name;
+		var rfmName = r.data.acronym;
 		
 		var filter = new OpenLayers.Filter.Comparison({
 			type: OpenLayers.Filter.Comparison.EQUAL_TO,
@@ -319,6 +319,18 @@ Vme.search = function(advanced){
 		var callback = function(r) {
 			var features = r.features;
 			
+			if(!features || features.length < 1){
+				mask.hide();
+				
+				Ext.MessageBox.show({
+					title: "Info",
+					msg: FigisMap.label("SIDP_NOFEATURES"),
+					buttons: Ext.Msg.OK,
+					icon: Ext.MessageBox.WARNING,
+					scope: this
+				});
+			}
+					
 			// ///////////////////////////
 			// Get the bigger extent
 			// ///////////////////////////

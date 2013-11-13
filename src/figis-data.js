@@ -418,6 +418,7 @@ var staticLabels = {
 	SIDP_SEARCH			: {en:"Search"},
 	SIDP_CLEAR			: {en:"Clear"},
 	SIDP_NOGEOMETRY     : {en:"Area isn't defined yet!"},    
+	SIDP_NOFEATURES     : {en:"The server did not return any feature !"},  
 	//SEARCH FIELDS LABELS
 	SEARCH_TEXT_LBL		: {en:"Free text search"},
 	SEARCH_RFMO_LBL		: {en:"By Management Body/Authority(ies)"},

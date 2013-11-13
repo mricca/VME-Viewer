@@ -854,10 +854,9 @@ Vme.data.stores = {
         url: Vme.data.models.rfmosUrl,
         autoLoad: true,
         remoteSort: false,
-        idProperty: 'id',
-        
+        idProperty: 'id',        
         root: 'resultList',
-        fields: [ "id", "name" ] // "lang"
+        fields: [ "id", "name", "acronym" ] // "lang"
         //sortInfo: {field: "name", direction: "ASC"}             
     }),
 
