@@ -358,6 +358,9 @@ FigisMap.ol.createPopupControl = function(vme){
 	
     }
 
+	var mask = new Ext.LoadMask(Ext.getBody(), {msg: "Please wait ..."});
+	mask.disable();
+	
     for (vmeLyr=0; vmeLyr<vme.length; vmeLyr++){
             
       //VMSGetFeatureInfo FOR FIGIS-VME PROJECT
@@ -370,11 +373,23 @@ FigisMap.ol.createPopupControl = function(vme){
 			  //vendorParams: {"CQL_FILTER": "year = '" + FigisMap.ol.getSelectedYear() + "'"},
 			  eventListeners: {
 				  beforegetfeatureinfo: function(e) { 
+					var m = mask.el.isVisible();
+					if(mask.disabled){
+					    mask.enable();
+						mask.show();
+					}	
 					this.vendorParams = {"CQL_FILTER": e.object.layers[0].params.CQL_FILTER};
 				  }, 
-				  getfeatureinfo: gml ? FigisMap.ol.getFeatureInfoHandlerGML : FigisMap.ol.getFeatureInfoHandler
+				  getfeatureinfo: function(e){
+					if(!mask.disabled){
+						mask.hide();
+						mask.disable();
+					}					
+					gml ? FigisMap.ol.getFeatureInfoHandlerGML(e) : FigisMap.ol.getFeatureInfoHandler(e);
+				  }
 			  }
 	    });
+		
       info.controls.push(control);  
     };
     return info.controls;

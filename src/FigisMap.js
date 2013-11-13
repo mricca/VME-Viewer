@@ -787,7 +787,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				group: "VME-DB layers",
                 showLegendGraphic: true,
                 wrapDateLine: false,    
-                singleTile: true,
+                singleTile: false,
 				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + (owner ? " AND OWNER ='" + owner +"'" :"") ,
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
@@ -1502,13 +1502,12 @@ FigisMap.draw = function( pars, visibleLayers ) {
 	var rnd = new FigisMap.renderer( { debug: pars.debug } );
 	var theMap = rnd.render( pars, visibleLayers );
 	
-	FigisMap.lastMap = ( theMap && theMap.id && theMap.id.indexOf('OpenLayers.')==0 ) ? theMap : false;
+	//FigisMap.lastMap = ( theMap && theMap.id && theMap.id.indexOf('OpenLayers.')==0 ) ? theMap : false;
+	FigisMap.lastMap = ( theMap && theMap.id && theMap.id.indexOf('OpenLayers')==0 ) ? theMap : false;
 	FigisMap.renderedMaps[ pars.target.id ] = FigisMap.lastMap;
 	
 	return FigisMap.lastMap;
 };
-
-
 
 FigisMap.renderer = function(options) {
 	var toBoundArray = new Array();
@@ -1582,11 +1581,11 @@ FigisMap.renderer = function(options) {
 		// redefine zoomworld button to zoom to default FigisMap center
 		var figisPanZoom = new GlassyPanZoom({position:new OpenLayers.Pixel(4,40)});
         if ( FigisMap.defaults.mapCenter ){
-            figisPanZoom.buttonDown = function (evt) {
-                OpenLayers.Control.PanZoom.prototype.buttonDown.apply(this, arguments);
-                switch (this.action) {
+            figisPanZoom.onButtonClick = function (evt) {
+                OpenLayers.Control.PanZoom.prototype.onButtonClick.apply(this, arguments);
+                switch (evt.buttonElement.action) {
                     case "zoomworld":
-                        myMap.setCenter( FigisMap.ol.reCenter( FigisMap.defaults.mapCenterProjection, myMap.getProjection() , FigisMap.defaults.mapCenter) );
+                        myMap.setCenter( FigisMap.ol.reCenter( FigisMap.defaults.mapCenterProjection, myMap.getProjection(), FigisMap.defaults.mapCenter) );
                         break;
                     default: break;
                 }

@@ -24,9 +24,9 @@
 	
 	<script type="text/javascript" src="lib/OpenLayers/OpenLayers.js"></script>
 	<script type="text/javascript" src="lib/proj4js/lib/proj4js-compressed.js"></script>
-	<script type="text/javascript" src="src/LoadingPanel.js"></script>
+	<script type="text/javascript" src="lib/OpenLayers/openlayers-ext/LoadingPanel.js"></script>
 	<script type="text/javascript" src="lib/GeoExt/script/GeoExt.js"></script>
-        <script type="text/javascript" src="src/GlassyPanZoom.js" defer="defer"></script>
+    <script type="text/javascript" src="lib/OpenLayers/openlayers-ext/GlassyPanZoom.js" defer="defer"></script>
 
 	<script type="text/javascript" src="src/figis-data.js"></script>
 	<script type="text/javascript" src="src/georeferences.js"></script>
@@ -41,7 +41,7 @@
 	<script type="text/javascript" src="src/sidePanel.js" ></script>
 	<script type="text/javascript" src="src/vme.js"></script>
 
-	<script type="text/javascript" src="src/Watermark.js" defer="defer"></script>
+	<script type="text/javascript" src="lib/OpenLayers/openlayers-ext/Watermark.js" defer="defer"></script>
     
     <style type="text/css">
           	
@@ -189,7 +189,6 @@
 			}
 			updateCopyYear();
 			document.getElementById('disclaimer').innerHTML = FigisMap.label('DISCLAIMER', '<p></p>');
-			document.getElementById('subTitle').innerHTML = FigisMap.label('SUB_TITLE');
 		// ]]>
 	</script>
 	
