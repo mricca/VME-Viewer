@@ -35,7 +35,21 @@ function setProjection(newValue) {
 	}
 }
 
-function reset(){
+function resetVME(){
+	var params = location.search.replace(/^\?/,'').replace(/&amp;/g,'&').split("&");
+	
+	var year;
+	for (var j=0; j < params.length; j++) {
+		var param = params[j].split("=");
+		switch ( param[0] ) {
+			case "year"	: year = param[1]; break;
+		}
+	}
+	
+	reset(year);
+}
+
+function reset(year){
 	document.getElementById("FilterRFB").text = FigisMap.label('SELECT_AN_AREA');
 	document.getElementById("FilterRFB").value = "";
 	document.getElementById("SelectRFB").value = "";
@@ -50,7 +64,9 @@ function reset(){
 	Ext.getCmp('years-min-field').setValue(new Date().getFullYear());
 	*/
 	
-	FigisMap.ol.setSelectedYear(new Date().getFullYear());
+	var y = year ? year : new Date().getFullYear();
+	FigisMap.ol.setSelectedYear(y);
+	
 	updateVme();	
 	myMap.zoomToMaxExtent();
 	if ( FigisMap.defaults.mapCenter ){

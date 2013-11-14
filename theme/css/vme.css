@@ -303,8 +303,9 @@ li {
 
 
 #sidebarP{
-    width:236px; margin-left:12px;
-     -webkit-box-shadow: 0px 2px 5px -1px rgba(0, 79, 131, 0.5);
+    width:260px; 
+	margin-left:12px;
+    -webkit-box-shadow: 0px 2px 5px -1px rgba(0, 79, 131, 0.5);
     box-shadow: 0px 2px 5px rgba(0, 79, 131, 0.5);
 }
 #sidebar .x-panel-body{
