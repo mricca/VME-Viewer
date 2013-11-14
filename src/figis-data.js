@@ -459,7 +459,8 @@ var staticLabels = {
 	VME_CRITERIA_STRUCT	: { en:"Structural complexity"},
 	VME_CRITERIA_NOTS	: { en:"Not specified"},
 	
-	SUB_TITLE           : { en:"The Vulnerable Marine Ecosystems Database (VME-DB)<br />gathers information on VME areas stored in harmonized<br />way and disseminated through maps and fact sheets."},
+	//SUB_TITLE           : { en:"The Vulnerable Marine Ecosystems Database (VME-DB)<br />gathers information on VME areas stored in harmonized<br />way and disseminated through maps and fact sheets."},
+	SUB_TITLE           : { en:"Global inventory of fisheries measures adopted to <br />prevent significant adverse impacts of high-seas <br />bottom fisheries on vulnerable marine ecosystems (VMEs) and associated information"},
 	
 	LEGEND_NOTE_SIOFA	: "The Agreement is subject to ratification, acceptance or approval by the signatories.<br />The signatories and the participants that have deposited their instruments can be found <a href=\"http://www.fao.org/Legal/treaties/035s-e.htm\" target=\"_blank\">here</a>.",
 	LEGEND_NOTE_SPRFMO	: "The Convention is subject to ratification, acceptance or approval by the signatories<br />The signatories and the participants that have deposited their instruments can be found <a href=\"http://www.southpacificrfmo.org/status-of-the-convention\" target=\"_blank\">here</a>.",
