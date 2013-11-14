@@ -118,7 +118,8 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                     
 					zoomTo(settings,repro_bbox,zoom);
                     
-                    myMap.paddingForPopups.right = 240; //TODO use this to center the popup when the search panel is opened!!! <--
+                    //myMap.paddingForPopups.right = 240; //TODO: use this to center the popup when the search panel is opened!!! 
+														  //but if do this we are problem on dateline (popup disappears)
                     
                     //var year = selectedRecord.get("year");
                     var year = Ext.getCmp("id_selectYear").getValue() || rec_year;
