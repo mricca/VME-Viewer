@@ -246,8 +246,8 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			triggerAction: 'all',
 			mode: 'local',
 			store:  Vme.data.stores.yearStore,
-			displayField: 'year',
-            valueField: 'year'
+			displayField: 'id',
+            valueField: 'id'
 		}
 	],
 
