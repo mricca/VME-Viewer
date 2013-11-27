@@ -571,6 +571,11 @@ function closeProjectionPanel(){
 	}
 }
 
+/**
+In Internet Explorer (up to at least IE8) clicking a radio button or checkbox to 
+change its value does not actually trigger the onChange event until the the input loses focus.
+Thus you need to somehow trigger the blur event yourself.
+*/
 function radioClick(radio)
 {
  radio.blur();  
