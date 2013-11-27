@@ -249,7 +249,7 @@ Vme.data={
 						'<h3>{localname}</h3>'+
 						'<em>Validity: </em><span>{[this.getValidity(values)]}</span> <br/> '+
 						//'<em>Year: </em>{year}<br/> '+
-						'<em>Management Body/Authority(ies): </em><span class="own">{owner}</span><br/>'+
+						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{vmeType}</span> <br/> '+
 						// '<em>UN Criteria: </em>{criteria}<br/> '+
@@ -372,7 +372,9 @@ Vme.data={
 						'<em>Reporting Year: </em>{year}<br/> '+
 						'<em>Quantity: </em><span>{quantity} {unit}</span> <br/> '+
 						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
-						'<br/><br/>'+
+						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
+						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						//'<br/><br/>'+
 						
 						'<div style="text-align:right;">' +
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
@@ -452,7 +454,10 @@ Vme.data={
 						'<em>Reporting Year: </em>{year}<br/> '+
 						'<em>Quantity: </em><span>{quantity} {unit}</span> <br/> '+
 						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
-						'<br/><br/>'+
+						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
+						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						//'<br/><br/>'+
+						
 						'<div style="text-align:right;">' +
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							'<a class="" onClick="'+
@@ -528,7 +533,9 @@ Vme.data={
 					'<div class="search-result" style="text-align:left">' +
 						'<em>Count: </em>{count}<br/>'+
 						'<em>Year: </em> <span class="status" >{year}</span><br/>' +
-						'<em>Competent Authority: </em> <span class="status" >{owner}</span><br/>' +
+						//'<em>Competent Authority: </em> <span class="status" >{owner}</span><br/>' +
+						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
+						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 					'</div>'+
 				'</tpl>',
 				{
@@ -542,7 +549,10 @@ Vme.data={
 					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{localname}</h3>'+
 						'<em>Year: </em>{year}<br/> '+
-						'<br/><br/>'+
+						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
+						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						//'<br/><br/>'+
+						
 						'<div>'+
 						'<div style="text-align:right;">' +
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
@@ -668,9 +678,7 @@ Vme.data.extensions ={
 					{name: 'owner', mapping: 'attributes.owner'},
                     {name: 'validityPeriodFrom', mapping: 'attributes.validityPeriodFrom'},
 					{name: 'validityPeriodTo', mapping: 'attributes.validityPeriodTo'},
-					{name: 'geo_ref', mapping: 'attributes.geoArea'}
-					
-					
+					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
 				],
 				idProperty: 'fid'
 			
@@ -691,9 +699,8 @@ Vme.data.extensions ={
 					{name: 'taxa', mapping: 'attributes.TAXA'},
 					{name: 'quantity', mapping: 'attributes.QUANTITY'},
 					{name: 'unit', mapping: 'attributes.UNIT'},
-					{name: 'owner', mapping: 'attributes.OWNER'}
-
-
+					{name: 'owner', mapping: 'attributes.OWNER'},
+					{name: 'geo_ref', mapping: 'attributes.geoArea'}
 				],
 				idProperty: 'fid'
 			
@@ -713,9 +720,8 @@ Vme.data.extensions ={
 					{name: 'taxa', mapping: 'attributes.TAXA'},
 					{name: 'quantity', mapping: 'attributes.QUANTITY'},
 					{name: 'unit', mapping: 'attributes.UNIT'},
-					{name: 'owner', mapping: 'attributes.OWNER'}
-					
-					
+					{name: 'owner', mapping: 'attributes.OWNER'},
+					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
 				],
 				idProperty: 'fid'
 			
@@ -725,16 +731,15 @@ Vme.data.extensions ={
 			reader : new Ext.data.JsonReader({
 				root:'',
 				fields: [
-						{name: 'id', mapping: 'fid'},
+				    {name: 'id', mapping: 'fid'},
 					{name: 'geometry', mapping: 'geometry'},
 					{name: 'resolution',  mapping: 'attributes.RESOLUTION'},
 					{name: 'bbox',		mapping: 'bounds'},
 					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
 					{name: 'count', 	 mapping: 'attributes.COUNT'},
 					{name: 'year', mapping: 'attributes.YEAR'},
-					{name: 'owner', mapping: 'attributes.OWNER'}
-					
-					
+					{name: 'owner', mapping: 'attributes.OWNER'},
+					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
 				],
 				idProperty: 'fid'
 			
@@ -753,9 +758,8 @@ Vme.data.extensions ={
 					{name: 'year', mapping: 'attributes.Year'},
 					{name: 'type', mapping: 'attributes.VME_TYPE'},
 					{name: 'owner', mapping: 'attributes.OWNER'},
-					{name: 'obj_id', mapping: 'attributes.OBJECTID'}
-					
-					
+					{name: 'obj_id', mapping: 'attributes.OBJECTID'},
+					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
 				],
 				idProperty: 'fid'
 			

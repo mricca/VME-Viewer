@@ -37,9 +37,6 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
         //if( window.console ) console.log('dataView.beforeclick(%o,%o,%o,%o)',view,index,node,event);
       }*/
     }
-	
-		
-		
 });
 /**
 * clickOnResult
@@ -62,7 +59,6 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
         //nuovi parametri
         var typename = FigisMap.fifao.vme;
         var CQL_FILTER = "VME_AREA_TIME = '"+geographicFeatureId+"'";
-
 
         Ext.Ajax.request({
             url : FigisMap.rnd.vars.ows,
