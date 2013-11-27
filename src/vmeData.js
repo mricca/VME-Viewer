@@ -193,9 +193,11 @@ Vme.data={
 				'<tpl for=".">'+
 					'<div class="search-result">' +
 						'<em>Name: </em><span class="searchResultValue">{localname}</span><br/>'+				
-						'<em>Validity: </em><span class="searchResultValue">{[this.getValidity(values)]}</span> <br/> '+	
+						//'<em>Validity: </em><span class="searchResultValue">{[this.getValidity(values)]}</span> <br/> '+	
+						'<em>Measure first applied in: </em><span class="searchResultValue">{[this.getValidity(values, true)]}</span> <br/> '+	
 						//'<em>Year: </em><span class="searchResultValue">{year}</span> <br/> '+
-						'<em>Management Body/Authority(ies): </em><span class="searchResultValue">{owner}</span><br/>'+
+						//'<em>Management Body/Authority(ies): </em><span class="searchResultValue">{owner}</span><br/>'+
+						'<em>Management Body/Authority: </em><span class="searchResultValue">{owner}</span><br/>'+
                         '<a onclick="Vme.clickOnFeature(\'{geographicFeatureId}\',{year},false)">'+
                         '<img title="More information" src="theme/img/icons/buttoninfo.png" />'+
                         '</a> '+
@@ -223,17 +225,20 @@ Vme.data={
                      * "validityFrom - validityTo" or "from validityFrom"
                      * 
                      */
-                    getValidity: function(values){
-                        if(values.validityPeriodFrom){
-                            if(values.validityPeriodTo && values.validityPeriodTo != 9999){
-                                return values.validityPeriodFrom + " - " + values.validityPeriodTo;
-                            }else{
-                                return "from "+ values.validityPeriodFrom;
+                    getValidity: function(values, firstOnly){
+						if(firstOnly === true){
+							return values.validityPeriodFrom ? values.validityPeriodFrom : "Not Found";
+						}else{
+							if(values.validityPeriodFrom){
+								if(values.validityPeriodTo && values.validityPeriodTo != 9999){
+									return values.validityPeriodFrom + " - " + values.validityPeriodTo;
+								}else{
+									return "from "+ values.validityPeriodFrom;
+								}
+							}else{
+								return("Not Found");
 							}
-                        }else
-                        {
-                            return("Not Found");
-                        }
+						}
                     }
 				}
 			),			
