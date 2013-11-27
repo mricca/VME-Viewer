@@ -570,3 +570,9 @@ function closeProjectionPanel(){
 		el.removeClass('open');
 	}
 }
+
+function radioClick(radio)
+{
+ radio.blur();  
+ radio.focus();  
+}

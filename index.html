@@ -209,24 +209,24 @@ document.namespaces;
                 <div id="SelectSRS">
                    <div> 
                                 <p>
-                                    <input id="mercatorRadio" type="radio" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3349' checked="checked" />
+                                    <input id="mercatorRadio" type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3349' checked="checked" />
                                     <label>Mercator</label>
                                 </p>
 
                                 <p>
-                                    <input type="radio" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='4326' />
+                                    <input type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='4326' />
                                     <label>WGS84</label>
                                 </p>
                    </div>
                    <div> 
                                 <p>
-                                    <input type="radio" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3031' />
+                                    <input type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3031' />
                                     <label>South Polar</label>
                                 </p>
 								<!-- missing proj4js eck4.js file -->
 								<!-- <option value='54012'>EckertIV (54012)</option> -->
                                 <p>
-                                    <input type="radio" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='54009' />
+                                    <input type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='54009' />
                                     <label>Mollweide</label>
                                 </p>
                    </div> 
