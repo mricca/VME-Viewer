@@ -229,16 +229,14 @@ Vme.data={
                                 return values.validityPeriodFrom + " - " + values.validityPeriodTo;
                             }else{
                                 return "from "+ values.validityPeriodFrom;
-                    }
+							}
                         }else
                         {
                             return("Not Found");
                         }
                     }
-
 				}
-			),
-			
+			),			
 		vme: 
 			new Ext.XTemplate(
 				'<tpl for=".">'+
@@ -247,10 +245,12 @@ Vme.data={
                     '</tpl>'+
 					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{localname}</h3>'+
-						'<em>Validity: </em><span>{[this.getValidity(values)]}</span> <br/> '+
-						//'<em>Year: </em>{year}<br/> '+
 						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
-						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						'<em>Measure first applied in: </em><span>{[this.getValidity(values, true)]}</span> <br/> '+
+						//'<em>Validity: </em><span>{[this.getValidity(values)]}</span> <br/> '+
+						//'<em>Year: </em>{year}<br/> '+
+						//'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
+						//'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{vmeType}</span> <br/> '+
 						// '<em>UN Criteria: </em>{criteria}<br/> '+
 						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
@@ -298,17 +298,20 @@ Vme.data={
                      * "validityFrom - validityTo" or "from validityFrom"
                      * 
                      */
-                    getValidity: function(values){
-                        if(values.validityPeriodFrom){
-                            if(values.validityPeriodTo && values.validityPeriodTo != 9999){
-                                return values.validityPeriodFrom + " - " + values.validityPeriodTo;
-                            }else{
-                                return "from "+ values.validityPeriodFrom;
-                            }
-                        }else
-                        {
-                            return("Not Found");
-                        }
+                    getValidity: function(values, firstOnly){
+						if(firstOnly === true){
+							return values.validityPeriodFrom ? values.validityPeriodFrom : "Not Found";
+						}else{
+							if(values.validityPeriodFrom){
+								if(values.validityPeriodTo && values.validityPeriodTo != 9999){
+									return values.validityPeriodFrom + " - " + values.validityPeriodTo;
+								}else{
+									return "from "+ values.validityPeriodFrom;
+								}
+							}else{
+								return("Not Found");
+							}
+						}
                     },
                     /**
                      * Returns the link to the factsheet
@@ -374,7 +377,7 @@ Vme.data={
 						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
-						//'<br/><br/>'+
+						'<br/>'+
 						
 						'<div style="text-align:right;">' +
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
@@ -456,7 +459,7 @@ Vme.data={
 						'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
-						//'<br/><br/>'+
+						'<br/>'+
 						
 						'<div style="text-align:right;">' +
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
@@ -596,18 +599,14 @@ Vme.data={
 							Vme.utils.generateFidFilter([values.id]),
 							"shape-zip"
 						);
-					}
-					
+					}					
 				}
 			)
 	},
 	constants:{
 		pageSize:8
 	}
-
 };
-
-
 
 /**
  * Models: base tipes for Vme for Extjs Stores 
@@ -653,8 +652,6 @@ Vme.data.models = {
 	//years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})(),
     yearsUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list",
     searchUrl: "http://figisapps.fao.org/figis/ws/vme/webservice/search" // see options parameter for Ext.Ajax.request
-
-
 };
 
 Vme.data.extensions ={
@@ -680,8 +677,7 @@ Vme.data.extensions ={
 					{name: 'validityPeriodTo', mapping: 'attributes.validityPeriodTo'},
 					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
 				],
-				idProperty: 'fid'
-			
+				idProperty: 'fid'			
 			})
 		}),
 		
@@ -702,8 +698,7 @@ Vme.data.extensions ={
 					{name: 'owner', mapping: 'attributes.OWNER'},
 					{name: 'geo_ref', mapping: 'attributes.geoArea'}
 				],
-				idProperty: 'fid'
-			
+				idProperty: 'fid'			
 			})
 		}),
 		SurveyDataStore : Ext.extend(Ext.data.JsonStore,{
@@ -723,8 +718,7 @@ Vme.data.extensions ={
 					{name: 'owner', mapping: 'attributes.OWNER'},
 					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
 				],
-				idProperty: 'fid'
-			
+				idProperty: 'fid'			
 			})
 		}),
 		AggregateDataStore : Ext.extend(Ext.data.JsonStore,{
@@ -741,8 +735,7 @@ Vme.data.extensions ={
 					{name: 'owner', mapping: 'attributes.OWNER'},
 					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
 				],
-				idProperty: 'fid'
-			
+				idProperty: 'fid'			
 			})
 		}),
 		FootprintStore : Ext.extend(Ext.data.JsonStore,{
@@ -761,12 +754,9 @@ Vme.data.extensions ={
 					{name: 'obj_id', mapping: 'attributes.OBJECTID'},
 					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
 				],
-				idProperty: 'fid'
-			
+				idProperty: 'fid'			
 			})
-		})
-		
-	
+		})	
 	},
 	WFS:{
 		/**
@@ -824,7 +814,6 @@ Vme.data.extensions ={
 				}
 			}
 		})
-	
 	}
 };
 /*

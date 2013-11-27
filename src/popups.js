@@ -273,7 +273,7 @@ FigisMap.ol.showPopup= function(e,response,layer){
 		//title: 'Features Info',
         border:false,
 		width: 400,
-		height: 240,
+		height: 225,
 		layout: "fit",
 		map: myMap,
 		unpinnable:false,
