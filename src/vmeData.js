@@ -755,9 +755,9 @@ Vme.data.extensions ={
 					{name: 'status', 	 mapping: 'attributes.STATUS'},
 					{name: 'year', mapping: 'attributes.Year'},
 					{name: 'type', mapping: 'attributes.VME_TYPE'},
-					{name: 'owner', mapping: 'attributes.OWNER'},
+					{name: 'owner', mapping: 'attributes.Owner'},
 					{name: 'obj_id', mapping: 'attributes.OBJECTID'},
-					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
+					{name: 'geo_ref', mapping: 'attributes.GeoRef'}					
 				],
 				idProperty: 'fid'			
 			})

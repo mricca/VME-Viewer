@@ -1133,8 +1133,7 @@ FigisMap.ol.checkValidBbox = function (projections,bboxs) {
 	if (projections == '3031'){
 	    var bbox2 = OpenLayers.Bounds.fromString(bboxs.zoomExtent,false);
 		var southpolarbbox = new OpenLayers.Bounds(-180,-90,180, -60);
-		return southpolarbbox.containsBounds(bbox2);
-			
+		return southpolarbbox.containsBounds(bbox2);			
 	}else{
 		return true; 		
 	}
@@ -1420,7 +1419,7 @@ FigisMap.ol.refreshFilters = function (){
 	// Footprints
 	f.mergeNewParams(
 		{'CQL_FILTER':
-			"Year = '" + year +"'"
+			"Year >= '" + year +"'"
 		}
 	);
 	f.redraw(true);
