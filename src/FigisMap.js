@@ -101,8 +101,8 @@ FigisMap.rnd.vars = {
 	vmeSearchZoomTo: {
 		wfsUrl: FigisMap.geoServerBase + "/figis/geoserver" + "/wfs",
 		wfsVersion: "1.1.0",
-		filterProperty: "RFB",
-	    featureType: "RFB_COMP",
+		filterProperty: "OWNER",//"RFB",
+	    featureType: "VMEAREAS",//"RFB_COMP",
 	    featurePrefix: "fifao",
 	    srsName: "EPSG:4326"
 	}

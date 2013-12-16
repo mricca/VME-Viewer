@@ -310,7 +310,7 @@ Vme.search = function(advanced){
 		   srsName: FigisMap.rnd.vars.vmeSearchZoomTo.srsName,             // "EPSG:4326",
 		   defaultFilter: filter
 		});
-		
+
 		var mask = new Ext.LoadMask(Ext.getBody(), {msg: "Please wait ..."});
 		
 		var callback = function(r) {
@@ -330,18 +330,44 @@ Vme.search = function(advanced){
 					
 			// ///////////////////////////
 			// Get the bigger extent
-			// ///////////////////////////
+			// ///////////////////////////			
+			
 			var size = features.length;
 			var bounds = features[0].bounds;
+			
+			var bottom = bounds.bottom;
+			var left = bounds.left;
+			var right = bounds.right;
+		    var top = bounds.top;
+			
 			for(var i=1; i<size; i++){
 				var b = features[i].bounds;
 				if(!b){
 					continue;
 				}
-				if(bounds && b.contains(bounds)){
+				
+				/*if(bounds && b.contains(bounds)){
 					bounds = b;
-				}			
+				}*/
+
+				if(b.bottom < bottom){
+					bottom = b.bottom;
+				}
+				
+				if(b.left > left){
+					left = b.left
+				}
+				
+				if(b.right < right){
+					right = b.right;
+				}
+				
+				if(b.top > top){
+					top = b.top
+				}
 			}
+			
+			bounds = new OpenLayers.Bounds(left, bottom, right, top);
 			
 			//var test = new OpenLayers.Layer.Vector("test", {
 			//		displayInLayerSwitcher: true
@@ -360,8 +386,27 @@ Vme.search = function(advanced){
 				zoomExtent: bounds.toBBOX(20)
 			};
 			
-			zoomTo(settings, repro_bbox, true);
+			// ////////////////////////////////////////////////////
+			// Chek if 'CCAMLR' is selected in order to perform 
+			// a reproject the map in 3031.
+			// /////////////////////////////////////////////////////
 			
+			var RFMOCombo = Ext.getCmp("RFMOCombo");
+			var RFMOValue = RFMOCombo.getValue();
+			var RFMOComboStore = RFMOCombo.getStore();
+			var RFMORecord = RFMOComboStore.getAt(RFMOComboStore.find('acronym', "CCAMLR"));
+			var RFMOId = RFMORecord.get('id');
+
+			if(RFMOValue == RFMOId){
+				settings.srs = "EPSG:3031";
+				zoomTo(settings, repro_bbox, false);
+			}else{
+				zoomTo(settings, repro_bbox, true);
+			}			
+			
+			//
+			// Perform the store load
+			// 
 			vmeSearch(advanced);
 			
 			mask.hide();
@@ -372,6 +417,9 @@ Vme.search = function(advanced){
 			callback: callback
 		});	
 	}else{
+		//
+		// Perform the store load
+		//
 		vmeSearch(advanced);
 	}
 };
