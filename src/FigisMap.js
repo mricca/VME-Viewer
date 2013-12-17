@@ -842,7 +842,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				group: "VME-DB layers",
                 showLegendGraphic: true,					
 				//filter	:'*',
-				filter	:"Year = '"+ year + "'",
+				filter	:"Year <= '"+ year + "'",
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: true,
@@ -1419,7 +1419,7 @@ FigisMap.ol.refreshFilters = function (){
 	// Footprints
 	f.mergeNewParams(
 		{'CQL_FILTER':
-			"Year >= '" + year +"'"
+			"Year <= '" + year +"'"
 		}
 	);
 	f.redraw(true);
