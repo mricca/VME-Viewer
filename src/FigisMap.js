@@ -788,7 +788,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
                 showLegendGraphic: true,
                 wrapDateLine: false,    
                 singleTile: false,
-				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + (owner ? " AND OWNER ='" + owner +"'" :"") ,
+				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + /*(owner ? " AND OWNER ='" + owner +"'" :"")*/ (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'") ,
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: pars.isFIGIS,
@@ -805,7 +805,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				label	: 'Encounters',
 				group: "VME-DB layers",
                 showLegendGraphic: true,				
-				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""), 
+				filter	:"YEAR = '"+ year + "'" /*+ (owner ? " AND OWNER ='" + owner +"'" :"")*/, 
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				singleTile	:false,
@@ -824,7 +824,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				singleTile	:false,
 				group: "VME-DB layers",
                 showLegendGraphic: true,
-				filter	:"YEAR = '"+ year + "'"+(owner ? " AND OWNER ='" + owner +"'" :""),
+				filter	:"YEAR = '"+ year + "'" /* + (owner ? " AND OWNER ='" + owner +"'" :"")*/,
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
                 skipLegend	: true,
 				opacity	: 1.0,
@@ -842,7 +842,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				group: "VME-DB layers",
                 showLegendGraphic: true,					
 				//filter	:'*',
-				filter	:"Year <= '"+ year + "'",
+				filter	:"Year <= '"+ year + "'" + (FigisMap.rnd.status.logged ?  "" : " AND Owner <> 'NPFC'"),
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: true,
@@ -1374,8 +1374,8 @@ FigisMap.ol.setSelectedYear= function(newyear){
  */
 FigisMap.ol.getSelectedOwner= function(){
 	return	document.getElementById("SelectRFB").value;
-
 };
+
 /** 
  * FigisMap.ol.refreshFilters 
  * refresh filters when year/filter are changes
@@ -1383,13 +1383,14 @@ FigisMap.ol.getSelectedOwner= function(){
  */
 FigisMap.ol.refreshFilters = function (){
 	var year = FigisMap.ol.getSelectedYear();  
-	var owner = FigisMap.ol.getSelectedOwner();
+	//var owner = FigisMap.ol.getSelectedOwner();
 	
 	// VME Areas
 	myMap.getLayersByName('VME areas')[0].mergeNewParams(
 		{'CQL_FILTER': 
 			"YEAR <= '" + year + "' AND END_YEAR >="+ year +
-			(owner ? " AND OWNER ='" + owner +"'" :"")
+			//(owner ? " AND OWNER ='" + owner +"'" :"") + 
+			(FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")
 		}
 	);
 	
@@ -1398,8 +1399,8 @@ FigisMap.ol.refreshFilters = function (){
 	// Encounters
 	myMap.getLayersByName('Encounters')[0].mergeNewParams(
 		{'CQL_FILTER': 
-			"YEAR = '"+ year +"'" +  
-			(owner ? " AND OWNER ='" + owner +"'" :"")
+			"YEAR = '"+ year +"'" /*+  
+			(owner ? " AND OWNER ='" + owner +"'" :"")*/
 		}
 	);
 	myMap.getLayersByName('Encounters')[0].redraw(true);
@@ -1407,8 +1408,8 @@ FigisMap.ol.refreshFilters = function (){
 	// Survey Data
 	myMap.getLayersByName('Survey Data')[0].mergeNewParams(
 		{'CQL_FILTER':
-			"YEAR = '" + year +"'"+
-			(owner ? " AND OWNER ='" + owner +"'" :"")
+			"YEAR = '" + year +"'" /*+
+			(owner ? " AND OWNER ='" + owner +"'" :"")*/
 		}
 	);
 	myMap.getLayersByName('Survey Data')[0].redraw(true);
@@ -1419,7 +1420,8 @@ FigisMap.ol.refreshFilters = function (){
 	// Footprints
 	f.mergeNewParams(
 		{'CQL_FILTER':
-			"Year <= '" + year +"'"
+			"Year <= '" + year +"'" + 
+			(FigisMap.rnd.status.logged ?  "" : " AND Owner <> 'NPFC'")
 		}
 	);
 	f.redraw(true);
@@ -2022,10 +2024,10 @@ FigisMap.renderer = function(options) {
 }; //FigisMap.renderer Class Ends
 Ext.onReady(function(){
     FigisMap.loginWin.on('login',function(user){
-    		FigisMap.ol.refreshAuthorized();
-    
-    
-    		FigisMap.ol.clearPopupCache();          
+    		FigisMap.ol.refreshAuthorized();    
+    		FigisMap.ol.clearPopupCache();     
+
+		    FigisMap.ol.refreshFilters();
     });
     
     FigisMap.loginWin.on('logout',function(user){
@@ -2034,6 +2036,8 @@ Ext.onReady(function(){
     		}
     		
             FigisMap.ol.refreshAuthorized();
+			
+			FigisMap.ol.refreshFilters();
     });
     
 });
