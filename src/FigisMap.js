@@ -788,7 +788,8 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
                 showLegendGraphic: true,
                 wrapDateLine: false,    
                 singleTile: false,
-				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year + /*(owner ? " AND OWNER ='" + owner +"'" :"")*/ (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'") ,
+				style: "VMEAREAS_Public",
+				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year /*+ (owner ? " AND OWNER ='" + owner +"'" :"") (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")*/ ,
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: pars.isFIGIS,
@@ -1387,10 +1388,10 @@ FigisMap.ol.refreshFilters = function (){
 	
 	// VME Areas
 	myMap.getLayersByName('VME areas')[0].mergeNewParams(
-		{'CQL_FILTER': 
-			"YEAR <= '" + year + "' AND END_YEAR >="+ year +
-			//(owner ? " AND OWNER ='" + owner +"'" :"") + 
-			(FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")
+		{
+		'CQL_FILTER': "YEAR <= '" + year + "' AND END_YEAR >="+ year,
+		'STYLES': (FigisMap.rnd.status.logged ?  "VMEAREAS_Categories" : "VMEAREAS_Public"), 
+		'STYLE': (FigisMap.rnd.status.logged ?  "VMEAREAS_Categories" : "VMEAREAS_Public")
 		}
 	);
 	

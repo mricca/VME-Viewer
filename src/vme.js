@@ -230,6 +230,8 @@ function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filte
 	FigisMap.ol.clearPopupCache();
 	addVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filter);
 	
+	FigisMap.ol.refreshFilters();
+	
 	// Restore toggle
 	restoreToggleButtons();
 }
