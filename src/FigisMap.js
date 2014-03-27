@@ -783,7 +783,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 		if ( ! layerTypes[ FigisMap.fifao.vme ] ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme,
-				label	: 'VME areas',
+				label	: 'Area types', //'VME areas',
 				group: "VME-DB layers",
                 showLegendGraphic: true,
                 wrapDateLine: false,    
