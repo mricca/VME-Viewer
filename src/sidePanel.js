@@ -102,7 +102,7 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                     var bounds = geom.clone().getBounds();
                     var repro_bbox = repro_geom.getBounds();
                     
-                    myMap.getLayersByName("VME areas")[0].setVisibility(false);
+                    myMap.getLayersByName("Area types")[0].setVisibility(false);
                     
                     if(Ext.isIE){
                       myMap.zoomOut(); 
@@ -129,7 +129,7 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
 
                     FigisMap.ol.refreshFilters();
                     
-                    myMap.getLayersByName("VME areas")[0].setVisibility(true);
+                    myMap.getLayersByName("Area types")[0].setVisibility(true);
                     if(!zoom){            
                         if(getProjection() == "4326"){
                             FigisMap.ol.emulatePopupFromGeom(geom);

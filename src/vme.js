@@ -113,10 +113,10 @@ function toggleStyle(el, isButton){
 /**
 * function toogleWME
 *
-* Enables/Disables 'VME areas' layer in LayerSwitcher 
+* Enables/Disables 'Area types' layer in LayerSwitcher 
 **/	
 function toogleWME(pressed){
-	var vme = myMap.getLayersByName('VME areas')[0];
+	var vme = myMap.getLayersByName('Area types')[0];
 	vme.setVisibility(!pressed);
 }
 
@@ -244,7 +244,7 @@ function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filte
 function restoreToggleButtons(){
 	var el = document.getElementById("lblVME");	
 	if(el){
-		var vme = myMap.getLayersByName('VME areas')[0];
+		var vme = myMap.getLayersByName('Area types')[0];
 		
 		// ///////////////////////////////////////////////
 		// If there are Embed URL params concerning VME 
@@ -549,7 +549,7 @@ function setVMEEmbedLink(embedUrl, embedIframe) {
 	
 	linkId.setValue(baseURL);
 	
-	var htmlFrame = '<iframe src="' + baseURL.replace(/VME-Viewer\//,'VME-Viewer/index_e.html') + '" width="800" height="600" frameborder="0" marginheight="0">';
+	var htmlFrame = '<iframe src="' + baseURL.replace(/VMEViewer\//,'VMEViewer/index_e.html') + '" width="800" height="600" frameborder="0" marginheight="0">';
 		htmlFrame += "</iframe>";
 		
 	htmlId.setValue(htmlFrame);

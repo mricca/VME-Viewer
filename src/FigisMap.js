@@ -783,7 +783,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 		if ( ! layerTypes[ FigisMap.fifao.vme ] ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme,
-				label	: 'Area types', //'VME areas',
+				label	: 'Area types', //'Area types',
 				group: "VME-DB layers",
                 showLegendGraphic: true,
                 wrapDateLine: false,    
@@ -1386,8 +1386,8 @@ FigisMap.ol.refreshFilters = function (){
 	var year = FigisMap.ol.getSelectedYear();  
 	//var owner = FigisMap.ol.getSelectedOwner();
 	
-	// VME Areas
-	myMap.getLayersByName('VME areas')[0].mergeNewParams(
+	// Area types
+	myMap.getLayersByName('Area types')[0].mergeNewParams(
 		{
 		'CQL_FILTER': "YEAR <= '" + year + "' AND END_YEAR >="+ year,
 		'STYLES': (FigisMap.rnd.status.logged ?  "VMEAREAS_Categories" : "VMEAREAS_Public"), 
@@ -1395,7 +1395,7 @@ FigisMap.ol.refreshFilters = function (){
 		}
 	);
 	
-	myMap.getLayersByName('VME areas')[0].redraw(true);
+	myMap.getLayersByName('Area types')[0].redraw(true);
 	
 	// Encounters
 	myMap.getLayersByName('Encounters')[0].mergeNewParams(
@@ -1544,7 +1544,7 @@ FigisMap.renderer = function(options) {
 		// Tuna code
 		// ////////////////////// 
 		/*
-		if(myMap.getLayersByName('VME areas')[0]){        
+		if(myMap.getLayersByName('Area types')[0]){        
 			Ext.getCmp('years-slider').enable();
 			Ext.getCmp("year-min-largestep").enable(); 
 			Ext.getCmp("year-min-littlestep").enable(); 
@@ -1681,7 +1681,7 @@ FigisMap.renderer = function(options) {
         lSwitcher.dataLbl.innerHTML = "";
 		
 		// //////////////////////////////////////////////////////////
-		// Manages toggle button for VME areas and Footprints when 
+		// Manages toggle button for Area types and Footprints when 
 		// layer is clicked on LayerSwitcher
 		// //////////////////////////////////////////////////////////
 		myMap.events.register("changelayer", this, function(e){
@@ -1692,7 +1692,7 @@ FigisMap.renderer = function(options) {
 				var name = layer.name;
 				
 				var el;
-				if(name == "VME areas"){
+				if(name == "Area types"){
 					el = document.getElementById("lblVME");										
 				}else if(name == "Footprints"){
 					el = document.getElementById("lblFootprints");										
@@ -1782,7 +1782,7 @@ FigisMap.renderer = function(options) {
 			//myMap.addLayer( l.wms );
 			olLayers.push( l.wms );
 			
-			if (l.wms.name == 'VME areas' || l.wms.name == 'Footprints'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
+			if (l.wms.name == 'Area types' || l.wms.name == 'Footprints'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
 				vme.push(olLayers[i]);
 			}
 
@@ -1861,7 +1861,7 @@ FigisMap.renderer = function(options) {
 					}
 
 					var el;
-					if(layerName == "VME areas"){
+					if(layerName == "Area types"){
 						el = document.getElementById("lblVME");	
 						if(layer.getVisibility()){
 							el.className = "lblVME figisButtonToggle";
