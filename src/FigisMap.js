@@ -29,12 +29,13 @@ FigisMap.fifao = {
 	cbs : 'fifao:country_bounds',
 	cnt : 'fifao:UN_CONTINENT2',
 	div : 'fifao:FAO_DIV',
-	eez : 'fifao:eez',
+	//eez : 'fifao:EEZ',
 	maj : 'fifao:FAO_MAJOR',
 	ma2 : 'fifao:FAO_MAJOR2',
 	mal : 'fifao:MarineAreas',
     gup : 'fifao:gebco_underseafeatures_points',
-	nma : 'fifao:eez2',
+	//nma : 'fifao:eez2',
+	nma : 'fifao:Limit_200nm',
 	RFB : 'fifao:RFB',
 	rfb : 'fifao:RFB_COMP',
 	sdi : 'fifao:FAO_SUB_DIV',
@@ -897,9 +898,10 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			} );
 		}       
 		//WMS 200 nautical miles arcs
-		if ( ! layerTypes[ FigisMap.fifao.eez ] ) {
+		//if ( ! layerTypes[ FigisMap.fifao.eez ] ) {
+		if ( ! layerTypes[ FigisMap.fifao.nma ] ) {
 			layers.push({
-				layer	: FigisMap.fifao.eez,
+				layer	: FigisMap.fifao.nma,
 				label	: '200 nautical miles arcs',
                 showLegendGraphic: true,
                 group: "Overlays",
