@@ -406,8 +406,8 @@ Vme.search = function(advanced){
 			
 			//
 			// Perform the store load
-			// 
-			vmeSearch(advanced);
+			//
+            vmeSearch(advanced);
 			
 			mask.hide();
 		};
@@ -420,7 +420,7 @@ Vme.search = function(advanced){
 		//
 		// Perform the store load
 		//
-		vmeSearch(advanced);
+        vmeSearch(advanced);
 	}
 };
 
@@ -464,6 +464,144 @@ function vmeSearch(advanced){
 	
 	Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');
 }
+
+/**
+ * Vme.rfbZoomTo
+ * Zooming to the RFB areas.
+ * 
+ */
+Vme.rfbZoomTo = function(){
+
+	////////////////////////////////////////////////////
+	// Retrieve RFB areas extent to perform a zoomTo. //
+	////////////////////////////////////////////////////
+	
+	var RFBCombo = Ext.getCmp("RFBCombo");
+	var RFBStore = RFBCombo.getStore();
+	var value = RFBCombo.getValue();
+	
+	var dIndex = RFBStore.find("id", value);
+	if(dIndex > -1){
+		var r = RFBStore.getAt(dIndex);	
+		var rfbName = r.data.acronym;
+		
+		var filter = new OpenLayers.Filter.Comparison({
+			type: OpenLayers.Filter.Comparison.EQUAL_TO,
+			property: FigisMap.rnd.vars.vmeRFBZoomTo.filterProperty,    // "RFB",
+			value: rfbName
+		});
+		
+		var protocol = new OpenLayers.Protocol.WFS({
+		   version: FigisMap.rnd.vars.vmeRFBZoomTo.wfsVersion,          // "1.1.0",					
+		   url: FigisMap.rnd.vars.vmeRFBZoomTo.wfsUrl,                  // "http://figisapps.fao.org/figis/geoserverdv/" + "wfs",									   
+		   featureType: FigisMap.rnd.vars.vmeRFBZoomTo.featureType,     // "regulatory_areas",
+		   featurePrefix: FigisMap.rnd.vars.vmeRFBZoomTo.featurePrefix, // "vme",
+		   srsName: FigisMap.rnd.vars.vmeRFBZoomTo.srsName,             // "EPSG:4326",
+		   defaultFilter: filter
+		});
+
+		var mask = new Ext.LoadMask(Ext.getBody(), {msg: "Please wait ..."});
+		
+		var callback = function(r) {
+			var features = r.features;
+			
+			if(!features || features.length < 1){
+				mask.hide();
+				
+				Ext.MessageBox.show({
+					title: "Info",
+					msg: FigisMap.label("SIDP_NOFEATURES"),
+					buttons: Ext.Msg.OK,
+					icon: Ext.MessageBox.WARNING,
+					scope: this
+				});
+			}
+					
+			// ///////////////////////////
+			// Get the bigger extent
+			// ///////////////////////////			
+			
+			var size = features.length;
+			var bounds = features[0].bounds;
+			
+			var bottom = bounds.bottom;
+			var left = bounds.left;
+			var right = bounds.right;
+		    var top = bounds.top;
+			
+			for(var i=1; i<size; i++){
+				var b = features[i].bounds;
+				if(!b){
+					continue;
+				}
+				
+				/*if(bounds && b.contains(bounds)){
+					bounds = b;
+				}*/
+
+				if(b.bottom < bottom){
+					bottom = b.bottom;
+				}
+				
+				if(b.left > left){
+					left = b.left
+				}
+				
+				if(b.right < right){
+					right = b.right;
+				}
+				
+				if(b.top > top){
+					top = b.top
+				}
+			}
+			
+			bounds = new OpenLayers.Bounds(left, bottom, right, top);
+			
+			//var test = new OpenLayers.Layer.Vector("test", {
+			//		displayInLayerSwitcher: true
+			//});
+			
+			var repro_geom = bounds.toGeometry().transform(
+				new OpenLayers.Projection(FigisMap.rnd.vars.vmeRFBZoomTo.srsName),
+				myMap.getProjectionObject()
+			);
+			
+			//test.addFeatures(new OpenLayers.Feature.Vector(repro_geom));	
+			//myMap.addLayers([test]);
+			
+			var repro_bbox = repro_geom.getBounds();
+			var settings = {
+				zoomExtent: bounds.toBBOX(20)
+			};
+			
+			// ////////////////////////////////////////////////////
+			// Chek if 'CCAMLR' is selected in order to perform 
+			// a reproject the map in 3031.
+			// /////////////////////////////////////////////////////
+			
+			var RFBCombo = Ext.getCmp("RFBCombo");
+			var RFBValue = RFBCombo.getValue();
+			var RFBComboStore = RFBCombo.getStore();
+			var RFBRecord = RFBComboStore.getAt(RFBComboStore.find('acronym', "CCAMLR"));
+			var RFBId = RFBRecord.get('id');
+
+			if(RFBValue == RFBId){
+				settings.srs = "EPSG:3031";
+				zoomTo(settings, repro_bbox, false);
+			}else{
+				zoomTo(settings, repro_bbox, true);
+			}			
+			
+			mask.hide();
+		};
+		
+		mask.show();
+		var response = protocol.read({
+			callback: callback
+		});	
+	}
+};
 
 /** 
  * Vme.form.panels.SearchPanel
@@ -585,3 +723,39 @@ var sidePanel = new Ext.Panel({
 	]
 
 });
+
+var selectRFB = new Ext.Panel({
+    layout: 'form',
+	labelWidth: 75, // label settings here cascade unless overridden
+    name: 'selectRFB',
+	border: false,
+	labelAlign :'left',
+	defaults: {
+	    anchor:'100%',
+        shadow:false
+    },
+    id:'selectRFB',
+    items: [{
+        xtype: 'combo',
+        fieldLabel: FigisMap.label('ZOOMTO_RFB_LBL'),//+' [<a href="#">?</a>]',
+        name: 'selectRFBcombo',
+        ref:'../RFBcombo',
+        id: "RFBCombo",
+        emptyText:  FigisMap.label('ZOOMTO_RFB_EMP'),
+        store: Vme.data.stores.rfmoStore,
+        allowBlank:true,
+        forceSelection:true,
+        triggerAction: 'all',
+        mode: 'local',
+        valueField : 'id',
+        displayField: 'acronym',
+        listeners: {
+            select: function(){
+                Vme.rfbZoomTo();
+                sidePanel.layout.setActiveItem('legendPanel');
+                sidePanel.expand();                
+            }
+        }    
+    }]
+});
+

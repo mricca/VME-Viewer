@@ -100,11 +100,19 @@ FigisMap.rnd.vars = {
 	wfs			: FigisMap.geoServerBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename=',
 	absWfs			: FigisMap.geoServerAbsBase + '/figis/geoserver/wfs?request=GetFeature&version=1.0.0&typename=',
 	vmeSearchZoomTo: {
-		wfsUrl: FigisMap.geoServerBase + "/figis/geoserver" + "/wfs",
+		wfsUrl: FigisMap.geoServerBase + "/figis/geoserverdv" + "/wfs",
 		wfsVersion: "1.1.0",
 		filterProperty: "OWNER",//"RFB",
 	    featureType: "VMEAREAS",//"RFB_COMP",
 	    featurePrefix: "fifao",
+	    srsName: "EPSG:4326"
+	},    
+	vmeRFBZoomTo: {
+		wfsUrl: FigisMap.geoServerBase + "/figis/geoserverdv" + "/wfs",
+		wfsVersion: "1.1.0",
+		filterProperty: "RFB",//"RFB",
+	    featureType: "regulatory_areas",//"RFB_COMP",
+	    featurePrefix: "vme",
 	    srsName: "EPSG:4326"
 	}
 };

@@ -418,7 +418,14 @@ var staticLabels = {
 	SIDP_SEARCH			: {en:"Search"},
 	SIDP_CLEAR			: {en:"Clear"},
 	SIDP_NOGEOMETRY     : {en:"Area isn't defined yet!"},    
-	SIDP_NOFEATURES     : {en:"The server did not return any feature !"},  
+	SIDP_NOFEATURES     : {en:"The server did not return any feature !"},
+    //ZOOMTO RFB LABELS
+    ZOOMTO_RFB_LBL		: {en:"RFB ZoomTo"},
+    //ZOOMTO RFB EMPTY
+    ZOOMTO_RFB_EMP		: {en:"Select RFB..."},
+    // SEARCH NO RESULT LABEL
+    ZOOMTO_NO_RES		: {en:'Nothing to display'},
+    ZOOMTO_LOADING		: {en:'Loading'},
 	//SEARCH FIELDS LABELS
 	SEARCH_TEXT_LBL		: {en:"Free text search"},
 	SEARCH_RFMO_LBL		: {en:"By Management Body/Authority(ies)"},

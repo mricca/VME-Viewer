@@ -130,6 +130,7 @@ document.namespaces;
 </script>
 </head>
 
+<!-- body onload="setVMEPage('e-link','rfbs-link', 'rfbs-html')" -->
 <body>
 
 <div id="page">
@@ -173,17 +174,19 @@ document.namespaces;
             </div>
         </div>
 
-		<div  style="display:none" id="topBar">			
+		<!--div  style="display:none" id="topBar"-->			
+		<div  id="topBar">			
 			<label id="lblFilRFB" style="visibility:hidden">Zoom to:</label>
-			<select  id="FilterRFB" onchange="setZoom()"></select>
+			<select  style="visibility:hidden" id="FilterRFB" onchange="setZoom()"></select>
 			<label style="visibility:hidden" id="lblRFB">Filter by:</label>
-			<select style="visibility:hidden" id="SelectRFB" onchange="setVME(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>  
+			<select style="visibility:hidden" id="SelectRFB" onchange="setVME(null, null, null, 'e-link','rfbs-link', 'rfbs-html')"></select>    
 
 			<!--a href="javascript:embedLink();" id="EmbedLink" title="Link or embed this RFB map"><span>Link</span></a-->
 			<input id="txtCql" type="hidden" />
 			<input id="command" type="hidden" />
 
 			<input id="opt" type="hidden" />
+			<div id="selectionRFB"></div>
 			<!-- li>
 				<label id="lblCQL">Provide CQL Query</label>
 				<input id="txtCql" type="text" />
@@ -296,6 +299,8 @@ document.namespaces;
 	// <![CDATA[
 		Ext.onReady(function(){
 			sidePanel.render(document.getElementById('sidebarP'));
+            
+            selectRFB.render(document.getElementById('selectionRFB'));
 
 			setVMEPage('embed-link','embed-url', 'embed-iframe');
 			
