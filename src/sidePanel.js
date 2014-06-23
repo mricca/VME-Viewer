@@ -54,10 +54,10 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
         var vmeId = 103; //selectedRecord.get("vmeId");
         //var geographicFeatureId = selectedRecord.get("geographicFeatureId");
         // vecchi parametri
-        var layerName = FigisMap.fifao.vme.split(':',2)[1];
+        var layerName = FigisMap.fifao.vme_cl.split(':',2)[1];
         var featureid = layerName+'.'+vmeId;
         //nuovi parametri
-        var typename = FigisMap.fifao.vme;
+        var typename = FigisMap.fifao.vme_cl;
         var CQL_FILTER = "VME_AREA_TIME = '"+geographicFeatureId+"'";
 
         Ext.Ajax.request({
@@ -83,7 +83,7 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                         icon: Ext.MessageBox.INFO,
                         scope: this
                     });  
-                }else{      
+                }else{
                     var geoJsonGeom = jsonData.features[0].geometry;
                     var projcode = "EPSG:4326";
                     var GeoJsonFormat = new OpenLayers.Format.GeoJSON();
@@ -102,7 +102,8 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                     var bounds = geom.clone().getBounds();
                     var repro_bbox = repro_geom.getBounds();
                     
-                    myMap.getLayersByName("Area types")[0].setVisibility(false);
+                    // uncomment when work on the line 6 
+                    //myMap.getLayersByName("Area types")[0].setVisibility(false);
                     
                     if(Ext.isIE){
                       myMap.zoomOut(); 
@@ -127,9 +128,16 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                     FigisMap.ol.setSelectedYear(year);
                     //TODO try use slider.updateVme();
 
-                    FigisMap.ol.refreshFilters();
+                    // start refresh legend
+                    var nameRFB = jsonData.features[0].properties.OWNER;
+                    FigisMap.ol.refreshFilters(nameRFB);
+                    // end
                     
-                    myMap.getLayersByName("Area types")[0].setVisibility(true);
+                    // uncomment when work on the line 6
+                    //myMap.getLayersByName("Area types")[0].setVisibility(true);
+                    
+                    FigisMap.ol.clearPopupCache();
+                    
                     if(!zoom){            
                         if(getProjection() == "4326"){
                             FigisMap.ol.emulatePopupFromGeom(geom);
@@ -215,7 +223,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			    }
 			}
 		},
-		{
+		/*{
 			fieldLabel: FigisMap.label('SEARCH_CRIT_LBL'),//+' [<a href="#">?</a>]',
 			name: 'vme_criteria',
 			ref: '../vmeCriteria',
@@ -229,7 +237,7 @@ Vme.form.panels.SearchForm = new Ext.FormPanel({
 			store:  Vme.data.stores.VmeCriteriaStore,
 			valueField : 'id',
 			displayField: 'displayText'			
-		}, 
+		},*/ 
 		{
 			fieldLabel: FigisMap.label('SEARCH_YEAR_LBL'),//+'[<a href="#">?</a>]',
 			id: "id_selectYear",
@@ -290,12 +298,28 @@ Vme.search = function(advanced){
 	var RFMOCombo = Ext.getCmp("RFMOCombo");
 	var RFMStore = RFMOCombo.getStore();
 	var value = RFMOCombo.getValue();
-	
-	var dIndex = RFMStore.find("id", value);
+    
+    FigisMap.ol.clearPopupCache();  
+
+    // remove highlight layer on new search
+    var layer = myMap.getLayersByName("highlight")[0];
+    //create layer
+    if(layer){
+        myMap.removeLayer(layer,false);
+    }	        
+        
+	var dIndex = RFMStore.find("id", value); 
+    
 	if(dIndex > -1){
+        var rfbCheckboxValue = Ext.getCmp(value+"_RFB").acronym;
+        setRFBCheckBoxValue(rfbCheckboxValue);
+        
 		var r = RFMStore.getAt(dIndex);	
 		var rfmName = r.data.acronym;
-		
+        
+        // perform CQL_FILTER
+        FigisMap.ol.refreshFilters(rfmName);
+        
 		var filter = new OpenLayers.Filter.Comparison({
 			type: OpenLayers.Filter.Comparison.EQUAL_TO,
 			property: FigisMap.rnd.vars.vmeSearchZoomTo.filterProperty,    // "RFB",
@@ -326,22 +350,35 @@ Vme.search = function(advanced){
 					icon: Ext.MessageBox.WARNING,
 					scope: this
 				});
+                return;
 			}
 					
 			// ///////////////////////////
 			// Get the bigger extent
 			// ///////////////////////////			
 			
-			var size = features.length;
-			var bounds = features[0].bounds;
+            //CHECK IF AREATYPE IS 1 OR 2 FOR NAFO AND NEAFC    
+            var areaType1 = new Array();
+            var areaType2 = new Array();
+            
+            for (var i = 0;i<features.length;i++){
+                if (features[i].attributes.AREATYPE == 1){
+                    areaType1.push({bounds:features[i].bounds})
+                }else if(features[i].attributes.AREATYPE == 2){
+                    areaType2.push({bounds:features[i].bounds})
+                }
+            }
+
+			var size = areaType2.length == 0 ? areaType1.length : areaType2.length;
+			var bounds = areaType2.length == 0 ? areaType1[0].bounds : areaType2[0].bounds;
 			
 			var bottom = bounds.bottom;
 			var left = bounds.left;
 			var right = bounds.right;
 		    var top = bounds.top;
 			
-			for(var i=1; i<size; i++){
-				var b = features[i].bounds;
+			for(var i=0; i<size; i++){
+				var b = areaType2.length == 0 ? areaType1[i].bounds : areaType2[i].bounds;
 				if(!b){
 					continue;
 				}
@@ -354,11 +391,11 @@ Vme.search = function(advanced){
 					bottom = b.bottom;
 				}
 				
-				if(b.left > left){
+				if(b.left < left){
 					left = b.left
 				}
 				
-				if(b.right < right){
+				if(b.right > right){
 					right = b.right;
 				}
 				
@@ -367,12 +404,15 @@ Vme.search = function(advanced){
 				}
 			}
 			
+            // WORKOROUND TO FIX STRANGE BEHAVIOR WHEN XMAX = 90 IN COORDINATE TRANSFORMATION TO GOOGLE MERCATOR
+            top = (top > 85 && top <= 92) ? 85 : top;
+            
 			bounds = new OpenLayers.Bounds(left, bottom, right, top);
 			
 			//var test = new OpenLayers.Layer.Vector("test", {
 			//		displayInLayerSwitcher: true
 			//});
-			
+
 			var repro_geom = bounds.toGeometry().transform(
 				new OpenLayers.Projection(FigisMap.rnd.vars.vmeSearchZoomTo.srsName),
 				myMap.getProjectionObject()
@@ -406,8 +446,8 @@ Vme.search = function(advanced){
 			
 			//
 			// Perform the store load
-			// 
-			vmeSearch(advanced);
+			//
+            vmeSearch(advanced);
 			
 			mask.hide();
 		};
@@ -420,7 +460,7 @@ Vme.search = function(advanced){
 		//
 		// Perform the store load
 		//
-		vmeSearch(advanced);
+        vmeSearch(advanced);
 	}
 };
 
@@ -447,7 +487,7 @@ function vmeSearch(advanced){
 			switch(key){
 				case 'authority':
 				case 'vme_type':
-				case 'vme_criteria':
+				//case 'vme_criteria':
 				case 'year':
 				case 'text':
 					store.setBaseParam(key, fields[key]);
@@ -464,6 +504,163 @@ function vmeSearch(advanced){
 	
 	Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');
 }
+
+/**
+ * Vme.rfbZoomTo
+ * Zooming to the RFB areas.
+ * 
+ */
+Vme.rfbZoomTo = function(acronym,value){
+
+	////////////////////////////////////////////////////
+	// Retrieve RFB areas extent to perform a zoomTo. //
+	////////////////////////////////////////////////////
+
+    var rfbName = acronym;
+    
+    // perform CQL_FILTER
+    FigisMap.ol.refreshFilters(rfbName);
+
+    FigisMap.ol.clearPopupCache();    
+
+    // remove highlight layer on new search
+    var layer = myMap.getLayersByName("highlight")[0];
+    //create layer
+    if(layer){
+        myMap.removeLayer(layer,false);
+    }	   
+    
+    var filter = new OpenLayers.Filter.Comparison({
+        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+        property: FigisMap.rnd.vars.vmeSearchZoomTo.filterProperty,    // "RFB",
+        value: rfbName
+    });
+    
+    var protocol = new OpenLayers.Protocol.WFS({
+       version: FigisMap.rnd.vars.vmeSearchZoomTo.wfsVersion,          // "1.1.0",					
+       url: FigisMap.rnd.vars.vmeSearchZoomTo.wfsUrl,                  // "http://figisapps.fao.org/figis/geoserverdv/" + "wfs",									   
+       featureType: FigisMap.rnd.vars.vmeSearchZoomTo.featureType,     // "regulatory_areas",
+       featurePrefix: FigisMap.rnd.vars.vmeSearchZoomTo.featurePrefix, // "vme",
+       srsName: FigisMap.rnd.vars.vmeSearchZoomTo.srsName,             // "EPSG:4326",
+       defaultFilter: filter
+    });
+
+    var mask = new Ext.LoadMask(Ext.getBody(), {msg: "Please wait ..."});
+    
+    var callback = function(r) {
+        var features = r.features;
+        
+        if(!features || features.length < 1){
+            mask.hide();
+            
+            Ext.MessageBox.show({
+                title: "Info",
+                msg: FigisMap.label("SIDP_NOFEATURES"),
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.WARNING,
+                scope: this
+            });
+            return;
+        }
+                
+        // ///////////////////////////
+        // Get the bigger extent
+        // ///////////////////////////			
+        
+        //CHECK IF AREATYPE IS 1 OR 2 FOR NAFO AND NEAFC    
+        var areaType1 = new Array();
+        var areaType2 = new Array();
+        
+        for (var i = 0;i<features.length;i++){
+            if (features[i].attributes.AREATYPE == 1){
+                areaType1.push({bounds:features[i].bounds})
+            }else if(features[i].attributes.AREATYPE == 2){
+                areaType2.push({bounds:features[i].bounds})
+            }
+        }
+
+        var size = areaType2.length == 0 ? areaType1.length : areaType2.length;
+        var bounds = areaType2.length == 0 ? areaType1[0].bounds : areaType2[0].bounds;
+        
+        var bottom = bounds.bottom;
+        var left = bounds.left;
+        var right = bounds.right;
+        var top = bounds.top;
+        
+        for(var i=0; i<size; i++){
+            var b = areaType2.length == 0 ? areaType1[i].bounds : areaType2[i].bounds;
+            if(!b){
+                continue;
+            }
+            
+            /*if(bounds && b.contains(bounds)){
+                bounds = b;
+            }*/
+
+            if(b.bottom < bottom){
+                bottom = b.bottom;
+            }
+            
+            if(b.left < left){
+                left = b.left
+            }
+            
+            if(b.right > right){
+                right = b.right;
+            }
+            
+            if(b.top > top){
+                top = b.top
+            }
+        }
+        
+        // WORKOROUND TO FIX STRANGE BEHAVIOR WHEN XMAX = 90 IN COORDINATE TRANSFORMATION TO GOOGLE MERCATOR
+        top = (top > 85 && top <= 92) ? 85 : top;
+        bounds = new OpenLayers.Bounds(left, bottom, right, top);
+        
+        //var test = new OpenLayers.Layer.Vector("test", {
+        //		displayInLayerSwitcher: true
+        //});
+        
+        var repro_geom = bounds.toGeometry().transform(
+            new OpenLayers.Projection(FigisMap.rnd.vars.vmeSearchZoomTo.srsName),
+            myMap.getProjectionObject()
+        );
+        
+        //test.addFeatures(new OpenLayers.Feature.Vector(repro_geom));	
+        //myMap.addLayers([test]);
+        
+        var repro_bbox = repro_geom.getBounds();
+        var settings = {
+            zoomExtent: bounds.toBBOX(20)
+        };
+        
+        // ////////////////////////////////////////////////////
+        // Chek if 'CCAMLR' is selected in order to perform 
+        // a reproject the map in 3031.
+        // /////////////////////////////////////////////////////
+        
+        var RFBValue = features[0].data.RFB;            
+        var RFBComboStore = Vme.data.stores.rfmoStore;
+        var RFBRecord = RFBComboStore.getAt(RFBComboStore.find('acronym', "CCAMLR"));
+        var RFBId = RFBRecord.get('acronym');
+        
+        if(RFBValue == RFBId){
+            settings.srs = "EPSG:3031";
+            zoomTo(settings, repro_bbox, false);
+        }else{
+            zoomTo(settings, repro_bbox, true);
+        }			
+        
+        mask.hide();
+    };
+    
+    mask.show();
+    var response = protocol.read({
+        callback: callback
+    });	
+
+};
 
 /** 
  * Vme.form.panels.SearchPanel
@@ -585,3 +782,114 @@ var sidePanel = new Ext.Panel({
 	]
 
 });
+
+var selectRFB = new Ext.Panel({
+    layout: 'form',
+    name: 'selectRFB',
+	border: false,
+	labelAlign :'left',
+	defaults: {
+	    anchor:'100%',
+        shadow:false
+    },
+    id:'selectRFB'
+});
+    
+Vme.data.stores.rfmoStore.on('load',function(store, records, options){
+    
+    var items = [];
+    
+    for (var i = 0;i<3;i++){
+        items.push({items: []});
+    }
+    
+    var panel = Ext.getCmp("selectRFB");
+    
+    panel.add({
+        xtype: 'radiogroup', 
+        name: 'selectRFBcombo',
+        ref:'../RFBcombo',
+        border: false,
+        id: "RFBCombo",   
+        hideLabel: true,
+        columns: 3,
+        vertical: true,
+        items:items         
+    });
+    
+    panel.doLayout();
+    
+    store.each(function(records,count,tot) {
+        var column;
+        if(count==0 || count<3){
+            column = Ext.getCmp("RFBCombo").panel.getComponent(0);
+            column.setWidth(90);
+        }else if(count==3 || count<6){
+            column = Ext.getCmp("RFBCombo").panel.getComponent(1);  
+            column.setWidth(90);
+        }else{
+            column = Ext.getCmp("RFBCombo").panel.getComponent(2);  
+            column.setWidth(90);
+        }
+        var radio = column.add(Ext.apply({
+            xtype: 'radio',
+            width: 'auto',
+            id: records.data.id + '_RFB',
+            boxLabel: '<a id="infoRFBimage_'+records.data.id+'_RFB'+'" ><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"> </a>',
+            name: 'rfb',
+            acronym: records.data.acronym,
+            inputValue: records.data.id,
+            listeners: {
+                check: function(radio, checked){
+                    if(checked){
+                        var acronym = radio.acronym;
+                        var value = radio.inputValue;
+                        Vme.rfbZoomTo(acronym,value);
+                        sidePanel.layout.setActiveItem('legendPanel');
+                        sidePanel.expand();                        
+                    }
+                },
+                afterrender: function(radio){
+                    var rfbStore = 'rfbStore' + radio.acronym;      
+                    //WORKAROUND TO MANAGE GFCM AND WECAFC WEB-SERVICE ERROR
+                    //if(Vme.data.stores[rfbStore].data.length != 0){
+                    if(radio.acronym != "GFCM" && radio.acronym != "WECAFC"){                    
+                        Vme.data.stores[rfbStore].on('load',function(store, records, options){
+                            store.each(function(records,count,tot) {
+                                var id = 'infoRFBimage_' + radio.id;
+                                Ext.get(id).dom.lastChild.parentNode.outerHTML = '<a id="'+id+'" style="color:#000000" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+records.data.factsheetUrl+'\');"><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"></a><span>'+radio.acronym+'</span>';
+                            })
+                        })
+                    }else{
+                        var id = 'infoRFBimage_' + radio.id;
+                        Ext.get(id).dom.lastChild.parentNode.outerHTML = '<a id="'+id+'" style="color:#000000" href="javascript:void(0);" onClick="Vme.msgAlert(\''+radio.acronym+'\')"><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"></a><span>'+radio.acronym+'</span>';
+                    }
+                }
+            }
+        },panel.items[count]));
+        column.items.add(radio);  
+        column.doLayout();
+    });
+    
+    if ( location.search.indexOf("embed=true") != -1 ){
+        var rfb;
+        var params = location.search.replace(/^\?/,'').replace(/&amp;/g,'&').split("&");
+        
+        for (var j=0; j < params.length; j++) {
+            var param = params[j].split("=");
+            switch ( param[0] ) {
+                case "rfb"	: rfb = param[1]; break;
+            }
+        }
+        
+        if ( rfb && rfb != '' && typeof(rfb) != 'undefined' && rfb != 'undefined'){
+            setRFBCheckBoxValue(rfb);
+        }        
+    }
+
+});
+
+//REMOVE WHEN GFCM AND WECAFC WEB-SERVICE WILL UP
+Vme.msgAlert = function (acronym){
+    Ext.Msg.alert("MESSAGE", "WEB-SERVICE: "+acronym+" IS DOWN");
+};

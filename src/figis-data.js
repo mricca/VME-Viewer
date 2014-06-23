@@ -197,7 +197,7 @@ var staticLabels = {
 	'200 NMI ARCS'		: '200 nmi arcs',
 	'FAO FISHING AREAS'	: { en:'FAO fishing areas', fr:'Zones de pêche de la FAO'},
 	'ALL FAO AREAS'		: { en:'FAO areas and their sub-divisions' },
-	'COORDINATES GRID'	: { en:'Coordinates grid' },
+	'COORDINATES GRID'	: { en:'Coordinates Grid' },
 	FAO_DIV			: { en:'FAO divisions'},
 	FAO_MAJOR		: { en:'FAO major fishing areas', fr:'Principales zones de pêche de la FAO'},
 	FAO_SUB_AREA		: { en:'FAO sub areas'},
@@ -418,7 +418,14 @@ var staticLabels = {
 	SIDP_SEARCH			: {en:"Search"},
 	SIDP_CLEAR			: {en:"Clear"},
 	SIDP_NOGEOMETRY     : {en:"Area isn't defined yet!"},    
-	SIDP_NOFEATURES     : {en:"The server did not return any feature !"},  
+	SIDP_NOFEATURES     : {en:"The server did not return any feature !"},
+    //ZOOMTO RFB LABELS
+    ZOOMTO_RFB_LBL		: {en:"RFB ZoomTo"},
+    //ZOOMTO RFB EMPTY
+    ZOOMTO_RFB_EMP		: {en:"Select RFB..."},
+    // SEARCH NO RESULT LABEL
+    ZOOMTO_NO_RES		: {en:'RFB not found'},
+    ZOOMTO_LOADING		: {en:'Loading'},
 	//SEARCH FIELDS LABELS
 	SEARCH_TEXT_LBL		: {en:"Free text search"},
 	SEARCH_RFMO_LBL		: {en:"By Management Body/Authority(ies)"},
