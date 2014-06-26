@@ -144,9 +144,20 @@ function updateVme(){
     Ext.getCmp("last-year").disable(); 
     Ext.getCmp("first-year").disable(); 
     */
-	
+    
+    var acronym;
+    
+    var rfbComboTop = Ext.getCmp("RFBCombo").getRawValue();
+    var rfmoComboSearch = Ext.getCmp("RFMOCombo").getRawValue();
+
+    if(rfbComboTop == ""){
+        acronym = rfmoComboSearch;
+    }else{
+        acronym = rfbComboTop;
+    }
+    
     FigisMap.ol.clearPopupCache();
-    FigisMap.ol.refreshFilters();
+    FigisMap.ol.refreshFilters(acronym);
 	
 	// //////////////////////////////
 	// Remove layer for hilighting
@@ -233,8 +244,19 @@ function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filte
 	// Close popup when RFB change
 	FigisMap.ol.clearPopupCache();
 	addVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filter);
+
+    var acronym;
+    
+    var rfbComboTop = Ext.getCmp("RFBCombo").getRawValue();
+    var rfmoComboSearch = Ext.getCmp("RFMOCombo").getRawValue();
+
+    if(rfbComboTop == ""){
+        acronym = rfmoComboSearch;
+    }else{
+        acronym = rfbComboTop;
+    }
 	
-	FigisMap.ol.refreshFilters();
+	FigisMap.ol.refreshFilters(acronym);
 	
 	// Restore toggle
 	restoreToggleButtons();

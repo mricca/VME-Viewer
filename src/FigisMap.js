@@ -30,10 +30,15 @@ FigisMap.fifao = {
 	cnt : 'fifao:UN_CONTINENT2',
 	div : 'fifao:FAO_DIV',
 	//eez : 'fifao:EEZ',
-	maj : 'fifao:FAO_MAJOR',
+	//maj : 'fifao:FAO_MAJOR', AFTER WORKSHOP
+	maj : 'fifao:FAO_MAJOR_Lines',
 	ma2 : 'fifao:FAO_MAJOR2',
 	mal : 'fifao:MarineAreas',
-    gup : 'fifao:gebco_underseafeatures_points',
+    //gup : 'fifao:gebco_underseafeatures_points', PRE WORKSHOP
+    guf : 'fifao:gebco_underseafeatures',
+    gbi : 'vme:gebco_isobath2000', //AFTER WORKSHOP
+    vnt : 'vme:vents_InterRidge_2011_all', // Hidrotermal
+    ccr : 'vme:WCMC-001-ColdCorals2005', //ColdCorals
 	//nma : 'fifao:eez2',
 	nma : 'fifao:Limit_200nm',
 	RFB : 'fifao:RFB',
@@ -47,13 +52,14 @@ FigisMap.fifao = {
     vme_cl : 'vme:closures', // VME Closure measures
     vme_oa : 'vme:other_areas', // VME areas with other access regulations    
     vme_bfa : 'vme:bottom_fishing_areas', // VME measures in bottom fishing areas
+    vme_regarea : 'vme:regulatory_areas', // VME regulatory areas
     //end after workshop
     
 	vme_fp : 'fifao:vme-db_footprints',
-    vme_en : 'fifao:Encounters2',
-    vme_sd : 'fifao:SurveyData2',
-    vme_agg_en : 'fifao:AggregatedEncounters',    
-	vme_agg_sd : 'fifao:AggregatedSurveyData',  
+    //vme_en : 'fifao:Encounters2',
+    //vme_sd : 'fifao:SurveyData2',
+    //vme_agg_en : 'fifao:AggregatedEncounters',    
+	//vme_agg_sd : 'fifao:AggregatedSurveyData',  
 	//bathimetry: 'fifao:color_etopo1_ice_full' //etopo
 	bathimetry: 'fifao:OB_LR'				//natural earth ocean bottom
 	
@@ -853,15 +859,15 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				isMasked: false
 			});
 		}*/	   
+        
 		//WMS Encounters		
-		if ( ! layerTypes[ FigisMap.fifao.vme_agg_en ] ) {
+		/*if ( ! layerTypes[ FigisMap.fifao.vme_agg_en ] ) {
 			layers.unshift({
 				layer	: FigisMap.ol.getAuthLayer('encounters'),
 				label	: 'Encounters',
 				group: "VME-DB layers",
                 showLegendGraphic: true,				
-				filter	:"YEAR = '"+ year + "'" /*+ (owner ? " AND OWNER ='" + owner +"'" :"")*/, 
-				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+				filter	:"YEAR = '"+ year + "'",
                 skipLegend	: true,
 				singleTile	:false,
 				opacity	: 1.0,
@@ -879,8 +885,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				singleTile	:false,
 				group: "VME-DB layers",
                 showLegendGraphic: true,
-				filter	:"YEAR = '"+ year + "'" /* + (owner ? " AND OWNER ='" + owner +"'" :"")*/,
-				//icon	: '<img src="' + FigisMap.rnd.vars.VME_FP_legendURL + '" width="30" height="20" />',
+				filter	:"YEAR = '"+ year + "'",
                 skipLegend	: true,
 				opacity	: 1.0,
 				hidden	: true,
@@ -888,7 +893,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
                 dispOrder: 2,
 				hideInSwitcher	: false
 			});
-		}        
+		}*/        
         
         // VME measures in bottom fishing areas
 		if ( ! layerTypes[ FigisMap.fifao.vme_bfa ] ) {
@@ -904,7 +909,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
                 filter	:"YEAR <= '"+ year + "'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'"),
 				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
-				hidden	: true,
+				hidden	: false,
 				type	: 'auto',
 				//hideInSwitcher	: false,
                 dispOrder: 1,
@@ -971,6 +976,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				filter	:'*',
 				remote  : false, 
 				icon	:'<img src="'+FigisMap.rnd.vars.FAO_fishing_legendURL+'" width="30" height="20" />',
+                hidden	: true,
 				type	:'auto'
 			} );
 		}       
@@ -985,7 +991,8 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				filter	:'*',
 				icon	: '<img src="' + FigisMap.rnd.vars.EEZ_legendURL + '" width="30" height="20" />',
 				opacity	: 0.3,
-				hidden	: pars.isFIGIS,
+				//hidden	: pars.isFIGIS,
+				hidden	: true,
 				remote  : false,
 				type	: 'auto'
 			});
@@ -1017,7 +1024,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			hideInSwitcher	: false
 		} );
     layers.push( {
-			layer		: FigisMap.fifao.gup,
+			layer		: FigisMap.fifao.guf,
 			cached		: true,
 			filter		: '*',
 			type		: 'auto',
@@ -1027,8 +1034,67 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			remote		: false,
             showLegendGraphic: false,	            
 			skipLegend	: true,
+            hidden	: false,
 			hideInSwitcher	: false
 		} );
+    layers.push( {
+			layer		: FigisMap.fifao.gbi,
+			cached		: true,
+			filter		: '*',
+			type		: 'auto',
+			style		: '',
+            group: "Overlays",
+            label	: 'Gebco Isobath 2000',
+			remote		: false,
+            showLegendGraphic: false,	            
+			skipLegend	: true,
+            hidden	: true,
+			hideInSwitcher	: false
+		} );        
+    layers.push( {
+			layer		: FigisMap.fifao.vnt,
+			cached		: true,
+			filter		: '*',
+			type		: 'auto',
+			style		: 'vents_InterRidge_2011_all',
+            group: "Overlays",
+            label	: 'Hydrotermal Vents',
+			remote		: false,
+            showLegendGraphic: false,	            
+			skipLegend	: true,
+            hidden	: true,
+			hideInSwitcher	: false
+		} );   
+    layers.push( {
+			layer		: FigisMap.fifao.ccr,
+			cached		: true,
+			filter		: '*',
+			type		: 'auto',
+			style		: '',
+            group: "Overlays",
+            label	: 'Cold Corals 2005',
+			remote		: false,
+            showLegendGraphic: false,	            
+			skipLegend	: true,
+            hidden	: true,
+			hideInSwitcher	: false
+		} );         
+    layers.push( {
+			layer		: FigisMap.fifao.vme_regarea,
+			cached		: true,
+			filter		: '*',
+			type		: 'auto',
+			style		: '',
+            group: "Overlays",
+            label	: 'RFMO Regulatory Areas',
+			remote		: false,
+            showLegendGraphic: false,	            
+			skipLegend	: true,
+            hidden	: false,
+			hideInSwitcher	: false,
+            dispOrder: 3,
+            isMasked: false
+		} );        
 	return layers;
 };
 
@@ -1360,12 +1426,12 @@ FigisMap.getStyleRuleDescription = function(STYLE, pars) {
  * returns proper layer for the auth level
  */
 FigisMap.ol.getAuthLayer = function (type){
-	if(type=='encounters'){
+	/*if(type=='encounters'){
 		return FigisMap.rnd.status.logged ? FigisMap.fifao.vme_en:FigisMap.fifao.vme_agg_en;
 	}
 	if(type=='survey'){
 		return FigisMap.rnd.status.logged ? FigisMap.fifao.vme_sd: FigisMap.fifao.vme_agg_sd;
-	}
+	}*/
 };
 
 /**
@@ -1374,13 +1440,13 @@ FigisMap.ol.getAuthLayer = function (type){
  * 
  */
 FigisMap.ol.refreshAuthorized = function(){
-		myMap.getLayersByName('Encounters')[0].mergeNewParams({'layers':FigisMap.ol.getAuthLayer('encounters')});
+		/*myMap.getLayersByName('Encounters')[0].mergeNewParams({'layers':FigisMap.ol.getAuthLayer('encounters')});
         //myMap.getLayersByName('Encounters')[0].visibility = false;
         myMap.getLayersByName('Encounters')[0].redraw(true);
         
         myMap.getLayersByName('Survey Data')[0].mergeNewParams({'layers': FigisMap.ol.getAuthLayer('survey')});
         //myMap.getLayersByName('Survey Data')[0].visibility = false;
-        myMap.getLayersByName('Survey Data')[0].redraw(true);
+        myMap.getLayersByName('Survey Data')[0].redraw(true);*/
 
 };
 
@@ -1463,19 +1529,28 @@ FigisMap.ol.getSelectedOwner= function(){
  */
 FigisMap.ol.refreshFilters = function (acronym){
 	var year = FigisMap.ol.getSelectedYear();
-        
+    var RFBFilter = (typeof(acronym) == 'undefined' || acronym == "") ? false : true; 
 	//var owner = FigisMap.ol.getSelectedOwner();
 
     // VME Closure measures
     // VME measures in bottom fishing areas
     // VME areas with other access regulations
+
+	// RFMO Regulatory Areas
+	myMap.getLayersByName('RFMO Regulatory Areas')[0].mergeNewParams(
+		{
+		'CQL_FILTER': (RFBFilter ? "RFB = '" + acronym + "'" : "RFB <> '*'"),
+		}
+	);
+	
+	myMap.getLayersByName('RFMO Regulatory Areas')[0].redraw(true);
 	
 	// VME Closure measures
 	myMap.getLayersByName('VME Closure measures')[0].mergeNewParams(
 		{
-		'CQL_FILTER': (acronym ? "YEAR <= '" + year + "' AND END_YEAR >="+ year+" AND OWNER ='"+acronym+"'" : "YEAR <= '" + year + "' AND END_YEAR >="+ year),
-		'STYLES': (acronym ?  "MEASURES_VME_for_" + acronym : "MEASURES_VME"), 
-		'STYLE': (acronym ?  "MEASURES_VME_for_" + acronym : "MEASURES_VME")
+		'CQL_FILTER': (RFBFilter ? "YEAR <= '" + year + "' AND END_YEAR >="+ year+" AND OWNER ='"+acronym+"'" : "YEAR <= '" + year + "' AND END_YEAR >="+ year),
+		'STYLES': (RFBFilter ?  "MEASURES_VME_for_" + acronym : "MEASURES_VME"), 
+		'STYLE': (RFBFilter ?  "MEASURES_VME_for_" + acronym : "MEASURES_VME")
 		}
 	);
 	
@@ -1484,19 +1559,18 @@ FigisMap.ol.refreshFilters = function (acronym){
 	// VME areas with other access regulations
 	myMap.getLayersByName('VME areas with other access regulations')[0].mergeNewParams(
 		{
-		'CQL_FILTER': (acronym ? "YEAR <= '" + year + "' AND END_YEAR >="+ year+" AND OWNER ='"+acronym+"'" : "YEAR <= '" + year + "' AND END_YEAR >="+ year),
-		'STYLES': (acronym ?  "MEASURES_OTHER_for_" + acronym : "MEASURES_OTHER"), 
-		'STYLE': (acronym ?  "MEASURES_OTHER_for_" + acronym : "MEASURES_OTHER")
+		'CQL_FILTER': (RFBFilter ? "YEAR <= '" + year + "' AND END_YEAR >="+ year+" AND OWNER ='"+acronym+"'" : "YEAR <= '" + year + "' AND END_YEAR >="+ year),
+		'STYLES': (RFBFilter ?  "MEASURES_OTHER_for_" + acronym : "MEASURES_OTHER"), 
+		'STYLE': (RFBFilter ?  "MEASURES_OTHER_for_" + acronym : "MEASURES_OTHER")
 		}
 	);
 	
 	myMap.getLayersByName('VME areas with other access regulations')[0].redraw(true);     
 	
-	// Encounters
+	/*// Encounters
 	myMap.getLayersByName('Encounters')[0].mergeNewParams(
 		{'CQL_FILTER': 
-			"YEAR = '"+ year +"'" /*+  
-			(owner ? " AND OWNER ='" + owner +"'" :"")*/
+			"YEAR = '"+ year +"'"
 		}
 	);
 	myMap.getLayersByName('Encounters')[0].redraw(true);
@@ -1504,11 +1578,10 @@ FigisMap.ol.refreshFilters = function (acronym){
 	// Survey Data
 	myMap.getLayersByName('Survey Data')[0].mergeNewParams(
 		{'CQL_FILTER':
-			"YEAR = '" + year +"'" /*+
-			(owner ? " AND OWNER ='" + owner +"'" :"")*/
+			"YEAR = '" + year +"'"
 		}
 	);
-	myMap.getLayersByName('Survey Data')[0].redraw(true);
+	myMap.getLayersByName('Survey Data')[0].redraw(true);*/
 
 	// VME measures in bottom fishing areas
 	var m = myMap;	
@@ -1516,9 +1589,9 @@ FigisMap.ol.refreshFilters = function (acronym){
 
 	f.mergeNewParams(
 		{'CQL_FILTER':
-			(acronym ? "YEAR <= '" + year +"'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'") + " AND OWNER ='"+acronym+"'" : "YEAR <= '" + year +"'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")),
-            'STYLES': (acronym ?  "MEASURES_BTM_FISH_for_" + acronym: "MEASURES_BTM_FISH"), 
-            'STYLE': (acronym ?  "MEASURES_BTM_FISH_for_" + acronym : "MEASURES_BTM_FISH")
+			(RFBFilter ? "YEAR <= '" + year +"'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'") + " AND OWNER ='"+acronym+"'" : "YEAR <= '" + year +"'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")),
+            'STYLES': (RFBFilter ?  "MEASURES_BTM_FISH_for_" + acronym: "MEASURES_BTM_FISH"), 
+            'STYLE': (RFBFilter ?  "MEASURES_BTM_FISH_for_" + acronym : "MEASURES_BTM_FISH")
 		}
 	);
 	f.redraw(true);
@@ -1832,7 +1905,7 @@ FigisMap.renderer = function(options) {
 				case FigisMap.fifao.ma2 : l.cached = true; break;
 				case FigisMap.fifao.nma : l.cached = true; break;
 				case FigisMap.fifao.mal : l.cached = true; break;
-				case FigisMap.fifao.maj : l.cached = true; break;
+				//case FigisMap.fifao.maj : l.cached = true; break;
 				default : l.cached = false;
 			}
 			
@@ -1879,7 +1952,8 @@ FigisMap.renderer = function(options) {
 			olLayers.push( l.wms );
 			
 			//if (l.wms.name == 'Area types' || l.wms.name == 'Footprints'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
-			if (l.wms.name == 'VME Closure measures' || l.wms.name == 'VME areas with other access regulations' || l.wms.name == 'VME measures in bottom fishing areas'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
+			//if (l.wms.name == 'VME Closure measures' || l.wms.name == 'VME areas with other access regulations' || l.wms.name == 'VME measures in bottom fishing areas'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
+			if (l.wms.name == 'VME Closure measures' || l.wms.name == 'VME areas with other access regulations' || l.wms.name == 'VME measures in bottom fishing areas'){
 				vme.push(olLayers[i]);
 			}
 

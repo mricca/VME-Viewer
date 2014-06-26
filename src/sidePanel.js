@@ -298,6 +298,10 @@ Vme.search = function(advanced){
 	
 	var dIndex = RFMStore.find("id", value);
 	if(dIndex > -1){
+    
+        var rfbCombo = Ext.getCmp('RFBCombo');
+        rfbCombo.reset();    
+        
 		var r = RFMStore.getAt(dIndex);	
 		var rfmName = r.data.acronym;
         
