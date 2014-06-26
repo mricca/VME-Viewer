@@ -53,6 +53,10 @@ function reset(year){
 	document.getElementById("FilterRFB").text = FigisMap.label('SELECT_AN_AREA');
 	document.getElementById("FilterRFB").value = "";
 	document.getElementById("SelectRFB").value = "";
+    
+    var rfbCombo = Ext.getCmp('RFBCombo');
+    rfbCombo.reset();
+    
 	setProjection('3349');
     closeProjectionPanel();
 	FigisMap.ol.clearPopupCache();
@@ -243,7 +247,7 @@ function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filte
 **/
 function restoreToggleButtons(){
 	var el = document.getElementById("lblVME");	
-	if(el){
+	/*if(el){
 		var vme = myMap.getLayersByName('Area types')[0];
 		
 		// ///////////////////////////////////////////////
@@ -276,7 +280,7 @@ function restoreToggleButtons(){
 		}					
 	
 		//el.className = "lblFootprints figisButton";
-	}
+	}*/
 }
 
 /**

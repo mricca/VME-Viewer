@@ -424,7 +424,7 @@ var staticLabels = {
     //ZOOMTO RFB EMPTY
     ZOOMTO_RFB_EMP		: {en:"Select RFB..."},
     // SEARCH NO RESULT LABEL
-    ZOOMTO_NO_RES		: {en:'Nothing to display'},
+    ZOOMTO_NO_RES		: {en:'RFB not found'},
     ZOOMTO_LOADING		: {en:'Loading'},
 	//SEARCH FIELDS LABELS
 	SEARCH_TEXT_LBL		: {en:"Free text search"},

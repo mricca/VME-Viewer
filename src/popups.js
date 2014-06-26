@@ -146,10 +146,19 @@ FigisMap.ol.getStore = function(layer){
   var layernames = FigisMap.fifao;
   var featureInfoStores =Vme.data.extensions.FeatureInfo;
   switch(name){
+    /* PRE WORKSHOP
     case layernames.vme :
       return new featureInfoStores.VmeStore();
     case layernames.vme_fp : 
+      return new featureInfoStores.FootprintStore();*/
+      
+    case layernames.vme_cl :
+      return new featureInfoStores.VmeStore();    
+    case layernames.vme_oa :
+      return new featureInfoStores.VmeStore();
+    case layernames.vme_bfa : 
       return new featureInfoStores.FootprintStore();
+      
     case layernames.vme_en : 
       return new featureInfoStores.EncountersStore();
     case layernames.vme_sd :   
@@ -165,10 +174,19 @@ FigisMap.ol.getTabTitle=function(layer){
   var layernames = FigisMap.fifao;
   var templates =Vme.data.templates;
   switch(name){
+    /* PRE WORKSHOP
     case layernames.vme :
       return "VME Area";
     case layernames.vme_fp : 
-      return "Footprints";
+      return "Footprints";*/
+
+    case layernames.vme_cl :
+      return "VME Closure measures";
+    case layernames.vme_oa :
+      return "VME areas with other access regulations";      
+    case layernames.vme_bfa : 
+      return "VME measures in bottom fishing areas";
+      
     case layernames.vme_en : 
       return "Encounters";
     case layernames.vme_sd :   
@@ -184,10 +202,19 @@ FigisMap.ol.getTemplate = function(layer){
   var layernames = FigisMap.fifao;
   var templates =Vme.data.templates;
   switch(name){
+    /* PRE WORKSHOP
     case layernames.vme :
       return templates.vme;
     case layernames.vme_fp : 
-      return templates.footprints;
+      return templates.footprints;*/
+      
+    case layernames.vme_cl :
+      return templates.vme;
+    case layernames.vme_oa :
+      return templates.vme;      
+    case layernames.vme_bfa : 
+      return templates.footprints;      
+      
     case layernames.vme_en : 
       return templates.encounters;
     case layernames.vme_sd :   
@@ -207,7 +234,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 	var reader = new OpenLayers.Format.WMSGetFeatureInfo();
     var response = reader.read(e.text);
     //request to the VME service VME
-    if(layer.params.LAYERS == FigisMap.fifao.vme){
+    if(layer.params.LAYERS == FigisMap.fifao.vme_cl || layer.params.LAYERS == FigisMap.fifao.vme_oa){
         /*
             count the results, do an ajax call for every field,
             merge the OpenLayers object "attributes" obj with the result
@@ -318,23 +345,37 @@ FigisMap.ol.showPopup= function(e,response,layer){
 		  
 		  
 	  }else{
-		  tp.add({
-			  itemId: name,
-			  title: name,
-			  layout: "fit",
-			  border:false,
-			  bodyStyle: 'padding:0px;',
-			  items:[dv],
-			  autoWidth: true,
-			  collapsible: false
-		  });
-		  
+      
+          if (name == "VME Closure measures"){
+              tp.insert(0,{
+                  itemId: name,
+                  title: name,
+                  layout: "fit",
+                  border:false,
+                  bodyStyle: 'padding:0px;',
+                  items:[dv],
+                  autoWidth: true,
+                  collapsible: false
+              });
+          }else{
+              tp.add({
+                  itemId: name,
+                  title: name,
+                  layout: "fit",
+                  border:false,
+                  bodyStyle: 'padding:0px;',
+                  items:[dv],
+                  autoWidth: true,
+                  collapsible: false
+              });
+		  }
 		 
 		  popup.opened =true;
 		  popup.doLayout();
 		  tp.doLayout();
 		  popup.show();
 	  }
+      tp.setActiveTab(0);
 	}
 
 };

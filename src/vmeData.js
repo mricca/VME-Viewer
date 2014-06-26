@@ -265,6 +265,7 @@ Vme.data={
 							//'{[this.getDownloadFDS(values)]}' +
 							'&nbsp;&nbsp;<a onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+                                
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
                             '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +
@@ -566,6 +567,7 @@ Vme.data={
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+   
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
 						'</div>'+
@@ -669,7 +671,7 @@ Vme.data.extensions ={
 					{name: 'geometry', mapping: 'geometry'},
                     {name: 'vme_id',     mapping: 'attributes.VME_ID'},
 					{name: 'status', 	 mapping: 'attributes.STATUS'},
-                    {name: 'year', mapping: 'attributes.YEAR'},
+                    {name: 'year', mapping: 'attributes.year'},
                     {name: 'VME_AREA_TIME', mapping: 'attributes.VME_AREA_TIME'},
                     {name: 'SHAPE_AREA', mapping:'attributes.SHAPE_AREA'},
                     {name: 'envelope', mapping: 'attributes.envelope'},
@@ -678,6 +680,7 @@ Vme.data.extensions ={
 					{name: 'bbox',		mapping: 'bounds'},
 					{name: 'vmeType', mapping: 'attributes.vmeType'},
 					{name: 'owner', mapping: 'attributes.owner'},
+                    {name: 'owner_acronym', mapping: 'attributes.OWNER'},
                     {name: 'validityPeriodFrom', mapping: 'attributes.validityPeriodFrom'},
 					{name: 'validityPeriodTo', mapping: 'attributes.validityPeriodTo'},
 					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
@@ -749,15 +752,15 @@ Vme.data.extensions ={
 				fields: [
 					{name: 'id', mapping: 'fid'},
 					{name: 'geometry', mapping: 'geometry'},
-					{name: 'localname',  mapping: 'attributes.Name'},
+					{name: 'localname',  mapping: 'attributes.LOCAL_NAME'},
 					{name: 'bbox',		mapping: 'bounds'},
 					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
 					{name: 'status', 	 mapping: 'attributes.STATUS'},
-					{name: 'year', mapping: 'attributes.Year'},
+					{name: 'year', mapping: 'attributes.YEAR'},
 					{name: 'type', mapping: 'attributes.VME_TYPE'},
-					{name: 'owner', mapping: 'attributes.Owner'},
+					{name: 'owner', mapping: 'attributes.OWNER'},
 					{name: 'obj_id', mapping: 'attributes.OBJECTID'},
-					{name: 'geo_ref', mapping: 'attributes.GeoRef'}					
+					{name: 'geo_ref', mapping: 'attributes.GEOREF'}					
 				],
 				idProperty: 'fid'			
 			})
@@ -775,7 +778,7 @@ Vme.data.extensions ={
 		WFSStore : Ext.extend(Ext.ux.LazyJsonStore,{
 			//combo:this,
 			
-			typeName: FigisMap.fifao.vme,
+			typeName: FigisMap.fifao.vme_cl,
 			reader: new Ext.data.JsonReader({
 				root:'features',
 				idProperty:'id', 

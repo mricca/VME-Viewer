@@ -54,10 +54,10 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
         var vmeId = 103; //selectedRecord.get("vmeId");
         //var geographicFeatureId = selectedRecord.get("geographicFeatureId");
         // vecchi parametri
-        var layerName = FigisMap.fifao.vme.split(':',2)[1];
+        var layerName = FigisMap.fifao.vme_cl.split(':',2)[1];
         var featureid = layerName+'.'+vmeId;
         //nuovi parametri
-        var typename = FigisMap.fifao.vme;
+        var typename = FigisMap.fifao.vme_cl;
         var CQL_FILTER = "VME_AREA_TIME = '"+geographicFeatureId+"'";
 
         Ext.Ajax.request({
@@ -83,7 +83,7 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                         icon: Ext.MessageBox.INFO,
                         scope: this
                     });  
-                }else{      
+                }else{
                     var geoJsonGeom = jsonData.features[0].geometry;
                     var projcode = "EPSG:4326";
                     var GeoJsonFormat = new OpenLayers.Format.GeoJSON();
@@ -102,7 +102,8 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                     var bounds = geom.clone().getBounds();
                     var repro_bbox = repro_geom.getBounds();
                     
-                    myMap.getLayersByName("Area types")[0].setVisibility(false);
+                    // uncomment when work on the line 6 
+                    //myMap.getLayersByName("Area types")[0].setVisibility(false);
                     
                     if(Ext.isIE){
                       myMap.zoomOut(); 
@@ -127,9 +128,13 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                     FigisMap.ol.setSelectedYear(year);
                     //TODO try use slider.updateVme();
 
-                    FigisMap.ol.refreshFilters();
+                    // start refresh legend
+                    var nameRFB = jsonData.features[0].properties.OWNER;
+                    FigisMap.ol.refreshFilters(nameRFB);
+                    // end
                     
-                    myMap.getLayersByName("Area types")[0].setVisibility(true);
+                    // uncomment when work on the line 6
+                    //myMap.getLayersByName("Area types")[0].setVisibility(true);
                     if(!zoom){            
                         if(getProjection() == "4326"){
                             FigisMap.ol.emulatePopupFromGeom(geom);
@@ -295,7 +300,10 @@ Vme.search = function(advanced){
 	if(dIndex > -1){
 		var r = RFMStore.getAt(dIndex);	
 		var rfmName = r.data.acronym;
-		
+        
+        // perform CQL_FILTER
+        FigisMap.ol.refreshFilters(rfmName); 
+        
 		var filter = new OpenLayers.Filter.Comparison({
 			type: OpenLayers.Filter.Comparison.EQUAL_TO,
 			property: FigisMap.rnd.vars.vmeSearchZoomTo.filterProperty,    // "RFB",
@@ -478,25 +486,28 @@ Vme.rfbZoomTo = function(){
 	
 	var RFBCombo = Ext.getCmp("RFBCombo");
 	var RFBStore = RFBCombo.getStore();
-	var value = RFBCombo.getValue();
-	
+	var value = RFBCombo.getValue();    
+                
 	var dIndex = RFBStore.find("id", value);
 	if(dIndex > -1){
 		var r = RFBStore.getAt(dIndex);	
 		var rfbName = r.data.acronym;
 		
+        // perform CQL_FILTER
+        FigisMap.ol.refreshFilters(rfbName);      
+            
 		var filter = new OpenLayers.Filter.Comparison({
 			type: OpenLayers.Filter.Comparison.EQUAL_TO,
-			property: FigisMap.rnd.vars.vmeRFBZoomTo.filterProperty,    // "RFB",
+			property: FigisMap.rnd.vars.vmeSearchZoomTo.filterProperty,    // "RFB",
 			value: rfbName
 		});
 		
 		var protocol = new OpenLayers.Protocol.WFS({
-		   version: FigisMap.rnd.vars.vmeRFBZoomTo.wfsVersion,          // "1.1.0",					
-		   url: FigisMap.rnd.vars.vmeRFBZoomTo.wfsUrl,                  // "http://figisapps.fao.org/figis/geoserverdv/" + "wfs",									   
-		   featureType: FigisMap.rnd.vars.vmeRFBZoomTo.featureType,     // "regulatory_areas",
-		   featurePrefix: FigisMap.rnd.vars.vmeRFBZoomTo.featurePrefix, // "vme",
-		   srsName: FigisMap.rnd.vars.vmeRFBZoomTo.srsName,             // "EPSG:4326",
+		   version: FigisMap.rnd.vars.vmeSearchZoomTo.wfsVersion,          // "1.1.0",					
+		   url: FigisMap.rnd.vars.vmeSearchZoomTo.wfsUrl,                  // "http://figisapps.fao.org/figis/geoserverdv/" + "wfs",									   
+		   featureType: FigisMap.rnd.vars.vmeSearchZoomTo.featureType,     // "regulatory_areas",
+		   featurePrefix: FigisMap.rnd.vars.vmeSearchZoomTo.featurePrefix, // "vme",
+		   srsName: FigisMap.rnd.vars.vmeSearchZoomTo.srsName,             // "EPSG:4326",
 		   defaultFilter: filter
 		});
 
@@ -563,7 +574,7 @@ Vme.rfbZoomTo = function(){
 			//});
 			
 			var repro_geom = bounds.toGeometry().transform(
-				new OpenLayers.Projection(FigisMap.rnd.vars.vmeRFBZoomTo.srsName),
+				new OpenLayers.Projection(FigisMap.rnd.vars.vmeSearchZoomTo.srsName),
 				myMap.getProjectionObject()
 			);
 			
@@ -600,7 +611,17 @@ Vme.rfbZoomTo = function(){
 		var response = protocol.read({
 			callback: callback
 		});	
-	}
+	}else{
+        mask.hide();
+
+        Ext.MessageBox.show({
+            title: "Info",
+            msg: FigisMap.label("ZOOMTO_NO_RES"),
+            buttons: Ext.Msg.OK,
+            icon: Ext.MessageBox.WARNING,
+            scope: this
+        });        
+    }
 };
 
 /** 
@@ -750,10 +771,10 @@ var selectRFB = new Ext.Panel({
         valueField : 'id',
         displayField: 'acronym',
         listeners: {
-            select: function(){
+            select: function(combo, record, index){
                 Vme.rfbZoomTo();
                 sidePanel.layout.setActiveItem('legendPanel');
-                sidePanel.expand();                
+                sidePanel.expand();
             }
         }    
     }]
