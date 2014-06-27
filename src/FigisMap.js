@@ -1032,7 +1032,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
             group: "Overlays",
             label	: 'Gebco Undersea Features',
 			remote		: false,
-            showLegendGraphic: false,	            
+            showLegendGraphic: true,	            
 			skipLegend	: true,
             hidden	: false,
 			hideInSwitcher	: false
@@ -1046,7 +1046,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
             group: "Overlays",
             label	: 'Gebco Isobath 2000',
 			remote		: false,
-            showLegendGraphic: false,	            
+            showLegendGraphic: true,	            
 			skipLegend	: true,
             hidden	: true,
 			hideInSwitcher	: false
@@ -1060,7 +1060,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
             group: "Overlays",
             label	: 'Hydrotermal Vents',
 			remote		: false,
-            showLegendGraphic: false,	            
+            showLegendGraphic: true,	            
 			skipLegend	: true,
             hidden	: true,
 			hideInSwitcher	: false
@@ -1074,7 +1074,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
             group: "Overlays",
             label	: 'Cold Corals 2005',
 			remote		: false,
-            showLegendGraphic: false,	            
+            showLegendGraphic: true,	            
 			skipLegend	: true,
             hidden	: true,
 			hideInSwitcher	: false
