@@ -1032,7 +1032,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
             group: "Overlays",
             label	: 'Gebco Undersea Features',
 			remote		: false,
-            showLegendGraphic: true,	            
+            showLegendGraphic: false,	            
 			skipLegend	: true,
             hidden	: false,
 			hideInSwitcher	: false
