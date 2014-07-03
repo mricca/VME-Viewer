@@ -1,5 +1,47 @@
 var myMap = false;
 
+function resetRFBCheckBox(){
+    var rfbCombo = Ext.getCmp('RFBCombo');
+    rfbCombo.reset();
+    
+    for (var i = 0;i<rfbCombo.panel.items.items.length;i++){
+        for (var c = 0;c<rfbCombo.panel.items.items[i].items.items.length;c++){
+            rfbCombo.panel.items.items[i].items.items[c].checked = false;
+            rfbCombo.panel.items.items[i].items.items[c].el.dom.checked = false;
+        }
+    }
+}      
+
+function getRFBCheckBoxValue(){
+    var rfbCombo = Ext.getCmp('RFBCombo');
+    var rfbValue;
+    for (var i = 0;i<rfbCombo.panel.items.items.length;i++){
+        for (var c = 0;c<rfbCombo.panel.items.items[i].items.items.length;c++){
+            var checkbox = rfbCombo.panel.items.items[i].items.items[c];
+            if(checkbox.checked == true && checkbox.el.dom.checked == true){
+                rfbValue = checkbox.boxLabel;
+            }
+        }
+    }
+    return rfbValue;
+}
+
+function setRFBCheckBoxValue(rfb){
+    var rfbCombo = Ext.getCmp('RFBCombo');
+    //var rfbValue;
+    for (var i = 0;i<rfbCombo.panel.items.items.length;i++){
+        for (var c = 0;c<rfbCombo.panel.items.items[i].items.items.length;c++){
+            var checkbox = rfbCombo.panel.items.items[i].items.items[c];
+            if(checkbox.boxLabel == rfb){
+                checkbox.checked = true;
+                checkbox.el.dom.checked = true;
+                //toggleRfbPanel();
+            }
+        }
+    }
+    //return rfbValue;
+}     
+
 function getProjection(radioObj) {
     var radioObj = document.getElementsByName("srs");
 	if(!radioObj)
@@ -54,8 +96,8 @@ function reset(year){
 	document.getElementById("FilterRFB").value = "";
 	document.getElementById("SelectRFB").value = "";
     
-    var rfbCombo = Ext.getCmp('RFBCombo');
-    rfbCombo.reset();
+    resetRFBCheckBox();
+    closeRfbPanel();
     
 	setProjection('3349');
     closeProjectionPanel();
@@ -95,42 +137,60 @@ function toggleStyle(el, isButton){
 		if(el.className ==  "lblVME figisButton") {
 			toogleWME(false);
 		}else if(el.className ==  "lblFootprints figisButton"){
-			toogleFootprints(false);
+			toogleFootprints(false);            
+		}else if(el.className ==  "lblVMEOther figisButton"){
+			toogleWMEOther(false);
 		}else if(el.className ==  "lblVME figisButtonToggle"){
 			toogleWME(true);
 		}else if(el.className ==  "lblFootprints figisButtonToggle"){
 			toogleFootprints(true);
+		}else if(el.className ==  "lblVMEOther figisButtonToggle"){
+			toogleWMEOther(true);            
 		}
 	}else{
 		if(el.className ==  "lblVME figisButton") {
 			el.className = "lblVME figisButtonToggle";
 		}else if(el.className ==  "lblFootprints figisButton"){
 			el.className = "lblFootprints figisButtonToggle";
+		}else if(el.className ==  "lblVMEOther figisButton"){
+			el.className = "lblVMEOther figisButtonToggle";            
 		}else if(el.className ==  "lblVME figisButtonToggle"){
 			el.className = "lblVME figisButton";
 		}else if(el.className ==  "lblFootprints figisButtonToggle"){
 			el.className = "lblFootprints figisButton";
-		}
+		}else if(el.className ==  "lblVMEOther figisButtonToggle"){
+			el.className = "lblVMEOther figisButton";
+        }
 	}
 }
 	
 /**
 * function toogleWME
 *
-* Enables/Disables 'Area types' layer in LayerSwitcher 
+* Enables/Disables 'VME Closure' layer in LayerSwitcher 
 **/	
 function toogleWME(pressed){
-	var vme = myMap.getLayersByName('Area types')[0];
+	var vme = myMap.getLayersByName('VME Closure')[0];
+	vme.setVisibility(!pressed);
+}
+
+/**
+* function toogleWMEOther
+*
+* Enables/Disables 'Other access regulated areas' layer in LayerSwitcher 
+**/	
+function toogleWMEOther(pressed){
+	var vme = myMap.getLayersByName('Other access regulated areas')[0];
 	vme.setVisibility(!pressed);
 }
 
 /**
 * function toogleFootprints
 *
-* Enables/Disables 'Footprints' layer in LayerSwitcher 
+* Enables/Disables 'Bottom fishing areas' layer in LayerSwitcher 
 **/	
 function toogleFootprints(pressed){
-	var footprint = myMap.getLayersByName('Footprints')[0];
+	var footprint = myMap.getLayersByName('Bottom fishing areas')[0];
 	footprint.setVisibility(!pressed);
 }
 
@@ -147,7 +207,7 @@ function updateVme(){
     
     var acronym;
     
-    var rfbComboTop = Ext.getCmp("RFBCombo").getRawValue();
+    var rfbComboTop = getRFBCheckBoxValue();
     var rfmoComboSearch = Ext.getCmp("RFMOCombo").getRawValue();
 
     if(rfbComboTop == ""){
@@ -246,8 +306,8 @@ function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filte
 	addVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filter);
 
     var acronym;
-    
-    var rfbComboTop = Ext.getCmp("RFBCombo").getRawValue();
+
+    var rfbComboTop = getRFBCheckBoxValue();
     var rfmoComboSearch = Ext.getCmp("RFMOCombo").getRawValue();
 
     if(rfbComboTop == ""){
@@ -269,8 +329,8 @@ function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filte
 **/
 function restoreToggleButtons(){
 	var el = document.getElementById("lblVME");	
-	/*if(el){
-		var vme = myMap.getLayersByName('Area types')[0];
+	if(el){
+		var vme = myMap.getLayersByName('VME Closure')[0];
 		
 		// ///////////////////////////////////////////////
 		// If there are Embed URL params concerning VME 
@@ -288,10 +348,10 @@ function restoreToggleButtons(){
 	
 	el = document.getElementById("lblFootprints");										
     if(el){
-		var footprints = myMap.getLayersByName('Footprints')[0];
+		var footprints = myMap.getLayersByName('Bottom fishing areas')[0];
 			
 		// /////////////////////////////////////////////////////
-		// If there are Embed URL params concerning Footprints 
+		// If there are Embed URL params concerning Bottom fishing areas 
 		// these should be maintained for the status 
 		// (see also FigisMap.finalizeMap).
 		// /////////////////////////////////////////////////////	
@@ -302,7 +362,25 @@ function restoreToggleButtons(){
 		}					
 	
 		//el.className = "lblFootprints figisButton";
-	}*/
+	}
+
+	el = document.getElementById("lblVMEOther");										
+    if(el){
+		var footprints = myMap.getLayersByName('Other access regulated areas')[0];
+			
+		// /////////////////////////////////////////////////////
+		// If there are Embed URL params concerning Bottom fishing areas 
+		// these should be maintained for the status 
+		// (see also FigisMap.finalizeMap).
+		// /////////////////////////////////////////////////////	
+		if(footprints.getVisibility()){
+			el.className = "lblVMEOther figisButtonToggle";
+		}else{
+			el.className = "lblVMEOther figisButton";
+		}					
+	
+		//el.className = "lblFootprints figisButton";
+	}    
 }
 
 /**
@@ -313,7 +391,7 @@ function restoreToggleButtons(){
 *       urlLink -> The id of the url input field of the embed-link (optional if not using the embed link div).
 *       htmlLink -> The id of the html input field of the embed-link (optional if not using the embed link div).
 **/
-function addVME(extent, zoom, projection, elinkDiv, urlLink, htmlLink, filter, center, layers, year) {
+function addVME(extent, zoom, projection, elinkDiv, urlLink, htmlLink, filter, center, layers, year, rfb) {
 	//sets the zoom dropdown to default values when the area selection and the selection of projection change
 	//populateZoomAreaOptions('FilterRFB');
 	
@@ -352,7 +430,9 @@ function addVME(extent, zoom, projection, elinkDiv, urlLink, htmlLink, filter, c
 				}
 			);
 		}
-	
+        if(rfb && rfb != '')
+            FigisMap.ol.refreshFilters(rfb);
+        
 		var l = document.getElementById('legendLegendTitle');
 		if ( l ) l.innerHTML = FigisMap.label( 'Legend', pars );
 		l = document.getElementById('legendMembersTitle');
@@ -439,7 +519,7 @@ function populateZoomAreaOptions(id) {
 function setVMEPage(elinkDiv, urlLink, htmlLink) {
 	// populateRfbOptions('SelectRFB'); TDP: mandatory ?
 	
-	var layers, extent, zoom, prj, center, year;
+	var layers, extent, zoom, prj, center, year, rfb;
 	
 	if ( location.search.indexOf("embed=true") != -1 ){
 		
@@ -456,6 +536,7 @@ function setVMEPage(elinkDiv, urlLink, htmlLink) {
 				case "prj"	: prj = param[1]; break;
 				case "center"	: center = param[1]; break;
 				case "year"	: year = param[1]; break;
+                case "rfb"	: rfb = param[1]; break;
 			}
 		}
 		
@@ -508,7 +589,7 @@ function setVMEPage(elinkDiv, urlLink, htmlLink) {
 	/*
 	* Load the RFB using the request parameters.
 	*/
-	addVME(extent, zoom, prj, elinkDiv, urlLink, htmlLink, null, center, layers, year);
+	addVME(extent, zoom, prj, elinkDiv, urlLink, htmlLink, null, center, layers, year, rfb);
 }
 
 /*
@@ -548,6 +629,12 @@ function setVMEEmbedLink(embedUrl, embedIframe) {
 	center = center.replace(/ /g, '');
 
 	var year = FigisMap.ol.getSelectedYear();
+    
+    var comboRfb = Ext.getCmp("RFBCombo");
+    var rfb;
+    
+    if (comboRfb)
+        rfb = getRFBCheckBoxValue();
 	
 	// ///////////////////////////////////////////////////
 	// Building the request url containing the map status.
@@ -560,7 +647,8 @@ function setVMEEmbedLink(embedUrl, embedIframe) {
 		+ "&zoom=" + zoom
 		+ "&center=" + center
 		+ "&year=" + year
-		+ "&layers=" + visibleLayers.join(";");
+		+ "&layers=" + visibleLayers.join(";")
+        + "&rfb=" + rfb;
 		
 	//baseURL = baseURL.replace(/ /g, '');
 	
@@ -575,7 +663,7 @@ function setVMEEmbedLink(embedUrl, embedIframe) {
 	
 	linkId.setValue(baseURL);
 	
-	var htmlFrame = '<iframe src="' + baseURL.replace(/VMEViewer\//,'VMEViewer/index_e.html') + '" width="800" height="600" frameborder="0" marginheight="0">';
+	var htmlFrame = '<iframe src="' + baseURL.replace(/VME-Viewer\//,'VME-Viewer/index_e.html') + '" width="800" height="600" frameborder="0" marginheight="0">';
 		htmlFrame += "</iframe>";
 		
 	htmlId.setValue(htmlFrame);
@@ -598,6 +686,23 @@ function closeProjectionPanel(){
 	}
 	
 	el = Ext.get('lblSRS');	
+	if(el){
+		el.removeClass('open');
+	}
+}
+
+function toggleRfbPanel(){
+    var el = Ext.get('RFBCombo');
+    el.getHeight()==0 ? el.setHeight(70,true):el.setHeight(0,true);
+    Ext.get('selectionRFB').toggleClass('open');
+}
+function closeRfbPanel(){
+    var el = Ext.get('RFBCombo');
+	if(el){
+		el.setHeight(0,true);
+	}
+	
+	el = Ext.get('selectionRFB');	
 	if(el){
 		el.removeClass('open');
 	}

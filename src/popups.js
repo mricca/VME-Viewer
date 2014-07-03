@@ -48,7 +48,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 					title: 'Features Info',
 					width: 400,
                     panIn:true,
-					height: 240,
+					height: 260,
 					layout: "accordion",
 					map: myMap,
 					location: e.xy,
@@ -91,27 +91,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 		}); 
 		
 	};
-	
-	var buttonsVme = [];
-			
-	if (e.object.layers[0].name == 'Established VME areas' && FigisMap.rnd.status.logged == true){
-		buttonsVme = [
-		  {
-			  iconCls : 'encounters-icon',
-			  text    : 'Encounters',
-			  //enableToggle: true,
-			  //pressed : myMap.getLayersByName('Encounters')[0].visibility,
-			  handler : addEncounters
-		  },{
-			  iconCls : 'surveydata-icon',
-			  text    : 'Survey Data',
-			  //enableToggle: true,
-			  //pressed :myMap.getLayersByName('SurveyData')[0].visibility,
-			  handler : addSurveyData
-		  }
-		];
 
-	}
 	var res = e.text.match(/<body[^>]*>([\s]*)<\/body>/);
 
 	e.object.layers[0].name;
@@ -131,8 +111,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 			  html: e.text,
 			  autoScroll: true,
 			  autoWidth: true,
-			  collapsible: false,
-			  buttons : buttonsVme
+			  collapsible: false
 		  });
 		  popup.opened =true;
 		  popup.doLayout();
@@ -158,6 +137,9 @@ FigisMap.ol.getStore = function(layer){
       return new featureInfoStores.VmeStore();
     case layernames.vme_bfa : 
       return new featureInfoStores.FootprintStore();
+
+    case layernames.vme_regarea : 
+      return new featureInfoStores.RfbStore();
       
     case layernames.vme_en : 
       return new featureInfoStores.EncountersStore();
@@ -181,11 +163,14 @@ FigisMap.ol.getTabTitle=function(layer){
       return "Footprints";*/
 
     case layernames.vme_cl :
-      return "VME Closure measures";
+      return "VME Closure";
     case layernames.vme_oa :
-      return "VME areas with other access regulations";      
+      return "Other access regulated areas";      
     case layernames.vme_bfa : 
-      return "VME measures in bottom fishing areas";
+      return "Bottom fishing areas";
+
+    case layernames.vme_regarea : 
+      return "RFMO Regulatory Areas";
       
     case layernames.vme_en : 
       return "Encounters";
@@ -209,11 +194,14 @@ FigisMap.ol.getTemplate = function(layer){
       return templates.footprints;*/
       
     case layernames.vme_cl :
-      return templates.vme;
+      return templates.vme_cl;
     case layernames.vme_oa :
-      return templates.vme;      
+      return templates.vme_oa;      
     case layernames.vme_bfa : 
       return templates.footprints;      
+
+    case layernames.vme_regarea : 
+      return templates.regarea; 
       
     case layernames.vme_en : 
       return templates.encounters;
@@ -300,7 +288,7 @@ FigisMap.ol.showPopup= function(e,response,layer){
 		//title: 'Features Info',
         border:false,
 		width: 400,
-		height: 225,
+		height: 260,
 		layout: "fit",
 		map: myMap,
 		unpinnable:false,
@@ -310,6 +298,8 @@ FigisMap.ol.showPopup= function(e,response,layer){
 				itemId:'tabPanel',
 				//deferredRender:false,
 				activeTab: 0,
+              tabPosition:'top',
+              enableTabScroll: true,                
 				border:false,
 				layoutOnTabChange:true
 				
@@ -346,7 +336,7 @@ FigisMap.ol.showPopup= function(e,response,layer){
 		  
 	  }else{
       
-          if (name == "VME Closure measures"){
+          if (name == "VME Closure"){
               tp.insert(0,{
                   itemId: name,
                   title: name,

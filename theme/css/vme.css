@@ -14,7 +14,7 @@ body {
 #page {
     z-index: 1;
     width: 960px;
-    height: 910px;
+    height: 880px;
     background-image: none;
     border-width: 1px;
     border-style: solid;
@@ -86,6 +86,69 @@ li {
 	padding: 0;
 }
 */
+
+#selectionRFB{
+    width:100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 0 0;
+    height:13px;
+    font-size: 12px;
+    font-family: asap, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    background-color: rgba(255, 255, 255, 0.6);
+    cursor:pointer;
+    padding-left: 5px;
+    padding-top: 8px;
+    padding-bottom: 5px;
+    padding-right:0px;
+
+}
+
+#selectionRFB{
+    width:100%;
+    color: #FFFFFF;
+    font-family: asap, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    position:relative;
+    background-color: rgba(41, 171, 226, 0.6);
+}
+#selectionRFB:hover{
+    
+    background-color: rgba(41, 171, 226, 0.4);
+}
+#selectionRFB.open{
+    background-color: rgba(41, 171, 226, 0.6);
+}
+
+
+#RFBCombo {
+    background-color: rgba(255, 255, 255, 0.8);
+    height:0px;
+    width:100%;
+    overflow:hidden;
+    font-family:  Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 400;   
+}
+
+#selectRFB .x-panel-body{
+    background-color: rgba(0, 0, 0, 0);   
+}
+
+#selectRFB .x-column{
+    margin-left: 6px;
+}
+#selectRFB .x-form-cb-label{
+    margin-left: 2px;
+    color: #000000;
+    font-family:  Arial, Helvetica, sans-serif;
+    overflow:hidden;
+    font-size: 12px;
+    font-weight: 400;   
+}
+
 /* change projection */
 #lblSRS{
     width:100%;
@@ -113,9 +176,8 @@ li {
     width:191px;
 }*/
 #lblSRS{
-    width:191px;
-
-    ;
+    /*width:191px;*/
+    width:100%;
     color: #FFFFFF;
     font-family: asap, sans-serif;
     font-size: 12px;
@@ -137,7 +199,7 @@ li {
     background-color: rgba(41, 171, 226, 0.4);
     background-color: rgba(255, 255, 255, 0.8);
     height:0px;
-    width:191px;
+    width:100%;
     overflow:hidden;
     font-family:  Arial, Helvetica, sans-serif;
     font-size: 12px;
@@ -153,14 +215,15 @@ li {
 }
 #bottomLeftPanel{
     bottom:65px;
+    width:230px;
     position:absolute;
     z-index:5000;
 }
 
 #bottomRightPanel {
-    height:60px;
-    width:165px;
-    bottom: 6px;
+    height:40px;
+    width:155px;
+    bottom: 45px;
     position: absolute;
     right: 380px;
     z-index: 5000;
@@ -171,7 +234,9 @@ li {
 
 #yearLess{
     width: 42px;
-    height: 60px;
+    height: 40px;
+    position: relative;
+    text-align: left;
     background-image: url('../img/asaparrowleft.png');
     background-repeat:no-repeat;
     background-position: center center;
@@ -179,17 +244,30 @@ li {
 
 #yearLess:hover{
     width: 42px;
-    height: 60px;
+    height: 40px;
+    position: relative;
+    text-align: left;
     background-image: url('../img/asaparrowleft.png');
     background-repeat:no-repeat;
     background-position: center 46%;
 }
 
+#yearsLabel{
+    width: 155px;
+    height: 20px;
+    text-align:center;
+    font-family: asap,sans-serif;
+    font-size: 15px;
+    color:#000000;
+    text-shadow: 1px 2px 2px #FFFFFF;
+}
+
 #yearCurrent{
     width: 69px;
-    height: 60px;
+    height: 40px;
     text-align:center;
-    line-height: 60px;
+    position: relative;    
+    line-height: 40px;
     font-family: asap,sans-serif;
     font-size: 32px;
     font-weight: 400;
@@ -199,9 +277,10 @@ li {
 
 #yearCurrent.ie {
     width: 70px;
-    height: 60px;
+    height: 40px;
+    position: relative;    
     text-align:center;
-    line-height: 60px;
+    line-height: 40px;
     font-family: asap,sans-serif;
     font-size: 30px;
     font-weight: 400;
@@ -214,7 +293,9 @@ li {
 
 #yearMore{
     width: 42px;
-    height: 60px;
+    height: 40px;
+    position: relative;
+    text-align: right;    
     background-image: url('../img/asaparrowright.png');
     background-repeat:no-repeat;
     background-position: center center;
@@ -222,7 +303,9 @@ li {
 
 #yearMore:hover{
     width: 42px;
-    height: 60px;
+    height: 40px;
+    position: relative;
+    text-align: right;     
     background-image: url('../img/asaparrowright.png');
     background-repeat:no-repeat;
     background-position: center 46%;
@@ -317,7 +400,7 @@ li {
     background-color: rgba(41, 171, 226, 0.5);
     background:linear-gradient(to bottom,rgba(41, 171, 226, 0.5) 70%,rgba(41, 171, 226, 0) ); 
 }
-
+/*
 #selectionRFB {
     font-weight:bold;
     display:inline-block;
@@ -328,7 +411,7 @@ li {
 #selectionRFB .x-panel-body {
     background-color: rgba(0, 0, 0, 0);  
 }
-
+*/
 #sidebar .x-panel-body .x-panel-body{
     background: transparent !important;
     font-weight:bold;
@@ -660,7 +743,7 @@ h3 {
 
 .figisButton{
     background-repeat: no-repeat;
-    width:65px;
+    width:170px;
     -moz-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
     -webkit-box-shadow: 0px 3px 3px -1px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
@@ -711,29 +794,37 @@ a.lblReset {
     /*background-image: url(../img/house.png);*/    
 }
 
-#lblReset{
-    position:absolute;
-    top:300px;
-    left:-1px;
-}
-
 #lblVME{
     position:absolute;
     top:200px;
     left:-1px;
 }
 
-#lblFootprints{
+#lblVMEOther{
     position:absolute;
-    top:250px;
+    top:240px;
     left:-1px;
 }
+
+#lblFootprints{
+    position:absolute;
+    top:280px;
+    left:-1px;
+}
+
+#lblReset{
+    position:absolute;
+    top:320px;
+    left:-1px;
+}
+
+
 
 /*---------------------*/
 
 .figisButtonToggle{
     background-repeat: no-repeat;
-    width:65px;
+    width:170px;
     -moz-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
     -webkit-box-shadow: 0px 3px 3px -1px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);

@@ -32,11 +32,13 @@
 	<script type="text/javascript" src="lib/OpenLayers/openlayers-ext/LoadingPanel.js"></script>
 	<script type="text/javascript" src="lib/GeoExt/script/GeoExt.js"></script>
     <script type="text/javascript" src="lib/OpenLayers/openlayers-ext/GlassyPanZoom.js" defer="defer"></script>
+    <script type="text/javascript" src="lib/OpenLayers/openlayers-ext/FigisLayerSwitcher.js" defer="defer"></script>
 
 	<script type="text/javascript" src="src/figis-data.js"></script>
 	<script type="text/javascript" src="src/georeferences.js"></script>
 	<script type="text/javascript" src="src/login.js"></script>	
     <script type="text/javascript" src="src/factsheet.js"></script> 
+    <script type="text/javascript" src="src/infoSourcesLayer.js"></script> 
 	
 	<script type="text/javascript" src="src/FigisMap.js"></script>
     <!-- proxy overriding configuration: allows to use a proxy for test purpose -->
@@ -174,8 +176,7 @@ document.namespaces;
             </div>
         </div>
 
-		<!--div  style="display:none" id="topBar"-->			
-		<div  id="topBar">			
+		<div  style="display:none" id="topBar">			
 			<label id="lblFilRFB" style="visibility:hidden">Zoom to:</label>
 			<select  style="visibility:hidden" id="FilterRFB" onchange="setZoom()"></select>
 			<label style="visibility:hidden" id="lblRFB">Filter by:</label>
@@ -186,7 +187,10 @@ document.namespaces;
 			<input id="command" type="hidden" />
 
 			<input id="opt" type="hidden" />
-			<div id="selectionRFB"></div>
+			
+            
+            <!--div id="selectionRFB" onClick="setVMEEmbedLink('embed-url', 'embed-iframe');"></div-->
+            
 			<!-- li>
 				<label id="lblCQL">Provide CQL Query</label>
 				<input id="txtCql" type="text" />
@@ -205,39 +209,50 @@ document.namespaces;
 		
 		<div style="position:relative" id="main">
 			<div id="map"  class="map"></div>
-            <div  id="bottomLeftPanel">
-                        <div id="lblSRS" onclick="toggleProjectionPanel();">
-                            Change projection
-                        </div>
+                           
+            <div id="bottomLeftPanel">
+            
+                <div id="selectionRFB" onclick="toggleRfbPanel();">
+                    RFB ZoomTo
+                </div> 
+                <div id="RFBCombo_">
+                </div> 
+                
+                <div id="lblSRS" onclick="toggleProjectionPanel();">
+                    Change projection
+                </div>
                 <div id="SelectSRS">
                    <div> 
-                                <p>
-                                    <input id="mercatorRadio" type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3349' checked="checked" />
-                                    <label>Mercator</label>
-                                </p>
+                        <p>
+                            <input id="mercatorRadio" type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3349' checked="checked" />
+                            <label>Mercator</label>
+                        </p>
 
-                                <p>
-                                    <input type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='4326' />
-                                    <label>WGS84</label>
-                                </p>
+                        <p>
+                            <input type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='4326' />
+                            <label>WGS84</label>
+                        </p>
                    </div>
                    <div> 
-                                <p>
-                                    <input type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3031' />
-                                    <label>South Polar</label>
-                                </p>
-								<!-- missing proj4js eck4.js file -->
-								<!-- <option value='54012'>EckertIV (54012)</option> -->
-                                <p>
-                                    <input type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='54009' />
-                                    <label>Mollweide</label>
-                                </p>
+                        <p>
+                            <input type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3031' />
+                            <label>South Polar</label>
+                        </p>
+                        <!-- missing proj4js eck4.js file -->
+                        <!-- <option value='54012'>EckertIV (54012)</option> -->
+                        <p>
+                            <input type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='54009' />
+                            <label>Mollweide</label>
+                        </p>
                    </div> 
                 </div>
                 
             </div>
             <div  id="bottomRightPanel">
-                <div id="yearLess" onClick="FigisMap.ol.decrementYear(); setVMEEmbedLink('embed-url', 'embed-iframe');" unselectable="on"></div>
+                <div id="yearsLabel">
+                    Year Selection:
+                </div>
+                <div id="yearLess" onClick="FigisMap.ol.decrementYear(); setVMEEmbedLink('embed-url', 'embed-iframe');" unselectable="on"></div>               
                 <div id="yearCurrent">
                     2014
                 </div>
@@ -245,9 +260,11 @@ document.namespaces;
             </div>
             <div id="loginContainer" class="figisButton" onclick="FigisMap.logInOut()">Login</div>
 	
-			<div id="lblVME" class="lblVME figisButtonToggle" style="" onclick="toggleStyle(this, true)">VME areas</div>
+			<div id="lblVME" class="lblVME figisButtonToggle" style="" onclick="toggleStyle(this, true)">VME Closures</div>
+            
+            <div id="lblVMEOther" class="lblVMEOther figisButtonToggle" style="" onclick="toggleStyle(this, true)">Other access regulated areas</div>
 			
-			<div id="lblFootprints" class="lblFootprints figisButton" style="" onclick="toggleStyle(this, true)">Footprints</div>			
+			<div id="lblFootprints" class="lblFootprints figisButtonToggle" style="" onclick="toggleStyle(this, true)">Bottom fishing Areas</div>			
 			
 			<div id="lblReset" class="lblReset figisButton" style="" onclick="resetVME()">Reset</div>
 			
@@ -300,7 +317,7 @@ document.namespaces;
 		Ext.onReady(function(){
 			sidePanel.render(document.getElementById('sidebarP'));
             
-            selectRFB.render(document.getElementById('selectionRFB'));
+            selectRFB.render(document.getElementById('RFBCombo_'));
 
 			setVMEPage('embed-link','embed-url', 'embed-iframe');
 			
