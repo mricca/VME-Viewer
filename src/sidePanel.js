@@ -788,6 +788,8 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                         Vme.rfbZoomTo(acronym,value);
                         sidePanel.layout.setActiveItem('legendPanel');
                         sidePanel.expand();
+                        
+                        FigisMap.ol.clearPopupCache();                        
                     }
                 }
             }
@@ -807,7 +809,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
             }
         }
         
-        if ( rfb && rfb != '' && typeof(rfb) != 'undefined'){
+        if ( rfb && rfb != '' && typeof(rfb) != 'undefined' && rfb != 'undefined'){
             setRFBCheckBoxValue(rfb);
         }        
     }

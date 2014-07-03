@@ -743,7 +743,7 @@ h3 {
 
 .figisButton{
     background-repeat: no-repeat;
-    width:170px;
+    width:90px;
     -moz-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
     -webkit-box-shadow: 0px 3px 3px -1px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
@@ -824,7 +824,7 @@ a.lblReset {
 
 .figisButtonToggle{
     background-repeat: no-repeat;
-    width:170px;
+    width:90px;
     -moz-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
     -webkit-box-shadow: 0px 3px 3px -1px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);

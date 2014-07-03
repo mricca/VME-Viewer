@@ -109,7 +109,7 @@ FigisMap.defaults = {
 	layerFilter	: '',
 	layerStyle	: '*',
 	layerStyles	: { distribution : 'all_fao_areas_style', intersecting : '*', associated : '*' },
-	mapCenter : new OpenLayers.LonLat(14, -26),
+	mapCenter : new OpenLayers.LonLat(0,5),
 	mapCenterProjection : 4326
 };
 
@@ -475,7 +475,8 @@ FigisMap.parser.projection = function( p ) {
 		case  54009 : break;
         case 4326:break;
 
-		default		: proj = 900913;
+		//default		: proj = 900913;
+		default		: proj = 4326;
 	}
 	return proj;
 };
@@ -838,14 +839,15 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
                 singleTile: false,
 				style: "MEASURES_VME",
 				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year /*+ (owner ? " AND OWNER ='" + owner +"'" :"") (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")*/ ,
-				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
+				//icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: pars.isFIGIS,
 				type	: 'auto',
 				hideInSwitcher	: false,
                 dispOrder: 2,
 				isMasked: false,
-                infoLayersSources: FigisMap.infoSources.vme_cl
+                infoLayersSources: FigisMap.infoSources.vme_cl,
+                legend_options: "forcelabels:on;forcerule:True;fontSize:12"
 			});
 		}       
 
@@ -860,14 +862,15 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
                 singleTile: false,
 				style: "MEASURES_OTHER",
 				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year /*+ (owner ? " AND OWNER ='" + owner +"'" :"") (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")*/ ,
-				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
+				//icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: pars.isFIGIS,
 				type	: 'auto',
 				hideInSwitcher	: false,
                 dispOrder: 2,
 				isMasked: false,
-                infoLayersSources: FigisMap.infoSources.vme_oa
+                infoLayersSources: FigisMap.infoSources.vme_oa,
+                legend_options: "forcelabels:on;forcerule:True;fontSize:12"
 			});
 		}   
         
@@ -939,14 +942,15 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				style: "MEASURES_BTM_FISH",
 				//filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year /*+ (owner ? " AND OWNER ='" + owner +"'" :"") (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")*/ ,
                 filter	:"YEAR <= '"+ year + "'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'"),
-				icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
+				//icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: false,
 				type	: 'auto',
 				//hideInSwitcher	: false,
                 dispOrder: 1,
 				isMasked: false,
-                infoLayersSources: FigisMap.infoSources.vme_bfa
+                infoLayersSources: FigisMap.infoSources.vme_bfa,
+                legend_options: "forcelabels:on;forcerule:True;fontSize:12"
 			});
 		} 
         
@@ -1593,7 +1597,7 @@ FigisMap.ol.refreshFilters = function (acronym){
 		'CQL_FILTER': (RFBFilter ? "YEAR <= '" + year + "' AND END_YEAR >="+ year+" AND OWNER ='"+acronym+"'" : "YEAR <= '" + year + "' AND END_YEAR >="+ year),
 		'STYLES': (RFBFilter ?  "MEASURES_VME_for_" + acronym : "MEASURES_VME"), 
 		'STYLE': (RFBFilter ?  "MEASURES_VME_for_" + acronym : "MEASURES_VME"),
-        'LEGEND_OPTIONS': "forcelabels:on"
+        'legend_options': "forcelabels:on;forcerule:True;fontSize:12"
 		}
 	);
 	
@@ -1605,7 +1609,7 @@ FigisMap.ol.refreshFilters = function (acronym){
 		'CQL_FILTER': (RFBFilter ? "YEAR <= '" + year + "' AND END_YEAR >="+ year+" AND OWNER ='"+acronym+"'" : "YEAR <= '" + year + "' AND END_YEAR >="+ year),
 		'STYLES': (RFBFilter ?  "MEASURES_OTHER_for_" + acronym : "MEASURES_OTHER"), 
 		'STYLE': (RFBFilter ?  "MEASURES_OTHER_for_" + acronym : "MEASURES_OTHER"),
-        'LEGEND_OPTIONS': "forcelabels:on"
+        'LEGEND_OPTIONS': "forcelabels:on;forcerule:True;fontSize:12"
 		}
 	);
 	
@@ -1636,7 +1640,7 @@ FigisMap.ol.refreshFilters = function (acronym){
 			(RFBFilter ? "YEAR <= '" + year +"'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'") + " AND OWNER ='"+acronym+"'" : "YEAR <= '" + year +"'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")),
             'STYLES': (RFBFilter ?  "MEASURES_BTM_FISH_for_" + acronym: "MEASURES_BTM_FISH"), 
             'STYLE': (RFBFilter ?  "MEASURES_BTM_FISH_for_" + acronym : "MEASURES_BTM_FISH"),
-            'LEGEND_OPTIONS': "forcelabels:on"
+            'LEGEND_OPTIONS': "forcelabels:on;forcerule:True;fontSize:12"
 		}
 	);
 	f.redraw(true);
@@ -1795,7 +1799,7 @@ FigisMap.renderer = function(options) {
 		target = p.target.id;
 		
 		// redefine zoomworld button to zoom to default FigisMap center
-		var figisPanZoom = new GlassyPanZoom({position:new OpenLayers.Pixel(30,30)});
+		var figisPanZoom = new GlassyPanZoom({position:new OpenLayers.Pixel(10,35)});
         if ( FigisMap.defaults.mapCenter ){
             figisPanZoom.onButtonClick = function (evt) {
                 OpenLayers.Control.PanZoom.prototype.onButtonClick.apply(this, arguments);
@@ -1970,6 +1974,7 @@ FigisMap.renderer = function(options) {
 				wp.params.layers = l.layer;
 				if ( l.filter && l.filter != '*' ) wp.params.cql_filter = l.filter;
 				if ( l.rule && l.rule != '*' ) wp.params.rule = l.rule;
+                if ( l.legend_options ) wp.params.legend_options = l.legend_options;
 				
 				
 				wp.options = { wrapDateLine: true, ratio: 1, buffer: 0, singleTile: false, opacity: 1.0};
@@ -2253,9 +2258,10 @@ FigisMap.renderer = function(options) {
 Ext.onReady(function(){
     FigisMap.loginWin.on('login',function(user){
     		FigisMap.ol.refreshAuthorized();    
-    		FigisMap.ol.clearPopupCache();     
-
-		    FigisMap.ol.refreshFilters();
+    		FigisMap.ol.clearPopupCache();  
+            
+            var rfb = getRFBCheckBoxValue();
+		    FigisMap.ol.refreshFilters(rfb);
     });
     
     FigisMap.loginWin.on('logout',function(user){
@@ -2265,7 +2271,8 @@ Ext.onReady(function(){
     		
             FigisMap.ol.refreshAuthorized();
 			
-			FigisMap.ol.refreshFilters();
+            var rfb = getRFBCheckBoxValue();
+			FigisMap.ol.refreshFilters(rfb);
     });
     
 });

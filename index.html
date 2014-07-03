@@ -224,12 +224,12 @@ document.namespaces;
                 <div id="SelectSRS">
                    <div> 
                         <p>
-                            <input id="mercatorRadio" type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3349' checked="checked" />
+                            <input id="mercatorRadio" type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='3349' />
                             <label>Mercator</label>
                         </p>
 
                         <p>
-                            <input type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='4326' />
+                            <input id="WGS84Radio" type="radio" onclick="radioClick(this)" onchange="setVME(null, null, this.value, 'embed-link','embed-url', 'embed-iframe')" name="srs" value='4326' checked="checked" />
                             <label>WGS84</label>
                         </p>
                    </div>
@@ -262,9 +262,9 @@ document.namespaces;
 	
 			<div id="lblVME" class="lblVME figisButtonToggle" style="" onclick="toggleStyle(this, true)">VME Closures</div>
             
-            <div id="lblVMEOther" class="lblVMEOther figisButtonToggle" style="" onclick="toggleStyle(this, true)">Other access regulated areas</div>
+            <div id="lblVMEOther" class="lblVMEOther figisButtonToggle" style="" onclick="toggleStyle(this, true)">Other Areas</div>
 			
-			<div id="lblFootprints" class="lblFootprints figisButtonToggle" style="" onclick="toggleStyle(this, true)">Bottom fishing Areas</div>			
+			<div id="lblFootprints" class="lblFootprints figisButtonToggle" style="" onclick="toggleStyle(this, true)">Bottom Areas</div>			
 			
 			<div id="lblReset" class="lblReset figisButton" style="" onclick="resetVME()">Reset</div>
 			

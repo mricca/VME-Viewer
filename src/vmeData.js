@@ -768,9 +768,10 @@ Vme.data={
 				'<tpl for=".">'+
 					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{rfb}</h3>'+
-						//'<em>Year: </em>{year}<br/> '+
-						//'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
-						//'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						'<em>VME ID: </em>{vme_id}<br/> '+
+						'<em>AREATYPE: </em><span class="own">{area_type}</span><br/>'+
+						'<em>Perimeter: </em><span class="geo_ref" >{SHAPE_LENG}</span> <br/>'+
+                        '<em>Area: </em><span class="geo_ref" >{SHAPE_AREA}</span> <br/>'+
 						//'<br/><br/>'+
 						
 						//'<div>'+
@@ -907,10 +908,16 @@ Vme.data.extensions ={
 				fields: [
 					{name: 'id', mapping: 'fid'},
 					{name: 'geometry', mapping: 'geometry'},
+                    {name: 'rfb',     mapping: 'attributes.RFB'},                    
                     {name: 'vme_id',     mapping: 'attributes.VME_ID'},
-                    {name: 'rfb',     mapping: 'attributes.RFB'},
                     {name: 'area_type',     mapping: 'attributes.AREATYPE'},
+                    {name: 'defrule',     mapping: 'attributes.DEFRULE'},
+                    {name: 'disporder',     mapping: 'attributes.DISPORDER'},
+                    {name: 'fill',     mapping: 'attributes.FILL'},
+                    {name: 'stroke',     mapping: 'attributes.STROKE'},
+                    {name: 'ancfeature',     mapping: 'attributes.ANCFEATURE'},
                     {name: 'SHAPE_AREA', mapping:'attributes.SHAPE_AREA'},
+                    {name: 'SHAPE_LENG', mapping:'attributes.SHAPE_LENG'}
 				],
 				idProperty: 'fid'			
 			})
