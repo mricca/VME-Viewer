@@ -135,6 +135,9 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                     
                     // uncomment when work on the line 6
                     //myMap.getLayersByName("Area types")[0].setVisibility(true);
+                    
+                    FigisMap.ol.clearPopupCache();
+                    
                     if(!zoom){            
                         if(getProjection() == "4326"){
                             FigisMap.ol.emulatePopupFromGeom(geom);
@@ -296,9 +299,7 @@ Vme.search = function(advanced){
 	var RFMStore = RFMOCombo.getStore();
 	var value = RFMOCombo.getValue();
 	
-	var dIndex = RFMStore.find("id", value);
-    
-    FigisMap.ol.clearPopupCache();  
+	var dIndex = RFMStore.find("id", value); 
     
 	if(dIndex > -1){
         var rfbCheckboxValue = Ext.getCmp(value+"_RFB").boxLabel;
