@@ -297,6 +297,9 @@ Vme.search = function(advanced){
 	var value = RFMOCombo.getValue();
 	
 	var dIndex = RFMStore.find("id", value);
+    
+    FigisMap.ol.clearPopupCache();  
+    
 	if(dIndex > -1){
         var rfbCheckboxValue = Ext.getCmp(value+"_RFB").boxLabel;
         setRFBCheckBoxValue(rfbCheckboxValue);
@@ -490,7 +493,9 @@ Vme.rfbZoomTo = function(acronym,value){
     var rfbName = acronym;
     
     // perform CQL_FILTER
-    FigisMap.ol.refreshFilters(rfbName);      
+    FigisMap.ol.refreshFilters(rfbName);
+
+    FigisMap.ol.clearPopupCache();    
         
     var filter = new OpenLayers.Filter.Comparison({
         type: OpenLayers.Filter.Comparison.EQUAL_TO,
@@ -787,9 +792,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                         var value = radio.inputValue;
                         Vme.rfbZoomTo(acronym,value);
                         sidePanel.layout.setActiveItem('legendPanel');
-                        sidePanel.expand();
-                        
-                        FigisMap.ol.clearPopupCache();                        
+                        sidePanel.expand();                        
                     }
                 }
             }
