@@ -109,44 +109,46 @@ FigisMap.defaults = {
 	layerFilter	: '',
 	layerStyle	: '*',
 	layerStyles	: { distribution : 'all_fao_areas_style', intersecting : '*', associated : '*' },
-	mapCenter : new OpenLayers.LonLat(0,5),
+	mapCenter : new OpenLayers.LonLat(14, -26),
 	mapCenterProjection : 4326
 };
 
 FigisMap.useProxy = FigisMap.isDeveloper ? false : ( FigisMap.isTesting ? FigisMap.currentSiteURI.indexOf(':8484') < 1 : ( FigisMap.currentSiteURI.indexOf('http://www.fao.org') != 0 ) );
 
 FigisMap.geoServerAbsBase = FigisMap.isDeveloper ? 'http://192.168.1.122:8484' : ( FigisMap.isTesting ? 'http://193.43.36.238:8484' : 'http://www.fao.org' );
-//FigisMap.geoServerBase = '';
-FigisMap.geoServerBase = 'http://figisapps.fao.org'; //use this for tests
+FigisMap.geoServerBase = "http://figisapps.fao.org";
+FigisMap.geoServerResource = "/figis/geoserverdv";
+FigisMap.httpBaseRoot = "http://figisapps.fao.org/fishery/vme-db/";
 
 
-FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figis/figis-vme/' : '/figis/geoserverdv/figis-vme/' );
+//FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figis/figis-vme/' : '/figis/geoserverdv/figis-vme/' );
 
 FigisMap.rnd.vars = {
-	geoserverURL		: FigisMap.geoServerBase + "/figis/geoserverdv",  //unused
-	geowebcacheURL		: FigisMap.geoServerBase + "/figis/geoserverdv/gwc/service",
-	//logoURL			: FigisMap.httpBaseRoot + "theme/img/FAO_blue_20.png",
-	logoURL			    : 'http://figisapps.fao.org/figis/geoserver/figis-vme/theme/img/FAO_blue_20.png',
+	geoserverURL		: FigisMap.geoServerBase + FigisMap.geoServerResource,  //unused
+	geowebcacheURL		: FigisMap.geoServerBase + FigisMap.geoServerResource + "/gwc/service",
+	logoURL			: FigisMap.httpBaseRoot + "theme/img/FAO_blue_20.png",
 	logoURLFirms		: FigisMap.httpBaseRoot + "theme/img/logoFirms60.gif",
 	FAO_fishing_legendURL	: FigisMap.httpBaseRoot + "theme/img/FAO_fishing_legend.png",
-	//EEZ_legendURL		: FigisMap.httpBaseRoot + "theme/img/EEZ_legend.png",
-	EEZ_legendURL		: "http://figisapps.fao.org/figis/geoserver/figis-vme/theme/img/EEZ_legend.png",
+	EEZ_legendURL		: FigisMap.httpBaseRoot + "theme/img/EEZ_legend.png",
 	VME_legendURL		: FigisMap.httpBaseRoot + "theme/img/VME_legend.png",
 	VME_FP_legendURL	: FigisMap.httpBaseRoot + "theme/img/VME_FP_legend.png",
 	RFB_legendURL		: FigisMap.httpBaseRoot + "theme/img/RFB_legend.png",
-	wms			: FigisMap.geoServerBase + "/figis/geoserverdv" + "/wms",
-	gwc			: FigisMap.geoServerBase + "/figis/geoserverdv/gwc/service" + "/wms",
-	ows			: FigisMap.geoServerBase + "/figis/geoserverdv/ows",
+	wms			: FigisMap.geoServerBase + FigisMap.geoServerResource + "/wms",
+	gwc			: FigisMap.geoServerBase + FigisMap.geoServerResource + "/gwc/service" + "/wms",
+	ows			: FigisMap.geoServerBase + FigisMap.geoServerResource + "/ows",
 	remote:{
-		wms: "http://figisapps.fao.org/figis/geoserverdv/wms",
-		gwc: "http://figisapps.fao.org/figis/geoserverdv/gwc/service/wms"
+		//http://hqldvfigis2:8584/geoserver
+		//wms: "http://figisapps.fao.org/figis/geoserver/wms",
+		//gwc: "http://figisapps.fao.org/figis/geoserver/gwc/service/wms"
+		wms: FigisMap.geoServerBase + FigisMap.geoServerResource + "/wms",
+		gwc: FigisMap.geoServerBase + FigisMap.geoServerResource + "/gwc/service/wms"
 	},
-	Legend_Base_Request	: FigisMap.geoServerBase + "/figis/geoserverdv" + "/wms" + "?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&WIDTH=30&HEIGHT=20",
-	wfs			: FigisMap.geoServerBase + '/figis/geoserverdv/wfs?request=GetFeature&version=1.0.0&typename=',
-	absWfs			: FigisMap.geoServerAbsBase + '/figis/geoserverdv/wfs?request=GetFeature&version=1.0.0&typename=',
+	Legend_Base_Request	: FigisMap.geoServerBase + FigisMap.geoServerResource + "/wms" + "?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&WIDTH=30&HEIGHT=20",
+	wfs			: FigisMap.geoServerBase + FigisMap.geoServerResource + '/wfs?request=GetFeature&version=1.0.0&typename=',
+	absWfs			: FigisMap.geoServerAbsBase + FigisMap.geoServerResource + '/wfs?request=GetFeature&version=1.0.0&typename=',
     // Change after WORKSHOP 2014
 	vmeSearchZoomTo: {
-		wfsUrl: FigisMap.geoServerBase + "/figis/geoserverdv" + "/wfs",
+		wfsUrl: FigisMap.geoServerBase + FigisMap.geoServerResource + "/wfs",
 		wfsVersion: "1.1.0",
 		filterProperty: "RFB",
 	    featureType: "regulatory_areas",
@@ -475,8 +477,8 @@ FigisMap.parser.projection = function( p ) {
 		case  54009 : break;
         case 4326:break;
 
-		//default		: proj = 900913;
-		default		: proj = 4326;
+		default		: proj = 900913;
+		//default		: proj = 4326;
 	}
 	return proj;
 };
@@ -1057,7 +1059,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			type		: 'auto',
 			style		: 'MarineAreasLabelled',
             group: "Overlays",
-            label	: 'Labels',
+            label	: 'Oceans and sea names',
 			remote		: false,
             showLegendGraphic: false,	            
 			skipLegend	: true,

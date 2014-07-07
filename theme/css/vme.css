@@ -221,12 +221,13 @@ li {
 }
 
 #bottomRightPanel {
-    height:40px;
+    height:60px;
     width:155px;
-    bottom: 45px;
+    bottom: 60px;
     position: absolute;
     right: 380px;
     z-index: 5000;
+    background-color: rgba(41, 171, 226, 0.6);
 }
 #bottomRightPanel div {
     float:left;
@@ -256,10 +257,12 @@ li {
     width: 155px;
     height: 20px;
     text-align:center;
-    font-family: asap,sans-serif;
-    font-size: 15px;
-    color:#000000;
-    text-shadow: 1px 2px 2px #FFFFFF;
+    position: relative; 
+    font-size: 12px;
+    font-family: asap, sans-serif;
+    font-style: normal;    
+    text-shadow: 1px 2px 2px #101010;
+    color:#FFFFFF;
 }
 
 #yearCurrent{

@@ -99,8 +99,8 @@ function reset(year){
     resetRFBCheckBox();
     closeRfbPanel();
     
-	//setProjection('3349');
-    setProjection('4326');
+	setProjection('3349');
+    //setProjection('4326');
     closeProjectionPanel();
 	FigisMap.ol.clearPopupCache();
 	setVMEPage('embed-link','embed-url', 'embed-iframe');
@@ -406,7 +406,7 @@ function addVME(extent, zoom, projection, elinkDiv, urlLink, htmlLink, filter, c
 		context		: 'rfbViewer',
 		legend		: 'legend',
 		projection	: projection,
-		center : center ? center : new OpenLayers.LonLat(0,5)
+		center : center ? center : new OpenLayers.LonLat(14, -26)
 	};
     
     if ( zoom != null ) pars.zoom = zoom;
@@ -580,11 +580,11 @@ function setVMEPage(elinkDiv, urlLink, htmlLink) {
 		FigisMap.ol.setSelectedYear(new Date().getFullYear());
 		
 		// //////////////////////////////////////////////////
-		// WGS84 Radio Button checked as default.
+		// Mercator Radio Button checked as default.
 		// //////////////////////////////////////////////////
 		
-		var WGS84Radio = document.getElementById("WGS84Radio");
-		WGS84Radio.checked = true;
+		var mercatorRadio = document.getElementById("mercatorRadio");
+		mercatorRadio.checked = true;
         
 	}
 	
