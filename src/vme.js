@@ -19,7 +19,7 @@ function getRFBCheckBoxValue(){
         for (var c = 0;c<rfbCombo.panel.items.items[i].items.items.length;c++){
             var checkbox = rfbCombo.panel.items.items[i].items.items[c];
             if(checkbox.checked == true && checkbox.el.dom.checked == true){
-                rfbValue = checkbox.boxLabel;
+                rfbValue = checkbox.acronym;
             }
         }
     }
@@ -32,7 +32,7 @@ function setRFBCheckBoxValue(rfb){
     for (var i = 0;i<rfbCombo.panel.items.items.length;i++){
         for (var c = 0;c<rfbCombo.panel.items.items[i].items.items.length;c++){
             var checkbox = rfbCombo.panel.items.items[i].items.items[c];
-            if(checkbox.boxLabel == rfb){
+            if(checkbox.acronym == rfb){
                 checkbox.checked = true;
                 checkbox.el.dom.checked = true;
                 //toggleRfbPanel();
@@ -696,7 +696,7 @@ function closeProjectionPanel(){
 
 function toggleRfbPanel(){
     var el = Ext.get('RFBCombo');
-    el.getHeight()==0 ? el.setHeight(70,true):el.setHeight(0,true);
+    el.getHeight()==0 ? el.setHeight(80,true):el.setHeight(0,true);
     Ext.get('selectionRFB').toggleClass('open');
 }
 function closeRfbPanel(){

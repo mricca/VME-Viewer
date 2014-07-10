@@ -65,9 +65,19 @@ FigisMap.fifao = {
 	
 }; 
 
+FigisMap.infoRFBSources = {
+    CCAMLR : "http://figisapps.fao.org/",
+    GFCM   : "http://figisapps.fao.org/",
+    NAFO   : "http://figisapps.fao.org/",
+    NEAFC  : "http://figisapps.fao.org/",
+    SEAFO  : "http://figisapps.fao.org/",
+    WECAFC : "http://figisapps.fao.org/",
+    SPRFMO : "http://figisapps.fao.org/"
+}
+
 FigisMap.infoGroupsSources = {
-    vme      : "http://figisapps.fao.org/",
-    overlays : "http://figisapps.fao.org/"
+    vme      : "http://localhost:8080/VME-Viewer/index_vme.html",
+    overlays : "http://localhost:8080/VME-Viewer/index_ovl.html"
 }
 
 FigisMap.infoSources = {
@@ -2060,8 +2070,14 @@ FigisMap.renderer = function(options) {
 		}
 			// handlig the zoom/center/extent
 		if ( projection == 4326 ) {
-            var graticule = new OpenLayers.Control.Graticule({visible: false, layerName: FigisMap.label('Coordinates Grid', p), group: "Overlays"});
+            var graticule = new OpenLayers.Control.Graticule({visible: false, layerName: FigisMap.label('Coordinates Grid', p)});
             myMap.addControl(graticule);
+            graticule.gratLayer.group = "Overlays";
+            graticule.gratLayer.infoGroupsSources = FigisMap.infoGroupsSources.overlays;
+            var layersLength = layers.length - 1;
+            myMap.raiseLayer(myMap.getLayersByName("Coordinates Grid")[0], -layersLength);
+            var bbb = myMap.getLayersByName("UN_CONTINENT2")[0];
+            myMap.raiseLayer(myMap.getLayersByName("UN_CONTINENT2")[0], -layersLength);
         }
 		FigisMap.debug('myMap:', myMap );
 		//OpenLayers.Util.getElement()

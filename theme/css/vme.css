@@ -149,6 +149,12 @@ li {
     font-weight: 400;   
 }
 
+#infoRFBimage img{
+    margin-bottom: 1px;
+    padding-bottom: 1px;
+    vertical-align: bottom;
+}
+
 /* change projection */
 #lblSRS{
     width:100%;
@@ -215,7 +221,7 @@ li {
 }
 #bottomLeftPanel{
     bottom:65px;
-    width:240px;
+    width:300px;
     position:absolute;
     z-index:5000;
 }
@@ -801,7 +807,7 @@ h3 {
     font-weight: 400;
     font-style: normal;
     background-color: #57BCE6; 
-    background-color: rgba(228, 69, 56, 0.4);
+    background-color: rgba(41, 171, 226, 0.5);
     z-index:1050;
 }
 
@@ -831,7 +837,7 @@ h3 {
     font-weight: 400;
     font-style: normal;
     background-color: #57BCE6; 
-    background-color: rgba(214, 164, 35, 0.4);
+    background-color: rgba(41, 171, 226, 0.5);
     z-index:1050;
 }
 
@@ -861,7 +867,7 @@ h3 {
     font-weight: 400;
     font-style: normal;
     background-color: #57BCE6; 
-    background-color: rgba(80, 219, 80, 0.4);
+    background-color: rgba(41, 171, 226, 0.5);
     z-index:1050;
 }
 
@@ -891,7 +897,7 @@ h3 {
     font-weight: 400;
     font-style: normal;
     background-color: #57BCE6; 
-    background-color: rgba(228, 69, 56, 1.0);
+    background-color: rgba(228, 69, 56, 0.8);
     z-index:1050;
 }
 
@@ -921,7 +927,7 @@ h3 {
     font-weight: 400;
     font-style: normal;
     background-color: #57BCE6; 
-    background-color: rgba(214, 164, 35, 1.0);
+    background-color: rgba(214, 164, 35, 0.8);
     z-index:1050;
 }
 
@@ -951,7 +957,7 @@ h3 {
     font-weight: 400;
     font-style: normal;
     background-color: #57BCE6; 
-    background-color: rgba(80, 219, 80, 1.0);
+    background-color: rgba(80, 219, 80, 0.8);
     z-index:1050;
 }
 
@@ -1209,3 +1215,9 @@ div.olControlMousePosition.olControlNoSelect {
     font-size:xx-small;                                                                                                               
     width:150px;                                                                                                                      
 }  
+
+.pippo.olControlNoSelect{
+    margin-left: 50px;
+    padding-left: 50px;
+    font-size:xx-small;
+}

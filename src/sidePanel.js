@@ -302,7 +302,7 @@ Vme.search = function(advanced){
 	var dIndex = RFMStore.find("id", value); 
     
 	if(dIndex > -1){
-        var rfbCheckboxValue = Ext.getCmp(value+"_RFB").boxLabel;
+        var rfbCheckboxValue = Ext.getCmp(value+"_RFB").acronym;
         setRFBCheckBoxValue(rfbCheckboxValue);
         
 		var r = RFMStore.getAt(dIndex);	
@@ -394,7 +394,9 @@ Vme.search = function(advanced){
 				}
 			}
 			
+            // WORKOROUND TO FIX STRANGE BEHAVIOR WHEN XMAX = 90 IN COORDINATE TRANSFORMATION TO GOOGLE MERCATOR
             top = top == 90 ? 80 : top
+            
 			bounds = new OpenLayers.Bounds(left, bottom, right, top);
 			
 			//var test = new OpenLayers.Layer.Vector("test", {
@@ -594,7 +596,9 @@ Vme.rfbZoomTo = function(acronym,value){
             }
         }
         
+        // WORKOROUND TO FIX STRANGE BEHAVIOR WHEN XMAX = 90 IN COORDINATE TRANSFORMATION TO GOOGLE MERCATOR
         top = top == 90 ? 80 : top
+        
         bounds = new OpenLayers.Bounds(left, bottom, right, top);
         
         //var test = new OpenLayers.Layer.Vector("test", {
@@ -767,7 +771,6 @@ var selectRFB = new Ext.Panel({
     name: 'selectRFB',
 	border: false,
 	labelAlign :'left',
-    width: 'auto', 
 	defaults: {
 	    anchor:'100%',
         shadow:false
@@ -802,23 +805,27 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
     store.each(function(records,count,tot) {
         var column;
         if(count==0 || count<3){
-            column = Ext.getCmp("RFBCombo").panel.getComponent(0);  
+            column = Ext.getCmp("RFBCombo").panel.getComponent(0);
+            column.setWidth(90);
         }else if(count==3 || count<6){
             column = Ext.getCmp("RFBCombo").panel.getComponent(1);  
+            column.setWidth(90);
         }else{
             column = Ext.getCmp("RFBCombo").panel.getComponent(2);  
+            column.setWidth(90);
         }
         var radio = column.add(Ext.apply({
             xtype: 'radio',
-            inputType:'radio',
-            id: records.data.id + "_RFB",
-            boxLabel: records.data.acronym, 
-            name: 'rfb', 
+            width: 'auto',
+            id: records.data.id + '_RFB',
+            boxLabel: '<a id="infoRFBimage" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+FigisMap.infoRFBSources[records.data.acronym]+'\');"><img title = "Source of Information" src="theme/img/icons/information.png"> </a>' + records.data.acronym,
+            name: 'rfb',
+            acronym: records.data.acronym,
             inputValue: records.data.id,
             listeners: {
                 check: function(radio, checked){
                     if(checked){
-                        var acronym = radio.boxLabel;
+                        var acronym = radio.acronym;
                         var value = radio.inputValue;
                         Vme.rfbZoomTo(acronym,value);
                         sidePanel.layout.setActiveItem('legendPanel');
@@ -846,5 +853,5 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
             setRFBCheckBoxValue(rfb);
         }        
     }
-    
+
 });
