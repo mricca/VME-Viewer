@@ -135,32 +135,32 @@ function reset(year){
 **/
 function toggleStyle(el, isButton){
 	if(isButton){
-		if(el.className ==  "lblVME figisButton") {
+		if(el.className ==  "lblVME figisButtonVME") {
 			toogleWME(false);
-		}else if(el.className ==  "lblFootprints figisButton"){
+		}else if(el.className ==  "lblFootprints figisButtonBOTTOM"){
 			toogleFootprints(false);            
-		}else if(el.className ==  "lblVMEOther figisButton"){
+		}else if(el.className ==  "lblVMEOther figisButtonOTHER"){
 			toogleWMEOther(false);
-		}else if(el.className ==  "lblVME figisButtonToggle"){
+		}else if(el.className ==  "lblVME figisButtonToggleVME"){
 			toogleWME(true);
-		}else if(el.className ==  "lblFootprints figisButtonToggle"){
+		}else if(el.className ==  "lblFootprints figisButtonToggleBOTTOM"){
 			toogleFootprints(true);
-		}else if(el.className ==  "lblVMEOther figisButtonToggle"){
+		}else if(el.className ==  "lblVMEOther figisButtonToggleOTHER"){
 			toogleWMEOther(true);            
 		}
 	}else{
-		if(el.className ==  "lblVME figisButton") {
-			el.className = "lblVME figisButtonToggle";
-		}else if(el.className ==  "lblFootprints figisButton"){
-			el.className = "lblFootprints figisButtonToggle";
-		}else if(el.className ==  "lblVMEOther figisButton"){
-			el.className = "lblVMEOther figisButtonToggle";            
-		}else if(el.className ==  "lblVME figisButtonToggle"){
-			el.className = "lblVME figisButton";
-		}else if(el.className ==  "lblFootprints figisButtonToggle"){
-			el.className = "lblFootprints figisButton";
-		}else if(el.className ==  "lblVMEOther figisButtonToggle"){
-			el.className = "lblVMEOther figisButton";
+		if(el.className ==  "lblVME figisButtonVME") {
+			el.className = "lblVME figisButtonToggleVME";
+		}else if(el.className ==  "lblFootprints figisButtonBOTTOM"){
+			el.className = "lblFootprints figisButtonToggleBOTTOM";
+		}else if(el.className ==  "lblVMEOther figisButtonOTHER"){
+			el.className = "lblVMEOther figisButtonToggleOTHER";            
+		}else if(el.className ==  "lblVME figisButtonToggleVME"){
+			el.className = "lblVME figisButtonVME";
+		}else if(el.className ==  "lblFootprints figisButtonToggleBOTTOM"){
+			el.className = "lblFootprints figisButtonBOTTOM";
+		}else if(el.className ==  "lblVMEOther figisButtonToggleOTHER"){
+			el.className = "lblVMEOther figisButtonOTHER";
         }
 	}
 }
@@ -247,7 +247,8 @@ function zoomTo(settings,geom,zoom) {
 	if (settings != null){
 		var bbox = geom ? geom : OpenLayers.Bounds.fromString(settings.zoomExtent,false);
 		var curr_proj = myMap.getProjection();
-		var bboxproj = settings.srs || "EPSG:4326";
+		//var bboxproj = settings.srs || "EPSG:4326";
+		var bboxproj = settings.srs || "EPSG:3349";
 		
 		//check 
 		var projcode = curr_proj.split(":")[1];
@@ -268,10 +269,10 @@ function zoomTo(settings,geom,zoom) {
 			}
 		}else{
 			var newproj = bboxproj.split(":")[1];
-			
+                
 			bbox = bbox.clone().transform(
 				new OpenLayers.Projection(curr_proj),
-				new OpenLayers.Projection(bboxproj)
+				new OpenLayers.Projection(bboxproj == "EPSG:3349" ? bboxproj = "EPSG:900913" : bboxproj = bboxproj)
 			);	
 			
 			setVME(bbox, null, newproj, 'embed-link','embed-url', 'embed-iframe');
@@ -339,9 +340,9 @@ function restoreToggleButtons(){
 		// (see also FigisMap.finalizeMap).
 		// ///////////////////////////////////////////////
 		if(vme.getVisibility()){
-			el.className = "lblVME figisButtonToggle";
+			el.className = "lblVME figisButtonToggleVME";
 		}else{
-			el.className = "lblVME figisButton";
+			el.className = "lblVME figisButtonVME";
 		}							
 
 		//el.className = "lblVME figisButtonToggle";
@@ -357,9 +358,9 @@ function restoreToggleButtons(){
 		// (see also FigisMap.finalizeMap).
 		// /////////////////////////////////////////////////////	
 		if(footprints.getVisibility()){
-			el.className = "lblFootprints figisButtonToggle";
+			el.className = "lblFootprints figisButtonToggleBOTTOM";
 		}else{
-			el.className = "lblFootprints figisButton";
+			el.className = "lblFootprints figisButtonBOTTOM";
 		}					
 	
 		//el.className = "lblFootprints figisButton";
@@ -375,9 +376,9 @@ function restoreToggleButtons(){
 		// (see also FigisMap.finalizeMap).
 		// /////////////////////////////////////////////////////	
 		if(footprints.getVisibility()){
-			el.className = "lblVMEOther figisButtonToggle";
+			el.className = "lblVMEOther figisButtonToggleOTHER";
 		}else{
-			el.className = "lblVMEOther figisButton";
+			el.className = "lblVMEOther figisButtonOTHER";
 		}					
 	
 		//el.className = "lblFootprints figisButton";

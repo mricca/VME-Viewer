@@ -65,6 +65,11 @@ FigisMap.fifao = {
 	
 }; 
 
+FigisMap.infoGroupsSources = {
+    vme      : "http://figisapps.fao.org/",
+    overlays : "http://figisapps.fao.org/"
+}
+
 FigisMap.infoSources = {
 	cbs : "http://figisapps.fao.org/", //'fifao:country_bounds',
 	cnt : "http://figisapps.fao.org/", //'fifao:UN_CONTINENT2',
@@ -848,7 +853,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hideInSwitcher	: false,
                 dispOrder: 2,
 				isMasked: false,
-                infoLayersSources: FigisMap.infoSources.vme_cl,
+                infoGroupsSources: FigisMap.infoGroupsSources.vme,
                 legend_options: "forcelabels:on;forcerule:True;fontSize:12"
 			});
 		}       
@@ -871,7 +876,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hideInSwitcher	: false,
                 dispOrder: 2,
 				isMasked: false,
-                infoLayersSources: FigisMap.infoSources.vme_oa,
+                infoGroupsSources: FigisMap.infoGroupsSources.vme,
                 legend_options: "forcelabels:on;forcerule:True;fontSize:12"
 			});
 		}   
@@ -951,7 +956,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				//hideInSwitcher	: false,
                 dispOrder: 1,
 				isMasked: false,
-                infoLayersSources: FigisMap.infoSources.vme_bfa,
+                infoGroupsSources: FigisMap.infoGroupsSources.vme,
                 legend_options: "forcelabels:on;forcerule:True;fontSize:12"
 			});
 		} 
@@ -1017,7 +1022,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				icon	:'<img src="'+FigisMap.rnd.vars.FAO_fishing_legendURL+'" width="30" height="20" />',
                 hidden	: true,
 				type	:'auto',
-                infoLayersSources: FigisMap.infoSources.maj
+                infoGroupsSources: FigisMap.infoGroupsSources.overlays
 			} );
 		}       
 		//WMS 200 nautical miles arcs
@@ -1035,7 +1040,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hidden	: true,
 				remote  : false,
 				type	: 'auto',
-                infoLayersSources: FigisMap.infoSources.nma
+                infoGroupsSources: FigisMap.infoGroupsSources.overlays
 			});
 		}        
 	}
@@ -1064,7 +1069,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
             showLegendGraphic: false,	            
 			skipLegend	: true,
 			hideInSwitcher	: false,
-                infoLayersSources: FigisMap.infoSources.mal
+                infoGroupsSources: FigisMap.infoGroupsSources.overlays
 		} );
     layers.push( {
 			layer		: FigisMap.fifao.guf,
@@ -1079,7 +1084,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			skipLegend	: true,
             hidden	: false,
 			hideInSwitcher	: false,
-            infoLayersSources: FigisMap.infoSources.guf
+                infoGroupsSources: FigisMap.infoGroupsSources.overlays
 		} );
     layers.push( {
 			layer		: FigisMap.fifao.gbi,
@@ -1094,7 +1099,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			skipLegend	: true,
             hidden	: true,
 			hideInSwitcher	: false,
-            infoLayersSources: FigisMap.infoSources.gbi
+                infoGroupsSources: FigisMap.infoGroupsSources.overlays
 		} );        
     layers.push( {
 			layer		: FigisMap.fifao.vnt,
@@ -1109,7 +1114,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			skipLegend	: true,
             hidden	: true,
 			hideInSwitcher	: false,
-            infoLayersSources: FigisMap.infoSources.vnt
+                infoGroupsSources: FigisMap.infoGroupsSources.overlays
 		} );   
     layers.push( {
 			layer		: FigisMap.fifao.ccr,
@@ -1124,7 +1129,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			skipLegend	: true,
             hidden	: true,
 			hideInSwitcher	: false,
-            infoLayersSources: FigisMap.infoSources.ccr
+                infoGroupsSources: FigisMap.infoGroupsSources.overlays
 		} );         
     layers.push( {
 			layer		: FigisMap.fifao.vme_regarea,
@@ -1141,7 +1146,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			hideInSwitcher	: false,
             dispOrder: 3,
             isMasked: false,
-            infoLayersSources: FigisMap.infoSources.vme_regarea
+                infoGroupsSources: FigisMap.infoGroupsSources.overlays
 		} );        
 	return layers;
 };
@@ -1982,6 +1987,7 @@ FigisMap.renderer = function(options) {
 				wp.options = { wrapDateLine: true, ratio: 1, buffer: 0, singleTile: false, opacity: 1.0};
                 if ( l.showLegendGraphic ) wp.options.showLegendGraphic = true;
                 if ( l.infoLayersSources ) wp.options.infoLayersSources = l.infoLayersSources;
+                if ( l.infoGroupsSources ) wp.options.infoGroupsSources = l.infoGroupsSources;
                 if ( l.group ) wp.options.group = l.group;
 				if ( l.hideInSwitcher ) wp.options.displayInLayerSwitcher = false;
 				if ( l.opacity ) wp.options.opacity = l.opacity;
@@ -2009,9 +2015,11 @@ FigisMap.renderer = function(options) {
 			
 			//if (l.wms.name == 'Area types' || l.wms.name == 'Footprints'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
 			//if (l.wms.name == 'VME Closure' || l.wms.name == 'Other access regulated areas' || l.wms.name == 'Bottom fishing areas'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
-			if (l.wms.name == 'VME Closure' || l.wms.name == 'Other access regulated areas' || l.wms.name == 'Bottom fishing areas' || l.wms.name == 'RFMO Regulatory Areas'){
+			//if (l.wms.name == 'VME Closure' || l.wms.name == 'Other access regulated areas' || l.wms.name == 'Bottom fishing areas' || l.wms.name == 'RFMO Regulatory Areas'){
+            if (l.wms.name == 'VME Closure' || l.wms.name == 'Other access regulated areas' || l.wms.name == 'Bottom fishing areas'){
 				vme.push(olLayers[i]);
 			}
+
 
 			l.inMap = true;
 		}
@@ -2020,7 +2028,8 @@ FigisMap.renderer = function(options) {
 		
 
 		var controls = FigisMap.ol.createPopupControl(vme);		
-    myMap.addControls(controls);                    
+        myMap.addControls(controls);        
+        
 		
 		FigisMap.debug( 'FigisMap.renderer layers array, after filling map:', layers );
 		
@@ -2050,7 +2059,10 @@ FigisMap.renderer = function(options) {
 			autoZoom( layers );
 		}
 			// handlig the zoom/center/extent
-		if ( projection == 4326 ) myMap.addControl( new OpenLayers.Control.Graticule({ visible: false, layerName: FigisMap.label('Coordinates Grid', p), group: "Overlays" }) );
+		if ( projection == 4326 ) {
+            var graticule = new OpenLayers.Control.Graticule({visible: false, layerName: FigisMap.label('Coordinates Grid', p), group: "Overlays"});
+            myMap.addControl(graticule);
+        }
 		FigisMap.debug('myMap:', myMap );
 		//OpenLayers.Util.getElement()
 		//Ext.get("id_box").insertBefore(Ext.get("zoom_selector"));  
@@ -2091,23 +2103,23 @@ FigisMap.renderer = function(options) {
 					if(layerName == "VME Closure"){
 						el = document.getElementById("lblVME");	
 						if(layer.getVisibility()){
-							el.className = "lblVME figisButtonToggle";
+							el.className = "lblVME figisButtonToggleVME";
 						}else{
-							el.className = "lblVME figisButton";
+							el.className = "lblVME figisButtonVME";
 						}							
 					}else if(layerName == "Bottom fishing areas"){
 						el = document.getElementById("lblFootprints");				
 						if(layer.getVisibility()){
-							el.className = "lblFootprints figisButtonToggle";
+							el.className = "lblFootprints figisButtonToggleBOTTOM";
 						}else{
-							el.className = "lblFootprints figisButton";
+							el.className = "lblFootprints figisButtonBOTTOM";
 						}					
 					}else if(layerName == "Other access regulated areas"){
 						el = document.getElementById("lblVMEOther");				
 						if(layer.getVisibility()){
-							el.className = "lblVMEOther figisButtonToggle";
+							el.className = "lblVMEOther figisButtonToggleOTHER";
 						}else{
-							el.className = "lblVMEOther figisButton";
+							el.className = "lblVMEOther figisButtonOTHER";
 						}					
 					}					
 				}
@@ -2115,7 +2127,7 @@ FigisMap.renderer = function(options) {
 		}
 		
 		myMap.addLayers( olLayers );
-		
+        
 		if ( FigisMap.isDeveloper || FigisMap.isTesting ) {
 			myMap.events.register(
 				'moveend',

@@ -197,7 +197,7 @@ var staticLabels = {
 	'200 NMI ARCS'		: '200 nmi arcs',
 	'FAO FISHING AREAS'	: { en:'FAO fishing areas', fr:'Zones de pêche de la FAO'},
 	'ALL FAO AREAS'		: { en:'FAO areas and their sub-divisions' },
-	'COORDINATES GRID'	: { en:'Coordinates grid' },
+	'COORDINATES GRID'	: { en:'Coordinates Grid' },
 	FAO_DIV			: { en:'FAO divisions'},
 	FAO_MAJOR		: { en:'FAO major fishing areas', fr:'Principales zones de pêche de la FAO'},
 	FAO_SUB_AREA		: { en:'FAO sub areas'},

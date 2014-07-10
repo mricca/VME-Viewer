@@ -767,23 +767,25 @@ Vme.data={
 			new Ext.XTemplate(
 				'<tpl for=".">'+
 					'<div class="popup-result" style="text-align:left;">' +
-						'<h3>{rfb}</h3>'+
-						'<em>VME ID: </em>{vme_id}<br/> '+
-						'<em>AREATYPE: </em><span class="own">{area_type}</span><br/>'+
+						'<h3>Name: {rfb}</h3>'+
+						//'<em>NAME: </em>{rfb}<br/> '+
+						//'<em>AREATYPE: </em><span class="own">{area_type}</span><br/>'+
 						'<em>Perimeter: </em><span class="geo_ref" >{SHAPE_LENG}</span> <br/>'+
                         '<em>Area: </em><span class="geo_ref" >{SHAPE_AREA}</span> <br/>'+
 						//'<br/><br/>'+
 						
-						//'<div>'+
-						//'<div style="text-align:right;">' +
+						'<div>'+
+						'<div style="text-align:right;">' +
 							//'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							//'<a class="" onClick="'+
 							//	'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
                             //    'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+   
 							//	'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							//'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
-						//'</div>'+
-						//'</div>'+
+                            //'&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +                            
+                            '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="alert(\'{rfb}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +                            
+						'</div>'+
+						'</div>'+
 					'</div>'+
 				'</tpl>',
 				{
@@ -818,7 +820,19 @@ Vme.data={
 							Vme.utils.generateVMEFilter([values.vme_id]),
 							"shape-zip"
 						);
-					}					
+					},
+                    /**
+                     * Returns the link to the factsheet
+                     */
+                    getFactsheetUrl: function(values){
+
+                        if(values.factsheetUrl){
+                            return(values.factsheetUrl);
+                        }else
+                        {
+                            return("fishery/vme/10/en");
+                        }
+                    }					
 				}
 			)
 	},

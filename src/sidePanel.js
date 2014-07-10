@@ -347,16 +347,28 @@ Vme.search = function(advanced){
 			// Get the bigger extent
 			// ///////////////////////////			
 			
-			var size = features.length;
-			var bounds = features[0].bounds;
+            //CHECK IF AREATYPE IS 1 OR 2 FOR NAFO AND NEAFC    
+            var areaType1 = new Array();
+            var areaType2 = new Array();
+            
+            for (var i = 0;i<features.length;i++){
+                if (features[i].attributes.AREATYPE == 1){
+                    areaType1.push({bounds:features[i].bounds})
+                }else if(features[i].attributes.AREATYPE == 2){
+                    areaType2.push({bounds:features[i].bounds})
+                }
+            }
+
+			var size = areaType2.length == 0 ? areaType1.length : areaType2.length;
+			var bounds = areaType2.length == 0 ? areaType1[0].bounds : areaType2[0].bounds;
 			
 			var bottom = bounds.bottom;
 			var left = bounds.left;
 			var right = bounds.right;
 		    var top = bounds.top;
 			
-			for(var i=1; i<size; i++){
-				var b = features[i].bounds;
+			for(var i=0; i<size; i++){
+				var b = areaType2.length == 0 ? areaType1[i].bounds : areaType2[i].bounds;
 				if(!b){
 					continue;
 				}
@@ -382,6 +394,7 @@ Vme.search = function(advanced){
 				}
 			}
 			
+            top = top == 90 ? 80 : top
 			bounds = new OpenLayers.Bounds(left, bottom, right, top);
 			
 			//var test = new OpenLayers.Layer.Vector("test", {
@@ -534,16 +547,28 @@ Vme.rfbZoomTo = function(acronym,value){
         // Get the bigger extent
         // ///////////////////////////			
         
-        var size = features.length;
-        var bounds = features[0].bounds;
+        //CHECK IF AREATYPE IS 1 OR 2 FOR NAFO AND NEAFC    
+        var areaType1 = new Array();
+        var areaType2 = new Array();
+        
+        for (var i = 0;i<features.length;i++){
+            if (features[i].attributes.AREATYPE == 1){
+                areaType1.push({bounds:features[i].bounds})
+            }else if(features[i].attributes.AREATYPE == 2){
+                areaType2.push({bounds:features[i].bounds})
+            }
+        }
+
+        var size = areaType2.length == 0 ? areaType1.length : areaType2.length;
+        var bounds = areaType2.length == 0 ? areaType1[0].bounds : areaType2[0].bounds;
         
         var bottom = bounds.bottom;
         var left = bounds.left;
         var right = bounds.right;
         var top = bounds.top;
         
-        for(var i=1; i<size; i++){
-            var b = features[i].bounds;
+        for(var i=0; i<size; i++){
+            var b = areaType2.length == 0 ? areaType1[i].bounds : areaType2[i].bounds;
             if(!b){
                 continue;
             }
@@ -569,6 +594,7 @@ Vme.rfbZoomTo = function(acronym,value){
             }
         }
         
+        top = top == 90 ? 80 : top
         bounds = new OpenLayers.Bounds(left, bottom, right, top);
         
         //var test = new OpenLayers.Layer.Vector("test", {
@@ -741,6 +767,7 @@ var selectRFB = new Ext.Panel({
     name: 'selectRFB',
 	border: false,
 	labelAlign :'left',
+    width: 'auto', 
 	defaults: {
 	    anchor:'100%',
         shadow:false
@@ -763,7 +790,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
         name: 'selectRFBcombo',
         ref:'../RFBcombo',
         border: false,
-        id: "RFBCombo",  
+        id: "RFBCombo",   
         hideLabel: true,
         columns: 3,
         vertical: true,
@@ -782,6 +809,8 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
             column = Ext.getCmp("RFBCombo").panel.getComponent(2);  
         }
         var radio = column.add(Ext.apply({
+            xtype: 'radio',
+            inputType:'radio',
             id: records.data.id + "_RFB",
             boxLabel: records.data.acronym, 
             name: 'rfb', 
