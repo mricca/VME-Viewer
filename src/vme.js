@@ -265,7 +265,13 @@ function zoomTo(settings,geom,zoom) {
 			if(zoom){
 				myMap.zoomToExtent(bbox);
 			}else{
-				myMap.moveTo(bbox.getCenterLonLat());
+                if(bboxproj == 'EPSG:3031'){
+                    // WORKAROUND TO FIX STRANGE BEHAVIOUR BOUNDS TRANSFORMATION FROM 4326 TO 3031. BOUND NOW IS HARCODED
+                    bbox = new OpenLayers.Bounds(-3465996.97,-3395598.49,5068881.53,4524427.45);
+                    myMap.moveTo(bbox.getCenterLonLat());
+                }else{
+                    myMap.moveTo(bbox.getCenterLonLat());
+                }
 			}
 		}else{
 			var newproj = bboxproj.split(":")[1];

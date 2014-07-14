@@ -280,7 +280,7 @@ Vme.data={
 				{
 					compiled:true,
                     toHectares:function(values){
-                        var hectares = values.surface/10000
+                        var hectares = values.surface/10000;
                         return Math.round(hectares);
                     },
 					getBBOX:function(values){
@@ -870,7 +870,8 @@ Vme.data.models = {
 		
 	],
 	*/
-    VmeStatusesUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",//) : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+    VmeStatusesUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+    //) : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
 	/*
 	VmeCriteria:[ 
 		[0, FigisMap.label("VME_CRITERIA_UNIQUE")],

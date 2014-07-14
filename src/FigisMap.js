@@ -14,10 +14,10 @@ var FigisMap = {
 	rfb		: new Object(), // specific RFB methods collection
 	rnd		: new Object(), // FigisMap.renderer specific collection of methods and variabes
 	ol		: new Object(), // OpenLayers related utilities
-	isDeveloper	: ( document.domain.indexOf( '192.168.' ) == 0 ),
+	isDeveloper	: false, //( document.domain.indexOf( '192.168.' ) == 0 ),
 	lastMap		: null,
 	renderedMaps	: new Object(),
-	isTesting	: ( (document.domain.indexOf('figis02')==0 ||document.domain.indexOf('193.43.36.238')==0||document.domain.indexOf('www-data.fao.org')==0) ),
+	isTesting	: false, //( (document.domain.indexOf('figis02')==0 ||document.domain.indexOf('193.43.36.238')==0||document.domain.indexOf('www-data.fao.org')==0) ),
 	currentSiteURI	: location.href.replace(/^([^:]+:\/\/[^\/]+).*$/,"$1"),
 //    proxy : '/http_proxy/proxy/?url=',
     proxy : '/figis/proxy/cgi-bin/proxy.cgi?url=',
@@ -73,12 +73,12 @@ FigisMap.infoRFBSources = {
     SEAFO  : "http://figisapps.fao.org/",
     WECAFC : "http://figisapps.fao.org/",
     SPRFMO : "http://figisapps.fao.org/"
-}
+};
 
 FigisMap.infoGroupsSources = {
     vme      : "http://localhost:8080/VME-Viewer/index_vme.html",
     overlays : "http://localhost:8080/VME-Viewer/index_ovl.html"
-}
+};
 
 FigisMap.infoSources = {
 	cbs : "http://figisapps.fao.org/", //'fifao:country_bounds',
@@ -107,7 +107,7 @@ FigisMap.infoSources = {
     //end after workshop
     
 	vme_fp : "http://figisapps.fao.org/", //'fifao:vme-db_footprints',
-	bathimetry: "http://figisapps.fao.org/", //'fifao:OB_LR'				//natural earth ocean bottom
+	bathimetry: "http://figisapps.fao.org/" //'fifao:OB_LR'				//natural earth ocean bottom
 
 };
 FigisMap.defaults = {
@@ -298,7 +298,7 @@ FigisMap.ol.reCenter = function( proj0, proj1, center ) {
 		center = new OpenLayers.LonLat( 0, 0 );
 	}
 	if ( proj0 == proj1 ) return center;
-	if ( proj1 == 3031 ) return new OpenLayers.LonLat(156250.0, 703256.0);
+	if ( proj1 == 3031 ) return new OpenLayers.LonLat(0.0, -72.4999999868);
 	var newCenter;
 	var source = new Proj4js.Proj( 'EPSG:' + proj0 );
 	var dest   = new Proj4js.Proj( 'EPSG:' + proj1 );
@@ -1425,7 +1425,7 @@ FigisMap.rfb.preparse = function( pars ) {
 			} );
 		}
 		if ( type.r ) {
-			var ttitle = FigisMap.label('Regulatory area', pars );;
+			var ttitle = FigisMap.label('Regulatory area', pars );
 			pars.distribution.push( { rfb: pars.rfb, settings: sett, layer: FigisMap.fifao.RFB,
 				filter: "RFB = '" + pars.rfb + "' AND DispOrder = '2'",
 				dispOrder : 1,
@@ -1440,7 +1440,7 @@ FigisMap.rfb.preparse = function( pars ) {
 			} );
 		}
 		if ( type.a ) {
-			var ttitle = FigisMap.label('Established limits of the area of competence', pars );;
+			var ttitle = FigisMap.label('Established limits of the area of competence', pars );
 			pars.distribution.push( { rfb: pars.rfb, settings: sett, layer: FigisMap.fifao.RFB,
 				filter: "RFB = '" + pars.rfb + "_DEP'",
 				style: '',			
@@ -1602,7 +1602,7 @@ FigisMap.ol.refreshFilters = function (acronym){
 	// RFMO Regulatory Areas
 	myMap.getLayersByName('RFMO Regulatory Areas')[0].mergeNewParams(
 		{
-		'CQL_FILTER': (RFBFilter ? "RFB = '" + acronym + "'" : "RFB <> '*'"),
+		'CQL_FILTER': (RFBFilter ? "RFB = '" + acronym + "'" : "RFB <> '*'")
 		}
 	);
 	

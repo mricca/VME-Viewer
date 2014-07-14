@@ -598,7 +598,6 @@ Vme.rfbZoomTo = function(acronym,value){
         
         // WORKOROUND TO FIX STRANGE BEHAVIOR WHEN XMAX = 90 IN COORDINATE TRANSFORMATION TO GOOGLE MERCATOR
         top = top == 90 ? 80 : top
-        
         bounds = new OpenLayers.Bounds(left, bottom, right, top);
         
         //var test = new OpenLayers.Layer.Vector("test", {
