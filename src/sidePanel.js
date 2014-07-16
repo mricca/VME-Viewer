@@ -352,7 +352,7 @@ Vme.search = function(advanced){
             var areaType2 = new Array();
             
             for (var i = 0;i<features.length;i++){
-                if (features[i].attributes.AREATYPE == 1){
+                if (features[i].attributes.AREATYPE != 0){
                     areaType1.push({bounds:features[i].bounds})
                 }else if(features[i].attributes.AREATYPE == 2){
                     areaType2.push({bounds:features[i].bounds})
@@ -395,7 +395,7 @@ Vme.search = function(advanced){
 			}
 			
             // WORKOROUND TO FIX STRANGE BEHAVIOR WHEN XMAX = 90 IN COORDINATE TRANSFORMATION TO GOOGLE MERCATOR
-            top = top == 90 ? 80 : top
+            top = (top > 85 && top <= 92) ? 85 : top;
             
 			bounds = new OpenLayers.Bounds(left, bottom, right, top);
 			
@@ -554,7 +554,7 @@ Vme.rfbZoomTo = function(acronym,value){
         var areaType2 = new Array();
         
         for (var i = 0;i<features.length;i++){
-            if (features[i].attributes.AREATYPE == 1){
+            if (features[i].attributes.AREATYPE != 0){
                 areaType1.push({bounds:features[i].bounds})
             }else if(features[i].attributes.AREATYPE == 2){
                 areaType2.push({bounds:features[i].bounds})
@@ -597,7 +597,7 @@ Vme.rfbZoomTo = function(acronym,value){
         }
         
         // WORKOROUND TO FIX STRANGE BEHAVIOR WHEN XMAX = 90 IN COORDINATE TRANSFORMATION TO GOOGLE MERCATOR
-        top = top == 90 ? 80 : top
+        top = (top > 85 && top <= 92) ? 85 : top;
         bounds = new OpenLayers.Bounds(left, bottom, right, top);
         
         //var test = new OpenLayers.Layer.Vector("test", {

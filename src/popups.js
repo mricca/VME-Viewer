@@ -170,7 +170,7 @@ FigisMap.ol.getTabTitle=function(layer){
       return "Bottom fishing areas";
 
     case layernames.vme_regarea : 
-      return "RFMO Regulatory Areas";
+      return "RFB Competence Areas";
       
     case layernames.vme_en : 
       return "Encounters";
@@ -233,17 +233,167 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
             var year = FigisMap.ol.getSelectedYear();
             
             Ext.Ajax.request({
-                url: 'http://figisapps.fao.org/figis/ws/vme/webservice/get',
+                //url: 'http://figisapps.fao.org/figis/ws/vme/webservice/get', // OLD SERVICE
+                url: 'http://figisapps.fao.org/figis/ws/vme/webservice/vme/' + inventoryIdentifier + '/specificmeasure', // NEW SERVICE FROM 20140714
                 scope:response[i],
                 method:'GET',
-                params: { 
+                // OLD PARAMS FOR SERVICE 'http://figisapps.fao.org/figis/ws/vme/webservice/get'
+                /*params: { 
                     inventoryIdentifier: inventoryIdentifier,
                     year: year
-                    },
+                },*/
                 success: function(resp,opt){
-                    var vmeDataParsed = Ext.decode(resp.responseText);
+
+                    var vmeDataParsed = Ext.decode(resp.responseText);                    
                     
-                    Ext.apply(this.attributes,vmeDataParsed.resultList[0]);
+                    // example test for same year
+                    /*var vmeDataParsed = {
+                        "uuid": "17a46f1d-a9b9-48d9-8875-90c3577d371f",
+                        "note": null,
+                        "vmeId": 24317,
+                        "localName": "Hatton Bank",
+                        "inventoryIdentifier": "VME_NEAFC_1",
+                        "geoArea": "Northeast Atlantic",
+                        "owner": "North East Atlantic Fisheries Commission",
+                        "vmeType": null,
+                        "responseList": [{
+                            "text": null,
+                            "year": 2014,
+                            "validityPeriodStart": 2013,
+                            "validityPeriodEnd": 2015,
+                            "sourceURL": "http://www.neafc.org/system/files/Rec9_Rockall_VME_closure_0.pdf",
+                            "factsheetURL": "http://figisapps.fao.org/fishery/vme/24317/176905/en"
+                        },
+                        {
+                            "text": null,
+                            "year": 2014,
+                            "validityPeriodStart": 2007,
+                            "validityPeriodEnd": 2009,
+                            "sourceURL": "http://www.neafc.org/system/files/07-rec_deep_sea.pdf",
+                            "factsheetURL": "http://figisapps.fao.org/fishery/vme/24317/176905/en"
+                        },
+                        {
+                            "text": null,
+                            "year": 2011,
+                            "validityPeriodStart": 2012,
+                            "validityPeriodEnd": 2012,
+                            "sourceURL": "http://www.neafc.org/system/files/Rec_8_Hatton_extension-rev.pdf",
+                            "factsheetURL": "http://figisapps.fao.org/fishery/vme/24317/176904/en"
+                        },
+                        {
+                            "text": null,
+                            "year": 2010,
+                            "validityPeriodStart": 2011,
+                            "validityPeriodEnd": 2011,
+                            "sourceURL": "http://www.neafc.org/system/files/rec-14_2011_hatton_extension_corrected_rev3.pdf",
+                            "factsheetURL": "http://figisapps.fao.org/fishery/vme/24317/176903/en"
+                        },
+                        {
+                            "text": null,
+                            "year": 2009,
+                            "validityPeriodStart": 2010,
+                            "validityPeriodEnd": 2010,
+                            "sourceURL": "http://www.neafc.org/system/files/rec-viiil%20%20-%20Hatton%20extension%20corrected%20rev4.pdf",
+                            "factsheetURL": "http://figisapps.fao.org/fishery/vme/24317/176902/en"
+                        },
+                        {
+                            "text": null,
+                            "year": 2007,
+                            "validityPeriodStart": 2008,
+                            "validityPeriodEnd": 2009,
+                            "sourceURL": "http://www.neafc.org/system/files/16-rec_bottom_fishing_em_2008.pdf",
+                            "factsheetURL": "http://figisapps.fao.org/fishery/vme/24317/176900/en"
+                        }]
+                    };*/
+                    
+                    // SORT DESCENDING
+                    
+                    if(vmeDataParsed.responseList.length == 0){
+                      count++  
+                      if(count == response.length){
+                            FigisMap.ol.showPopup(e,response,layer);
+                            return;
+                      }                    
+                    }
+                    
+                    vmeDataParsed.responseList.sort(function(a,b){return b.year - a.year});
+                    
+                    var newYears = new Array();                    
+                    var newText = new Array();
+                    var newValidityPeriodStart = new Array();
+                    var newValidityPeriodEnd = new Array();
+                    
+                    var newYearsNoDate = new Array();
+                    var newTextNoDate = new Array();
+                    var newValidityPeriodStartNoDate = new Array();
+                    var newValidityPeriodEndNoDate = new Array();                    
+                    
+                    var firstDate = vmeDataParsed.responseList[0].year;
+                    
+                    for (var i = 0;i<vmeDataParsed.responseList.length;i++){
+                        if (vmeDataParsed.responseList[i].year == year){
+                        
+                            newYears.push(vmeDataParsed.responseList[i].year);
+                            newText.push(vmeDataParsed.responseList[i].text);
+                            newValidityPeriodStart.push(vmeDataParsed.responseList[i].validityPeriodStart);
+                            newValidityPeriodEnd.push(vmeDataParsed.responseList[i].validityPeriodEnd);
+                            
+                        }else{
+                            if(firstDate == vmeDataParsed.responseList[i].year){
+                                newYearsNoDate.push(vmeDataParsed.responseList[i].year);
+                                newTextNoDate.push(vmeDataParsed.responseList[i].text);
+                                newValidityPeriodStartNoDate.push(vmeDataParsed.responseList[i].validityPeriodStart);
+                                newValidityPeriodEndNoDate.push(vmeDataParsed.responseList[i].validityPeriodEnd);                            
+                            }
+                        
+                        }
+                    }                    
+                    
+                    var filterResponseListFin = new Array();
+                    
+                    if(newYears.length != 0){
+                        var measureText = newText.join(";");
+                        newValidityPeriodStart.sort(function(a, b){return a-b});
+                        newValidityPeriodEnd.sort(function(a, b){return a-b});
+            
+                        filterResponseListFin = {
+                            localName            : vmeDataParsed.localName,     
+                            geoArea              : vmeDataParsed.geoArea,     
+                            owner                : vmeDataParsed.owner,     
+                            vmeType              : vmeDataParsed.vmeType,     
+                            measure              : measureText,
+                            year                 : vmeDataParsed.responseList[0].year,
+                            validityPeriodStart  : newValidityPeriodStart[0], // prendo il minore
+                            validityPeriodEnd    : newValidityPeriodEnd[newValidityPeriodEnd.length - 1], // prendo il maggiore
+                            pdfURL               : vmeDataParsed.responseList[0].sourceURL,
+                            factsheetURL         : vmeDataParsed.responseList[0].factsheetURL
+                        }
+                        
+                    }else{
+                    
+                        var measureTextNoDate = newTextNoDate.join(";");
+                        newValidityPeriodStartNoDate.sort(function(a, b){return a-b});
+                        newValidityPeriodEndNoDate.sort(function(a, b){return a-b});
+                        newYearsNoDate.sort(function(a, b){return a-b});
+            
+                        filterResponseListFin = {
+                            localName            : vmeDataParsed.localName,     
+                            geoArea              : vmeDataParsed.geoArea,     
+                            owner                : vmeDataParsed.owner,     
+                            vmeType              : vmeDataParsed.vmeType,     
+                            measure              : measureTextNoDate,
+                            year                 : newYearsNoDate[newYearsNoDate.length - 1],
+                            validityPeriodStart  : newValidityPeriodStartNoDate[0], // prendo il minore
+                            validityPeriodEnd    : newValidityPeriodEndNoDate[newValidityPeriodEndNoDate.length - 1], // prendo il maggiore
+                            pdfURL               : vmeDataParsed.responseList[0].sourceURL,
+                            factsheetURL         : vmeDataParsed.responseList[0].factsheetURL
+                        }
+                    
+                    }                    
+
+                    //Ext.apply(this.attributes,vmeDataParsed.resultList[0]);
+                    Ext.apply(this.attributes,filterResponseListFin);                    
+
                     count++;
                     
                     if(count == response.length){

@@ -52,7 +52,7 @@ FigisMap.fifao = {
     vme_cl : 'vme:closures', // VME Closure
     vme_oa : 'vme:other_areas', // Other access regulated areas    
     vme_bfa : 'vme:bottom_fishing_areas', // Bottom fishing areas
-    vme_regarea : 'vme:regulatory_areas', // VME regulatory areas
+    vme_regarea : 'fifao:RFB_COMP_CLIP', // VME regulatory areas
     //end after workshop
     
 	vme_fp : 'fifao:vme-db_footprints',
@@ -166,8 +166,8 @@ FigisMap.rnd.vars = {
 		wfsUrl: FigisMap.geoServerBase + FigisMap.geoServerResource + "/wfs",
 		wfsVersion: "1.1.0",
 		filterProperty: "RFB",
-	    featureType: "regulatory_areas",
-	    featurePrefix: "vme",
+	    featureType: "RFB_COMP_CLIP",
+	    featurePrefix: "fifao",
 	    srsName: "EPSG:4326"
 	}    
 };
@@ -1148,11 +1148,11 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			type		: 'auto',
 			style		: '',
             group: "Overlays",
-            label	: 'RFMO Regulatory Areas',
+            label	: 'RFB Competence Areas',
 			remote		: false,
             showLegendGraphic: false,	            
 			skipLegend	: true,
-            hidden	: false,
+            hidden	: true,
 			hideInSwitcher	: false,
             dispOrder: 3,
             isMasked: false,
@@ -1599,14 +1599,14 @@ FigisMap.ol.refreshFilters = function (acronym){
     // Bottom fishing areas
     // Other access regulated areas
 
-	// RFMO Regulatory Areas
-	myMap.getLayersByName('RFMO Regulatory Areas')[0].mergeNewParams(
+	// RFB Competence Areas
+	myMap.getLayersByName('RFB Competence Areas')[0].mergeNewParams(
 		{
 		'CQL_FILTER': (RFBFilter ? "RFB = '" + acronym + "'" : "RFB <> '*'")
 		}
 	);
 	
-	myMap.getLayersByName('RFMO Regulatory Areas')[0].redraw(true);
+	myMap.getLayersByName('RFB Competence Areas')[0].redraw(true);
 	
 	// VME Closure
 	myMap.getLayersByName('VME Closure')[0].mergeNewParams(

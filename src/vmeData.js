@@ -251,15 +251,18 @@ Vme.data={
 					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{localname}</h3>'+
 						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
-						'<em>Measure first applied in: </em><span>{[this.getValidity(values, true)]}</span> <br/> '+
+						//'<em>Measure first applied in: </em><span>{[this.getValidity(values, true)]}</span> <br/> '+
+                        '<em>Closed since </em><span>{validityPeriodFrom}</span> <em>until</em> <span>{validityPeriodTo}, </span><em>review in <span>{review_date}</span></em><br/> '+
+                        //'<em>Measure: </em><span>{measure}</span> <a  target="_blank" href="{pdfURL}"><img title="Download pdf" src="theme/img/icons/download_pdf.png"></a><br/> '+
+                        '<em>Measure: </em>{[this.formatMeasure(values)]}'+
 						//'<em>Validity: </em><span>{[this.getValidity(values)]}</span> <br/> '+
 						//'<em>Year: </em>{year}<br/> '+
 						//'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
 						//'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{vmeType}</span> <br/> '+
                         '<em>Surface: </em><span>{[this.toHectares(values)]}</span><em> (ha)</em> <br/> '+
-						'<em>Start Date: </em><span>{validityPeriodFrom}</span> <br/> '+
-                        '<em>End Date: </em><span>{validityPeriodTo}</span> <br/> '+                        
+						//'<em>Start Date: </em><span>{validityPeriodFrom}</span> <br/> '+
+                        //'<em>End Date: </em><span>{validityPeriodTo}</span> <br/> '+                        
 						// '<em>UN Criteria: </em>{criteria}<br/> '+
 						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						
@@ -279,6 +282,20 @@ Vme.data={
 				'</tpl>',
 				{
 					compiled:true,
+                    formatMeasure:function(values){
+                        var pdf = values.pdfURL;
+                        var measureArray = values.measure.split(";");
+                        var html="";
+                        
+                        for (var i = 0;i<measureArray.length;i++){
+                            if (pdf == ""){
+                                html += '</em><span>' + measureArray[i] + '</span> <a  target="_blank" href="' + pdf + '"></a><br/>';
+                            }else{
+                                html += '</em><span>' + measureArray[i] + '</span> <a  target="_blank" href="' + pdf + '"><img title="Download pdf" src="theme/img/icons/download_pdf.png"></a><br/>';
+                            }
+                        }
+                        return html;
+                    },
                     toHectares:function(values){
                         var hectares = values.surface/10000;
                         return Math.round(hectares);
@@ -335,7 +352,8 @@ Vme.data={
                             return(values.factsheetUrl);
                         }else
                         {
-                            return("fishery/vme/10/en");
+                            //return("fishery/vme/10/en");
+                            return("http://figisapps.fao.org/fishery/vme/10/en");
                         }
                     },
 					/**
@@ -391,15 +409,18 @@ Vme.data={
 					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{localname}</h3>'+
 						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
-						'<em>Measure first applied in: </em><span>{[this.getValidity(values, true)]}</span> <br/> '+
+						//'<em>Measure first applied in: </em><span>{[this.getValidity(values, true)]}</span> <br/> '+
+                        '<em>Closed since </em><span>{validityPeriodFrom}</span> <em>until</em> <span>{validityPeriodTo}, </span><em>review in <span>{review_date}</span></em><br/> '+
+                        //'<em>Measure: </em><span>{measure}</span> <a  target="_blank" href="{pdfURL}"><img title="Download pdf" src="theme/img/icons/download_pdf.png"></a><br/> '+
+                        '<em>Measure: </em>{[this.formatMeasure(values)]}'+
 						//'<em>Validity: </em><span>{[this.getValidity(values)]}</span> <br/> '+
 						//'<em>Year: </em>{year}<br/> '+
 						//'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
 						//'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{vmeType}</span> <br/> '+
-                        '<em>Surface: </em><span>{[this.toHectares(values)]}</span><em> (ha)</em> <br/> '+                        
-						'<em>Start Date: </em><span>{validityPeriodFrom}</span> <br/> '+
-                        '<em>End Date: </em><span>{validityPeriodTo}</span> <br/> '+                        
+                        '<em>Surface: </em><span>{[this.toHectares(values)]}</span><em> (ha)</em> <br/> '+
+						//'<em>Start Date: </em><span>{validityPeriodFrom}</span> <br/> '+
+                        //'<em>End Date: </em><span>{validityPeriodTo}</span> <br/> '+                        
 						// '<em>UN Criteria: </em>{criteria}<br/> '+
 						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						
@@ -419,6 +440,19 @@ Vme.data={
 				'</tpl>',
 				{
 					compiled:true,
+                    formatMeasure:function(values){
+                        var pdf = values.pdfURL;
+                        var measureArray = values.measure.split(";");
+                        var html="";
+                        for (var i = 0;i<measureArray.length;i++){
+                            if (pdf == ""){
+                                html += '</em><span>' + measureArray[i] + '</span> <a  target="_blank" href="' + pdf + '"></a><br/>';
+                            }else{
+                                html += '</em><span>' + measureArray[i] + '</span> <a  target="_blank" href="' + pdf + '"><img title="Download pdf" src="theme/img/icons/download_pdf.png"></a><br/>';
+                            }
+                        }
+                        return html;
+                    },                    
                     toHectares:function(values){
                         var hectares = values.surface/10000
                         return Math.round(hectares);
@@ -903,6 +937,27 @@ Vme.data.extensions ={
                     {name: 'SHAPE_AREA', mapping:'attributes.SHAPE_AREA'},
                     {name: 'envelope', mapping: 'attributes.envelope'},
 					{name: 'localname',  mapping: 'attributes.localName'},
+					{name: 'factsheetUrl',  mapping: 'attributes.factsheetURL'},
+                    {name: 'pdfURL',  mapping: 'attributes.pdfURL'},
+					{name: 'bbox',		mapping: 'bounds'},
+					{name: 'vmeType', mapping: 'attributes.vmeType'},
+					{name: 'owner', mapping: 'attributes.owner'},
+                    {name: 'owner_acronym', mapping: 'attributes.OWNER'},
+                    {name: 'validityPeriodFrom', mapping: 'attributes.validityPeriodStart'},
+					{name: 'validityPeriodTo', mapping: 'attributes.validityPeriodEnd'},
+					{name: 'geo_ref', mapping: 'attributes.geoArea'},
+                    {name: 'surface', mapping: 'attributes.SURFACE'},
+                    {name: 'measure', mapping: 'attributes.measure'}
+                    
+					/*{name: 'id', mapping: 'fid'},
+					{name: 'geometry', mapping: 'geometry'},
+                    {name: 'vme_id',     mapping: 'attributes.VME_ID'},
+					{name: 'status', 	 mapping: 'attributes.STATUS'},
+                    {name: 'year', mapping: 'attributes.year'},
+                    {name: 'VME_AREA_TIME', mapping: 'attributes.VME_AREA_TIME'},
+                    {name: 'SHAPE_AREA', mapping:'attributes.SHAPE_AREA'},
+                    {name: 'envelope', mapping: 'attributes.envelope'},
+					{name: 'localname',  mapping: 'attributes.localName'},
 					{name: 'factsheetUrl',  mapping: 'attributes.factsheetUrl'},
 					{name: 'bbox',		mapping: 'bounds'},
 					{name: 'vmeType', mapping: 'attributes.vmeType'},
@@ -911,7 +966,7 @@ Vme.data.extensions ={
                     {name: 'validityPeriodFrom', mapping: 'attributes.validityPeriodFrom'},
 					{name: 'validityPeriodTo', mapping: 'attributes.validityPeriodTo'},
 					{name: 'geo_ref', mapping: 'attributes.geoArea'},
-                    {name: 'surface', mapping: 'attributes.SURFACE'}
+                    {name: 'surface', mapping: 'attributes.SURFACE'}*/
 				],
 				idProperty: 'fid'			
 			})
