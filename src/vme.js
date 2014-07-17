@@ -12,6 +12,26 @@ function resetRFBCheckBox(){
     }
 }      
 
+/*function setRFBFactsheetURL(){
+    var rfbCombo = Ext.getCmp('RFBCombo');
+    var rfbValue;
+    for (var i = 0;i<rfbCombo.panel.items.items.length;i++){
+        for (var c = 0;c<rfbCombo.panel.items.items[i].items.items.length;c++){
+            var checkbox = rfbCombo.panel.items.items[i].items.items[c];
+            rfbValue = checkbox.acronym;    
+            if(rfbValue != "GFCM" && rfbValue != "WECAFC"){
+                var storeName = 'rfbStore' + rfbValue;
+                var rfbStoreValue = Vme.data.stores[storeName]; 
+                var RFBfactsheetURL = rfbStoreValue.data.items[0].data.factsheetUrl;
+                //FigisMap.infoRFBSources[rfbValue] = RFBfactsheetURL;
+                checkbox.boxLabel = '<a id="infoRFBimage" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+RFBfactsheetURL+'\');"><img title = "Source of Information" src="theme/img/icons/information.png"> </a>' + rfbValue;
+                rfbCombo.doLayout();
+            }
+        }
+    }
+    return rfbValue;
+}*/
+
 function getRFBCheckBoxValue(){
     var rfbCombo = Ext.getCmp('RFBCombo');
     var rfbValue;

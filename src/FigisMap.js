@@ -40,7 +40,7 @@ FigisMap.fifao = {
     vnt : 'vme:vents_InterRidge_2011_all', // Hidrotermal
     ccr : 'vme:WCMC-001-ColdCorals2005', //ColdCorals
 	//nma : 'fifao:eez2',
-	nma : 'fifao:Limit_200nm',
+	nma : 'fifao:limit_200nm',
 	RFB : 'fifao:RFB',
 	rfb : 'fifao:RFB_COMP',
 	sdi : 'fifao:FAO_SUB_DIV',

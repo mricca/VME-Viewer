@@ -1199,7 +1199,63 @@ Vme.data.stores = {
         root: 'resultList',
         fields: [ "id", {name:"year", mapping:"name"} ] // "lang"
     }),
-	
+
+    rfbStoreCCAMLR: new Ext.data.JsonStore({
+        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),
+    
+    /*rfbStoreGFCM: new Ext.data.JsonStore({
+        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/GFCM/scope/Regulatory/vmes",
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),*/
+
+    rfbStoreNAFO: new Ext.data.JsonStore({
+        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NAFO/scope/Regulatory/vmes",
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),
+
+    rfbStoreNEAFC: new Ext.data.JsonStore({
+        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NEAFC/scope/Regulatory/vmes",
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),
+
+    rfbStoreSEAFO: new Ext.data.JsonStore({
+        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SEAFO/scope/Regulatory/vmes",
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),
+
+    /*rfbStoreWECAFC: new Ext.data.JsonStore({
+        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/WECAFC/scope/Regulatory/vmes",
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),*/
+
+    rfbStoreSPRFMO: new Ext.data.JsonStore({
+        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SPRFMO/scope/Regulatory/vmes",
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),    
+                    
 	SearchResultStore:new Ext.ux.LazyJsonStore({
 
 		method:'GET',

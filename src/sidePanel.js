@@ -298,6 +298,8 @@ Vme.search = function(advanced){
 	var RFMOCombo = Ext.getCmp("RFMOCombo");
 	var RFMStore = RFMOCombo.getStore();
 	var value = RFMOCombo.getValue();
+    
+    FigisMap.ol.clearPopupCache();  
 	
 	var dIndex = RFMStore.find("id", value); 
     
@@ -778,7 +780,7 @@ var selectRFB = new Ext.Panel({
 });
     
 Vme.data.stores.rfmoStore.on('load',function(store, records, options){
-
+    
     var items = [];
     
     for (var i = 0;i<3;i++){
@@ -830,6 +832,17 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                         sidePanel.layout.setActiveItem('legendPanel');
                         sidePanel.expand();                        
                     }
+                },
+                render: function(radio){
+                    /*if(radio.acronym != "GFCM" || radio.acronym != "WECAFC"){
+                        var rfbStore = 'rfbStore' + radio.acronym;
+                        Vme.data.stores[rfbStore].on('load',function(store, records, options){
+                            store.each(function(records,count,tot) {
+                                Ext.applyIf(radio,{boxLabel: '<a id="infoRFBimage" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+records.factsheetUrl+'\');"><img title = "Source of Information" src="theme/img/icons/information.png"> </a>' + radio.acronym});
+                                radio.ownerCt.doLayout();
+                            })
+                        })
+                    }*/
                 }
             }
         },panel.items[count]));
