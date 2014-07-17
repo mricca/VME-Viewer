@@ -48,7 +48,7 @@ FigisMap.ol.getFeatureInfoHandler =  function(e) {
 					title: 'Features Info',
 					width: 400,
                     panIn:true,
-					height: 260,
+					height: 300,
 					layout: "accordion",
 					map: myMap,
 					location: e.xy,
@@ -322,28 +322,39 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                     var newText = new Array();
                     var newValidityPeriodStart = new Array();
                     var newValidityPeriodEnd = new Array();
+                    var newSourceURL = new Array();
+                    var newFactsheetURL = new Array();
                     
                     var newYearsNoDate = new Array();
                     var newTextNoDate = new Array();
                     var newValidityPeriodStartNoDate = new Array();
-                    var newValidityPeriodEndNoDate = new Array();                    
+                    var newValidityPeriodEndNoDate = new Array();    
+                    var newSourceURLNoDate = new Array();
+                    var newFactsheetURLNoDate = new Array();                    
                     
                     var firstDate = vmeDataParsed.responseList[0].year;
                     
                     for (var i = 0;i<vmeDataParsed.responseList.length;i++){
+                    
+                        newValidityPeriodStart.push(vmeDataParsed.responseList[i].validityPeriodStart);
+                        newValidityPeriodEnd.push(vmeDataParsed.responseList[i].validityPeriodEnd);
+                        
+                        newValidityPeriodStartNoDate.push(vmeDataParsed.responseList[i].validityPeriodStart);
+                        newValidityPeriodEndNoDate.push(vmeDataParsed.responseList[i].validityPeriodEnd);                              
+                            
                         if (vmeDataParsed.responseList[i].year == year){
                         
                             newYears.push(vmeDataParsed.responseList[i].year);
                             newText.push(vmeDataParsed.responseList[i].text);
-                            newValidityPeriodStart.push(vmeDataParsed.responseList[i].validityPeriodStart);
-                            newValidityPeriodEnd.push(vmeDataParsed.responseList[i].validityPeriodEnd);
+                            newSourceURL.push(vmeDataParsed.responseList[i].sourceURL);
+                            newFactsheetURL.push(vmeDataParsed.responseList[i].factsheetURL);
                             
                         }else{
                             if(firstDate == vmeDataParsed.responseList[i].year){
                                 newYearsNoDate.push(vmeDataParsed.responseList[i].year);
                                 newTextNoDate.push(vmeDataParsed.responseList[i].text);
-                                newValidityPeriodStartNoDate.push(vmeDataParsed.responseList[i].validityPeriodStart);
-                                newValidityPeriodEndNoDate.push(vmeDataParsed.responseList[i].validityPeriodEnd);                            
+                                newSourceURLNoDate.push(vmeDataParsed.responseList[i].sourceURL);
+                                newFactsheetURLNoDate.push(vmeDataParsed.responseList[i].factsheetURL);                                
                             }
                         
                         }
@@ -362,11 +373,11 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                             owner                : vmeDataParsed.owner,     
                             vmeType              : vmeDataParsed.vmeType,     
                             measure              : measureText,
-                            year                 : vmeDataParsed.responseList[0].year,
+                            year                 : newYears[0],
                             validityPeriodStart  : newValidityPeriodStart[0], // prendo il minore
                             validityPeriodEnd    : newValidityPeriodEnd[newValidityPeriodEnd.length - 1], // prendo il maggiore
-                            pdfURL               : vmeDataParsed.responseList[0].sourceURL,
-                            factsheetURL         : vmeDataParsed.responseList[0].factsheetURL
+                            pdfURL               : newSourceURL[0],
+                            factsheetURL         : newFactsheetURL[0]
                         }
                         
                     }else{
@@ -385,8 +396,8 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                             year                 : newYearsNoDate[newYearsNoDate.length - 1],
                             validityPeriodStart  : newValidityPeriodStartNoDate[0], // prendo il minore
                             validityPeriodEnd    : newValidityPeriodEndNoDate[newValidityPeriodEndNoDate.length - 1], // prendo il maggiore
-                            pdfURL               : vmeDataParsed.responseList[0].sourceURL,
-                            factsheetURL         : vmeDataParsed.responseList[0].factsheetURL
+                            pdfURL               : newSourceURLNoDate[0],
+                            factsheetURL         : newFactsheetURLNoDate[0]
                         }
                     
                     }                    
@@ -438,7 +449,7 @@ FigisMap.ol.showPopup= function(e,response,layer){
 		//title: 'Features Info',
         border:false,
 		width: 400,
-		height: 260,
+		height: 300,
 		layout: "fit",
 		map: myMap,
 		unpinnable:false,
