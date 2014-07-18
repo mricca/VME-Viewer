@@ -354,7 +354,7 @@ Vme.search = function(advanced){
             var areaType2 = new Array();
             
             for (var i = 0;i<features.length;i++){
-                if (features[i].attributes.AREATYPE != 0){
+                if (features[i].attributes.AREATYPE == 1){
                     areaType1.push({bounds:features[i].bounds})
                 }else if(features[i].attributes.AREATYPE == 2){
                     areaType2.push({bounds:features[i].bounds})
@@ -556,7 +556,7 @@ Vme.rfbZoomTo = function(acronym,value){
         var areaType2 = new Array();
         
         for (var i = 0;i<features.length;i++){
-            if (features[i].attributes.AREATYPE != 0){
+            if (features[i].attributes.AREATYPE == 1){
                 areaType1.push({bounds:features[i].bounds})
             }else if(features[i].attributes.AREATYPE == 2){
                 areaType2.push({bounds:features[i].bounds})
@@ -834,7 +834,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                     }
                 },
                 render: function(radio){
-                    /*if(radio.acronym != "GFCM" || radio.acronym != "WECAFC"){
+                    /*if(radio.acronym != "GFCM" && radio.acronym != "WECAFC"){
                         var rfbStore = 'rfbStore' + radio.acronym;
                         Vme.data.stores[rfbStore].on('load',function(store, records, options){
                             store.each(function(records,count,tot) {
