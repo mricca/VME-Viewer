@@ -12,26 +12,6 @@ function resetRFBCheckBox(){
     }
 }      
 
-/*function setRFBFactsheetURL(){
-    var rfbCombo = Ext.getCmp('RFBCombo');
-    var rfbValue;
-    for (var i = 0;i<rfbCombo.panel.items.items.length;i++){
-        for (var c = 0;c<rfbCombo.panel.items.items[i].items.items.length;c++){
-            var checkbox = rfbCombo.panel.items.items[i].items.items[c];
-            rfbValue = checkbox.acronym;    
-            if(rfbValue != "GFCM" && rfbValue != "WECAFC"){
-                var storeName = 'rfbStore' + rfbValue;
-                var rfbStoreValue = Vme.data.stores[storeName]; 
-                var RFBfactsheetURL = rfbStoreValue.data.items[0].data.factsheetUrl;
-                //FigisMap.infoRFBSources[rfbValue] = RFBfactsheetURL;
-                checkbox.boxLabel = '<a id="infoRFBimage" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+RFBfactsheetURL+'\');"><img title = "Source of Information" src="theme/img/icons/information.png"> </a>' + rfbValue;
-                rfbCombo.doLayout();
-            }
-        }
-    }
-    return rfbValue;
-}*/
-
 function getRFBCheckBoxValue(){
     var rfbCombo = Ext.getCmp('RFBCombo');
     var rfbValue;
@@ -322,8 +302,9 @@ function zoomTo(settings,geom,zoom) {
 *       elinkDiv -> The embed-link id  (optional if not using the embed link div).
 *       urlLink -> The id of the url input field of the embed-link (optional if not using the embed link div).
 *       htmlLink -> The id of the html input field of the embed-link (optional if not using the embed link div).
+*       refresh -> set to false to manage FigisMap.ol.refreshFilters() function when user change projection.
 **/
-function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filter) {
+function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filter, refresh) {
 	if ( ! mapProjection ) {
 		var settings = FigisMap.rfb.getSettings( getProjection());
 		setProjection(settings && settings.srs ? settings.srs : '4326');
@@ -344,7 +325,12 @@ function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filte
         acronym = rfbComboTop;
     }
 	
-	FigisMap.ol.refreshFilters(acronym);
+    // REFRESH IS FALSE WHEN USER CHANGE PROJECTION
+    if(refresh){
+        FigisMap.ol.refreshFilters(acronym);
+    }else{
+        resetRFBCheckBox();    
+    }
 	
 	// Restore toggle
 	restoreToggleButtons();

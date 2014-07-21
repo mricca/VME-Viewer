@@ -363,7 +363,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                     var filterResponseListFin = new Array();
                     
                     if(newYears.length != 0){
-                        var measureText = newText.join(";");
+                        var measureText = newText.join("__");
                         newValidityPeriodStart.sort(function(a, b){return a-b});
                         newValidityPeriodEnd.sort(function(a, b){return a-b});
             

@@ -65,51 +65,11 @@ FigisMap.fifao = {
 	
 }; 
 
-FigisMap.infoRFBSources = {
-    CCAMLR : "http://figisapps.fao.org/",
-    GFCM   : "http://figisapps.fao.org/",
-    NAFO   : "http://figisapps.fao.org/",
-    NEAFC  : "http://figisapps.fao.org/",
-    SEAFO  : "http://figisapps.fao.org/",
-    WECAFC : "http://figisapps.fao.org/",
-    SPRFMO : "http://figisapps.fao.org/"
-};
-
 FigisMap.infoGroupsSources = {
     vme      : "http://localhost:8080/VME-Viewer/index_vme.html",
     overlays : "http://localhost:8080/VME-Viewer/index_ovl.html"
 };
 
-FigisMap.infoSources = {
-	cbs : "http://figisapps.fao.org/", //'fifao:country_bounds',
-	cnt : "http://figisapps.fao.org/", //'fifao:UN_CONTINENT2',
-	div : "http://figisapps.fao.org/", //'fifao:FAO_DIV',
-	maj : "http://figisapps.fao.org/", //'fifao:FAO_MAJOR_Lines',
-	ma2 : "http://figisapps.fao.org/", //'fifao:FAO_MAJOR2',
-	mal : "http://figisapps.fao.org/", //'fifao:MarineAreas',
-    guf : "http://figisapps.fao.org/", //'fifao:gebco_underseafeatures',
-    gbi : "http://figisapps.fao.org/", //'vme:gebco_isobath2000', //AFTER WORKSHOP
-    vnt : "http://figisapps.fao.org/", //'vme:vents_InterRidge_2011_all', // Hidrotermal
-    ccr : "http://figisapps.fao.org/", //'vme:WCMC-001-ColdCorals2005', //ColdCorals
-	nma : "http://figisapps.fao.org/", //'fifao:Limit_200nm',
-	RFB : "http://figisapps.fao.org/", //'fifao:RFB',
-	rfb : "http://figisapps.fao.org/", //'fifao:RFB_COMP',
-	sdi : "http://figisapps.fao.org/", //'fifao:FAO_SUB_DIV',
-	spd : "http://figisapps.fao.org/", //'fifao:SPECIES_DIST', 
-	sub : "http://figisapps.fao.org/", //'fifao:FAO_SUB_AREA',
-	vme : "http://figisapps.fao.org/", //'fifao:VMEAREAS',
-    
-    // start after workshop
-    vme_cl : "http://figisapps.fao.org/", //'vme:closures', // VME Closure
-    vme_oa : "http://figisapps.fao.org/", //'vme:other_areas', // Other access regulated areas    
-    vme_bfa : "http://figisapps.fao.org/", //'vme:bottom_fishing_areas', // Bottom fishing areas
-    vme_regarea : "http://figisapps.fao.org/", //'vme:regulatory_areas', // VME regulatory areas
-    //end after workshop
-    
-	vme_fp : "http://figisapps.fao.org/", //'fifao:vme-db_footprints',
-	bathimetry: "http://figisapps.fao.org/" //'fifao:OB_LR'				//natural earth ocean bottom
-
-};
 FigisMap.defaults = {
 	lang		: document.documentElement.getAttribute('lang') ? document.documentElement.getAttribute('lang').toLowerCase() : 'en',
 	defaultBaseLayer	: { layer: FigisMap.fifao.cnt, cached: true, remote:false, label : "Continents" },//FigisMap.fifao.maj,
@@ -1062,8 +1022,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			style		: '*',
 			remote		: false,
 			skipLegend	: true,
-			hideInSwitcher	: true,
-            infoLayersSources: FigisMap.infoSources.cnt
+			hideInSwitcher	: true
 		} );
 	}
 	// marine areas
@@ -1079,7 +1038,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
             showLegendGraphic: false,	            
 			skipLegend	: true,
 			hideInSwitcher	: false,
-                infoGroupsSources: FigisMap.infoGroupsSources.overlays
+            infoGroupsSources: FigisMap.infoGroupsSources.overlays
 		} );
     layers.push( {
 			layer		: FigisMap.fifao.guf,
@@ -2074,11 +2033,10 @@ FigisMap.renderer = function(options) {
             myMap.addControl(graticule);
             graticule.gratLayer.group = "Overlays";
             graticule.gratLayer.infoGroupsSources = FigisMap.infoGroupsSources.overlays;
-            var layersLength = layers.length - 1;
-            myMap.raiseLayer(myMap.getLayersByName("Coordinates Grid")[0], -layersLength);
-            var bbb = myMap.getLayersByName("UN_CONTINENT2")[0];
-            myMap.raiseLayer(myMap.getLayersByName("UN_CONTINENT2")[0], -layersLength);
+            //myMap.raiseLayer(myMap.getLayersByName("UN_CONTINENT2")[0], layers.length+1);
+            myMap.raiseLayer(myMap.getLayersByName("Coordinates Grid")[0], layers.length+1);
         }
+        
 		FigisMap.debug('myMap:', myMap );
 		//OpenLayers.Util.getElement()
 		//Ext.get("id_box").insertBefore(Ext.get("zoom_selector"));  

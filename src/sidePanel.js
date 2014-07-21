@@ -300,7 +300,14 @@ Vme.search = function(advanced){
 	var value = RFMOCombo.getValue();
     
     FigisMap.ol.clearPopupCache();  
-	
+
+    // remove highlight layer on new search
+    var layer = myMap.getLayersByName("highlight")[0];
+    //create layer
+    if(layer){
+        myMap.removeLayer(layer,false);
+    }	        
+        
 	var dIndex = RFMStore.find("id", value); 
     
 	if(dIndex > -1){
@@ -311,7 +318,7 @@ Vme.search = function(advanced){
 		var rfmName = r.data.acronym;
         
         // perform CQL_FILTER
-        FigisMap.ol.refreshFilters(rfmName); 
+        FigisMap.ol.refreshFilters(rfmName);
         
 		var filter = new OpenLayers.Filter.Comparison({
 			type: OpenLayers.Filter.Comparison.EQUAL_TO,
@@ -343,6 +350,7 @@ Vme.search = function(advanced){
 					icon: Ext.MessageBox.WARNING,
 					scope: this
 				});
+                return;
 			}
 					
 			// ///////////////////////////
@@ -514,7 +522,14 @@ Vme.rfbZoomTo = function(acronym,value){
     FigisMap.ol.refreshFilters(rfbName);
 
     FigisMap.ol.clearPopupCache();    
-        
+
+    // remove highlight layer on new search
+    var layer = myMap.getLayersByName("highlight")[0];
+    //create layer
+    if(layer){
+        myMap.removeLayer(layer,false);
+    }	   
+    
     var filter = new OpenLayers.Filter.Comparison({
         type: OpenLayers.Filter.Comparison.EQUAL_TO,
         property: FigisMap.rnd.vars.vmeSearchZoomTo.filterProperty,    // "RFB",
@@ -545,6 +560,7 @@ Vme.rfbZoomTo = function(acronym,value){
                 icon: Ext.MessageBox.WARNING,
                 scope: this
             });
+            return;
         }
                 
         // ///////////////////////////
@@ -819,7 +835,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
             xtype: 'radio',
             width: 'auto',
             id: records.data.id + '_RFB',
-            boxLabel: '<a id="infoRFBimage" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+FigisMap.infoRFBSources[records.data.acronym]+'\');"><img title = "Source of Information" src="theme/img/icons/information.png"> </a>' + records.data.acronym,
+            boxLabel: '<a id="infoRFBimage_'+records.data.id+'_RFB'+'" ><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"> </a>',
             name: 'rfb',
             acronym: records.data.acronym,
             inputValue: records.data.id,
@@ -833,16 +849,21 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                         sidePanel.expand();                        
                     }
                 },
-                render: function(radio){
-                    /*if(radio.acronym != "GFCM" && radio.acronym != "WECAFC"){
-                        var rfbStore = 'rfbStore' + radio.acronym;
+                afterrender: function(radio){
+                    var rfbStore = 'rfbStore' + radio.acronym;      
+                    //WORKAROUND TO MANAGE GFCM AND WECAFC WEB-SERVICE ERROR
+                    //if(Vme.data.stores[rfbStore].data.length != 0){
+                    if(radio.acronym != "GFCM" && radio.acronym != "WECAFC"){                    
                         Vme.data.stores[rfbStore].on('load',function(store, records, options){
                             store.each(function(records,count,tot) {
-                                Ext.applyIf(radio,{boxLabel: '<a id="infoRFBimage" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+records.factsheetUrl+'\');"><img title = "Source of Information" src="theme/img/icons/information.png"> </a>' + radio.acronym});
-                                radio.ownerCt.doLayout();
+                                var id = 'infoRFBimage_' + radio.id;
+                                Ext.get(id).dom.lastChild.parentNode.outerHTML = '<a id="'+id+'" style="color:#000000" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+records.data.factsheetUrl+'\');"><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"></a><span>'+radio.acronym+'</span>';
                             })
                         })
-                    }*/
+                    }else{
+                        var id = 'infoRFBimage_' + radio.id;
+                        Ext.get(id).dom.lastChild.parentNode.outerHTML = '<a id="'+id+'" style="color:#000000" href="javascript:void(0);" onClick="Vme.msgAlert(\''+radio.acronym+'\')"><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"></a><span>'+radio.acronym+'</span>';
+                    }
                 }
             }
         },panel.items[count]));
@@ -867,3 +888,8 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
     }
 
 });
+
+//REMOVE WHEN GFCM AND WECAFC WEB-SERVICE WILL UP
+Vme.msgAlert = function (acronym){
+    Ext.Msg.alert("MESSAGE", "WEB-SERVICE: "+acronym+" IS DOWN");
+};

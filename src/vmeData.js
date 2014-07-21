@@ -284,7 +284,7 @@ Vme.data={
 					compiled:true,
                     formatMeasure:function(values){
                         var pdf = values.pdfURL;
-                        var measureArray = values.measure.split(";");
+                        var measureArray = values.measure.split("__");
                         var html="";
                         
                         for (var i = 0;i<measureArray.length;i++){
@@ -442,7 +442,7 @@ Vme.data={
 					compiled:true,
                     formatMeasure:function(values){
                         var pdf = values.pdfURL;
-                        var measureArray = values.measure.split(";");
+                        var measureArray = values.measure.split("__");
                         var html="";
                         for (var i = 0;i<measureArray.length;i++){
                             if (pdf == ""){
@@ -919,7 +919,21 @@ Vme.data.models = {
     VmeCriteriaUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list",
 	//years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})(),
     yearsUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list",
-    searchUrl: "http://figisapps.fao.org/figis/ws/vme/webservice/search" // see options parameter for Ext.Ajax.request
+    searchUrl: "http://figisapps.fao.org/figis/ws/vme/webservice/search", // see options parameter for Ext.Ajax.request
+    
+    factsheetCCAMLR : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
+    
+    factsheetGFCM   : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/GFCM/scope/Regulatory/vmes",
+    
+    factsheetNAFO   : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NAFO/scope/Regulatory/vmes",
+    
+    factsheetNEAFC  : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NEAFC/scope/Regulatory/vmes",
+    
+    factsheetSEAFO  : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SEAFO/scope/Regulatory/vmes",
+    
+    factsheetWECAFC : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/WECAFC/scope/Regulatory/vmes",
+    
+    factsheetSPRFMO : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SPRFMO/scope/Regulatory/vmes"
 };
 
 Vme.data.extensions ={
@@ -1199,17 +1213,20 @@ Vme.data.stores = {
         root: 'resultList',
         fields: [ "id", {name:"year", mapping:"name"} ] // "lang"
     }),
-
+    
+    // LIST OF RFB FACTSHEET URL
+    
     rfbStoreCCAMLR: new Ext.data.JsonStore({
-        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
+        url: Vme.data.models.factsheetCCAMLR,
         autoLoad: true,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
     }),
     
+    // NOTE: UNCOMMENT WHEN WEB-SERVICE IS UP
     /*rfbStoreGFCM: new Ext.data.JsonStore({
-        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/GFCM/scope/Regulatory/vmes",
+        url: Vme.data.models.factsheetGFCM,
         autoLoad: true,
         remoteSort: false,
         root: 'vmeDto',                      
@@ -1217,7 +1234,7 @@ Vme.data.stores = {
     }),*/
 
     rfbStoreNAFO: new Ext.data.JsonStore({
-        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NAFO/scope/Regulatory/vmes",
+        url: Vme.data.models.factsheetNAFO,
         autoLoad: true,
         remoteSort: false,
         root: 'vmeDto',                      
@@ -1225,7 +1242,7 @@ Vme.data.stores = {
     }),
 
     rfbStoreNEAFC: new Ext.data.JsonStore({
-        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NEAFC/scope/Regulatory/vmes",
+        url: Vme.data.models.factsheetNEAFC,
         autoLoad: true,
         remoteSort: false,
         root: 'vmeDto',                      
@@ -1233,15 +1250,16 @@ Vme.data.stores = {
     }),
 
     rfbStoreSEAFO: new Ext.data.JsonStore({
-        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SEAFO/scope/Regulatory/vmes",
+        url: Vme.data.models.factsheetSEAFO,
         autoLoad: true,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
     }),
 
+    // NOTE: UNCOMMENT WHEN WEB-SERVICE IS UP
     /*rfbStoreWECAFC: new Ext.data.JsonStore({
-        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/WECAFC/scope/Regulatory/vmes",
+        url: Vme.data.models.factsheetWECAFC,
         autoLoad: true,
         remoteSort: false,
         root: 'vmeDto',                      
@@ -1249,7 +1267,7 @@ Vme.data.stores = {
     }),*/
 
     rfbStoreSPRFMO: new Ext.data.JsonStore({
-        url: "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SPRFMO/scope/Regulatory/vmes",
+        url: Vme.data.models.factsheetSPRFMO,
         autoLoad: true,
         remoteSort: false,
         root: 'vmeDto',                      
