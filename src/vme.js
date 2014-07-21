@@ -327,9 +327,11 @@ function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filte
 	
     // REFRESH IS FALSE WHEN USER CHANGE PROJECTION
     if(refresh){
-        FigisMap.ol.refreshFilters(acronym);
+        resetRFBCheckBox();
+        FigisMap.ol.refreshFilters();
     }else{
-        resetRFBCheckBox();    
+        FigisMap.ol.refreshFilters(acronym);
+    
     }
 	
 	// Restore toggle
