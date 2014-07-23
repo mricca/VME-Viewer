@@ -211,6 +211,7 @@ li {
     position: absolute;
     right: 380px;
     z-index: 5000;
+    background-color: #57BCE6;    
     background-color: rgba(41, 171, 226, 0.6);
 }
 #bottomRightPanel div {

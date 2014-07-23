@@ -66,8 +66,8 @@ FigisMap.fifao = {
 }; 
 
 FigisMap.infoGroupsSources = {
-    vme      : "http://localhost:8080/VME-Viewer/index_vme.html",
-    overlays : "http://localhost:8080/VME-Viewer/index_ovl.html"
+    vme      : "index_vme.html",
+    overlays : "index_ovl.html"
 };
 
 FigisMap.defaults = {
