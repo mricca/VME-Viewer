@@ -19,7 +19,7 @@
  */
  /**
  * 
- * Factsheet display window.
+ * InfoSourceLayer display window.
  * 
  * Author: Lorenzo Pini (GeoSolutions S.A.S.)
  *
@@ -54,12 +54,11 @@ Ext.IframeWindow = Ext.extend(Ext.Window, {
 
 Ext.onReady(function(){
     //
-	//Factsheet window
+	//infoSourceLayer window
 	//
-    FigisMap.factsheetRel = function(factsheetUrl){
-        var factsheetUrl = factsheetUrl.replace("http://figisapps.fao.org/","");
-        if(!factsheetUrl)
-            factsheetUrl = "http://figisapps.fao.org/fishery/vme/10/en";
+    FigisMap.infoSourceLayers = function(InfoSourcesLayerUrl){
+        if(!InfoSourcesLayerUrl)
+            InfoSourcesLayerUrl = "http://figisapps.fao.org/";
         var tbarDiv = Ext.get('logo');
         var mainDiv = Ext.get('main');
         //var disclaimerDiv = Ext.get('disclaimer');
@@ -71,8 +70,7 @@ Ext.onReady(function(){
             height: mainDiv.getHeight() +tbarDiv.getHeight() - 49,//+disclaimerDiv.getHeight(),
             //title: "VME fact sheet <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;back to map&nbsp;</a>",
 			title: " <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;Home&nbsp;</a>",
-            src:"http://figisapps.fao.org/"+factsheetUrl,
-            //src:factsheetUrl,
+            src: InfoSourcesLayerUrl,
             closeAction: 'destroy',
             maximizable: true,
             draggable: false,

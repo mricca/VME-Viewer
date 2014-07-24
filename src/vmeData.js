@@ -242,7 +242,7 @@ Vme.data={
                     }
 				}
 			),			
-		vme: 
+		vme_cl: 
 			new Ext.XTemplate(
 				'<tpl for=".">'+
                     '<tpl if="[xindex] &gt; \'1\'">'+
@@ -251,12 +251,18 @@ Vme.data={
 					'<div class="popup-result" style="text-align:left;">' +
 						'<h3>{localname}</h3>'+
 						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
-						'<em>Measure first applied in: </em><span>{[this.getValidity(values, true)]}</span> <br/> '+
+						//'<em>Measure first applied in: </em><span>{[this.getValidity(values, true)]}</span> <br/> '+
+                        '<em>Closed since </em><span>{validityPeriodFrom}</span> <em>until</em> <span>{validityPeriodTo}, </span><em>review in <span>{review_date}</span></em><br/> '+
+                        //'<em>Measure: </em><span>{measure}</span> <a  target="_blank" href="{pdfURL}"><img title="Download pdf" src="theme/img/icons/download_pdf.png"></a><br/> '+
+                        '<em>Measure: </em>{[this.formatMeasure(values)]}'+
 						//'<em>Validity: </em><span>{[this.getValidity(values)]}</span> <br/> '+
 						//'<em>Year: </em>{year}<br/> '+
 						//'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
 						//'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
 						'<em>Area Type: </em><span>{vmeType}</span> <br/> '+
+                        '<em>Surface: </em><span>{[this.toHectares(values)]}</span><em> (ha)</em> <br/> '+
+						//'<em>Start Date: </em><span>{validityPeriodFrom}</span> <br/> '+
+                        //'<em>End Date: </em><span>{validityPeriodTo}</span> <br/> '+                        
 						// '<em>UN Criteria: </em>{criteria}<br/> '+
 						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
 						
@@ -265,6 +271,7 @@ Vme.data={
 							//'{[this.getDownloadFDS(values)]}' +
 							'&nbsp;&nbsp;<a onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+                                
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
                             '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +
@@ -275,6 +282,181 @@ Vme.data={
 				'</tpl>',
 				{
 					compiled:true,
+                    formatMeasure:function(values){
+                        var pdf = values.pdfURL;
+                        var measureArray = values.measure.split("__");
+                        var html="";
+                        
+                        for (var i = 0;i<measureArray.length;i++){
+                            if (pdf == ""){
+                                html += '</em><span>' + measureArray[i] + '</span> <a  target="_blank" href="' + pdf + '"></a><br/>';
+                            }else{
+                                html += '</em><span>' + measureArray[i] + '</span> <a  target="_blank" href="' + pdf + '"><img title="Download pdf" src="theme/img/icons/download_pdf.png"></a><br/>';
+                            }
+                        }
+                        return html;
+                    },
+                    toHectares:function(values){
+                        var hectares = values.surface/10000;
+                        return Math.round(hectares);
+                    },
+					getBBOX:function(values){
+						var projcode = "EPSG:4326";
+						if(myMap.getProjection() == projcode ){
+							bbox = values.bbox;
+							return bbox.toArray(); 
+						}else{
+							var geom = values.geometry;
+							var repro_geom = geom.clone().transform(
+							new OpenLayers.Projection(projcode),
+							myMap.getProjectionObject()
+						);
+						
+						var repro_bbox = repro_geom.getBounds();
+						return repro_bbox.toArray();
+						
+						}
+					},
+					getVert: function(geom){
+						vert  = geom.getVertices()[0];
+						
+						return "{x:"+vert.x+",y:"+vert.y+"}";
+						//return evt;
+					},
+                    /**
+                     * Returns Validity String
+                     * "validityFrom - validityTo" or "from validityFrom"
+                     * 
+                     */
+                    getValidity: function(values, firstOnly){
+						if(firstOnly === true){
+							return values.validityPeriodFrom ? values.validityPeriodFrom : "Not Found";
+						}else{
+							if(values.validityPeriodFrom){
+								if(values.validityPeriodTo && values.validityPeriodTo != 9999){
+									return values.validityPeriodFrom + " - " + values.validityPeriodTo;
+								}else{
+									return "from "+ values.validityPeriodFrom;
+								}
+							}else{
+								return("Not Found");
+							}
+						}
+                    },
+                    /**
+                     * Returns the link to the factsheet
+                     */
+                    getFactsheetUrl: function(values){
+
+                        if(values.factsheetUrl){
+                            return(values.factsheetUrl);
+                        }else
+                        {
+                            //return("fishery/vme/10/en");
+                            return("http://figisapps.fao.org/fishery/vme/10/en");
+                        }
+                    },
+					/**
+					 * Download all vme areas
+					 */
+					getDownloadLink: function(values){
+						return Vme.utils.generateDownloadLink(
+							FigisMap.rnd.vars.ows,
+							FigisMap.fifao.vme_cl,
+							Vme.utils.generateVMEFilter(values.vme_id),
+							"shape-zip",
+							{format_options:"filename:VME-DB_"+values.vme_id+".zip"}
+						);
+						//return +"?service=WFS&version=1.0.0&request=GetFeature&typeName=" + FigisMap.fifao.vme+ "&outputFormat=shape-zip" +
+						//	"&cql_filter=" + encodeURIComponent( "YEAR = '" + values.year + "' AND VME_ID = '" +values.vme_id +"'" )
+							
+					},
+					/**
+					 * Download all vme areas + encoutners & sd for this vme
+					 */
+					getDownloadFDS:function(values){
+						if(!FigisMap.rnd.status.logged){
+							return "";
+						}
+						var filter = Vme.utils.generateVMEFilter(values.vme_id);
+						filter =filter +";"+ filter + ";" + filter;
+						return '<a class="zipmlink" target="_blank" href="'+
+							Vme.utils.generateDownloadLink(
+								FigisMap.rnd.vars.ows,
+                                //Remove encounters and ...
+								//[FigisMap.fifao.vme,FigisMap.fifao.vme_en,FigisMap.fifao.vme_sd],
+                                [FigisMap.fifao.vme_cl],
+								filter,
+								"shape-zip",
+								{format_options:"filename:VME-DB_"+values.vme_id+"_DS.zip"}
+							)
+							+'">Download full Data Set</a>' ;
+					},
+					addProtectedLinks: function(values){
+						if(!FigisMap.rnd.status.logged){
+							return "";
+						}
+						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Related Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Related</a>';
+					}
+				}
+			),
+		vme_oa: 
+			new Ext.XTemplate(
+				'<tpl for=".">'+
+                    '<tpl if="[xindex] &gt; \'1\'">'+
+                        '<hr/>'+
+                    '</tpl>'+
+					'<div class="popup-result" style="text-align:left;">' +
+						'<h3>{localname}</h3>'+
+						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
+						//'<em>Measure first applied in: </em><span>{[this.getValidity(values, true)]}</span> <br/> '+
+                        '<em>Closed since </em><span>{validityPeriodFrom}</span> <em>until</em> <span>{validityPeriodTo}, </span><em>review in <span>{review_date}</span></em><br/> '+
+                        //'<em>Measure: </em><span>{measure}</span> <a  target="_blank" href="{pdfURL}"><img title="Download pdf" src="theme/img/icons/download_pdf.png"></a><br/> '+
+                        '<em>Measure: </em>{[this.formatMeasure(values)]}'+
+						//'<em>Validity: </em><span>{[this.getValidity(values)]}</span> <br/> '+
+						//'<em>Year: </em>{year}<br/> '+
+						//'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
+						//'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+						'<em>Area Type: </em><span>{vmeType}</span> <br/> '+
+                        '<em>Surface: </em><span>{[this.toHectares(values)]}</span><em> (ha)</em> <br/> '+
+						//'<em>Start Date: </em><span>{validityPeriodFrom}</span> <br/> '+
+                        //'<em>End Date: </em><span>{validityPeriodTo}</span> <br/> '+                        
+						// '<em>UN Criteria: </em>{criteria}<br/> '+
+						//'<em>Vme ID:</em><span class="own"> {vme_id}</span><br/>'+
+						
+						'<div style="text-align:right;">' +
+							'<a  target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
+							//'{[this.getDownloadFDS(values)]}' +
+							'&nbsp;&nbsp;<a onClick="'+
+								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+                                
+								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
+							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
+                            '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +
+
+							//'<br/>{[this.addProtectedLinks(values)]}' +
+                        '</div>'+
+                    '</div>'+
+				'</tpl>',
+				{
+					compiled:true,
+                    formatMeasure:function(values){
+                        var pdf = values.pdfURL;
+                        var measureArray = values.measure.split("__");
+                        var html="";
+                        for (var i = 0;i<measureArray.length;i++){
+                            if (pdf == ""){
+                                html += '</em><span>' + measureArray[i] + '</span> <a  target="_blank" href="' + pdf + '"></a><br/>';
+                            }else{
+                                html += '</em><span>' + measureArray[i] + '</span> <a  target="_blank" href="' + pdf + '"><img title="Download pdf" src="theme/img/icons/download_pdf.png"></a><br/>';
+                            }
+                        }
+                        return html;
+                    },                    
+                    toHectares:function(values){
+                        var hectares = values.surface/10000
+                        return Math.round(hectares);
+                    },                    
 					getBBOX:function(values){
 						var projcode = "EPSG:4326";
 						if(myMap.getProjection() == projcode ){
@@ -336,7 +518,7 @@ Vme.data={
 					getDownloadLink: function(values){
 						return Vme.utils.generateDownloadLink(
 							FigisMap.rnd.vars.ows,
-							FigisMap.fifao.vme,
+							FigisMap.fifao.vme_oa,
 							Vme.utils.generateVMEFilter(values.vme_id),
 							"shape-zip",
 							{format_options:"filename:VME-DB_"+values.vme_id+".zip"}
@@ -357,7 +539,9 @@ Vme.data={
 						return '<a class="zipmlink" target="_blank" href="'+
 							Vme.utils.generateDownloadLink(
 								FigisMap.rnd.vars.ows,
-								[FigisMap.fifao.vme,FigisMap.fifao.vme_en,FigisMap.fifao.vme_sd],
+                                //Remove encounters and ...
+								//[FigisMap.fifao.vme,FigisMap.fifao.vme_en,FigisMap.fifao.vme_sd],
+                                [FigisMap.fifao.vme_oa],
 								filter,
 								"shape-zip",
 								{format_options:"filename:VME-DB_"+values.vme_id+"_DS.zip"}
@@ -371,7 +555,7 @@ Vme.data={
 						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Related Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Related</a>';
 					}
 				}
-			),
+			),            
 		encounters :
 			new Ext.XTemplate(
 				'<tpl for=".">'+
@@ -559,6 +743,7 @@ Vme.data={
 						'<em>Year: </em>{year}<br/> '+
 						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
+                        '<em>Surface: </em><span>{[this.toHectares(values)]}</span><em> (ha)</em> <br/> '+                         
 						//'<br/><br/>'+
 						
 						'<div>'+
@@ -566,8 +751,73 @@ Vme.data={
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+   
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
+						'</div>'+
+						'</div>'+
+					'</div>'+
+				'</tpl>',
+				{
+					compiled:true,
+                    toHectares:function(values){
+                        var hectares = values.surface/10000
+                        return Math.round(hectares);
+                    },                    
+					getBBOX:function(values){
+						var projcode = "EPSG:4326";
+						if(myMap.getProjection() == projcode ){
+							bbox = values.bbox;
+							return bbox.toArray(); 
+						}else{
+							var geom = values.geometry;
+							var repro_geom = geom.clone().transform(
+							new OpenLayers.Projection(projcode),
+							myMap.getProjectionObject()
+						);
+						
+						var repro_bbox = repro_geom.getBounds();
+						return repro_bbox.toArray();
+						
+						}
+					},
+					getVert: function(geom){
+						vert  = geom.getVertices()[0];
+						
+						return "{x:"+vert.x+",y:"+vert.y+"}";
+						//return evt;
+					},
+					getDownloadLink: function(values){
+						return Vme.utils.generateDownloadLink(
+							FigisMap.rnd.vars.ows,
+							FigisMap.fifao.vme_bfa,
+							Vme.utils.generateVMEFilter([values.vme_id]),
+							"shape-zip"
+						);
+					}					
+				}
+			),
+		regarea :
+			new Ext.XTemplate(
+				'<tpl for=".">'+
+					'<div class="popup-result" style="text-align:left;">' +
+						'<h3>Name: {rfb}</h3>'+
+						//'<em>NAME: </em>{rfb}<br/> '+
+						//'<em>AREATYPE: </em><span class="own">{area_type}</span><br/>'+
+						'<em>Perimeter: </em><span class="geo_ref" >{SHAPE_LENG}</span> <br/>'+
+                        '<em>Area: </em><span class="geo_ref" >{SHAPE_AREA}</span> <br/>'+
+						//'<br/><br/>'+
+						
+						'<div>'+
+						'<div style="text-align:right;">' +
+							//'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
+							//'<a class="" onClick="'+
+							//	'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+                            //    'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+   
+							//	'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
+							//'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
+                            //'&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +                            
+                            '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="alert(\'{rfb}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +                            
 						'</div>'+
 						'</div>'+
 					'</div>'+
@@ -600,11 +850,23 @@ Vme.data={
 					getDownloadLink: function(values){
 						return Vme.utils.generateDownloadLink(
 							FigisMap.rnd.vars.ows,
-							FigisMap.fifao.vme_fp,
-							Vme.utils.generateFidFilter([values.id]),
+							FigisMap.fifao.vme_bfa,
+							Vme.utils.generateVMEFilter([values.vme_id]),
 							"shape-zip"
 						);
-					}					
+					},
+                    /**
+                     * Returns the link to the factsheet
+                     */
+                    getFactsheetUrl: function(values){
+
+                        if(values.factsheetUrl){
+                            return(values.factsheetUrl);
+                        }else
+                        {
+                            return("fishery/vme/10/en");
+                        }
+                    }					
 				}
 			)
 	},
@@ -642,7 +904,8 @@ Vme.data.models = {
 		
 	],
 	*/
-    VmeStatusesUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",//) : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+    VmeStatusesUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+    //) : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
 	/*
 	VmeCriteria:[ 
 		[0, FigisMap.label("VME_CRITERIA_UNIQUE")],
@@ -656,7 +919,21 @@ Vme.data.models = {
     VmeCriteriaUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list",
 	//years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})(),
     yearsUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list",
-    searchUrl: "http://figisapps.fao.org/figis/ws/vme/webservice/search" // see options parameter for Ext.Ajax.request
+    searchUrl: "http://figisapps.fao.org/figis/ws/vme/webservice/search", // see options parameter for Ext.Ajax.request
+    
+    factsheetCCAMLR : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
+    
+    factsheetGFCM   : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/GFCM/scope/Regulatory/vmes",
+    
+    factsheetNAFO   : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NAFO/scope/Regulatory/vmes",
+    
+    factsheetNEAFC  : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NEAFC/scope/Regulatory/vmes",
+    
+    factsheetSEAFO  : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SEAFO/scope/Regulatory/vmes",
+    
+    factsheetWECAFC : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/WECAFC/scope/Regulatory/vmes",
+    
+    factsheetSPRFMO : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SPRFMO/scope/Regulatory/vmes"
 };
 
 Vme.data.extensions ={
@@ -669,7 +946,28 @@ Vme.data.extensions ={
 					{name: 'geometry', mapping: 'geometry'},
                     {name: 'vme_id',     mapping: 'attributes.VME_ID'},
 					{name: 'status', 	 mapping: 'attributes.STATUS'},
-                    {name: 'year', mapping: 'attributes.YEAR'},
+                    {name: 'year', mapping: 'attributes.year'},
+                    {name: 'VME_AREA_TIME', mapping: 'attributes.VME_AREA_TIME'},
+                    {name: 'SHAPE_AREA', mapping:'attributes.SHAPE_AREA'},
+                    {name: 'envelope', mapping: 'attributes.envelope'},
+					{name: 'localname',  mapping: 'attributes.localName'},
+					{name: 'factsheetUrl',  mapping: 'attributes.factsheetURL'},
+                    {name: 'pdfURL',  mapping: 'attributes.pdfURL'},
+					{name: 'bbox',		mapping: 'bounds'},
+					{name: 'vmeType', mapping: 'attributes.vmeType'},
+					{name: 'owner', mapping: 'attributes.owner'},
+                    {name: 'owner_acronym', mapping: 'attributes.OWNER'},
+                    {name: 'validityPeriodFrom', mapping: 'attributes.validityPeriodStart'},
+					{name: 'validityPeriodTo', mapping: 'attributes.validityPeriodEnd'},
+					{name: 'geo_ref', mapping: 'attributes.geoArea'},
+                    {name: 'surface', mapping: 'attributes.SURFACE'},
+                    {name: 'measure', mapping: 'attributes.measure'}
+                    
+					/*{name: 'id', mapping: 'fid'},
+					{name: 'geometry', mapping: 'geometry'},
+                    {name: 'vme_id',     mapping: 'attributes.VME_ID'},
+					{name: 'status', 	 mapping: 'attributes.STATUS'},
+                    {name: 'year', mapping: 'attributes.year'},
                     {name: 'VME_AREA_TIME', mapping: 'attributes.VME_AREA_TIME'},
                     {name: 'SHAPE_AREA', mapping:'attributes.SHAPE_AREA'},
                     {name: 'envelope', mapping: 'attributes.envelope'},
@@ -678,13 +976,36 @@ Vme.data.extensions ={
 					{name: 'bbox',		mapping: 'bounds'},
 					{name: 'vmeType', mapping: 'attributes.vmeType'},
 					{name: 'owner', mapping: 'attributes.owner'},
+                    {name: 'owner_acronym', mapping: 'attributes.OWNER'},
                     {name: 'validityPeriodFrom', mapping: 'attributes.validityPeriodFrom'},
 					{name: 'validityPeriodTo', mapping: 'attributes.validityPeriodTo'},
-					{name: 'geo_ref', mapping: 'attributes.geoArea'}					
+					{name: 'geo_ref', mapping: 'attributes.geoArea'},
+                    {name: 'surface', mapping: 'attributes.SURFACE'}*/
 				],
 				idProperty: 'fid'			
 			})
 		}),
+        
+		RfbStore : Ext.extend(Ext.data.JsonStore,{
+			reader : new Ext.data.JsonReader({
+				root:'',
+				fields: [
+					{name: 'id', mapping: 'fid'},
+					{name: 'geometry', mapping: 'geometry'},
+                    {name: 'rfb',     mapping: 'attributes.RFB'},                    
+                    {name: 'vme_id',     mapping: 'attributes.VME_ID'},
+                    {name: 'area_type',     mapping: 'attributes.AREATYPE'},
+                    {name: 'defrule',     mapping: 'attributes.DEFRULE'},
+                    {name: 'disporder',     mapping: 'attributes.DISPORDER'},
+                    {name: 'fill',     mapping: 'attributes.FILL'},
+                    {name: 'stroke',     mapping: 'attributes.STROKE'},
+                    {name: 'ancfeature',     mapping: 'attributes.ANCFEATURE'},
+                    {name: 'SHAPE_AREA', mapping:'attributes.SHAPE_AREA'},
+                    {name: 'SHAPE_LENG', mapping:'attributes.SHAPE_LENG'}
+				],
+				idProperty: 'fid'			
+			})
+		}),        
 		
 		EncountersStore : Ext.extend(Ext.data.JsonStore,{
 			reader : new Ext.data.JsonReader({
@@ -749,15 +1070,16 @@ Vme.data.extensions ={
 				fields: [
 					{name: 'id', mapping: 'fid'},
 					{name: 'geometry', mapping: 'geometry'},
-					{name: 'localname',  mapping: 'attributes.Name'},
+					{name: 'localname',  mapping: 'attributes.LOCAL_NAME'},
 					{name: 'bbox',		mapping: 'bounds'},
 					{name: 'vme_id',     mapping: 'attributes.VME_ID'},
 					{name: 'status', 	 mapping: 'attributes.STATUS'},
-					{name: 'year', mapping: 'attributes.Year'},
+					{name: 'year', mapping: 'attributes.YEAR'},
 					{name: 'type', mapping: 'attributes.VME_TYPE'},
-					{name: 'owner', mapping: 'attributes.Owner'},
+					{name: 'owner', mapping: 'attributes.OWNER'},
 					{name: 'obj_id', mapping: 'attributes.OBJECTID'},
-					{name: 'geo_ref', mapping: 'attributes.GeoRef'}					
+					{name: 'geo_ref', mapping: 'attributes.GEOREF'},
+                    {name: 'surface', mapping: 'attributes.SURFACE'}					
 				],
 				idProperty: 'fid'			
 			})
@@ -775,7 +1097,7 @@ Vme.data.extensions ={
 		WFSStore : Ext.extend(Ext.ux.LazyJsonStore,{
 			//combo:this,
 			
-			typeName: FigisMap.fifao.vme,
+			typeName: FigisMap.fifao.vme_cl,
 			reader: new Ext.data.JsonReader({
 				root:'features',
 				idProperty:'id', 
@@ -854,7 +1176,7 @@ Vme.data.stores = {
         remoteSort: false,
         idProperty: 'id',        
         root: 'resultList',
-        fields: [ "id", "name", "acronym" ] // "lang"
+        fields: [ "id", "name", "acronym" ]// "lang"
         //sortInfo: {field: "name", direction: "ASC"}             
     }),
 
@@ -891,7 +1213,67 @@ Vme.data.stores = {
         root: 'resultList',
         fields: [ "id", {name:"year", mapping:"name"} ] // "lang"
     }),
-	
+    
+    // LIST OF RFB FACTSHEET URL
+    
+    rfbStoreCCAMLR: new Ext.data.JsonStore({
+        url: Vme.data.models.factsheetCCAMLR,
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),
+    
+    // NOTE: UNCOMMENT WHEN WEB-SERVICE IS UP
+    /*rfbStoreGFCM: new Ext.data.JsonStore({
+        url: Vme.data.models.factsheetGFCM,
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),*/
+
+    rfbStoreNAFO: new Ext.data.JsonStore({
+        url: Vme.data.models.factsheetNAFO,
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),
+
+    rfbStoreNEAFC: new Ext.data.JsonStore({
+        url: Vme.data.models.factsheetNEAFC,
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),
+
+    rfbStoreSEAFO: new Ext.data.JsonStore({
+        url: Vme.data.models.factsheetSEAFO,
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),
+
+    // NOTE: UNCOMMENT WHEN WEB-SERVICE IS UP
+    /*rfbStoreWECAFC: new Ext.data.JsonStore({
+        url: Vme.data.models.factsheetWECAFC,
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),*/
+
+    rfbStoreSPRFMO: new Ext.data.JsonStore({
+        url: Vme.data.models.factsheetSPRFMO,
+        autoLoad: true,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),    
+                    
 	SearchResultStore:new Ext.ux.LazyJsonStore({
 
 		method:'GET',

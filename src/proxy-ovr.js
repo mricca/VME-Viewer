@@ -7,11 +7,11 @@ Ext.apply(Ext.lib.Ajax, {
 	/** private: method[request]
 	 */
 	request: function(method, uri, cb, data, options) { 
-		console.log(method);
-		console.log(uri);
-		console.log(cb);
-		console.log(data);
-		console.log(options);                                   
+		//console.log(method);
+		//console.log(uri);
+		//console.log(cb);
+		//console.log(data);
+		//console.log(options);                                   
 		var sameOrigin = !(uri.indexOf("http") == 0);
 		var urlParts = !sameOrigin && uri.match(/([^:]*:)\/\/([^:]*:?[^@]*@)?([^:\/\?]*):?([^\/\?]*)/);
 		if (urlParts) {
