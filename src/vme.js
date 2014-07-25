@@ -680,10 +680,11 @@ function setVMEEmbedLink(embedUrl, embedIframe) {
 	
 	linkId.setValue(baseURL);
     
-	var pathArray = window.location.pathname.split( '/' );
+	//var pathArray = window.location.pathname.split( '/' );
 
 	//var htmlFrame = '<iframe src="' + baseURL.replace(/VME-Viewer\//,'VME-Viewer/index_e.html') + '" width="800" height="600" frameborder="0" marginheight="0">';
-    var htmlFrame = '<iframe src="' + baseURL.replace(pathArray[1]+'/',pathArray[1] + '/index_e.html') + '" width="800" height="600" frameborder="0" marginheight="0">';
+    //var htmlFrame = '<iframe src="' + baseURL.replace(pathArray[1]+'/',pathArray[1] + '/index_e.html') + '" width="800" height="600" frameborder="0" marginheight="0">';
+    var htmlFrame = '<iframe src="' + baseURL.replace(window.location.href,window.location.href + 'index_e.html') + '" width="800" height="600" frameborder="0" marginheight="0">';
 		htmlFrame += "</iframe>";
 		
 	htmlId.setValue(htmlFrame);

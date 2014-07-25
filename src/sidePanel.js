@@ -855,9 +855,9 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                     Vme.data.stores[rfbStore].on('load',function(store, records, options){
                         store.each(function(records,count,tot) {
                             var id = 'infoRFBimage_' + radio.id;
-                            Ext.get(id).dom.lastChild.parentNode.outerHTML = '<a id="'+id+'" style="color:#000000" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+records.data.factsheetUrl+'\');"><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"></a><span>'+radio.acronym+'</span>';
+                            Ext.get(id).dom.lastChild.parentNode.outerHTML = '<a id="'+id+'" style="color:#000000" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+records.data.factsheetUrl+'\',true);"><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"></a><span>'+radio.acronym+'</span>';
                         })
-                    });                    
+                    });
                     
                     //WORKAROUND TO MANAGE GFCM AND WECAFC WEB-SERVICE ERROR
                     //if(Vme.data.stores[rfbStore].data.length != 0){
