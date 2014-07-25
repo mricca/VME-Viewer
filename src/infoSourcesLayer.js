@@ -70,7 +70,7 @@ Ext.onReady(function(){
             height: mainDiv.getHeight() +tbarDiv.getHeight() - 49,//+disclaimerDiv.getHeight(),
             //title: "VME fact sheet <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;back to map&nbsp;</a>",
 			title: " <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;Home&nbsp;</a>",
-            src: InfoSourcesLayerUrl,
+            src: "http://figisapps.fao.org/" + InfoSourcesLayerUrl,
             closeAction: 'destroy',
             maximizable: true,
             draggable: false,

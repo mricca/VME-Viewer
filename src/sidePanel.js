@@ -851,9 +851,17 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                 },
                 afterrender: function(radio){
                     var rfbStore = 'rfbStore' + radio.acronym;      
+                    
+                    Vme.data.stores[rfbStore].on('load',function(store, records, options){
+                        store.each(function(records,count,tot) {
+                            var id = 'infoRFBimage_' + radio.id;
+                            Ext.get(id).dom.lastChild.parentNode.outerHTML = '<a id="'+id+'" style="color:#000000" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+records.data.factsheetUrl+'\');"><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"></a><span>'+radio.acronym+'</span>';
+                        })
+                    });                    
+                    
                     //WORKAROUND TO MANAGE GFCM AND WECAFC WEB-SERVICE ERROR
                     //if(Vme.data.stores[rfbStore].data.length != 0){
-                    if(radio.acronym != "GFCM" && radio.acronym != "WECAFC"){                    
+                    /*if(radio.acronym != "GFCM" && radio.acronym != "WECAFC"){                    
                         Vme.data.stores[rfbStore].on('load',function(store, records, options){
                             store.each(function(records,count,tot) {
                                 var id = 'infoRFBimage_' + radio.id;
@@ -863,7 +871,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                     }else{
                         var id = 'infoRFBimage_' + radio.id;
                         Ext.get(id).dom.lastChild.parentNode.outerHTML = '<a id="'+id+'" style="color:#000000" href="javascript:void(0);" onClick="Vme.msgAlert(\''+radio.acronym+'\')"><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"></a><span>'+radio.acronym+'</span>';
-                    }
+                    }*/
                 }
             }
         },panel.items[count]));

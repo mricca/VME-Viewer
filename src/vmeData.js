@@ -1224,14 +1224,13 @@ Vme.data.stores = {
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
     }),
     
-    // NOTE: UNCOMMENT WHEN WEB-SERVICE IS UP
-    /*rfbStoreGFCM: new Ext.data.JsonStore({
+    rfbStoreGFCM: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetGFCM,
         autoLoad: true,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
-    }),*/
+    }),
 
     rfbStoreNAFO: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetNAFO,
@@ -1257,14 +1256,13 @@ Vme.data.stores = {
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
     }),
 
-    // NOTE: UNCOMMENT WHEN WEB-SERVICE IS UP
-    /*rfbStoreWECAFC: new Ext.data.JsonStore({
+    rfbStoreWECAFC: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetWECAFC,
         autoLoad: true,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
-    }),*/
+    }),
 
     rfbStoreSPRFMO: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetSPRFMO,
