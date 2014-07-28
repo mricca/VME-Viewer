@@ -46,7 +46,7 @@
     <script type="text/javascript" src="src/proxy-ovr.js" defer="defer"></script>
 	<script type="text/javascript" src="src/vmeData.js" ></script>
 	<script type="text/javascript" src="src/popups.js"></script>
-	<script type="text/javascript" src="src/sidePanel.js" ></script>
+	<script type="text/javascript" src="src/sidePanel.js" defer></script>
 	<script type="text/javascript" src="src/vme.js"></script>
 
 	<script type="text/javascript" src="lib/OpenLayers/openlayers-ext/Watermark.js" defer="defer"></script>
@@ -318,7 +318,7 @@ document.namespaces;
 		Ext.onReady(function(){
 			sidePanel.render(document.getElementById('sidebarP'));
             
-            selectRFB.render(document.getElementById('RFBCombo_'));
+            //selectRFB.render(document.getElementById('RFBCombo_'));
 
 			setVMEPage('embed-link','embed-url', 'embed-iframe');
 			

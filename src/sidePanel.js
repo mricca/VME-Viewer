@@ -785,6 +785,7 @@ var sidePanel = new Ext.Panel({
 
 var selectRFB = new Ext.Panel({
     layout: 'form',
+    renderTo: 'RFBCombo_',
     name: 'selectRFB_name',
 	border: false,
 	labelAlign :'left',
@@ -817,9 +818,9 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
         items:items         
     });
     
+    panel.doLayout(false,true);        
     
     store.each(function(records,count,tot) {
-        panel.doLayout(false,true);    
         var column;
         if(count==0 || count<3){
             column = Ext.getCmp("RFBCombo").panel.getComponent(0);
@@ -831,7 +832,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
             column = Ext.getCmp("RFBCombo").panel.getComponent(2);  
             column.setWidth(90);
         }
-        var radio = column.add(Ext.apply({
+        var radio = column.add({
             xtype: 'radio',
             width: 'auto',
             id: records.data.id + '_RFB',
@@ -849,9 +850,10 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                         sidePanel.expand();                        
                     }
                 },
-                render: function(radio){
+                afterrender: function(radio){
+                
                     var rfbStore = 'rfbStore' + radio.acronym;      
-                    
+                    Vme.data.stores[rfbStore].load();
                     Vme.data.stores[rfbStore].on('load',function(store, records, options){
                         store.each(function(records,count,tot) {
                             var id = 'infoRFBimage_' + radio.id;
@@ -874,7 +876,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                     }*/
                 }
             }
-        },panel.items[count]));
+        });
         column.items.add(radio);  
         column.doLayout(false,true);
     });

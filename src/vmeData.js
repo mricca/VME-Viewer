@@ -1247,7 +1247,7 @@ Vme.data.stores = {
     
     rfbStoreCCAMLR: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetCCAMLR,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1255,7 +1255,7 @@ Vme.data.stores = {
     
     rfbStoreGFCM: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetGFCM,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1263,7 +1263,7 @@ Vme.data.stores = {
 
     rfbStoreNAFO: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetNAFO,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1271,7 +1271,7 @@ Vme.data.stores = {
 
     rfbStoreNEAFC: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetNEAFC,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1279,7 +1279,7 @@ Vme.data.stores = {
 
     rfbStoreSEAFO: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetSEAFO,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1287,7 +1287,7 @@ Vme.data.stores = {
 
     rfbStoreWECAFC: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetWECAFC,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1295,7 +1295,7 @@ Vme.data.stores = {
 
     rfbStoreSPRFMO: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetSPRFMO,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          

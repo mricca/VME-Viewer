@@ -40,7 +40,7 @@
     <script type="text/javascript" src="src/proxy-ovr.js" defer="defer"></script>
 	<script type="text/javascript" src="src/vmeData.js" ></script>
 	<script type="text/javascript" src="src/popups.js"></script>
-	<script type="text/javascript" src="src/sidePanel.js" ></script>
+	<script type="text/javascript" src="src/sidePanel.js" defer></script>
 	<script type="text/javascript" src="src/vme.js"></script>
 
 	<script type="text/javascript" src="lib/OpenLayers/openlayers-ext/Watermark.js" defer="defer"></script>
@@ -182,7 +182,7 @@
 		// <![CDATA[
 			Ext.onReady(function(){
 				sidePanel.render(document.getElementById('sidebarP'));
-                selectRFB.render(document.getElementById('RFBCombo_'));
+                //selectRFB.render(document.getElementById('RFBCombo_'));
 
 				setVMEPage('embed-link','embed-url', 'embed-iframe');
 				
@@ -192,6 +192,9 @@
 				
 				if(Ext.isIE7 || Ext.isIE8 || Ext.isIE9)
 					Ext.get('yearCurrent').addClass('ie');
+                    
+                if(Ext.isIE7 || Ext.isIE8)
+                    Proj4js.defs["EPSG:3031"] = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";                    
 			});
 			
 			function updateCopyYear() {
