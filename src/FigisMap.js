@@ -14,10 +14,10 @@ var FigisMap = {
 	rfb		: new Object(), // specific RFB methods collection
 	rnd		: new Object(), // FigisMap.renderer specific collection of methods and variabes
 	ol		: new Object(), // OpenLayers related utilities
-	isDeveloper	: false, //( document.domain.indexOf( '192.168.' ) == 0 ),
+	isDeveloper	: ( document.domain.indexOf( '192.168.' ) == 0 ),
 	lastMap		: null,
 	renderedMaps	: new Object(),
-	isTesting	: false, //( (document.domain.indexOf('figis02')==0 ||document.domain.indexOf('193.43.36.238')==0||document.domain.indexOf('www-data.fao.org')==0) ),
+	isTesting	: ( (document.domain.indexOf('figis02')==0 ||document.domain.indexOf('193.43.36.238')==0||document.domain.indexOf('www-data.fao.org')==0) ),
 	currentSiteURI	: location.href.replace(/^([^:]+:\/\/[^\/]+).*$/,"$1"),
 //    proxy : '/http_proxy/proxy/?url=',
     proxy : '/figis/proxy/cgi-bin/proxy.cgi?url=',
