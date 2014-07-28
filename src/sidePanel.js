@@ -785,7 +785,7 @@ var sidePanel = new Ext.Panel({
 
 var selectRFB = new Ext.Panel({
     layout: 'form',
-    name: 'selectRFB',
+    name: 'selectRFB_name',
 	border: false,
 	labelAlign :'left',
 	defaults: {
@@ -817,9 +817,9 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
         items:items         
     });
     
-    panel.doLayout();
     
     store.each(function(records,count,tot) {
+        panel.doLayout(false,true);    
         var column;
         if(count==0 || count<3){
             column = Ext.getCmp("RFBCombo").panel.getComponent(0);
@@ -835,7 +835,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
             xtype: 'radio',
             width: 'auto',
             id: records.data.id + '_RFB',
-            boxLabel: '<a id="infoRFBimage_'+records.data.id+'_RFB'+'" ><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"> </a>',
+            boxLabel: '<a id="infoRFBimage_'+records.data.id+'_RFB'+'" style="color:#000000"><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png">'+records.data.acronym+'</a>',
             name: 'rfb',
             acronym: records.data.acronym,
             inputValue: records.data.id,
@@ -849,7 +849,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                         sidePanel.expand();                        
                     }
                 },
-                afterrender: function(radio){
+                render: function(radio){
                     var rfbStore = 'rfbStore' + radio.acronym;      
                     
                     Vme.data.stores[rfbStore].on('load',function(store, records, options){
@@ -876,7 +876,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
             }
         },panel.items[count]));
         column.items.add(radio);  
-        column.doLayout();
+        column.doLayout(false,true);
     });
     
     if ( location.search.indexOf("embed=true") != -1 ){

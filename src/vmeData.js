@@ -271,7 +271,8 @@ Vme.data={
 							//'{[this.getDownloadFDS(values)]}' +
 							'&nbsp;&nbsp;<a onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
-                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+                                
+                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+     
+                                //'FigisMap.ol.clearPopupCache();'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
                             '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +
@@ -318,10 +319,19 @@ Vme.data={
 						}
 					},
 					getVert: function(geom){
-						vert  = geom.getVertices()[0];
-						
-						return "{x:"+vert.x+",y:"+vert.y+"}";
-						//return evt;
+                        var vert = {};
+                        var projcode = "EPSG:4326";
+                        var repro_geom = geom.clone().transform(
+                            new OpenLayers.Projection(projcode),
+                            myMap.getProjectionObject()
+                        );                        
+                        if(getProjection() == "4326"){
+                            vert = "{x: " + geom.getVertices()[0].x +", y:" + geom.getVertices()[0].y + "}";
+                            return vert;
+                        }else{
+                            vert = "{x: " + repro_geom.getVertices()[0].x +", y:" + repro_geom.getVertices()[0].y + "}";
+                            return vert;
+                        }                      
 					},
                     /**
                      * Returns Validity String
@@ -429,7 +439,8 @@ Vme.data={
 							//'{[this.getDownloadFDS(values)]}' +
 							'&nbsp;&nbsp;<a onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
-                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+                                
+                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+
+                                //'FigisMap.ol.clearPopupCache();'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
                             '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +
@@ -475,10 +486,19 @@ Vme.data={
 						}
 					},
 					getVert: function(geom){
-						vert  = geom.getVertices()[0];
-						
-						return "{x:"+vert.x+",y:"+vert.y+"}";
-						//return evt;
+                        var vert = {};
+                        var projcode = "EPSG:4326";
+                        var repro_geom = geom.clone().transform(
+                            new OpenLayers.Projection(projcode),
+                            myMap.getProjectionObject()
+                        );                        
+                        if(getProjection() == "4326"){
+                            vert = "{x: " + geom.getVertices()[0].x +", y:" + geom.getVertices()[0].y + "}";
+                            return vert;
+                        }else{
+                            vert = "{x: " + repro_geom.getVertices()[0].x +", y:" + repro_geom.getVertices()[0].y + "}";
+                            return vert;
+                        }                      
 					},
                     /**
                      * Returns Validity String
@@ -751,7 +771,7 @@ Vme.data={
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
-                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+   
+                                'FigisMap.ol.refreshFilters(\'{owner}\');'+   
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
 						'</div>'+
@@ -759,7 +779,7 @@ Vme.data={
 					'</div>'+
 				'</tpl>',
 				{
-					compiled:true,
+					compiled:true,                  
                     toHectares:function(values){
                         var hectares = values.surface/10000
                         return Math.round(hectares);
@@ -782,10 +802,19 @@ Vme.data={
 						}
 					},
 					getVert: function(geom){
-						vert  = geom.getVertices()[0];
-						
-						return "{x:"+vert.x+",y:"+vert.y+"}";
-						//return evt;
+                        var vert = {};
+                        var projcode = "EPSG:4326";
+                        var repro_geom = geom.clone().transform(
+                            new OpenLayers.Projection(projcode),
+                            myMap.getProjectionObject()
+                        );                        
+                        if(getProjection() == "4326"){
+                            vert = "{x: " + geom.getVertices()[0].x +", y:" + geom.getVertices()[0].y + "}";
+                            return vert;
+                        }else{
+                            vert = "{x: " + repro_geom.getVertices()[0].x +", y:" + repro_geom.getVertices()[0].y + "}";
+                            return vert;
+                        }                      
 					},
 					getDownloadLink: function(values){
 						return Vme.utils.generateDownloadLink(
