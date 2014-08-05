@@ -123,15 +123,7 @@
 			
 			<div style="position:relative" id="main">
 				<div id="map"  class="map"></div>
-            <div id="bottomLeftPanel">
-            
-                <div id="selectionRFB" onclick="toggleRfbPanel();">
-                    Management Body/Authority (ies)
-                </div> 
-                <div id="RFBCombo_">
-                </div> 
-
-            </div>
+                
 				<div  id="bottomRightPanel">            
 					<div id="yearLess" onClick="javascript:FigisMap.ol.decrementYear()" unselectable="on"></div>
 					<div id="yearCurrent">
@@ -142,7 +134,16 @@
                         Year Selection
                     </div>                    
 				</div>
-		
+                
+                <div id="bottomLeftPanel">
+                
+                    <div id="selectionRFB" onclick="toggleRfbPanel();">
+                        Management Body/Authority (ies)
+                    </div> 
+                    <div id="RFBCombo_">
+                    </div> 
+
+                </div>		
 				<div id="lblVME" class="lblVME figisButtonToggleVME" style="" onclick="toggleStyle(this, true)">VME Closures</div>
                 <div id="lblVMEOther" class="lblVMEOther figisButtonOTHER" style="" onclick="toggleStyle(this, true)">Other access regulated areas</div>
 				
@@ -193,8 +194,7 @@
 				if(Ext.isIE7 || Ext.isIE8 || Ext.isIE9)
 					Ext.get('yearCurrent').addClass('ie');
                     
-                if(Ext.isIE7 || Ext.isIE8)
-                    Proj4js.defs["EPSG:3031"] = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";                    
+                Proj4js.defs["EPSG:3031"] = "+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs";                    
 			});
 			
 			function updateCopyYear() {

@@ -407,16 +407,23 @@ Vme.search = function(advanced){
             // WORKOROUND TO FIX STRANGE BEHAVIOR WHEN XMAX = 90 IN COORDINATE TRANSFORMATION TO GOOGLE MERCATOR
             top = (top > 85 && top <= 92) ? 85 : top;
             
-			bounds = new OpenLayers.Bounds(left, bottom, right, top);
+            var fixedZoomTo = vmeViewerRFBZoomTo[features[0].data.RFB]
+            
+            // ZOOM TO WRAPDATELINE FEATURES
+            bounds = fixedZoomTo ? fixedZoomTo.zoomExtent : new OpenLayers.Bounds(left, bottom, right, top);
 			
 			//var test = new OpenLayers.Layer.Vector("test", {
 			//		displayInLayerSwitcher: true
 			//});
 
-			var repro_geom = bounds.toGeometry().transform(
-				new OpenLayers.Projection(FigisMap.rnd.vars.vmeSearchZoomTo.srsName),
-				myMap.getProjectionObject()
-			);
+            var defaultProj = getProjection();
+            var mapProj = myMap.getProjectionObject();
+            
+            var repro_geom = bounds.toGeometry().transform(
+                new OpenLayers.Projection(FigisMap.rnd.vars.vmeSearchZoomTo.srsName),
+                mapProj
+                //defaultProj == "3031" ? new OpenLayers.Projection("EPSG:4326") : mapProj //use this if default map projection is 4326
+            );
 			
 			//test.addFeatures(new OpenLayers.Feature.Vector(repro_geom));	
 			//myMap.addLayers([test]);
@@ -437,6 +444,16 @@ Vme.search = function(advanced){
 			var RFMORecord = RFMOComboStore.getAt(RFMOComboStore.find('acronym', "CCAMLR"));
 			var RFMOId = RFMORecord.get('id');
 
+            if (fixedZoomTo && fixedZoomTo.isWrapDateLine){
+                repro_bbox.newLeft = repro_bbox.right;
+                repro_bbox.newRight = repro_bbox.left;
+                repro_bbox.right = repro_bbox.newRight;
+                repro_bbox.left = repro_bbox.newLeft;
+
+                delete repro_bbox["newLeft"];
+                delete repro_bbox["newRight"];
+            }
+        
 			if(RFMOValue == RFMOId){
 				settings.srs = "EPSG:3031";
 				zoomTo(settings, repro_bbox, false);
@@ -616,15 +633,23 @@ Vme.rfbZoomTo = function(acronym,value){
         
         // WORKOROUND TO FIX STRANGE BEHAVIOR WHEN XMAX = 90 IN COORDINATE TRANSFORMATION TO GOOGLE MERCATOR
         top = (top > 85 && top <= 92) ? 85 : top;
-        bounds = new OpenLayers.Bounds(left, bottom, right, top);
+
+            
+        var fixedZoomTo = vmeViewerRFBZoomTo[features[0].data.RFB]
+        
+        // ZOOM TO WRAPDATELINE FEATURES
+        bounds = fixedZoomTo ? fixedZoomTo.zoomExtent : new OpenLayers.Bounds(left, bottom, right, top);
         
         //var test = new OpenLayers.Layer.Vector("test", {
         //		displayInLayerSwitcher: true
         //});
+        var defaultProj = getProjection();
+        var mapProj = myMap.getProjectionObject();
         
         var repro_geom = bounds.toGeometry().transform(
             new OpenLayers.Projection(FigisMap.rnd.vars.vmeSearchZoomTo.srsName),
-            myMap.getProjectionObject()
+            mapProj
+            //defaultProj == "3031" ? new OpenLayers.Projection("EPSG:4326") : mapProj //use this if default map projection is 4326
         );
         
         //test.addFeatures(new OpenLayers.Feature.Vector(repro_geom));	
@@ -644,6 +669,17 @@ Vme.rfbZoomTo = function(acronym,value){
         var RFBComboStore = Vme.data.stores.rfmoStore;
         var RFBRecord = RFBComboStore.getAt(RFBComboStore.find('acronym', "CCAMLR"));
         var RFBId = RFBRecord.get('acronym');
+        
+        // ZOOM TO WRAPDATELINE FEATURES
+        if (fixedZoomTo && fixedZoomTo.isWrapDateLine){
+            repro_bbox.newLeft = repro_bbox.right;
+            repro_bbox.newRight = repro_bbox.left;
+            repro_bbox.right = repro_bbox.newRight;
+            repro_bbox.left = repro_bbox.newLeft;
+
+            delete repro_bbox["newLeft"];
+            delete repro_bbox["newRight"];
+        }
         
         if(RFBValue == RFBId){
             settings.srs = "EPSG:3031";

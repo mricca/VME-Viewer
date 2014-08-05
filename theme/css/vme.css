@@ -207,9 +207,9 @@ li {
 #bottomRightPanel {
     height:60px;
     width:155px;
-    bottom: 60px;
+    bottom: 200px;
     position: absolute;
-    right: 380px;
+    /*right: 380px;*/
     z-index: 5000;
     background-color: #57BCE6;    
     background-color: rgba(41, 171, 226, 0.6);
