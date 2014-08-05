@@ -14,7 +14,7 @@ body {
 #page {
     z-index: 1;
     width: 960px;
-    height: 880px;
+    height: 940px;
     background-image: none;
     border-width: 1px;
     border-style: solid;
@@ -30,7 +30,7 @@ body {
 #page_e {
     z-index: 1;
     width: 960px;
-    height: 728px;
+    height: 768px;
     background-image: none;
     border-width: 1px;
     border-style: solid;
@@ -207,12 +207,14 @@ li {
 #bottomRightPanel {
     height:60px;
     width:155px;
-    bottom: 200px;
-    position: absolute;
+    bottom: -5px;
+    position: relative;
+    display: table;
+    margin: 0 auto;    
     /*right: 380px;*/
     z-index: 5000;
-    background-color: #57BCE6;    
-    background-color: rgba(41, 171, 226, 0.6);
+    /*background-color: #57BCE6;    
+    background-color: rgba(41, 171, 226, 0.6);*/
 }
 #bottomRightPanel div {
     float:left;
