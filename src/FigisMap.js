@@ -1527,9 +1527,11 @@ FigisMap.ol.setSelectedYear= function(newyear){
     }
     if(newyear == FigisMap.ol.minYear){
         Ext.get('yearLess').addClass('nobackground');
+        Ext.get('yearMore').removeClass('nobackground');
     }
     else if( newyear == FigisMap.ol.maxYear){
         Ext.get('yearMore').addClass('nobackground');
+        Ext.get('yearLess').removeClass('nobackground');
     }else{
         Ext.get('yearMore').removeClass('nobackground');
         Ext.get('yearLess').removeClass('nobackground');
@@ -2033,7 +2035,6 @@ FigisMap.renderer = function(options) {
             myMap.addControl(graticule);
             graticule.gratLayer.group = "Layers of interest";
             graticule.gratLayer.infoGroupsSources = FigisMap.infoGroupsSources.overlays;
-            //myMap.raiseLayer(myMap.getLayersByName("UN_CONTINENT2")[0], layers.length+1);
             myMap.raiseLayer(myMap.getLayersByName("Coordinates Grid")[0], layers.length+1);
         }
         

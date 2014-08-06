@@ -21,6 +21,12 @@
  * 17. rfb_marine_unspecified_inland_noborders
  **/
 
+// FIXED ZOOM TO FOR SOME RFB TYPE (ZOOM TO WRAPDATELINE FEATURES)
+var vmeViewerRFBZoomTo = {
+    SPRFMO : {isWrapDateLine: true, zoomExtent: new OpenLayers.Bounds(-50, -60, 100, 10)}
+}
+
+
 // Use the "skip" property (set to true) if the RFB shouldn't be listed in select
 var rfbLayerSettings = {
 /*

@@ -222,7 +222,8 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
 	var reader = new OpenLayers.Format.WMSGetFeatureInfo();
     var response = reader.read(e.text);
     //request to the VME service VME
-    if(layer.params.LAYERS == FigisMap.fifao.vme_cl || layer.params.LAYERS == FigisMap.fifao.vme_oa){
+    //if(layer.params.LAYERS == FigisMap.fifao.vme_cl || layer.params.LAYERS == FigisMap.fifao.vme_oa){
+    if(layer.params.LAYERS == FigisMap.fifao.vme_cl){
         /*
             count the results, do an ajax call for every field,
             merge the OpenLayers object "attributes" obj with the result

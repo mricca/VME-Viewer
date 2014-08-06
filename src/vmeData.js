@@ -271,7 +271,8 @@ Vme.data={
 							//'{[this.getDownloadFDS(values)]}' +
 							'&nbsp;&nbsp;<a onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
-                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+     
+                                'FigisMap.ol.refreshFilters(\'{owner_acronym}\');'+
+                                'setRFBCheckBoxValue(\'{owner_acronym}\');'+
                                 //'FigisMap.ol.clearPopupCache();'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
@@ -302,19 +303,21 @@ Vme.data={
                         return Math.round(hectares);
                     },
 					getBBOX:function(values){
+                        if (values.bbox.left == -180)
+                            values.bbox.left = 180
 						var projcode = "EPSG:4326";
 						if(myMap.getProjection() == projcode ){
 							bbox = values.bbox;
 							return bbox.toArray(); 
 						}else{
-							var geom = values.geometry;
+							var geom = values.bbox;
 							var repro_geom = geom.clone().transform(
-							new OpenLayers.Projection(projcode),
-							myMap.getProjectionObject()
-						);
+                                new OpenLayers.Projection(projcode),
+                                myMap.getProjectionObject()
+                            );
 						
-						var repro_bbox = repro_geom.getBounds();
-						return repro_bbox.toArray();
+                            //var repro_bbox = repro_geom.getBounds();
+                            return repro_geom.toArray();
 						
 						}
 					},
@@ -329,7 +332,10 @@ Vme.data={
                             vert = "{x: " + geom.getVertices()[0].x +", y:" + geom.getVertices()[0].y + "}";
                             return vert;
                         }else{
-                            vert = "{x: " + repro_geom.getVertices()[0].x +", y:" + repro_geom.getVertices()[0].y + "}";
+                            var checkWrapDateLine = repro_geom.getVertices()[0].x * (-1);
+                            var getVerticesX = geom.getVertices()[0].x == 180 ? checkWrapDateLine : repro_geom.getVertices()[0].x;
+                            vert = "{x: " + getVerticesX +", y:" + repro_geom.getVertices()[0].y + "}";
+                            //vert = "{x: " + repro_geom.getVertices()[0].x +", y:" + repro_geom.getVertices()[0].y + "}";
                             return vert;
                         }                      
 					},
@@ -412,7 +418,8 @@ Vme.data={
 			),
 		vme_oa: 
 			new Ext.XTemplate(
-				'<tpl for=".">'+
+                //OLD POPUP 
+				/*'<tpl for=".">'+
                     '<tpl if="[xindex] &gt; \'1\'">'+
                         '<hr/>'+
                     '</tpl>'+
@@ -448,7 +455,29 @@ Vme.data={
 							//'<br/>{[this.addProtectedLinks(values)]}' +
                         '</div>'+
                     '</div>'+
-				'</tpl>',
+				'</tpl>',*/
+				'<tpl for=".">'+
+					'<div class="popup-result" style="text-align:left;">' +
+						'<h3>{feature_localname}</h3>'+
+						'<em>Year: </em>{feature_year}<br/> '+
+						'<em>Management Body/Authority: </em><span class="own">{owner_acronym}</span><br/>'+
+						'<em>Geographical reference: </em><span class="geo_ref" >{feature_geo_ref}</span> <br/>'+
+                        '<em>Surface: </em><span>{[this.toHectares(values)]}</span><em> (ha)</em> <br/> '+                         
+						//'<br/><br/>'+
+						
+						'<div>'+
+						'<div style="text-align:right;">' +
+							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
+							'<a class="" onClick="'+
+								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
+                                'FigisMap.ol.refreshFilters(\'{owner}\');'+   
+                                'setRFBCheckBoxValue(\'{owner}\');'+
+								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
+							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
+						'</div>'+
+						'</div>'+
+					'</div>'+
+				'</tpl>',                
 				{
 					compiled:true,
                     formatMeasure:function(values){
@@ -469,19 +498,21 @@ Vme.data={
                         return Math.round(hectares);
                     },                    
 					getBBOX:function(values){
+                        if (values.bbox.left == -180)
+                            values.bbox.left = 180
 						var projcode = "EPSG:4326";
 						if(myMap.getProjection() == projcode ){
 							bbox = values.bbox;
 							return bbox.toArray(); 
 						}else{
-							var geom = values.geometry;
+							var geom = values.bbox;
 							var repro_geom = geom.clone().transform(
-							new OpenLayers.Projection(projcode),
-							myMap.getProjectionObject()
-						);
+                                new OpenLayers.Projection(projcode),
+                                myMap.getProjectionObject()
+                            );
 						
-						var repro_bbox = repro_geom.getBounds();
-						return repro_bbox.toArray();
+                            //var repro_bbox = repro_geom.getBounds();
+                            return repro_geom.toArray();
 						
 						}
 					},
@@ -496,7 +527,10 @@ Vme.data={
                             vert = "{x: " + geom.getVertices()[0].x +", y:" + geom.getVertices()[0].y + "}";
                             return vert;
                         }else{
-                            vert = "{x: " + repro_geom.getVertices()[0].x +", y:" + repro_geom.getVertices()[0].y + "}";
+                            var checkWrapDateLine = repro_geom.getVertices()[0].x * (-1);
+                            var getVerticesX = geom.getVertices()[0].x == 180 ? checkWrapDateLine : repro_geom.getVertices()[0].x;
+                            vert = "{x: " + getVerticesX +", y:" + repro_geom.getVertices()[0].y + "}";
+                            //vert = "{x: " + repro_geom.getVertices()[0].x +", y:" + repro_geom.getVertices()[0].y + "}";
                             return vert;
                         }                      
 					},
@@ -772,6 +806,7 @@ Vme.data={
 							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
                                 'FigisMap.ol.refreshFilters(\'{owner}\');'+   
+                                'setRFBCheckBoxValue(\'{owner}\');'+
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
 						'</div>'+
@@ -785,19 +820,21 @@ Vme.data={
                         return Math.round(hectares);
                     },                    
 					getBBOX:function(values){
+                        if (values.bbox.left == -180)
+                            values.bbox.left = 180
 						var projcode = "EPSG:4326";
 						if(myMap.getProjection() == projcode ){
 							bbox = values.bbox;
 							return bbox.toArray(); 
 						}else{
-							var geom = values.geometry;
+							var geom = values.bbox;
 							var repro_geom = geom.clone().transform(
-							new OpenLayers.Projection(projcode),
-							myMap.getProjectionObject()
-						);
+                                new OpenLayers.Projection(projcode),
+                                myMap.getProjectionObject()
+                            );
 						
-						var repro_bbox = repro_geom.getBounds();
-						return repro_bbox.toArray();
+                            //var repro_bbox = repro_geom.getBounds();
+                            return repro_geom.toArray();
 						
 						}
 					},
@@ -812,7 +849,10 @@ Vme.data={
                             vert = "{x: " + geom.getVertices()[0].x +", y:" + geom.getVertices()[0].y + "}";
                             return vert;
                         }else{
-                            vert = "{x: " + repro_geom.getVertices()[0].x +", y:" + repro_geom.getVertices()[0].y + "}";
+                            var checkWrapDateLine = repro_geom.getVertices()[0].x * (-1);
+                            var getVerticesX = geom.getVertices()[0].x == 180 ? checkWrapDateLine : repro_geom.getVertices()[0].x;
+                            vert = "{x: " + getVerticesX +", y:" + repro_geom.getVertices()[0].y + "}";
+                            //vert = "{x: " + repro_geom.getVertices()[0].x +", y:" + repro_geom.getVertices()[0].y + "}";
                             return vert;
                         }                      
 					},
@@ -976,6 +1016,7 @@ Vme.data.extensions ={
                     {name: 'vme_id',     mapping: 'attributes.VME_ID'},
 					{name: 'status', 	 mapping: 'attributes.STATUS'},
                     {name: 'year', mapping: 'attributes.year'},
+                    {name: 'feature_year', mapping: 'attributes.YEAR'},
                     {name: 'VME_AREA_TIME', mapping: 'attributes.VME_AREA_TIME'},
                     {name: 'SHAPE_AREA', mapping:'attributes.SHAPE_AREA'},
                     {name: 'envelope', mapping: 'attributes.envelope'},
@@ -983,12 +1024,14 @@ Vme.data.extensions ={
 					{name: 'factsheetUrl',  mapping: 'attributes.factsheetURL'},
                     {name: 'pdfURL',  mapping: 'attributes.pdfURL'},
 					{name: 'bbox',		mapping: 'bounds'},
-					{name: 'vmeType', mapping: 'attributes.vmeType'},
+					{name: 'vmeType', mapping: 'attributes.REG_NAME'},
 					{name: 'owner', mapping: 'attributes.owner'},
                     {name: 'owner_acronym', mapping: 'attributes.OWNER'},
                     {name: 'validityPeriodFrom', mapping: 'attributes.validityPeriodStart'},
 					{name: 'validityPeriodTo', mapping: 'attributes.validityPeriodEnd'},
 					{name: 'geo_ref', mapping: 'attributes.geoArea'},
+                    {name: 'feature_geo_ref', mapping: 'attributes.GEOREF'},
+                    {name: 'feature_localname',  mapping: 'attributes.LOCAL_NAME'},
                     {name: 'surface', mapping: 'attributes.SURFACE'},
                     {name: 'measure', mapping: 'attributes.measure'}
                     
@@ -1247,7 +1290,7 @@ Vme.data.stores = {
     
     rfbStoreCCAMLR: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetCCAMLR,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1255,7 +1298,7 @@ Vme.data.stores = {
     
     rfbStoreGFCM: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetGFCM,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1263,7 +1306,7 @@ Vme.data.stores = {
 
     rfbStoreNAFO: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetNAFO,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1271,7 +1314,7 @@ Vme.data.stores = {
 
     rfbStoreNEAFC: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetNEAFC,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1279,7 +1322,7 @@ Vme.data.stores = {
 
     rfbStoreSEAFO: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetSEAFO,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1287,7 +1330,7 @@ Vme.data.stores = {
 
     rfbStoreWECAFC: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetWECAFC,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
@@ -1295,7 +1338,7 @@ Vme.data.stores = {
 
     rfbStoreSPRFMO: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetSPRFMO,
-        autoLoad: true,
+        autoLoad: false,
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          

@@ -263,28 +263,36 @@ function zoomTo(settings,geom,zoom) {
 			}
 			
 			if(zoom){
-				myMap.zoomToExtent(bbox);
+				myMap.zoomToExtent(bbox,true);
 			}else{
                 if(bboxproj == 'EPSG:3031'){
                     // WORKAROUND TO FIX STRANGE BEHAVIOUR BOUNDS TRANSFORMATION FROM 4326 TO 3031. BOUND NOW IS HARCODED
                     bbox = new OpenLayers.Bounds(-3465996.97,-3395598.49,5068881.53,4524427.45);
                     myMap.moveTo(bbox.getCenterLonLat());
+                    //myMap.zoomToExtent(bbox,true);
                 }else{
                     myMap.moveTo(bbox.getCenterLonLat());
+                    //myMap.zoomToExtent(bbox,true);
                 }
 			}
 		}else{
 			var newproj = bboxproj.split(":")[1];
-                
+            
+            // uncomment this if default projection is 4326
+			/*bbox = bbox.clone().transform(
+				newproj == "4326" ? new OpenLayers.Projection(newproj) : new OpenLayers.Projection(curr_proj),
+                new OpenLayers.Projection(bboxproj)
+			);*/	
+
 			bbox = bbox.clone().transform(
 				new OpenLayers.Projection(curr_proj),
-				new OpenLayers.Projection(bboxproj == "EPSG:3349" ? bboxproj = "EPSG:900913" : bboxproj = bboxproj)
-			);	
+				new OpenLayers.Projection(bboxproj == "EPSG:3349" ? "EPSG:900913" : bboxproj)
+			);
 			
 			setVME(bbox, null, newproj, 'embed-link','embed-url', 'embed-iframe');
 			
 		    if(zoom){
-				myMap.zoomToExtent(bbox);
+				myMap.zoomToExtent(bbox,true);
 			}
 					    
 			setProjection(newproj);		
@@ -595,10 +603,17 @@ function setVMEPage(elinkDiv, urlLink, htmlLink) {
 		FigisMap.ol.setSelectedYear(new Date().getFullYear());
 		
 		// //////////////////////////////////////////////////
-		// Mercator Radio Button checked as default.
+		// WGS84 Radio Button checked as default.
 		// //////////////////////////////////////////////////
 		
-		var mercatorRadio = document.getElementById("mercatorRadio");
+		/*var WGS84Radio = document.getElementById("WGS84Radio");
+		WGS84Radio.checked = true;*/
+
+		// //////////////////////////////////////////////////
+		// mercatorRadio Radio Button checked as default.
+		// //////////////////////////////////////////////////
+        
+        var mercatorRadio = document.getElementById("mercatorRadio");
 		mercatorRadio.checked = true;
         
 	}
@@ -697,6 +712,7 @@ function toggleProjectionPanel(){
     var el = Ext.get('SelectSRS');
     el.getHeight()==0 ? el.setHeight(50,true):el.setHeight(0,true);
     Ext.get('lblSRS').toggleClass('open');
+    closeRfbPanel();
 }
 function closeProjectionPanel(){
     var el = Ext.get('SelectSRS');
@@ -714,6 +730,7 @@ function toggleRfbPanel(){
     var el = Ext.get('RFBCombo');
     el.getHeight()==0 ? el.setHeight(80,true):el.setHeight(0,true);
     Ext.get('selectionRFB').toggleClass('open');
+    closeProjectionPanel();
 }
 function closeRfbPanel(){
     var el = Ext.get('RFBCombo');
