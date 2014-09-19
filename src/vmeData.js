@@ -252,7 +252,7 @@ Vme.data={
 						'<h3>{localname}</h3>'+
 						'<em>Management Body/Authority: </em><span class="own">{owner}</span><br/>'+
 						//'<em>Measure first applied in: </em><span>{[this.getValidity(values, true)]}</span> <br/> '+
-                        '<em>Closed since </em><span>{validityPeriodFrom}</span> <em>until</em> <span>{validityPeriodTo}, </span><em>review in <span>{review_date}</span></em><br/> '+
+                        '<em>Closed since </em><span>{validityPeriodFrom}</span> <em>until</em> <span>{validityPeriodTo}, </span><em>review in <span>{reviewYear}</span></em><br/> '+
                         //'<em>Measure: </em><span>{measure}</span> <a  target="_blank" href="{pdfURL}"><img title="Download pdf" src="theme/img/icons/download_pdf.png"></a><br/> '+
                         '<em>Measure: </em>{[this.formatMeasure(values)]}'+
 						//'<em>Validity: </em><span>{[this.getValidity(values)]}</span> <br/> '+
@@ -1040,7 +1040,7 @@ Vme.data.extensions ={
 					{name: 'factsheetUrl',  mapping: 'attributes.factsheetURL'},
                     {name: 'pdfURL',  mapping: 'attributes.pdfURL'},
 					{name: 'bbox',		mapping: 'bounds'},
-					{name: 'vmeType', mapping: 'attributes.REG_NAME'},
+					{name: 'vmeType', mapping: 'attributes.vmeType'},
 					{name: 'owner', mapping: 'attributes.owner'},
                     {name: 'owner_acronym', mapping: 'attributes.OWNER'},
                     {name: 'validityPeriodFrom', mapping: 'attributes.validityPeriodStart'},
@@ -1048,6 +1048,7 @@ Vme.data.extensions ={
 					{name: 'geo_ref', mapping: 'attributes.geoArea'},
                     {name: 'feature_geo_ref', mapping: 'attributes.GEOREF'},
                     {name: 'feature_localname',  mapping: 'attributes.LOCAL_NAME'},
+                    {name: 'reviewYear',  mapping: 'attributes.reviewYear'},
                     {name: 'surface', mapping: 'attributes.SURFACE'},
                     {name: 'measure', mapping: 'attributes.measure'}
                     
