@@ -235,7 +235,8 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
             
             Ext.Ajax.request({
                 //url: 'http://figisapps.fao.org/figis/ws/vme/webservice/get', // OLD SERVICE
-                url: 'http://figisapps.fao.org/figis/ws/vme/webservice/vme/' + inventoryIdentifier + '/specificmeasure', // NEW SERVICE FROM 20140714
+                //url: 'http://figisapps.fao.org/figis/ws/vme/webservice/vme/' + inventoryIdentifier + '/specificmeasure', // NEW SERVICE FROM 20140714
+                url: FigisMap.geoServerBase + '/figis/ws/vme/webservice/vme/' + inventoryIdentifier + '/specificmeasure', // NEW SERVICE FROM 20140714
                 scope:response[i],
                 method:'GET',
                 // OLD PARAMS FOR SERVICE 'http://figisapps.fao.org/figis/ws/vme/webservice/get'

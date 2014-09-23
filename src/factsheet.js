@@ -57,9 +57,11 @@ Ext.onReady(function(){
 	//Factsheet window
 	//
     FigisMap.factsheetRel = function(factsheetUrl){
-        var factsheetUrl = factsheetUrl.replace("http://figisapps.fao.org/","");
+        //var factsheetUrl = factsheetUrl.replace("http://figisapps.fao.org/","");
+        var factsheetUrl = factsheetUrl.replace(FigisMap.geoServerBase + "/","");
         if(!factsheetUrl)
-            factsheetUrl = "http://figisapps.fao.org/fishery/vme/10/en";
+            //factsheetUrl = "http://figisapps.fao.org/fishery/vme/10/en";
+            factsheetUrl = FigisMap.geoServerBase + "/fishery/vme/10/en";
         var tbarDiv = Ext.get('logo');
         var mainDiv = Ext.get('main');
         //var disclaimerDiv = Ext.get('disclaimer');
@@ -71,7 +73,8 @@ Ext.onReady(function(){
             height: mainDiv.getHeight() +tbarDiv.getHeight() - 49,//+disclaimerDiv.getHeight(),
             //title: "VME fact sheet <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;back to map&nbsp;</a>",
 			title: " <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;Home&nbsp;</a>",
-            src:"http://figisapps.fao.org/"+factsheetUrl,
+            //src:"http://figisapps.fao.org/"+factsheetUrl,
+            src: FigisMap.geoServerBase + "/" + factsheetUrl,
             //src:factsheetUrl,
             closeAction: 'destroy',
             maximizable: true,

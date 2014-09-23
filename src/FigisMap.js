@@ -91,10 +91,14 @@ FigisMap.defaults = {
 FigisMap.useProxy = FigisMap.isDeveloper ? false : ( FigisMap.isTesting ? FigisMap.currentSiteURI.indexOf(':8484') < 1 : ( FigisMap.currentSiteURI.indexOf('http://www.fao.org') != 0 ) );
 
 FigisMap.geoServerAbsBase = FigisMap.isDeveloper ? 'http://192.168.1.122:8484' : ( FigisMap.isTesting ? 'http://193.43.36.238:8484' : 'http://www.fao.org' );
-FigisMap.geoServerBase = "http://figisapps.fao.org";
-FigisMap.geoServerResource = "/figis/geoserverdv";
-FigisMap.httpBaseRoot = "http://figisapps.fao.org/fishery/vme-db/";
 
+FigisMap.geoServerBase = "http://figisapps.fao.org";
+//FigisMap.geoServerBase = "http://www.fao.org";
+
+FigisMap.geoServerResource = "/figis/geoserverdv";
+//FigisMap.geoServerResource = "/figis/geoserverprod";
+
+FigisMap.httpBaseRoot = FigisMap.geoServerBase + "/fishery/vme-db/";
 
 //FigisMap.httpBaseRoot = FigisMap.geoServerBase + ( FigisMap.isDeveloper ? '/figis/figis-vme/' : '/figis/geoserverdv/figis-vme/' );
 
@@ -1849,7 +1853,8 @@ FigisMap.renderer = function(options) {
             //DEMO1
 			myMap.addLayer( new OpenLayers.Layer.WMS(
 				"GEBCO imagery",
-				"http://figisapps.fao.org/figis/geoserverdv/gwc/service/wms",
+				//"http://figisapps.fao.org/figis/geoserverdv/gwc/service/wms",
+				FigisMap.rnd.vars.geowebcacheURL + "/wms",
 				{
 					layers:"fifao:gebco1",
 					gridset:"EPSG:4326",
