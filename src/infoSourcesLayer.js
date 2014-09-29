@@ -58,7 +58,8 @@ Ext.onReady(function(){
 	//
     FigisMap.infoSourceLayers = function(InfoSourcesLayerUrl,addUrl){
         if(!InfoSourcesLayerUrl)
-            InfoSourcesLayerUrl = "http://figisapps.fao.org/";
+            //InfoSourcesLayerUrl = "http://figisapps.fao.org/";
+            InfoSourcesLayerUrl = FigisMap.geoServerBase + "/";
         var tbarDiv = Ext.get('logo');
         var mainDiv = Ext.get('main');
         //var disclaimerDiv = Ext.get('disclaimer');
@@ -70,7 +71,8 @@ Ext.onReady(function(){
             height: mainDiv.getHeight() +tbarDiv.getHeight() - 49,//+disclaimerDiv.getHeight(),
             //title: "VME fact sheet <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;back to map&nbsp;</a>",
 			title: " <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;Home&nbsp;</a>",
-            src: addUrl ? "http://figisapps.fao.org/" + InfoSourcesLayerUrl : InfoSourcesLayerUrl,
+            //src: addUrl ? "http://figisapps.fao.org/" + InfoSourcesLayerUrl : InfoSourcesLayerUrl,
+            src: addUrl ? FigisMap.geoServerBase + "/" + InfoSourcesLayerUrl : InfoSourcesLayerUrl,
             closeAction: 'destroy',
             maximizable: true,
             draggable: false,

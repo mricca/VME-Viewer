@@ -369,7 +369,8 @@ Vme.data={
                         }else
                         {
                             //return("fishery/vme/10/en");
-                            return("http://figisapps.fao.org/fishery/vme/10/en");
+                            //return("http://figisapps.fao.org/fishery/vme/10/en");
+                            return(FigisMap.geoServerBase + "/fishery/vme/10/en");
                         }
                     },
 					/**
@@ -950,7 +951,8 @@ Vme.data={
  */
 Vme.data.models = {
 	//rfmos : [['CCAMLR','CCAMLR'],['NAFO','NAFO'],['NEAFC','NEAFC']],
-	rfmosUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+	//rfmosUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+	rfmosUrl : FigisMap.geoServerBase + "/figis/ws/vme/webservice/references/authority/en/list",
 	/*
 	areaTypes : [
 		[1, FigisMap.label('VME_TYPE_VME')],
@@ -960,7 +962,8 @@ Vme.data.models = {
 		[5, FigisMap.label('VME_TYPE_OTHER')]
 	],
 	*/
-    areaTypesUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/type/en/list",
+    //areaTypesUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/type/en/list",
+    areaTypesUrl : FigisMap.geoServerBase + "/figis/ws/vme/webservice/references/type/en/list",
 	/*
 	VmeStatuses:[ 
 		[1, FigisMap.label("VME_STATUS_ENS")],
@@ -973,7 +976,8 @@ Vme.data.models = {
 		
 	],
 	*/
-    VmeStatusesUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+    //VmeStatusesUrl : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
+    VmeStatusesUrl : FigisMap.geoServerBase + "/figis/ws/vme/webservice/references/authority/en/list",
     //) : "http://figisapps.fao.org/figis/ws/vme/webservice/references/authority/en/list",
 	/*
 	VmeCriteria:[ 
@@ -985,24 +989,36 @@ Vme.data.models = {
 		[5, FigisMap.label("VME_CRITERIA_NOTS")]
 	],
 	*/
-    VmeCriteriaUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list",
+    //VmeCriteriaUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/criteria/en/list",
+    VmeCriteriaUrl :FigisMap.geoServerBase + "/figis/ws/vme/webservice/references/criteria/en/list",
+	
 	//years : (function(){var currentTime = new Date();var now=currentTime.getFullYear();var year=2000;var ret=[];while(year<=now){ret.push([now]);now--;}return ret;})(),
-    yearsUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list",
-    searchUrl: "http://figisapps.fao.org/figis/ws/vme/webservice/search", // see options parameter for Ext.Ajax.request
+    //yearsUrl :"http://figisapps.fao.org/figis/ws/vme/webservice/references/years/en/list",
+    yearsUrl :FigisMap.geoServerBase + "/figis/ws/vme/webservice/references/years/en/list",
+	
+    //searchUrl: "http://figisapps.fao.org/figis/ws/vme/webservice/search", // see options parameter for Ext.Ajax.request
+    searchUrl: FigisMap.geoServerBase + "/figis/ws/vme/webservice/search", // see options parameter for Ext.Ajax.request
     
-    factsheetCCAMLR : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
+    //factsheetCCAMLR : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
+    factsheetCCAMLR : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
     
-    factsheetGFCM   : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/GFCM/scope/Regulatory/vmes",
+    //factsheetGFCM   : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/GFCM/scope/Regulatory/vmes",
+    factsheetGFCM   : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/GFCM/scope/Regulatory/vmes",
     
-    factsheetNAFO   : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NAFO/scope/Regulatory/vmes",
+    //factsheetNAFO   : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NAFO/scope/Regulatory/vmes",
+    factsheetNAFO   : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/NAFO/scope/Regulatory/vmes",
     
-    factsheetNEAFC  : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NEAFC/scope/Regulatory/vmes",
+    //factsheetNEAFC  : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NEAFC/scope/Regulatory/vmes",
+    factsheetNEAFC  : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/NEAFC/scope/Regulatory/vmes",
     
-    factsheetSEAFO  : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SEAFO/scope/Regulatory/vmes",
+    //factsheetSEAFO  : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SEAFO/scope/Regulatory/vmes",
+    factsheetSEAFO  : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/SEAFO/scope/Regulatory/vmes",
     
-    factsheetWECAFC : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/WECAFC/scope/Regulatory/vmes",
+    //factsheetWECAFC : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/WECAFC/scope/Regulatory/vmes",
+    factsheetWECAFC : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/WECAFC/scope/Regulatory/vmes",
     
-    factsheetSPRFMO : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SPRFMO/scope/Regulatory/vmes"
+    //factsheetSPRFMO : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SPRFMO/scope/Regulatory/vmes"
+    factsheetSPRFMO : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/SPRFMO/scope/Regulatory/vmes"
 };
 
 Vme.data.extensions ={
