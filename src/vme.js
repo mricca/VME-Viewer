@@ -98,6 +98,7 @@ function reset(year){
     
     resetRFBCheckBox();
     closeRfbPanel();
+    closeYearsPanel();
     
 	setProjection('3349');
     //setProjection('4326');
