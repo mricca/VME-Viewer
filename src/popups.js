@@ -377,8 +377,8 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                     
                     if(newYears.length != 0){
                         var measureText = newText.join("__");
-                        newValidityPeriodStart.sort(function(a, b){return a-b});
-                        newValidityPeriodEnd.sort(function(a, b){return a-b});
+                        //newValidityPeriodStart.sort(function(a, b){return a-b});
+                        //newValidityPeriodEnd.sort(function(a, b){return a-b});
             
                         filterResponseListFin = {
                             localName            : vmeDataParsed.localName,     
@@ -388,8 +388,8 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                             reviewYear           : newReviewYear[0],     
                             measure              : measureText,
                             year                 : newYears[0],
-                            validityPeriodStart  : newValidityPeriodStart[0], // prendo il minore
-                            validityPeriodEnd    : newValidityPeriodEnd[newValidityPeriodEnd.length - 1], // prendo il maggiore
+                            validityPeriodStart  : newValidityPeriodStart[newValidityPeriodStart.length - 1], // prendo il minore
+                            validityPeriodEnd    : newValidityPeriodEnd[0], // prendo il maggiore
                             pdfURL               : newSourceURL[0],
                             factsheetURL         : newFactsheetURL[0]
                         }
@@ -397,8 +397,8 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                     }else{
                     
                         var measureTextNoDate = newTextNoDate.join(";");
-                        newValidityPeriodStartNoDate.sort(function(a, b){return a-b});
-                        newValidityPeriodEndNoDate.sort(function(a, b){return a-b});
+                        //newValidityPeriodStartNoDate.sort(function(a, b){return a-b});
+                        //newValidityPeriodEndNoDate.sort(function(a, b){return a-b});
                         
                         newYearsNoDate.sort(function(a, b){return a-b});
                         newReviewYearNoDate.sort(function(a, b){return a-b});
@@ -411,8 +411,8 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                             reviewYear           : newReviewYearNoDate[newReviewYearNoDate.length - 1], // prendo il maggiore
                             measure              : measureTextNoDate,
                             year                 : newYearsNoDate[newYearsNoDate.length - 1], // prendo il maggiore
-                            validityPeriodStart  : newValidityPeriodStartNoDate[0], // prendo il minore
-                            validityPeriodEnd    : newValidityPeriodEndNoDate[newValidityPeriodEndNoDate.length - 1], // prendo il maggiore
+                            validityPeriodStart  : newValidityPeriodStartNoDate[newValidityPeriodStartNoDate.length - 1], // prendo il minore
+                            validityPeriodEnd    : newValidityPeriodEndNoDate[0], // prendo il maggiore
                             pdfURL               : newSourceURLNoDate[0],
                             factsheetURL         : newFactsheetURLNoDate[0]
                         }
