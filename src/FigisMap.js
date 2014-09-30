@@ -94,9 +94,12 @@ FigisMap.geoServerAbsBase = FigisMap.isDeveloper ? 'http://192.168.1.122:8484' :
 
 FigisMap.geoServerBase = "http://figisapps.fao.org";
 //FigisMap.geoServerBase = "http://www.fao.org";
+//FigisMap.geoServerBase = "http://" + window.location.hostname;
 
 FigisMap.geoServerResource = "/figis/geoserverdv";
 //FigisMap.geoServerResource = "/figis/geoserverprod";
+//FigisMap.geoServerResource = "/figis/geoserver" +
+//		(window.location.hostname.indexOf('figisapps')==0 ? 'dv' : 'prod' );
 
 FigisMap.httpBaseRoot = FigisMap.geoServerBase + "/fishery/vme-db/";
 
