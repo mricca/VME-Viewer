@@ -211,7 +211,7 @@ document.namespaces;
 		<div style="position:relative" id="main">
 			<div id="map"  class="map"></div>
             
-            <div  id="bottomRightPanel">
+            <!--div  id="bottomRightPanel">
                 <div id="yearLess" onClick="FigisMap.ol.decrementYear(); setVMEEmbedLink('embed-url', 'embed-iframe');" unselectable="on"></div>               
                 <div id="yearCurrent">
                 2014
@@ -220,10 +220,26 @@ document.namespaces;
                 <div id="yearsLabel">
                 Year Selection
                 </div>                
-            </div>      
+            </div-->      
             
             <div id="bottomLeftPanel">
             
+                <div id="selectionYears" onclick="toggleYearsPanel();">
+                    Year selection
+                </div> 
+                <div  id="yearsContent">
+                 <div  id="bottomRightPanel">
+                    <div id="yearLess" onClick="FigisMap.ol.decrementYear(); setVMEEmbedLink('embed-url', 'embed-iframe');" unselectable="on"></div>               
+                    <div id="yearCurrent">
+                    2014
+                    </div>
+                    <div id="yearMore" onClick="FigisMap.ol.incrementYear(); setVMEEmbedLink('embed-url', 'embed-iframe');" unselectable="on"></div>
+                    <!--div id="yearsLabel">
+                    Year Selection
+                    </div-->   
+                    </div>  
+                </div> 
+                
                 <div id="selectionRFB" onclick="toggleRfbPanel();">
                     Management Body/Authority (ies)
                 </div> 

@@ -98,6 +98,7 @@ function reset(year){
     
     resetRFBCheckBox();
     closeRfbPanel();
+    closeYearsPanel();
     
 	setProjection('3349');
     //setProjection('4326');
@@ -713,6 +714,7 @@ function toggleProjectionPanel(){
     el.getHeight()==0 ? el.setHeight(50,true):el.setHeight(0,true);
     Ext.get('lblSRS').toggleClass('open');
     closeRfbPanel();
+    closeYearsPanel();
 }
 function closeProjectionPanel(){
     var el = Ext.get('SelectSRS');
@@ -728,9 +730,10 @@ function closeProjectionPanel(){
 
 function toggleRfbPanel(){
     var el = Ext.get('RFBCombo');
-    el.getHeight()==0 ? el.setHeight(80,true):el.setHeight(0,true);
+    el.getHeight()==0 ? el.setHeight(90,true):el.setHeight(0,true);
     Ext.get('selectionRFB').toggleClass('open');
     closeProjectionPanel();
+    closeYearsPanel();
 }
 function closeRfbPanel(){
     var el = Ext.get('RFBCombo');
@@ -739,6 +742,25 @@ function closeRfbPanel(){
 	}
 	
 	el = Ext.get('selectionRFB');	
+	if(el){
+		el.removeClass('open');
+	}
+}
+
+function toggleYearsPanel(){
+    var el = Ext.get('yearsContent');
+    el.getHeight()==0 ? el.setHeight(50,true):el.setHeight(0,true);
+    Ext.get('selectionYears').toggleClass('open');
+    closeProjectionPanel();
+    closeRfbPanel();
+}
+function closeYearsPanel(){
+    var el = Ext.get('yearsContent');
+	if(el){
+		el.setHeight(0,true);
+	}
+	
+	el = Ext.get('selectionYears');	
 	if(el){
 		el.removeClass('open');
 	}

@@ -318,6 +318,7 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                       }                    
                     }
                     
+                    // Sort year desc
                     vmeDataParsed.responseList.sort(function(a,b){return b.year - a.year});
                     
                     var newYears = new Array();                    
@@ -327,36 +328,46 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                     var newSourceURL = new Array();
                     var newFactsheetURL = new Array();
                     
+                    var newReviewYear = new Array();
+                    
                     var newYearsNoDate = new Array();
                     var newTextNoDate = new Array();
                     var newValidityPeriodStartNoDate = new Array();
                     var newValidityPeriodEndNoDate = new Array();    
                     var newSourceURLNoDate = new Array();
-                    var newFactsheetURLNoDate = new Array();                    
+                    var newFactsheetURLNoDate = new Array();
                     
+                    var newReviewYearNoDate = new Array();
+                    
+                    // Take the firts element of array. The greatest year.
                     var firstDate = vmeDataParsed.responseList[0].year;
                     
+                    // Loop the responseList.
                     for (var i = 0;i<vmeDataParsed.responseList.length;i++){
                     
+                        
                         newValidityPeriodStart.push(vmeDataParsed.responseList[i].validityPeriodStart);
                         newValidityPeriodEnd.push(vmeDataParsed.responseList[i].validityPeriodEnd);
                         
                         newValidityPeriodStartNoDate.push(vmeDataParsed.responseList[i].validityPeriodStart);
                         newValidityPeriodEndNoDate.push(vmeDataParsed.responseList[i].validityPeriodEnd);                              
-                            
+                        
+                        // if the selected year in the vme-viewer is the same that in the response list than
                         if (vmeDataParsed.responseList[i].year == year){
                         
                             newYears.push(vmeDataParsed.responseList[i].year);
                             newText.push(vmeDataParsed.responseList[i].text);
                             newSourceURL.push(vmeDataParsed.responseList[i].sourceURL);
                             newFactsheetURL.push(vmeDataParsed.responseList[i].factsheetURL);
-                            
+                            newReviewYear.push(vmeDataParsed.responseList[i].reviewYear);
+                        
                         }else{
                             if(firstDate == vmeDataParsed.responseList[i].year){
                                 newYearsNoDate.push(vmeDataParsed.responseList[i].year);
                                 newTextNoDate.push(vmeDataParsed.responseList[i].text);
                                 newSourceURLNoDate.push(vmeDataParsed.responseList[i].sourceURL);
                                 newFactsheetURLNoDate.push(vmeDataParsed.responseList[i].factsheetURL);                                
+                                newReviewYearNoDate.push(vmeDataParsed.responseList[i].reviewYear);
                             }
                         
                         }
@@ -366,18 +377,19 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                     
                     if(newYears.length != 0){
                         var measureText = newText.join("__");
-                        newValidityPeriodStart.sort(function(a, b){return a-b});
-                        newValidityPeriodEnd.sort(function(a, b){return a-b});
+                        //newValidityPeriodStart.sort(function(a, b){return a-b});
+                        //newValidityPeriodEnd.sort(function(a, b){return a-b});
             
                         filterResponseListFin = {
                             localName            : vmeDataParsed.localName,     
                             geoArea              : vmeDataParsed.geoArea,     
                             owner                : vmeDataParsed.owner,     
                             vmeType              : vmeDataParsed.vmeType,     
+                            reviewYear           : newReviewYear[0],     
                             measure              : measureText,
                             year                 : newYears[0],
-                            validityPeriodStart  : newValidityPeriodStart[0], // prendo il minore
-                            validityPeriodEnd    : newValidityPeriodEnd[newValidityPeriodEnd.length - 1], // prendo il maggiore
+                            validityPeriodStart  : newValidityPeriodStart[newValidityPeriodStart.length - 1], // prendo il minore
+                            validityPeriodEnd    : newValidityPeriodEnd[0], // prendo il maggiore
                             pdfURL               : newSourceURL[0],
                             factsheetURL         : newFactsheetURL[0]
                         }
@@ -385,19 +397,22 @@ FigisMap.ol.getFeatureInfoHandlerGML =  function(e) {
                     }else{
                     
                         var measureTextNoDate = newTextNoDate.join(";");
-                        newValidityPeriodStartNoDate.sort(function(a, b){return a-b});
-                        newValidityPeriodEndNoDate.sort(function(a, b){return a-b});
+                        //newValidityPeriodStartNoDate.sort(function(a, b){return a-b});
+                        //newValidityPeriodEndNoDate.sort(function(a, b){return a-b});
+                        
                         newYearsNoDate.sort(function(a, b){return a-b});
+                        newReviewYearNoDate.sort(function(a, b){return a-b});
             
                         filterResponseListFin = {
                             localName            : vmeDataParsed.localName,     
                             geoArea              : vmeDataParsed.geoArea,     
                             owner                : vmeDataParsed.owner,     
                             vmeType              : vmeDataParsed.vmeType,     
+                            reviewYear           : newReviewYearNoDate[newReviewYearNoDate.length - 1], // prendo il maggiore
                             measure              : measureTextNoDate,
-                            year                 : newYearsNoDate[newYearsNoDate.length - 1],
-                            validityPeriodStart  : newValidityPeriodStartNoDate[0], // prendo il minore
-                            validityPeriodEnd    : newValidityPeriodEndNoDate[newValidityPeriodEndNoDate.length - 1], // prendo il maggiore
+                            year                 : newYearsNoDate[newYearsNoDate.length - 1], // prendo il maggiore
+                            validityPeriodStart  : newValidityPeriodStartNoDate[newValidityPeriodStartNoDate.length - 1], // prendo il minore
+                            validityPeriodEnd    : newValidityPeriodEndNoDate[0], // prendo il maggiore
                             pdfURL               : newSourceURLNoDate[0],
                             factsheetURL         : newFactsheetURLNoDate[0]
                         }

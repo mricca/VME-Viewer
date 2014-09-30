@@ -836,7 +836,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
     
     var items = [];
     
-    for (var i = 0;i<3;i++){
+    for (var i = 0;i<2;i++){
         items.push({items: []});
     }
     
@@ -849,7 +849,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
         border: false,
         id: "RFBCombo",   
         hideLabel: true,
-        columns: 3,
+        columns: 2,
         vertical: true,
         items:items         
     });
@@ -858,10 +858,10 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
     
     store.each(function(records,count,tot) {
         var column;
-        if(count==0 || count<3){
+        if(count==0 || count<4){
             column = Ext.getCmp("RFBCombo").panel.getComponent(0);
             column.setWidth(90);
-        }else if(count==3 || count<6){
+        }else if(count==4 || count<8){
             column = Ext.getCmp("RFBCombo").panel.getComponent(1);  
             column.setWidth(90);
         }else{
