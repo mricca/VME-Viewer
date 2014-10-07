@@ -1015,7 +1015,7 @@ Vme.data.models = {
     searchUrl: FigisMap.geoServerBase + "/figis/ws/vme/webservice/search", // see options parameter for Ext.Ajax.request
     
     //factsheetCCAMLR : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
-    factsheetCCAMLR : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
+    /*factsheetCCAMLR : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
     
     //factsheetGFCM   : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/GFCM/scope/Regulatory/vmes",
     factsheetGFCM   : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/GFCM/scope/Regulatory/vmes",
@@ -1033,7 +1033,10 @@ Vme.data.models = {
     factsheetWECAFC : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/WECAFC/scope/Regulatory/vmes",
     
     //factsheetSPRFMO : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/SPRFMO/scope/Regulatory/vmes"
-    factsheetSPRFMO : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/SPRFMO/scope/Regulatory/vmes"
+    factsheetSPRFMO : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/SPRFMO/scope/Regulatory/vmes",
+    
+    //factsheetNPFC : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/NPFC/scope/Regulatory/vmes"
+    factsheetNPFC : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/NPFC/scope/Regulatory/vmes"*/    
 };
 
 Vme.data.extensions ={
@@ -1320,7 +1323,7 @@ Vme.data.stores = {
     
     // LIST OF RFB FACTSHEET URL
     
-    rfbStoreCCAMLR: new Ext.data.JsonStore({
+    /*rfbStoreCCAMLR: new Ext.data.JsonStore({
         url: Vme.data.models.factsheetCCAMLR,
         autoLoad: false,
         remoteSort: false,
@@ -1374,7 +1377,15 @@ Vme.data.stores = {
         remoteSort: false,
         root: 'vmeDto',                      
         fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
-    }),    
+    }),   
+
+    rfbStoreNPFC: new Ext.data.JsonStore({
+        url: Vme.data.models.factsheetNPFC,
+        autoLoad: false,
+        remoteSort: false,
+        root: 'vmeDto',                      
+        fields: ['vmeId',{name: "factsheetUrl", mapping: "factsheetUrl"}]          
+    }),*/     
                     
 	SearchResultStore:new Ext.ux.LazyJsonStore({
 
