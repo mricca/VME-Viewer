@@ -1012,7 +1012,7 @@ Vme.data.models = {
     yearsUrl :FigisMap.geoServerBase + "/figis/ws/vme/webservice/references/years/en/list",
 	
     //searchUrl: "http://figisapps.fao.org/figis/ws/vme/webservice/search", // see options parameter for Ext.Ajax.request
-    searchUrl: FigisMap.geoServerBase + "/figis/ws/vme/webservice/search", // see options parameter for Ext.Ajax.request
+    searchUrl: FigisMap.geoServerBase + "/figis/ws/vme/webservice/search" // see options parameter for Ext.Ajax.request
     
     //factsheetCCAMLR : "http://figisapps.fao.org/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
     /*factsheetCCAMLR : FigisMap.geoServerBase + "/figis/ws/vme/webservice/owner/CCAMLR/scope/Regulatory/vmes",
