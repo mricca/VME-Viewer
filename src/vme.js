@@ -748,8 +748,19 @@ function closeRfbPanel(){
 }
 
 function toggleYearsPanel(){
+    
     var el = Ext.get('yearsContent');
     el.getHeight()==0 ? el.setHeight(50,true):el.setHeight(0,true);
+    
+    var el = Ext.get('yearLess');
+    el.getHeight()==0 ? el.setHeight(40,true):el.setHeight(0,true);    
+    
+    var el = Ext.get('yearCurrent');
+    el.getHeight()==0 ? el.setHeight(40,true):el.setHeight(0,true);     
+
+    var el = Ext.get('yearMore');
+    el.getHeight()==0 ? el.setHeight(40,true):el.setHeight(0,true);    
+    
     Ext.get('selectionYears').toggleClass('open');
     closeProjectionPanel();
     closeRfbPanel();
@@ -759,6 +770,21 @@ function closeYearsPanel(){
 	if(el){
 		el.setHeight(0,true);
 	}
+    
+    var el = Ext.get('yearLess');
+	if(el){
+		el.setHeight(0,true);
+	}
+
+    var el = Ext.get('yearCurrent');
+	if(el){
+		el.setHeight(0,true);
+	}
+
+    var el = Ext.get('yearMore');
+	if(el){
+		el.setHeight(0,true);
+	}    
 	
 	el = Ext.get('selectionYears');	
 	if(el){

@@ -133,10 +133,10 @@ li {
     margin-left:50px;*/
     float:left;
 }
-/*#yearsContent p{
+#yearsContent p{
     padding:3px;
     margin:0;
-}*/
+}
 
 /*RFB SELECTION STYLE*/
 
@@ -272,7 +272,7 @@ li {
 
 #yearLess{
     width: 42px;
-    height: 40px;
+    height: 0px;
     position: relative;
     text-align: left;
     background-image: url('../img/asaparrowleft.png');
@@ -282,7 +282,7 @@ li {
 
 #yearLess:hover{
     width: 42px;
-    height: 40px;
+    height: 0px;
     position: relative;
     text-align: left;
     background-image: url('../img/asaparrowleft.png');
@@ -290,7 +290,7 @@ li {
     background-position: center 46%;
 }
 
-#yearsLabel{
+/*#yearsLabel{
     width: 155px;
     height: 20px;
     text-align:center;
@@ -298,13 +298,14 @@ li {
     font-size: 14px;
     font-family: asap, sans-serif;
     font-style: normal;    
-    text-shadow: 1px 2px 2px #101010;
+    text-shadow: 2px 2px 2px #101010;
+    filter: dropshadow(color=#101010, offx=5, offy=5);
     color:#FFFFFF;
-}
+}*/
 
 #yearCurrent{
     width: 69px;
-    height: 40px;
+    height: 0px;
     text-align:center;
     position: relative;    
     line-height: 40px;
@@ -317,7 +318,7 @@ li {
 
 #yearCurrent.ie {
     width: 70px;
-    height: 40px;
+    height: 0px;
     position: relative;    
     text-align:center;
     line-height: 40px;
@@ -333,7 +334,7 @@ li {
 
 #yearMore{
     width: 42px;
-    height: 40px;
+    height: 0px;
     position: relative;
     text-align: right;    
     background-image: url('../img/asaparrowright.png');
@@ -343,7 +344,7 @@ li {
 
 #yearMore:hover{
     width: 42px;
-    height: 40px;
+    height: 0px;
     position: relative;
     text-align: right;     
     background-image: url('../img/asaparrowright.png');
