@@ -169,10 +169,10 @@ function toggleStyle(el, isButton){
 /**
 * function toogleWME
 *
-* Enables/Disables 'VME Closure' layer in LayerSwitcher 
+* Enables/Disables 'VME closed areas' layer in LayerSwitcher 
 **/	
 function toogleWME(pressed){
-	var vme = myMap.getLayersByName('VME Closure')[0];
+	var vme = myMap.getLayersByName('VME closed areas')[0];
 	vme.setVisibility(!pressed);
 }
 
@@ -355,7 +355,7 @@ function setVME( extent, zoom, mapProjection, elinkDiv, urlLink, htmlLink, filte
 function restoreToggleButtons(){
 	var el = document.getElementById("lblVME");	
 	if(el){
-		var vme = myMap.getLayersByName('VME Closure')[0];
+		var vme = myMap.getLayersByName('VME closed areas')[0];
 		
 		// ///////////////////////////////////////////////
 		// If there are Embed URL params concerning VME 

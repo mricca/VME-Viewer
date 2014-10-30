@@ -49,7 +49,7 @@ FigisMap.fifao = {
 	vme : 'fifao:VMEAREAS',
     
     // start after workshop
-    vme_cl : 'vme:closures', // VME Closure
+    vme_cl : 'vme:closures', // VME closed areas
     vme_oa : 'vme:other_areas', // Other access regulated areas    
     vme_bfa : 'vme:bottom_fishing_areas', // Bottom fishing areas
     vme_regarea : 'fifao:RFB_COMP_CLIP', // VME regulatory areas
@@ -812,12 +812,12 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 		var owner = FigisMap.ol.getSelectedOwner();
 		var year = FigisMap.ol.getSelectedYear();
     
-        // VME Closure
+        // VME closed areas
 		if ( ! layerTypes[ FigisMap.fifao.vme_cl ] ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme_cl,
-				label	: 'VME Closure', //'Area types',
-				group: "Managements regulations related to UNGA RES. 61-105",
+				label	: 'VME closed areas', //'Area types',
+				group: "Managed areas related to UNGA Res. 61-105",
                 showLegendGraphic: true,
                 wrapDateLine: false,    
                 singleTile: false,
@@ -830,7 +830,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				hideInSwitcher	: false,
                 dispOrder: 2,
 				isMasked: false,
-                infoGroupsSources: FigisMap.infoGroupsSources.vme,
+                //infoGroupsSources: FigisMap.infoGroupsSources.vme,
                 legend_options: "forcelabels:on;forcerule:True;fontSize:12"
 			});
 		}       
@@ -840,7 +840,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme_oa,
 				label	: 'Other access regulated areas', //'Area types',
-				group: "Managements regulations related to UNGA RES. 61-105",
+				group: "Managed areas related to UNGA Res. 61-105",
                 showLegendGraphic: true,
                 wrapDateLine: false,    
                 singleTile: false,
@@ -848,12 +848,12 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year /*+ (owner ? " AND OWNER ='" + owner +"'" :"") (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")*/ ,
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
-				hidden	: true,
+				hidden	: pars.isFIGIS,
 				type	: 'auto',
 				hideInSwitcher	: false,
                 dispOrder: 2,
 				isMasked: false,
-                infoGroupsSources: FigisMap.infoGroupsSources.vme,
+                //infoGroupsSources: FigisMap.infoGroupsSources.vme,
                 legend_options: "forcelabels:on;forcerule:True;fontSize:12"
 			});
 		}   
@@ -919,7 +919,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			layers.unshift({
 				layer	: FigisMap.fifao.vme_bfa,
 				label	: 'Bottom fishing areas', //'Area types',
-				group: "Managements regulations related to UNGA RES. 61-105",
+				group: "Managed areas related to UNGA Res. 61-105",
                 showLegendGraphic: true,
                 wrapDateLine: false,    
                 singleTile: false,
@@ -928,12 +928,12 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
                 filter	:"YEAR <= '"+ year + "'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'"),
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
-				hidden	: true,
+				hidden	: pars.isFIGIS,
 				type	: 'auto',
 				//hideInSwitcher	: false,
                 dispOrder: 1,
 				isMasked: false,
-                infoGroupsSources: FigisMap.infoGroupsSources.vme,
+                //infoGroupsSources: FigisMap.infoGroupsSources.vme,
                 legend_options: "forcelabels:on;forcerule:True;fontSize:12"
 			});
 		} 
@@ -993,7 +993,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				layer	: FigisMap.fifao.maj,
 				label	: 'FAO fishing areas',
                 showLegendGraphic: true,	  
-                group: "Layers of interest",
+                group: "Additional features",
 				filter	:'*',
 				remote  : false, 
 				icon	:'<img src="'+FigisMap.rnd.vars.FAO_fishing_legendURL+'" width="30" height="20" />',
@@ -1009,7 +1009,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 				layer	: FigisMap.fifao.nma,
 				label	: '200 nautical miles arcs',
                 showLegendGraphic: true,
-                group: "Layers of interest",
+                group: "Additional features",
 				filter	:'*',
 				icon	: '<img src="' + FigisMap.rnd.vars.EEZ_legendURL + '" width="30" height="20" />',
 				opacity	: 0.3,
@@ -1039,7 +1039,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			filter		: '*',
 			type		: 'auto',
 			style		: 'MarineAreasLabelled',
-            group: "Layers of interest",
+            group: "Additional features",
             label	: 'Oceans and sea names',
 			remote		: false,
             showLegendGraphic: false,	            
@@ -1053,14 +1053,14 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			filter		: '*',
 			type		: 'auto',
 			style		: '',
-            group: "Layers of interest",
+            group: "Additional features",
             label	: 'Gebco Undersea Features',
 			remote		: false,
             showLegendGraphic: false,	            
 			skipLegend	: true,
             hidden	: false,
 			hideInSwitcher	: false,
-                infoGroupsSources: FigisMap.infoGroupsSources.overlays
+            infoGroupsSources: FigisMap.infoGroupsSources.overlays
 		} );
     layers.push( {
 			layer		: FigisMap.fifao.gbi,
@@ -1068,14 +1068,14 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			filter		: '*',
 			type		: 'auto',
 			style		: '',
-            group: "Layers of interest",
+            group: "Additional features",
             label	: 'Gebco Isobath 2000',
 			remote		: false,
             showLegendGraphic: true,	            
 			skipLegend	: true,
             hidden	: true,
 			hideInSwitcher	: false,
-                infoGroupsSources: FigisMap.infoGroupsSources.overlays
+            infoGroupsSources: FigisMap.infoGroupsSources.overlays
 		} );        
     layers.push( {
 			layer		: FigisMap.fifao.vnt,
@@ -1083,16 +1083,16 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
 			filter		: '*',
 			type		: 'auto',
 			style		: 'vents_InterRidge_2011_all',
-            group: "Layers of interest",
+            group: "Additional features",
             label	: 'Hydrotermal Vents',
 			remote		: false,
             showLegendGraphic: true,	            
 			skipLegend	: true,
             hidden	: true,
 			hideInSwitcher	: false,
-                infoGroupsSources: FigisMap.infoGroupsSources.overlays
+            infoGroupsSources: FigisMap.infoGroupsSources.overlays
 		} );   
-    layers.push( {
+    /*layers.push( {
 			layer		: FigisMap.fifao.ccr,
 			cached		: true,
 			filter		: '*',
@@ -1106,14 +1106,14 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
             hidden	: true,
 			hideInSwitcher	: false,
                 infoGroupsSources: FigisMap.infoGroupsSources.overlays
-		} );         
+		} );*/    
     layers.push( {
 			layer		: FigisMap.fifao.vme_regarea,
 			cached		: true,
 			filter		: '*',
 			type		: 'auto',
 			style		: '',
-            group: "Layers of interest",
+            group: "Additional features",
             label	: 'RFB Competence Areas',
 			remote		: false,
             showLegendGraphic: true,	            
@@ -1563,7 +1563,7 @@ FigisMap.ol.refreshFilters = function (acronym){
     var RFBFilter = (typeof(acronym) == 'undefined' || acronym == 'undefined' || acronym == "") ? false : true; 
 	//var owner = FigisMap.ol.getSelectedOwner();
 
-    // VME Closure
+    // VME closed areas
     // Bottom fishing areas
     // Other access regulated areas
 
@@ -1576,8 +1576,8 @@ FigisMap.ol.refreshFilters = function (acronym){
 	
 	myMap.getLayersByName('RFB Competence Areas')[0].redraw(true);
 	
-	// VME Closure
-	myMap.getLayersByName('VME Closure')[0].mergeNewParams(
+	// VME closed areas
+	myMap.getLayersByName('VME closed areas')[0].mergeNewParams(
 		{
 		'CQL_FILTER': (RFBFilter ? "YEAR <= '" + year + "' AND END_YEAR >="+ year+" AND OWNER ='"+acronym+"'" : "YEAR <= '" + year + "' AND END_YEAR >="+ year),
 		'STYLES': (RFBFilter ?  "MEASURES_VME_for_" + acronym : "MEASURES_VME"), 
@@ -1586,7 +1586,7 @@ FigisMap.ol.refreshFilters = function (acronym){
 		}
 	);
 	
-	myMap.getLayersByName('VME Closure')[0].redraw(true);   
+	myMap.getLayersByName('VME closed areas')[0].redraw(true);   
     
 	// Other access regulated areas
 	myMap.getLayersByName('Other access regulated areas')[0].mergeNewParams(
@@ -1886,7 +1886,7 @@ FigisMap.renderer = function(options) {
         lSwitcher.dataLbl.innerHTML = "";
 		
 		// //////////////////////////////////////////////////////////
-		// Manages toggle button for VME Closure and Bottom fishing areas when 
+		// Manages toggle button for VME closed areas and Bottom fishing areas when 
 		// layer is clicked on LayerSwitcher
 		// //////////////////////////////////////////////////////////
 		myMap.events.register("changelayer", this, function(e){
@@ -1897,7 +1897,7 @@ FigisMap.renderer = function(options) {
 				var name = layer.name;
 				
 				var el;
-				if(name == "VME Closure"){
+				if(name == "VME closed areas"){
 					el = document.getElementById("lblVME");										
 				}else if(name == "Bottom fishing areas"){
 					el = document.getElementById("lblFootprints");										
@@ -1993,9 +1993,9 @@ FigisMap.renderer = function(options) {
 			olLayers.push( l.wms );
 			
 			//if (l.wms.name == 'Area types' || l.wms.name == 'Footprints'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
-			//if (l.wms.name == 'VME Closure' || l.wms.name == 'Other access regulated areas' || l.wms.name == 'Bottom fishing areas'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
-			//if (l.wms.name == 'VME Closure' || l.wms.name == 'Other access regulated areas' || l.wms.name == 'Bottom fishing areas' || l.wms.name == 'RFMO Regulatory Areas'){
-            if (l.wms.name == 'VME Closure' || l.wms.name == 'Other access regulated areas' || l.wms.name == 'Bottom fishing areas'){
+			//if (l.wms.name == 'VME closed areas' || l.wms.name == 'Other access regulated areas' || l.wms.name == 'Bottom fishing areas'  || l.wms.name == 'Encounters'  || l.wms.name == 'Survey Data'){
+			//if (l.wms.name == 'VME closed areas' || l.wms.name == 'Other access regulated areas' || l.wms.name == 'Bottom fishing areas' || l.wms.name == 'RFMO Regulatory Areas'){
+            if (l.wms.name == 'VME closed areas' || l.wms.name == 'Other access regulated areas' || l.wms.name == 'Bottom fishing areas'){
 				vme.push(olLayers[i]);
 			}
 
@@ -2083,7 +2083,7 @@ FigisMap.renderer = function(options) {
 					}
 
 					var el;
-					if(layerName == "VME Closure"){
+					if(layerName == "VME closed areas"){
 						el = document.getElementById("lblVME");	
 						if(layer.getVisibility()){
 							el.className = "lblVME figisButtonToggleVME";

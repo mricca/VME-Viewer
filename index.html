@@ -277,16 +277,15 @@ document.namespaces;
                 
             </div>
 
-            <div id="loginContainer" class="figisButton" onclick="FigisMap.logInOut()">Login</div>
-	
-			<div id="lblVME" class="lblVME figisButtonToggleVME" style="" onclick="toggleStyle(this, true)">VME Closures</div>
-            
-            <div id="lblVMEOther" class="lblVMEOther figisButtonOTHER" style="" onclick="toggleStyle(this, true)">Other access regulated areas</div>
-			
-			<div id="lblFootprints" class="lblFootprints figisButtonBOTTOM" style="" onclick="toggleStyle(this, true)">Bottom fishing areas</div>			
-			
-			<div id="lblReset" class="lblReset figisButton" style="" onclick="resetVME()">Reset</div>
-			
+            <div id="loginContainer">		
+				<div id="lblVME" class="lblVME figisButtonToggleVME" style="" onclick="toggleStyle(this, true)">VME closed areas</div>
+				
+				<div id="lblVMEOther" class="lblVMEOther figisButtonToggleOTHER" style="" onclick="toggleStyle(this, true)">Other access regulated areas</div>
+				
+				<div id="lblFootprints" class="lblFootprints figisButtonToggleBOTTOM" style="" onclick="toggleStyle(this, true)">Bottom fishing areas</div>			
+				
+				<div id="lblReset" class="lblReset figisButton" style="" onclick="resetVME()">Reset</div>
+			</div>
             <div id="sidebar">
                 <div id="leftTopPan">
                     <div id="searchtextwrapper"><input type="text" id="searchtext" name="searchtext" onkeydown="if (event.keyCode == 13) { Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');}"/><div onclick=" Vme.search(false);sidePanel.layout.setActiveItem('searchPanel');sidePanel.expand();Vme.form.panels.SearchPanel.layout.setActiveItem('resultPanel');" id="simpleSearchButton"></div></div>

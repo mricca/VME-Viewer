@@ -883,7 +883,11 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                         var value = radio.inputValue;
                         Vme.rfbZoomTo(acronym,value);
                         sidePanel.layout.setActiveItem('legendPanel');
-                        sidePanel.expand();                        
+                        sidePanel.expand();  
+						
+						toogleWME(false);
+						toogleWMEOther(false);
+						toogleFootprints(false);	
                     }
                 },
                 afterrender: function(radio){               

@@ -70,7 +70,7 @@ Ext.onReady(function(){
             width: mainDiv.getWidth()+10,
             height: mainDiv.getHeight() +tbarDiv.getHeight() - 49,//+disclaimerDiv.getHeight(),
             //title: "VME fact sheet <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;back to map&nbsp;</a>",
-			title: " <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;Home&nbsp;</a>",
+			title: " <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;Back to map&nbsp;</a>",
             //src: addUrl ? "http://figisapps.fao.org/" + InfoSourcesLayerUrl : InfoSourcesLayerUrl,
             src: addUrl ? FigisMap.geoServerBase + "/" + InfoSourcesLayerUrl : InfoSourcesLayerUrl,
             closeAction: 'destroy',

@@ -30,7 +30,7 @@ body {
 #page_e {
     z-index: 1;
     width: 960px;
-    height: 710px;
+    height: 680px;
     background-image: none;
     border-width: 1px;
     border-style: solid;
@@ -599,6 +599,22 @@ li {
     position:relative;
     text-align:left;
 }
+
+#disclaimer_e{
+/*color: #FFFFFF;*/
+    font-size: 10px;
+    font-family: asap, sans-serif;
+    font-weight: 400;
+    width : 920px;
+    margin-left: auto;
+    margin-top:2px;
+    margin-bottom:2px;
+    margin-right: auto;
+    top:-40px;
+    position:relative;
+    text-align:left;
+}
+
 #disclaimer p {
                  padding :   0px  10px;
 }
@@ -813,7 +829,7 @@ h3 {
     background-position: 3px 0px; /* equivalent to 'top left' */
     border: none;           /* assuming we don't want any borders */
     cursor: pointer;        /* make the cursor like hovering over an <a> element */
-    height: 16px;
+    height: 26px;
     padding:  2px ;
     text-align:center;/* make text start to the right of the image */
     vertical-align: baseline; /* align the text vertically centered */
@@ -903,7 +919,7 @@ h3 {
     background-position: 3px 0px; /* equivalent to 'top left' */
     border: none;           /* assuming we don't want any borders */
     cursor: pointer;        /* make the cursor like hovering over an <a> element */
-    height: 16px;
+    height: 26px;
     padding:  2px ;
     text-align:center;/* make text start to the right of the image */
     vertical-align: baseline; /* align the text vertically centered */
@@ -1007,25 +1023,25 @@ a.lblReset {
 
 #lblVME{
     position:absolute;
-    top:200px;
+    top:10px;
     left:-1px;
 }
 
 #lblVMEOther{
     position:absolute;
-    top:230px;
+    top:50px;
     left:-1px;
 }
 
 #lblFootprints{
     position:absolute;
-    top:273px;
+    top:93px;
     left:-1px;
 }
 
 #lblReset{
     position:absolute;
-    top:320px;
+    top:270px;
     left:-1px;
 }
 

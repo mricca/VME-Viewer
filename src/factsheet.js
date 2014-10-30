@@ -67,12 +67,12 @@ Ext.onReady(function(){
         //var disclaimerDiv = Ext.get('disclaimer');
         new Ext.IframeWindow({
             id:'factsheetWindow',
-            x: tbarDiv.getX() -5,
-            y: tbarDiv.getY() + tbarDiv.getHeight() - 31,
-            width: mainDiv.getWidth()+10,
-            height: mainDiv.getHeight() +tbarDiv.getHeight() - 49,//+disclaimerDiv.getHeight(),
+            x: tbarDiv.getX() - 5,
+            y: tbarDiv.getY() + tbarDiv.getHeight() - 10,
+            width: mainDiv.getWidth() + 10,
+            height: mainDiv.getHeight() + tbarDiv.getHeight() + 50,//+disclaimerDiv.getHeight(),
             //title: "VME fact sheet <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;back to map&nbsp;</a>",
-			title: " <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;Home&nbsp;</a>",
+			title: " <a style=\"position:absolute;right:60px;\" onclick=\"Ext.getCmp('factsheetWindow').close();\">&laquo;Back to map&nbsp;</a>",
             //src:"http://figisapps.fao.org/"+factsheetUrl,
             src: FigisMap.geoServerBase + "/" + factsheetUrl,
             //src:factsheetUrl,
