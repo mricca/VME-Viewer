@@ -407,9 +407,9 @@ Vme.data={
 					 * Download all vme areas + encoutners & sd for this vme
 					 */
 					getDownloadFDS:function(values){
-						if(!FigisMap.rnd.status.logged){
+						/*if(!FigisMap.rnd.status.logged){
 							return "";
-						}
+						}*/
 						var filter = Vme.utils.generateVMEFilter(values.vme_id);
 						filter =filter +";"+ filter + ";" + filter;
 						return '<a class="zipmlink" target="_blank" href="'+
@@ -425,9 +425,9 @@ Vme.data={
 							+'">Download full Data Set</a>' ;
 					},
 					addProtectedLinks: function(values){
-						if(!FigisMap.rnd.status.logged){
+						/*if(!FigisMap.rnd.status.logged){
 							return "";
-						}
+						}*/
 						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Related Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Related</a>';
 					}
 				}
@@ -601,9 +601,9 @@ Vme.data={
 					 * Download all vme areas + encoutners & sd for this vme
 					 */
 					getDownloadFDS:function(values){
-						if(!FigisMap.rnd.status.logged){
+						/*if(!FigisMap.rnd.status.logged){
 							return "";
-						}
+						}*/
 						var filter = Vme.utils.generateVMEFilter(values.vme_id);
 						filter =filter +";"+ filter + ";" + filter;
 						return '<a class="zipmlink" target="_blank" href="'+
@@ -619,9 +619,9 @@ Vme.data={
 							+'">Download full Data Set</a>' ;
 					},
 					addProtectedLinks: function(values){
-						if(!FigisMap.rnd.status.logged){
+						/*if(!FigisMap.rnd.status.logged){
 							return "";
-						}
+						}*/
 						return  '<a class="rellink" onClick=\'Ext.MessageBox.show({title: "Info",msg: "Related Encounters and Survey Data not implemented yet",buttons: Ext.Msg.OK,icon: Ext.MessageBox.INFO,scope: this}); \'>Related</a>';
 					}
 				}
@@ -692,9 +692,9 @@ Vme.data={
 					 * Download all points for this vme
 					 */
 					getDownloadFDS:function(values){
-						if(!FigisMap.rnd.status.logged){
+						/*if(!FigisMap.rnd.status.logged){
 							return "";
-						}
+						}*/
 						
 						return '<a class="zipmlink" target="_blank" href="'+
 							Vme.utils.generateDownloadLink(
@@ -773,9 +773,9 @@ Vme.data={
 					 * Download all points for this vme
 					 */
 					getDownloadFDS:function(values){
-						if(!FigisMap.rnd.status.logged){
+						/*if(!FigisMap.rnd.status.logged){
 							return "";
-						}
+						}*/
 						
 						return '<a class="zipmlink" target="_blank" href="'+
 							Vme.utils.generateDownloadLink(

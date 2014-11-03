@@ -925,7 +925,7 @@ FigisMap.rnd.addAutoLayers = function( layers, pars ) {
                 singleTile: false,
 				style: "MEASURES_BTM_FISH",
 				//filter	: "YEAR <= '" + year + "' AND END_YEAR >="+ year /*+ (owner ? " AND OWNER ='" + owner +"'" :"") (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")*/ ,
-                filter	:"YEAR <= '"+ year + "'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'"),
+                filter	:"YEAR <= '"+ year + "'", // + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'"),
 				//icon	: '<img src="' + FigisMap.rnd.vars.VME_legendURL + '" width="30" height="20" />',
 				opacity	: 1.0,
 				hidden	: pars.isFIGIS,
@@ -1621,8 +1621,10 @@ FigisMap.ol.refreshFilters = function (acronym){
 	var f = m.getLayersByName('Bottom fishing areas')[0];
 
 	f.mergeNewParams(
-		{'CQL_FILTER':
-			(RFBFilter ? "YEAR <= '" + year +"'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'") + " AND OWNER ='"+acronym+"'" : "YEAR <= '" + year +"'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")),
+		{
+		//'CQL_FILTER':
+		//	(RFBFilter ? "YEAR <= '" + year +"'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'") + " AND OWNER ='"+acronym+"'" : "YEAR <= '" + year +"'" + (FigisMap.rnd.status.logged ?  "" : " AND OWNER <> 'NPFC'")),
+            'CQL_FILTER': (RFBFilter ? "YEAR <= '" + year + "' AND END_YEAR >="+ year+" AND OWNER ='"+acronym+"'" : "YEAR <= '" + year + "' AND END_YEAR >="+ year),
             'STYLES': (RFBFilter ?  "MEASURES_BTM_FISH_for_" + acronym: "MEASURES_BTM_FISH"), 
             'STYLE': (RFBFilter ?  "MEASURES_BTM_FISH_for_" + acronym : "MEASURES_BTM_FISH"),
             'LEGEND_OPTIONS': "forcelabels:on;forcerule:True;fontSize:12"
@@ -2253,7 +2255,7 @@ FigisMap.renderer = function(options) {
 	
 }; //FigisMap.renderer Class Ends
 Ext.onReady(function(){
-    FigisMap.loginWin.on('login',function(user){
+    /*FigisMap.loginWin.on('login',function(user){
     		FigisMap.ol.refreshAuthorized();    
     		FigisMap.ol.clearPopupCache();  
             
@@ -2270,6 +2272,6 @@ Ext.onReady(function(){
 			
             var rfb = getRFBCheckBoxValue();
 			FigisMap.ol.refreshFilters(rfb);
-    });
+    });*/
     
 });
