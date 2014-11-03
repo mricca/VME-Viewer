@@ -15,14 +15,18 @@ function resetRFBCheckBox(){
 function getRFBCheckBoxValue(){
     var rfbCombo = Ext.getCmp('RFBCombo');
     var rfbValue;
-    for (var i = 0;i<rfbCombo.panel.items.items.length;i++){
-        for (var c = 0;c<rfbCombo.panel.items.items[i].items.items.length;c++){
-            var checkbox = rfbCombo.panel.items.items[i].items.items[c];
-            if(checkbox.checked == true && checkbox.el.dom.checked == true){
-                rfbValue = checkbox.acronym;
-            }
-        }
-    }
+	
+	if(rfbCombo){
+	    for (var i = 0;i<rfbCombo.panel.items.items.length;i++){
+			for (var c = 0;c<rfbCombo.panel.items.items[i].items.items.length;c++){
+				var checkbox = rfbCombo.panel.items.items[i].items.items[c];
+				if(checkbox.checked == true && checkbox.el.dom.checked == true){
+					rfbValue = checkbox.acronym;
+				}
+			}
+		}
+	}
+
     return rfbValue;
 }
 
