@@ -12,6 +12,9 @@ Vme.form={
 		
 };
 
+// store Factsheet URL for popup
+Vme.factsheetUrl={};
+
 /**
  * Vme.form.widgets.SearchResults
  * Data view for search results. uses SearchResultStore and searchResult template
@@ -28,8 +31,8 @@ Vme.form.widgets.SearchResults = new Ext.DataView({
 	itemCls: 'x-view-item',
 	overClass:'x-view-over',
 	selectedClass: 'x-view-selected',
-	emptyText: FigisMap.label('SEARCH_NO_RES'),
-	loadingText:FigisMap.label('SEARCH_LOADING'),
+	emptyText: '<div style="color:white;">' + FigisMap.label('SEARCH_NO_RES') + '</div>',
+	loadingText:'<div style="color:white;">' + FigisMap.label('SEARCH_LOADING') + '</div>',
 	listeners: {
     /*
       click: 
@@ -113,7 +116,7 @@ Vme.clickOnFeature =function(geographicFeatureId,rec_year,zoom){
                       zoomExtent: bounds.toBBOX(20)
                     };
                     
-					zoomTo(settings,repro_bbox,zoom);
+					zoomTo(settings,repro_bbox,zoom,false);
                     
                     //myMap.paddingForPopups.right = 240; //TODO: use this to center the popup when the search panel is opened!!! 
 														  //but if do this we are problem on dateline (popup disappears)
@@ -456,9 +459,9 @@ Vme.search = function(advanced){
         
 			if(RFMOValue == RFMOId){
 				settings.srs = "EPSG:3031";
-				zoomTo(settings, repro_bbox, false);
+				zoomTo(settings, repro_bbox, false, true);
 			}else{
-				zoomTo(settings, repro_bbox, true);
+				zoomTo(settings, repro_bbox, true, true);
 			}			
 			
 			//
@@ -683,9 +686,9 @@ Vme.rfbZoomTo = function(acronym,value){
         
         if(RFBValue == RFBId){
             settings.srs = "EPSG:3031";
-            zoomTo(settings, repro_bbox, false);
+            zoomTo(settings, repro_bbox, false, true);
         }else{
-            zoomTo(settings, repro_bbox, true);
+            zoomTo(settings, repro_bbox, true, true);
         }			
         
         mask.hide();
@@ -905,6 +908,7 @@ Vme.data.stores.rfmoStore.on('load',function(store, records, options){
                     rfbStoreAcronym.load();
                     rfbStoreAcronym.on('load',function(store, records, options){
                         store.each(function(records,count,tot) {
+                            Vme.factsheetUrl[radio.acronym] = records.data.factsheetUrl;
                             var id = 'infoRFBimage_' + radio.id;
                             Ext.get(id).dom.lastChild.parentNode.outerHTML = '<a id="'+id+'" style="color:#000000" href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\''+records.data.factsheetUrl+'\',true);"><img style="margin-bottom: 1px; vertical-align: bottom" title = "Clik To View Regional Measures" src="theme/img/icons/information.png"></a><span>'+radio.acronym+'</span>';
                         })

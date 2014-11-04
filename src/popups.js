@@ -163,7 +163,7 @@ FigisMap.ol.getTabTitle=function(layer){
       return "Footprints";*/
 
     case layernames.vme_cl :
-      return "VME Closure";
+      return "VME closed areas";
     case layernames.vme_oa :
       return "Other access regulated areas";      
     case layernames.vme_bfa : 
@@ -514,7 +514,7 @@ FigisMap.ol.showPopup= function(e,response,layer){
 		  
 	  }else{
       
-          if (name == "VME Closure"){
+          if (name == "VME closed areas"){
               tp.insert(0,{
                   itemId: name,
                   title: name,

@@ -248,7 +248,7 @@ function setZoom() {
 * function zoomTo
 *
 **/
-function zoomTo(settings,geom,zoom) {
+function zoomTo(settings,geom,zoom,closest) {
 	if (settings != null){
 		var bbox = geom ? geom : OpenLayers.Bounds.fromString(settings.zoomExtent,false);
 		var curr_proj = myMap.getProjection();
@@ -268,7 +268,7 @@ function zoomTo(settings,geom,zoom) {
 			}
 			
 			if(zoom){
-				myMap.zoomToExtent(bbox,true);
+				myMap.zoomToExtent(bbox,closest);
 			}else{
                 if(bboxproj == 'EPSG:3031'){
                     // WORKAROUND TO FIX STRANGE BEHAVIOUR BOUNDS TRANSFORMATION FROM 4326 TO 3031. BOUND NOW IS HARCODED
@@ -297,7 +297,7 @@ function zoomTo(settings,geom,zoom) {
 			setVME(bbox, null, newproj, 'embed-link','embed-url', 'embed-iframe');
 			
 		    if(zoom){
-				myMap.zoomToExtent(bbox,true);
+				myMap.zoomToExtent(bbox,closest);
 			}
 					    
 			setProjection(newproj);		
