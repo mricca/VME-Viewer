@@ -486,9 +486,9 @@ Vme.data={
 						'<em>Geographical reference: </em><span class="geo_ref" >{feature_geo_ref}</span> <br/>'+
                         '<em>Surface: </em><span>{[this.toHectares(values)]}</span><em> (ha)</em> <br/> '+                         
 						//'<br/><br/>'+
-						
+						'<br/>' +
 						'<div>'+
-						'<div style="text-align:right;">' +
+						'<div style="text-align:right;float:right;">' +
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
@@ -497,11 +497,17 @@ Vme.data={
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
 						'</div>'+
+						'<div style="text-align:left;">' +
+							'<u><a href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\'{[this.getFactsheet(values)]}\',true);" >Access the Regional Factsheet</a></u>' +
+                        '</div>'+                         
 						'</div>'+
 					'</div>'+
 				'</tpl>',                
 				{
 					compiled:true,
+                    getFactsheet: function(values){
+                        return Vme.factsheetUrl[values.owner_acronym];
+                    },                         
                     formatMeasure:function(values){
                         var pdf = values.pdfURL;
                         var measureArray = values.measure.split("__");
@@ -821,9 +827,9 @@ Vme.data={
 						'<em>Geographical reference: </em><span class="geo_ref" >{geo_ref}</span> <br/>'+
                         '<em>Surface: </em><span>{[this.toHectares(values)]}</span><em> (ha)</em> <br/> '+                         
 						//'<br/><br/>'+
-						
+                        '<br/>' +
 						'<div>'+
-						'<div style="text-align:right;">' +
+						'<div style="text-align:right;float:right;">' +
 							'<a class="" target="_blank" href="{[this.getDownloadLink(values)]}"><img title="Download as shapefile" src="theme/img/icons/download.png"></a>' +
 							'<a class="" onClick="'+
 								'myMap.zoomToExtent(OpenLayers.Bounds.fromString( \'{[this.getBBOX(values)]}\'));'+
@@ -832,11 +838,17 @@ Vme.data={
 								'FigisMap.ol.emulatePopupFromVert({[this.getVert(values.geometry)]})'+
 							'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
 						'</div>'+
+						'<div style="text-align:left;">' +
+							'<u><a href="javascript:void(0);" onClick="FigisMap.infoSourceLayers(\'{[this.getFactsheet(values)]}\',true);" >Access the Regional Factsheet</a></u>' +
+                        '</div>'+                         
 						'</div>'+
 					'</div>'+
 				'</tpl>',
 				{
-					compiled:true,                  
+					compiled:true,           
+                    getFactsheet: function(values){
+                        return Vme.factsheetUrl[values.owner];
+                    },                    
                     toHectares:function(values){
                         var hectares = values.surface/10000
                         return Math.round(hectares);
@@ -909,12 +921,12 @@ Vme.data={
 							//'"><img title="Zoom to area" src="theme/img/icons/buttonzoom.png"></a>' +
                             //'&nbsp;&nbsp;<a href="javascript:void(0);" onClick="FigisMap.factsheetRel(\'{[this.getFactsheetUrl(values)]}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +                            
                             '&nbsp;&nbsp;<a href="javascript:void(0);" onClick="alert(\'{rfb}\');"><img title="View fact sheet" src="theme/img/icons/buttonfactsheet.png" /></a>' +                            
-						'</div>'+
+						'</div>'+                          
 						'</div>'+
 					'</div>'+
 				'</tpl>',
 				{
-					compiled:true,
+					compiled:true,               
 					getBBOX:function(values){
 						var projcode = "EPSG:4326";
 						if(myMap.getProjection() == projcode ){
